@@ -1,0 +1,1086 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 01 · Первый промпт и три инструмента уточнения — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 01 тьюториала по Claude Design: анатомия дизайн-промпта, три инструмента уточнения (текст, инлайн-комментарий, слайдер) и правило четырёх итераций.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ D</span>
+            <a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a>
+        </div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="01">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 01</span><span lang="en">Etape 01</span></span> &nbsp;·&nbsp; <span lang="ru">Первый промпт и&nbsp;три инструмента уточнения</span><span lang="en">First Prompt &amp; the Three Refinement Tools</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Промпт&nbsp;&mdash; это не&nbsp;команда,<br>а&nbsp;<em>дизайн-бриф</em>.</span>
+            <span lang="en">A prompt is not a command,<br>it is a <em>design brief</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Структура промпта вам знакома: цель, ограничения, формат, пример. На&nbsp;этом этапе разбираем <em>три места, где дизайн-промпт ведёт себя иначе</em>, чем код-промпт, осваиваем визуальные <dfn class="term" tabindex="0" data-def="конкретное имя, задающее стилевую систему: имя продукта, дизайнера, эпохи или издания. В дизайне работают в десять раз сильнее эпитетов «стильно/современно».">референсы</dfn>, и&nbsp;строим прямой мост от&nbsp;трёх слоёв чтения дизайна (этап&nbsp;00) к&nbsp;трём инструментам уточнения. Главное правило выбора инструмента, которое сэкономит вам сотни итераций.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Prompt structure is familiar: goal, constraints, format, example. This etape covers <em>three places where a design prompt behaves differently</em> from a code prompt, masters visual <dfn class="term" tabindex="0" data-def="a concrete name that anchors a stylistic system: a product, designer, era, or publication name. In design they work ten times stronger than epithets like «stylish/modern».">references</dfn>, and builds the direct bridge from etape 00&rsquo;s three reading layers to the three refinement tools. The headline tool-selection rule that will save you hundreds of iterations.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">3–4 дня · 1–2&nbsp;ч/день</span><span lang="en">3–4 days · 1–2&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">анатомия промпта · текст / инлайн / слайдер · правило четырёх итераций</span><span lang="en">prompt anatomy · text / inline / slider · the four-iteration rule</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">первая версия Claude уже близка к&nbsp;нужной</span><span lang="en">Claude’s first attempt is already close</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd>
+                    <span lang="ru">лендинг кофейни в&nbsp;трёх стилях (Swiss / editorial / brutalist) и&nbsp;постер фильма с&nbsp;инлайн-правкой композиции</span>
+                    <span lang="en">a café landing in three styles (Swiss / editorial / brutalist) and a film poster with inline-edited composition</span>
+                </dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что мы&nbsp;пройдём по&nbsp;шагам</span><span lang="en">What we will walk through</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Дизайн-промпт vs код-промпт: три ключевых отличия</span><span lang="en">Design prompt vs code prompt: three key differences</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Структура хорошего промпта вам знакома по&nbsp;основному курсу: цель, ограничения, формат, пример. В&nbsp;дизайн-контексте этот скелет работает, но&nbsp;три слоя ведут себя иначе&nbsp;&mdash; и&nbsp;именно там новички ломаются.</p>
+                    <p><strong>1. Формат стал обязательным.</strong></p>
+                    <p>В&nbsp;коде Claude угадывает «формат» по&nbsp;файлу: <code>.py</code>, <code>.html</code>, <code>.tsx</code>&nbsp;&mdash; ясно, что&nbsp;писать. В&nbsp;дизайне такого якоря нет. Без явного формата Claude собирает «лендинг» в&nbsp;абстрактных пропорциях, который потом не&nbsp;ляжет ни&nbsp;на&nbsp;десктоп, ни&nbsp;в&nbsp;Instagram. Поэтому&nbsp;&mdash; всегда: <em>1280×800 десктоп</em>, <em>A4 вертикально</em>, <em>1080×1080 квадрат</em>. Минимум один.</p>
+                    <p><strong>2. Стиль задаётся именем, не&nbsp;описанием.</strong></p>
+                    <p>В&nbsp;коде вы&nbsp;могли сказать «функциональный стиль, без&nbsp;побочек, чисто»&nbsp;&mdash; и&nbsp;Claude понимал. В&nbsp;дизайне такие слова работают плохо: «стильно», «минимально», «современно»&nbsp;&mdash; в&nbsp;обучающих данных тысячи разных стилей помечены ими, и&nbsp;модель усредняет в&nbsp;«никакое». Конкретное имя&nbsp;&mdash; <em>«Müller-Brockmann»</em>, <em>«как Stripe.com»</em>, <em>«Польская школа плаката 70-х»</em>&nbsp;&mdash; задаёт точную стилевую систему. Это самый важный сдвиг&nbsp;&mdash; разбираем отдельно ниже.</p>
+                    <p><strong>3. Структура&nbsp;&mdash; пространственная, не&nbsp;последовательная.</strong></p>
+                    <p>В&nbsp;коде структура линейна: импорты вверху, классы в&nbsp;середине, экспорт внизу. В&nbsp;дизайне структура двумерна: что в&nbsp;hero, что в&nbsp;левой колонке, что в&nbsp;правой, какой блок «над» каким. Описывайте промпт в&nbsp;терминах <em>зон холста</em>: «вверху&nbsp;X», «в&nbsp;центре три колонки&nbsp;Y», «внизу&nbsp;Z». Без этой пространственной структуры Claude собирает «средний» лендинг по&nbsp;памяти.</p>
+                    <pre class="shell"><span class="cmt"># одна и та же задача, две формулировки</span>
+
+<span class="cmt"># слабо</span>
+&gt; красивый минималистичный лендинг кофейни, современный
+
+<span class="cmt"># сильно</span>
+&gt; лендинг крафтовой кофейни «Северный край» для туристов центра.
+&gt; формат 1280×800 десктоп + мобильная 375.
+&gt; стиль: Müller-Brockmann (модульная сетка, sans-serif, минимум цвета, один акцент).
+&gt; структура:
+&gt;   hero — крупный заголовок «Coffee. Made Right.» + слоган-подзаголовок;
+&gt;   далее — три колонки (espresso / filter / sweets), одна строка описания;
+&gt;   далее — фотография кофейни во всю ширину;
+&gt;   внизу — адрес и часы.</pre>
+                    <p>Второй промпт даёт первую версию, попадающую в&nbsp;цель в&nbsp;80–90% случаев. Первый&nbsp;&mdash; в&nbsp;20%. Разница&nbsp;&mdash; 5–7 минут на&nbsp;написание промпта против 30–40 минут правок неудачной первой версии.</p>
+                </div>
+                <div lang="en">
+                    <p>Good prompt structure is familiar from the main course: goal, constraints, format, example. In the design context the skeleton holds, but three layers behave differently&nbsp;&mdash; and that is where newcomers stumble.</p>
+                    <p><strong>1. Format became mandatory.</strong></p>
+                    <p>In code Claude reads &ldquo;format&rdquo; off the file: <code>.py</code>, <code>.html</code>, <code>.tsx</code>&nbsp;&mdash; the medium is obvious. In design, no such anchor. Without explicit format, Claude assembles a &ldquo;landing&rdquo; in abstract proportions that fits neither desktop nor Instagram. So&nbsp;&mdash; always: <em>1280×800 desktop</em>, <em>A4 vertical</em>, <em>1080×1080 square</em>. At least one.</p>
+                    <p><strong>2. Style is set by name, not description.</strong></p>
+                    <p>In code you could say &ldquo;functional, no side-effects, clean&rdquo;&nbsp;&mdash; and Claude got it. In design those words work badly: &ldquo;stylish,&rdquo; &ldquo;minimal,&rdquo; &ldquo;modern&rdquo;&nbsp;&mdash; thousands of different styles in training data carry those tags, and the model averages to &ldquo;nothing.&rdquo; A concrete name&nbsp;&mdash; <em>&ldquo;Müller-Brockmann,&rdquo;</em> <em>&ldquo;like Stripe.com,&rdquo;</em> <em>&ldquo;1970s Polish poster school&rdquo;</em>&nbsp;&mdash; anchors a precise stylistic system. The most important shift&nbsp;&mdash; covered separately below.</p>
+                    <p><strong>3. Structure is spatial, not sequential.</strong></p>
+                    <p>In code structure is linear: imports up top, classes in the middle, exports at the bottom. In design it is two-dimensional: what is in the hero, what is in the left column, what is in the right, which block is &ldquo;above&rdquo; which. Describe in terms of <em>canvas zones</em>: &ldquo;top X,&rdquo; &ldquo;centre three columns Y,&rdquo; &ldquo;bottom Z.&rdquo; Without this spatial structure, Claude assembles the &ldquo;average landing&rdquo; from memory.</p>
+                    <pre class="shell"><span class="cmt"># the same task, two formulations</span>
+
+<span class="cmt"># weak</span>
+&gt; beautiful minimalist café landing, modern
+
+<span class="cmt"># strong</span>
+&gt; landing for a craft café "Northern Coast" targeting city-centre tourists.
+&gt; format 1280×800 desktop + mobile 375.
+&gt; style: Müller-Brockmann (modular grid, sans-serif, minimal colour, one accent).
+&gt; structure:
+&gt;   hero — large heading "Coffee. Made Right." + sub-slogan;
+&gt;   then — three columns (espresso / filter / sweets), one-line descriptions;
+&gt;   then — full-width café photograph;
+&gt;   bottom — address and hours.</pre>
+                    <p>The second prompt produces a first take landing on target 80–90% of the time. The first&nbsp;&mdash; 20%. The difference: 5–7 minutes writing the prompt vs. 30–40 minutes correcting a failed first take.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Конкретный референс vs&nbsp;абстрактные эпитеты</span><span lang="en">Concrete reference vs. abstract epithets</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Самая частая ошибка&nbsp;&mdash; описывать стиль эпитетами. <em>«Стильно, современно, чисто, дорого»</em>&nbsp;&mdash; для Claude эти слова значат «средне-обычно», потому что в&nbsp;его обучающих данных так названы тысячи разных стилей.</p>
+                    <p>Конкретный референс действует в&nbsp;десять раз сильнее. Сравните:</p>
+                    <ul>
+                        <li>«современный»&nbsp;&mdash; <em>что-то с&nbsp;sans-serif и&nbsp;воздухом, может быть.</em></li>
+                        <li>«как у&nbsp;Apple»&nbsp;&mdash; <em>San Francisco-шрифт, белый фон, крупная типографика, тонкие отступы. Уже точнее.</em></li>
+                        <li>«как у&nbsp;Apple AirPods Pro 2 промо-страницы»&nbsp;&mdash; <em>чёрный фон, ультра-крупный продукт по&nbsp;центру, минимум текста. Точная цель.</em></li>
+                    </ul>
+                    <p>Хорошие классы референсов:</p>
+                    <ol>
+                        <li><strong>Имя продукта/бренда.</strong> «Как у&nbsp;Stripe.com», «как у&nbsp;Linear.app», «как у&nbsp;NYT обложки воскресной газеты».</li>
+                        <li><strong>Имя дизайнера или художника.</strong> «Müller-Brockmann», «Saul Bass», «Massimo Vignelli», «David Carson» (для брутального стиля).</li>
+                        <li><strong>Эпоха или направление.</strong> «Польская школа плаката 70-х», «Bauhaus», «японская графика середины&nbsp;XX&nbsp;века», «Memphis Group&nbsp;1980s».</li>
+                        <li><strong>Конкретное издание или музей.</strong> «Обложка <em>Wallpaper Magazine</em>», «<em>Financial Times</em> типографика», «<em>The Economist</em> infographics».</li>
+                    </ol>
+                    <p>Если не&nbsp;знаете имени референса&nbsp;&mdash; <strong>попросите Claude его дать</strong>. Это допустимый трюк:</p>
+                    <pre class="shell">&gt; я хочу лендинг для крафтовой кофейни, тёплый, для туристов.
+&gt; назови мне 5 конкретных дизайн-направлений или имён,
+&gt; которые подошли бы для этой задачи,
+&gt; и для каждого — одну фразу почему именно оно.
+&gt; не делай дизайн пока — мне нужны только варианты для выбора.</pre>
+                    <p>Claude вернёт список («Scandinavian café aesthetic à la Fjord Studios», «New York third-wave coffee, like Sightglass»...). Вы&nbsp;выбираете один и&nbsp;идёте делать дизайн с&nbsp;точным именем.</p>
+                    <h4 style="margin-top:1.5em;">Где брать референсы</h4>
+                    <p>Если своих имён мало&nbsp;&mdash; вот четыре источника, которые работают:</p>
+                    <ul>
+                        <li><strong><a href="https://www.are.na">Are.na</a></strong>&nbsp;&mdash; курируемые «каналы» с&nbsp;референсами по&nbsp;стилям и&nbsp;темам. Лучше Pinterest, потому что подборки делают живые дизайнеры, а&nbsp;не&nbsp;алгоритм.</li>
+                        <li><strong><a href="https://siteinspire.com">SiteInspire</a></strong>, <strong><a href="https://designmuseum.org">Design Museum</a></strong>&nbsp;&mdash; для веба и&nbsp;истории дизайна.</li>
+                        <li><strong>Музейные коллекции онлайн</strong>: MoMA, Cooper Hewitt, V&amp;A. У&nbsp;каждого есть архив постеров, типографики, плакатов. Фильтруйте по&nbsp;эпохам.</li>
+                        <li><strong>Сами обложки журналов</strong>: <em>Wallpaper</em>, <em>Apartamento</em>, <em>The Gentlewoman</em>, <em>032c</em>, <em>FT&nbsp;Weekend</em>, <em>NYT&nbsp;Magazine</em>. У&nbsp;каждого&nbsp;&mdash; узнаваемый стилевой почерк.</li>
+                    </ul>
+                    <h4 style="margin-top:1.5em;">Как проверить, «знает» ли&nbsp;Claude референс</h4>
+                    <p>Не&nbsp;все имена одинаково «понятны» модели. Иногда вы&nbsp;называете что-то нишевое, и&nbsp;Claude собирает вид «средне-стильно», потому что в&nbsp;тренировочных данных мало про этот референс. Простой тест перед запуском задачи:</p>
+                    <pre class="shell">&gt; что ты знаешь про дизайн в стиле X?
+&gt; назови три ключевых визуальных свойства,
+&gt; и одного-двух коллег по «соседней эпохе/направлению».
+&gt; не делай дизайн пока — мне нужна проверка.</pre>
+                    <p>Если Claude отвечает живо и&nbsp;конкретно («Müller-Brockmann работал в&nbsp;Цюрихе, известен модульными сетками <em>Neue Grafik</em>, рядом&nbsp;&mdash; Hofmann и&nbsp;Lohse...»)&nbsp;&mdash; референс «знакомый», смело используйте. Если ответ общий («модернистский подход, чистая типографика»)&nbsp;&mdash; референс размытый, ищите имя точнее.</p>
+                </div>
+                <div lang="en">
+                    <p>The most common mistake is describing style with epithets. <em>&ldquo;Stylish, modern, clean, expensive&rdquo;</em>&nbsp;&mdash; to Claude those words mean &ldquo;average,&rdquo; because thousands of different styles are tagged that way in its training data.</p>
+                    <p>A concrete reference is ten times stronger. Compare:</p>
+                    <ul>
+                        <li>&ldquo;modern&rdquo;&nbsp;&mdash; <em>something with sans-serif and whitespace, maybe.</em></li>
+                        <li>&ldquo;like Apple&rdquo;&nbsp;&mdash; <em>San Francisco type, white, large headlines, tight spacing. Sharper.</em></li>
+                        <li>&ldquo;like the Apple AirPods Pro 2 promo page&rdquo;&nbsp;&mdash; <em>black background, ultra-large product centred, minimal text. A precise target.</em></li>
+                    </ul>
+                    <p>Good reference classes:</p>
+                    <ol>
+                        <li><strong>A product or brand name.</strong> &ldquo;Like Stripe.com,&rdquo; &ldquo;like Linear.app,&rdquo; &ldquo;like an NYT Sunday cover.&rdquo;</li>
+                        <li><strong>A designer or artist name.</strong> &ldquo;Müller-Brockmann,&rdquo; &ldquo;Saul Bass,&rdquo; &ldquo;Massimo Vignelli,&rdquo; &ldquo;David Carson&rdquo; (for brutalist).</li>
+                        <li><strong>An era or movement.</strong> &ldquo;1970s Polish poster school,&rdquo; &ldquo;Bauhaus,&rdquo; &ldquo;mid-20th-century Japanese graphic,&rdquo; &ldquo;Memphis Group 1980s.&rdquo;</li>
+                        <li><strong>A specific publication or museum.</strong> &ldquo;<em>Wallpaper</em> magazine cover,&rdquo; &ldquo;<em>Financial Times</em> typography,&rdquo; &ldquo;<em>The Economist</em> infographics.&rdquo;</li>
+                    </ol>
+                    <p>If you do not know the reference name&nbsp;&mdash; <strong>ask Claude to suggest one</strong>. A legitimate move:</p>
+                    <pre class="shell">&gt; I want a landing for a craft café, warm, for tourists.
+&gt; name 5 concrete design directions or designer names
+&gt; that would fit this brief, and one sentence per name
+&gt; explaining why. do not design anything yet —
+&gt; I just need options to pick from.</pre>
+                    <p>Claude returns a list (&ldquo;Scandinavian café aesthetic à la Fjord Studios,&rdquo; &ldquo;New York third-wave coffee, like Sightglass&rdquo;...). Pick one, go do the design with that exact name in hand.</p>
+                    <h4 style="margin-top:1.5em;">Where to find references</h4>
+                    <p>If your name-bank is thin&nbsp;&mdash; four sources that work:</p>
+                    <ul>
+                        <li><strong><a href="https://www.are.na">Are.na</a></strong>&nbsp;&mdash; curated &ldquo;channels&rdquo; of references by style and theme. Beats Pinterest because real designers curate, not an algorithm.</li>
+                        <li><strong><a href="https://siteinspire.com">SiteInspire</a></strong>, <strong><a href="https://designmuseum.org">Design Museum</a></strong>&nbsp;&mdash; for web and design history.</li>
+                        <li><strong>Online museum collections</strong>: MoMA, Cooper Hewitt, V&amp;A. Each has archives of posters, type, prints. Filter by era.</li>
+                        <li><strong>Magazine covers themselves</strong>: <em>Wallpaper</em>, <em>Apartamento</em>, <em>The Gentlewoman</em>, <em>032c</em>, <em>FT Weekend</em>, <em>NYT Magazine</em>. Each carries a recognisable handwriting.</li>
+                    </ul>
+                    <h4 style="margin-top:1.5em;">How to test whether Claude &ldquo;knows&rdquo; a reference</h4>
+                    <p>Not every name lands equally with the model. Sometimes you cite something niche and Claude returns generic &ldquo;sort of stylish,&rdquo; because the training data is thin on that reference. A simple test before running the task:</p>
+                    <pre class="shell">&gt; what do you know about design in the style of X?
+&gt; name three key visual properties,
+&gt; and one-two neighbours by «adjacent era/movement».
+&gt; do not design yet — I just need the calibration.</pre>
+                    <p>If Claude answers crisply and concretely (&ldquo;Müller-Brockmann worked in Zürich, famed for modular grids in <em>Neue Grafik</em>, neighbours include Hofmann and Lohse...&rdquo;)&nbsp;&mdash; the reference is &ldquo;known,&rdquo; use it confidently. If the answer is generic (&ldquo;a modernist approach, clean typography&rdquo;)&nbsp;&mdash; the reference is fuzzy, look for a sharper name.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Три инструмента, три задачи: правило выбора</span><span lang="en">Three tools, three jobs: a decision rule</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;этапе&nbsp;00 мы&nbsp;разобрали три слоя чтения дизайна. Они напрямую отображаются на&nbsp;три инструмента уточнения. Это и&nbsp;есть главное правило выбора:</p>
+                    <table style="width:100%; border-collapse:collapse; margin: 1em 0;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--ink); text-align:left;">
+                                <th style="padding:0.5em;">Слой / диагноз</th>
+                                <th style="padding:0.5em;">Инструмент</th>
+                                <th style="padding:0.5em;">Когда</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--rule);">
+                                <td style="padding:0.5em;"><strong>Иерархия</strong> (что главное)</td>
+                                <td style="padding:0.5em;">Текстовый промпт</td>
+                                <td style="padding:0.5em;">Смысловые правки: смена концепции, замена раздела, добавление блока, глобальные правки типографики.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--rule);">
+                                <td style="padding:0.5em;"><strong>Композиция</strong> (что где)</td>
+                                <td style="padding:0.5em;">Инлайн-комментарий</td>
+                                <td style="padding:0.5em;">Точечные правки на&nbsp;конкретном элементе: размер, позиция, шрифт одного блока.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.5em;"><strong>Атмосфера</strong> (mood)</td>
+                                <td style="padding:0.5em;">Слайдер</td>
+                                <td style="padding:0.5em;">Финальная отделка: spacing, color, layout без&nbsp;слов.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>На&nbsp;практике перед каждой правкой задаёте себе один вопрос: <em>«это иерархия, композиция или атмосфера?»</em>&nbsp;&mdash; ответ выбирает инструмент. Через 5–6 правок становится рефлексом.</p>
+                    <h4 style="margin-top:1.5em;">Что говорит, что вы&nbsp;нарушаете границу</h4>
+                    <ul>
+                        <li><strong>«Заголовок крупнее» текстом.</strong> Это композиция (один элемент). Текст может ошибиться&nbsp;&mdash; увеличит все заголовки или только h1. Привяжите инлайн-комментарий к&nbsp;конкретному заголовку.</li>
+                        <li><strong>«Контрастнее на&nbsp;15%» текстом.</strong> Это атмосфера. Claude не&nbsp;умеет в&nbsp;«15%». Тяните слайдер.</li>
+                        <li><strong>Третий инлайн подряд про разные элементы одной концепции.</strong> Это, наоборот, иерархия&nbsp;&mdash; что-то идеологически не&nbsp;то. Текстовый промпт «поменяй стиль на&nbsp;X» вернёт прозрачность.</li>
+                    </ul>
+                    <h4 style="margin-top:1.5em;">Один комментарий = одна правка</h4>
+                    <p>Главное специфическое правило для инлайн-комментариев: не&nbsp;пишите «крупнее, шрифт другой, и&nbsp;ещё цвет смени» в&nbsp;одной заметке&nbsp;&mdash; разбейте на&nbsp;три по&nbsp;одному. Тогда Claude точно ничего не&nbsp;потеряет, и&nbsp;вы&nbsp;легче откатите конкретную правку, если она&nbsp;не&nbsp;понравится.</p>
+                    <div class="note">UI&nbsp;-механика «привязать комментарий» и&nbsp;имена слайдеров (warmth, density, hierarchy...) могут отличаться от&nbsp;того, что я&nbsp;называю&nbsp;&mdash; research preview&nbsp;же. Принципы постоянны: <em>текст для смысла, инлайн для конкретного элемента, слайдер для атмосферы</em>. Если функцию не&nbsp;нашли&nbsp;&mdash; спросите Claude в&nbsp;диалоге, как сейчас называется нужное.</div>
+                </div>
+                <div lang="en">
+                    <p>In etape 00 we covered the three reading layers of a design. They map directly onto the three refinement tools. That mapping <em>is</em> the decision rule:</p>
+                    <table style="width:100%; border-collapse:collapse; margin: 1em 0;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--ink); text-align:left;">
+                                <th style="padding:0.5em;">Layer / diagnosis</th>
+                                <th style="padding:0.5em;">Tool</th>
+                                <th style="padding:0.5em;">When</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--rule);">
+                                <td style="padding:0.5em;"><strong>Hierarchy</strong> (what matters)</td>
+                                <td style="padding:0.5em;">Text prompt</td>
+                                <td style="padding:0.5em;">Semantic edits: concept swap, section replacement, adding a block, global typography.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--rule);">
+                                <td style="padding:0.5em;"><strong>Composition</strong> (what goes where)</td>
+                                <td style="padding:0.5em;">Inline comment</td>
+                                <td style="padding:0.5em;">Pointed edits on a specific element: size, position, typeface of one block.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.5em;"><strong>Atmosphere</strong> (mood)</td>
+                                <td style="padding:0.5em;">Slider</td>
+                                <td style="padding:0.5em;">Final polish: wordless spacing, colour, layout.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>In practice, before every edit ask one question: <em>&ldquo;is this hierarchy, composition, or atmosphere?&rdquo;</em>&nbsp;&mdash; the answer picks the tool. Five or six corrections in, it becomes reflex.</p>
+                    <h4 style="margin-top:1.5em;">Signs you crossed the line</h4>
+                    <ul>
+                        <li><strong>&ldquo;Make the heading bigger&rdquo; via text.</strong> That is composition (one element). Text may miss&nbsp;&mdash; resize all headings, or just h1. Attach an inline comment to the specific heading instead.</li>
+                        <li><strong>&ldquo;15% more contrast&rdquo; via text.</strong> That is atmosphere. Claude is not great at &ldquo;15%.&rdquo; Pull the slider.</li>
+                        <li><strong>Third inline in a row across different elements of one concept.</strong> Conversely&nbsp;&mdash; that is hierarchy: something is ideologically off. A text prompt &ldquo;change the style to X&rdquo; restores clarity.</li>
+                    </ul>
+                    <h4 style="margin-top:1.5em;">One comment = one fix</h4>
+                    <p>The headline inline-specific rule: do not write &ldquo;bigger, different font, and change colour&rdquo; in one note&nbsp;&mdash; split into three. Claude does not drop anything, and you can roll back a specific fix more easily.</p>
+                    <div class="note">UI mechanics for &ldquo;attach a comment&rdquo; and slider names (warmth, density, hierarchy...) may differ from what I name&nbsp;&mdash; research preview, after all. The principles persist: <em>text for meaning, inline for a specific element, slider for atmosphere</em>. If you cannot find a feature&nbsp;&mdash; ask Claude in the dialogue what the function is called now.</div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Правило четырёх итераций: когда переписывать с&nbsp;нуля</span><span lang="en">The four-iteration rule: when to start over</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Если первая версия далеко от&nbsp;того, что вы&nbsp;хотели,&nbsp;&mdash; включаются часы. Эмпирическое правило, которое сэкономит вам много времени:</p>
+                    <p style="text-align:center; font-style:italic; font-size:1.2em; padding:1em 0;">«Если после <strong>четырёх итераций</strong> в&nbsp;одном проекте вы&nbsp;не&nbsp;близко к&nbsp;нужному&nbsp;&mdash; начинайте новый проект».</p>
+                    <p>Логика: чем больше итераций без сходимости, тем сильнее «накапливается мусор» в&nbsp;диалоге&nbsp;&mdash; Claude помнит все ваши прошлые правки, и&nbsp;даже самая чистая новая инструкция тянет за&nbsp;собой контекст предыдущих метаний. Чище переписать промпт с&nbsp;нуля и&nbsp;стартовать заново.</p>
+                    <p>Признаки, что пора жать «New project»:</p>
+                    <ul>
+                        <li>Третья итерация даже хуже первой.</li>
+                        <li>Вы&nbsp;спорите с&nbsp;Claude о&nbsp;понимании задачи: «нет, я&nbsp;не&nbsp;это имел&nbsp;в&nbsp;виду» три раза подряд.</li>
+                        <li>Каждая правка ломает что-то другое.</li>
+                        <li>Вы&nbsp;уже не&nbsp;помните, какая версия была лучшей.</li>
+                    </ul>
+                    <p>Что делать в&nbsp;новом проекте:</p>
+                    <ol>
+                        <li>Не&nbsp;копируйте старый промпт. Перечитайте его&nbsp;&mdash; что было неточным?</li>
+                        <li>Добавьте <strong>конкретный референс</strong>, если в&nbsp;старом промпте были только эпитеты.</li>
+                        <li>Проверьте, что все четыре слоя (цель / формат / стиль / структура) <em>явно</em> прописаны.</li>
+                        <li>Запускайте.</li>
+                    </ol>
+                    <div class="note">Это контр-интуитивно. Кажется, что «ещё одна итерация и&nbsp;будет хорошо». Часто это ловушка sunk-cost fallacy. Чистый рестарт с&nbsp;улучшенным промптом обычно даёт лучший дизайн за&nbsp;5&nbsp;минут, чем 30 минут шлифовки тупикового.</div>
+                </div>
+                <div lang="en">
+                    <p>If the first take is far from what you wanted, the clock starts. An empirical rule that will save you a lot of time:</p>
+                    <p style="text-align:center; font-style:italic; font-size:1.2em; padding:1em 0;">&ldquo;If after <strong>four iterations</strong> in one project you are not close&nbsp;&mdash; start a new project.&rdquo;</p>
+                    <p>The logic: more no-convergence iterations &rArr; more &ldquo;debris&rdquo; in the dialogue. Claude remembers all your past corrections, and even a clean new instruction drags the previous flailing along. A blank-slate prompt is faster than a chained recovery.</p>
+                    <p>Signs it is time for &ldquo;New project&rdquo;:</p>
+                    <ul>
+                        <li>The third iteration is worse than the first.</li>
+                        <li>You are arguing with Claude about understanding the task three times in a row: &ldquo;no, that is not what I meant.&rdquo;</li>
+                        <li>Every fix breaks something else.</li>
+                        <li>You no longer remember which version was best.</li>
+                    </ul>
+                    <p>What to do in the new project:</p>
+                    <ol>
+                        <li>Do not copy the old prompt. Re-read it&nbsp;&mdash; what was vague?</li>
+                        <li>Add a <strong>concrete reference</strong>, if the old prompt was only epithets.</li>
+                        <li>Check that all four layers (goal / format / style / structure) are <em>explicit</em>.</li>
+                        <li>Run it.</li>
+                    </ol>
+                    <div class="note">Counter-intuitive. It always feels like &ldquo;one more iteration and it will land.&rdquo; Often that is a sunk-cost trap. A clean restart with a sharper prompt usually beats 30 minutes of dead-end polishing in 5.</div>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Десятиминутный прогон по&nbsp;промптам</span><span lang="en">A ten-minute prompt warm-up</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Прежде чем браться за&nbsp;проекты, сделайте короткий прогон. Он&nbsp;ставит на&nbsp;место разницу между плохим и&nbsp;хорошим дизайн-промптом наглядно&nbsp;&mdash; за&nbsp;5–10 минут.</p>
+        <p class="reading" lang="en">Before tackling the projects, take a short warm-up. It locks the difference between a bad and a good design prompt in your hand&nbsp;&mdash; in 5–10 minutes.</p>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон №&nbsp;1 · Один бриф, два промпта</span><span lang="en">Run №&nbsp;1 · One brief, two prompts</span></h4>
+            <ol lang="ru">
+                <li>Откройте <code>claude.ai/design</code>, нажмите «New project».</li>
+                <li>Напишите <strong>краткий промпт</strong>: <em>«сделай красивый минималистичный лендинг для пекарни, чтобы было современно»</em>. Дождитесь первой версии.</li>
+                <li>Не&nbsp;уточняйте, не&nbsp;правьте&nbsp;&mdash; просто запомните, что получилось.</li>
+                <li>Нажмите снова «New project». Теперь напишите <strong>развёрнутый промпт по&nbsp;четырём слоям</strong>:
+                    <pre class="shell">&gt; цель: лендинг крафтовой пекарни «Хлебная» для жителей района.
+&gt; формат: 1280×800 десктоп + мобильная версия (375 ширина).
+&gt; стиль: editorial, в духе обложки Wallpaper Magazine — крупная serif-типографика,
+&gt;   тёплая молочная палитра, одна большая фотография хлеба.
+&gt; структура: hero — название + слоган «выпечено каждое утро»;
+&gt;   далее — три блока: ассортимент, мастер-класс, доставка;
+&gt;   далее — фотография большого каравая на разделочной доске;
+&gt;   внизу — адрес и часы работы.</pre>
+                </li>
+                <li>Дождитесь второй первой версии. Сравните с&nbsp;первой.</li>
+                <li>Запишите для себя: какая ближе к&nbsp;нужной? на&nbsp;сколько процентов? сколько минут заняло сделать второй промпт vs&nbsp;первый? стоила&nbsp;ли разница времени?</li>
+            </ol>
+            <ol lang="en">
+                <li>Open <code>claude.ai/design</code>, click &ldquo;New project.&rdquo;</li>
+                <li>Type a <strong>short prompt</strong>: <em>&ldquo;build a beautiful minimalist landing for a bakery, modern.&rdquo;</em> Wait for the first take.</li>
+                <li>Do not refine&nbsp;&mdash; just remember what you got.</li>
+                <li>Click &ldquo;New project&rdquo; again. Now write a <strong>full four-layer prompt</strong>:
+                    <pre class="shell">&gt; goal: landing for a craft bakery "Hlebnaya" targeting the neighbourhood.
+&gt; format: 1280×800 desktop + mobile (375 wide).
+&gt; style: editorial, in the line of a Wallpaper magazine cover — large serif type,
+&gt;   warm milk palette, one big bread photograph.
+&gt; structure: hero — name + slogan "baked every morning";
+&gt;   then — three blocks: range, masterclass, delivery;
+&gt;   then — a photograph of a large loaf on a cutting board;
+&gt;   bottom — address and hours.</pre>
+                </li>
+                <li>Wait for the second first-take. Compare with the first.</li>
+                <li>Note for yourself: which one is closer? by how much? how much longer did the second prompt take vs. the first? was the difference worth it?</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>почувствовать ROI развёрнутого промпта</strong>. Эта десятиминутная разница вернётся к&nbsp;вам в&nbsp;каждом следующем проекте.</p>
+            <p lang="en">What we are training: <strong>feeling the ROI of a full prompt</strong>. That ten-minute difference comes back on every future project.</p>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон №&nbsp;2 · Один холст, три инструмента</span><span lang="en">Run №&nbsp;2 · One canvas, three tools</span></h4>
+            <ol lang="ru">
+                <li>Не&nbsp;закрывайте удачный из&nbsp;двух предыдущих проектов&nbsp;&mdash; продолжаем в&nbsp;нём.</li>
+                <li><strong>Текстовый промпт.</strong> Замените раздел «доставка» на&nbsp;«кофе и&nbsp;завтраки»&nbsp;&mdash; смысловая правка.</li>
+                <li><strong>Инлайн-комментарий.</strong> Найдите элемент-логотип. Привяжите комментарий: <em>«в&nbsp;два раза мельче, и&nbsp;сместите вниз»</em>. Дайте применить.</li>
+                <li><strong>Слайдер.</strong> Найдите слайдер тёплости/контраста. Передвиньте на&nbsp;1/3 в&nbsp;сторону «теплее»&nbsp;&mdash; смотрите, что меняется. Подвиньте обратно. Подвиньте ещё на&nbsp;1/4. Найдите свой «хорошо».</li>
+                <li>Если на&nbsp;каком-то шаге Claude не&nbsp;понял или сделал хуже&nbsp;&mdash; <em>не&nbsp;уговаривайте текстом</em>. Используйте Cmd/Ctrl+Z (или нажмите «отменить»), и&nbsp;попробуйте другим инструментом.</li>
+            </ol>
+            <ol lang="en">
+                <li>Stay in the better of the two earlier projects&nbsp;&mdash; we continue inside it.</li>
+                <li><strong>Text prompt.</strong> Replace the &ldquo;delivery&rdquo; section with &ldquo;coffee and breakfasts&rdquo;&nbsp;&mdash; a semantic edit.</li>
+                <li><strong>Inline comment.</strong> Find the logo element. Attach a comment: <em>&ldquo;half the size, and shift down.&rdquo;</em> Let it apply.</li>
+                <li><strong>Slider.</strong> Find a warmth or contrast slider. Drag 1/3 toward warmer&nbsp;&mdash; watch the change. Drag back. Drag 1/4 again. Catch your &ldquo;right.&rdquo;</li>
+                <li>If at any step Claude misreads or makes it worse&nbsp;&mdash; <em>do not negotiate by text</em>. Use Cmd/Ctrl+Z (or hit undo) and try a different tool.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>выбирать инструмент по&nbsp;типу задачи, а&nbsp;не&nbsp;«как привычнее»</strong>. Это самая частая ошибка новых пользователей&nbsp;&mdash; всё делать текстом, потому что в&nbsp;Claude Code привычно так.</p>
+            <p lang="en">What we are training: <strong>matching tool to task type, not falling back on what feels familiar</strong>. The most common new-user mistake is doing everything by text because that is the Claude Code reflex.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Один бриф, три стилевые системы</span><span lang="en">One brief, three style systems</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Главный навык этапа&nbsp;01&nbsp;&mdash; чувствовать, как референс меняет первую версию. Поэтому мы&nbsp;берём один и&nbsp;тот&nbsp;же бриф (лендинг кофейни) и&nbsp;трижды собираем его в&nbsp;разных стилях. К&nbsp;концу проекта у&nbsp;вас три рядом стоящих лендинга&nbsp;&mdash; нагляднее этого ничто не&nbsp;учит.</p>
+        <p class="reading" lang="en">The headline skill of etape 01 is to feel how a reference reshapes the first take. So we use one brief (a café landing) and assemble it three times in different styles. By the end you have three landings side by side&nbsp;&mdash; nothing teaches better.</p>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;кофейня</span><span lang="en">Project A · guided · café track</span></span>
+            <h3><span lang="ru">Лендинг «Северный край» в&nbsp;трёх стилях</span><span lang="en">&ldquo;Northern Coast&rdquo; landing in three styles</span></h3>
+            <p class="goal" lang="ru">Цель: три отдельных лендинга для одной воображаемой крафтовой кофейни в&nbsp;трёх стилевых системах: Swiss, editorial, brutalist. Один и&nbsp;тот&nbsp;же бренд, тот&nbsp;же контент&nbsp;&mdash; разная визуальная упаковка.</p>
+            <p class="goal" lang="en">Goal: three separate landings for the same imaginary craft café in three stylistic systems: Swiss, editorial, brutalist. The same brand, the same content&nbsp;&mdash; three visual packagings.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Откройте <code>claude.ai/design</code>, новый проект.</li>
+                <li><strong>Версия 1: Swiss design.</strong>
+                    <pre class="shell">&gt; цель: лендинг крафтовой кофейни «Северный край» для туристов центра города.
+&gt; формат: 1280×800 десктоп, мобильная версия 375 ширина.
+&gt; стиль: Swiss design в духе Müller-Brockmann.
+&gt;   модульная сетка, sans-serif (Helvetica или Inter), чёткая иерархия размера,
+&gt;   минимум цвета — белый фон + чёрный + один акцент (кирпично-красный),
+&gt;   крупная типографика, ничего лишнего.
+&gt; структура:
+&gt;   hero — заголовок «Coffee. Made Right.» в очень крупном шрифте,
+&gt;     подзаголовок одной строкой «Серьёзный кофе для серьёзных людей»;
+&gt;   далее — три колонки: espresso, filter, sweets, с одной строкой описания и ценой;
+&gt;   далее — фотография обжарки кофе во всю ширину;
+&gt;   внизу — адрес «ул. Морская, 12» и часы «8:00 — 21:00» — всё на одной линии.</pre>
+                </li>
+                <li>Дождитесь первой версии. Если она <em>не</em> похожа на&nbsp;Swiss (например, появились декоративные элементы, разные шрифты)&nbsp;&mdash; одним текстовым промптом: <em>«я хочу строже Müller-Brockmann: уберите все украшения, оставьте только сетку и&nbsp;типографику»</em>. Это смысловая правка&nbsp;&mdash; текст уместен.</li>
+                <li>Когда нравится&nbsp;&mdash; <em>Export → HTML</em> в&nbsp;папку <code>landing-swiss</code>. Сохраните Internal URL.</li>
+                <li><strong>Версия 2: editorial.</strong> Новый проект, тот&nbsp;же бриф но&nbsp;стиль:
+                    <pre class="shell">&gt; стиль: editorial, в духе обложки Wallpaper Magazine.
+&gt;   крупная serif-типографика (Newsreader или Fraunces),
+&gt;   тёплая молочно-горчичная палитра,
+&gt;   композиция асимметричная — текст слева, фотография справа,
+&gt;   ощущение «толстого журнала».</pre>
+                    Структуру оставьте ту&nbsp;же, что в&nbsp;v1.</li>
+                <li>Когда нравится&nbsp;&mdash; <em>Export → HTML</em> в&nbsp;папку <code>landing-editorial</code>.</li>
+                <li><strong>Версия 3: brutalist.</strong> Новый проект:
+                    <pre class="shell">&gt; стиль: brutalist в духе ранних работ David Carson.
+&gt;   гипертрофированные размеры шрифта, обломанные блоки,
+&gt;   сырые цветовые контрасты, ощущение наспех собранного,
+&gt;   сетка «нарушена», но осознанно.</pre>
+                </li>
+                <li>Когда нравится&nbsp;&mdash; <em>Export → HTML</em> в&nbsp;папку <code>landing-brutalist</code>.</li>
+                <li>Откройте все три <code>index.html</code> рядом в&nbsp;браузере (три вкладки). Один и&nbsp;тот&nbsp;же контент&nbsp;&mdash; три абсолютно разных впечатления. Это и&nbsp;есть сила референса.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Open <code>claude.ai/design</code>, new project.</li>
+                <li><strong>Version 1: Swiss design.</strong>
+                    <pre class="shell">&gt; goal: landing for a craft café "Northern Coast" targeting city-centre tourists.
+&gt; format: 1280×800 desktop, mobile 375 wide.
+&gt; style: Swiss design à la Müller-Brockmann.
+&gt;   modular grid, sans-serif (Helvetica or Inter), sharp size hierarchy,
+&gt;   minimal colour — white + black + one accent (brick red),
+&gt;   large typography, nothing extra.
+&gt; structure:
+&gt;   hero — heading "Coffee. Made Right." in very large type,
+&gt;     subheading in one line "Serious coffee for serious people";
+&gt;   then — three columns: espresso, filter, sweets, one-line description, price;
+&gt;   then — full-width photograph of coffee roasting;
+&gt;   bottom — address "12 Marine Street" and hours "8:00 — 21:00" on one line.</pre>
+                </li>
+                <li>Wait for the first take. If it does <em>not</em> look Swiss (decorative elements crept in, mixed typefaces) — one text correction: <em>&ldquo;I want stricter Müller-Brockmann: drop all ornament, keep only grid and typography.&rdquo;</em> Concept-level&nbsp;&mdash; text is right.</li>
+                <li>When happy&nbsp;&mdash; <em>Export → HTML</em> into <code>landing-swiss/</code>. Save the Internal URL.</li>
+                <li><strong>Version 2: editorial.</strong> New project, same brief, new style:
+                    <pre class="shell">&gt; style: editorial, in the line of a Wallpaper magazine cover.
+&gt;   large serif typography (Newsreader or Fraunces),
+&gt;   warm milk-mustard palette,
+&gt;   asymmetric composition — text left, photograph right,
+&gt;   the feel of a thick magazine.</pre>
+                    Keep the same structure as v1.</li>
+                <li>When happy&nbsp;&mdash; <em>Export → HTML</em> into <code>landing-editorial/</code>.</li>
+                <li><strong>Version 3: brutalist.</strong> New project:
+                    <pre class="shell">&gt; style: brutalist à la early David Carson.
+&gt;   hypertrophied type sizes, broken blocks,
+&gt;   raw colour contrasts, a hastily-assembled feel,
+&gt;   the grid violated, deliberately.</pre>
+                </li>
+                <li>When happy&nbsp;&mdash; <em>Export → HTML</em> into <code>landing-brutalist/</code>.</li>
+                <li>Open all three <code>index.html</code> side by side (three tabs). The same content&nbsp;&mdash; three completely different impressions. That is the power of a reference.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>писать дизайн-промпт по&nbsp;четырём слоям (цель, формат, стиль, структура);</li>
+                <li>отдавать конкретный референс именем дизайнера или направления;</li>
+                <li>видеть разницу между одинаковым контентом в&nbsp;трёх стилевых системах.</li>
+            </ul>
+            <ul lang="en">
+                <li>writing a design prompt with four layers (goal, format, style, structure);</li>
+                <li>handing over a concrete reference by designer or movement name;</li>
+                <li>seeing identical content land in three different stylistic systems.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;игра</span><span lang="en">Project B · guided · game track</span></span>
+            <h3><span lang="ru">Постер фильма с&nbsp;инлайн-правкой композиции</span><span lang="en">Film poster with inline-edited composition</span></h3>
+            <p class="goal" lang="ru">Цель: один постер любимого фильма в&nbsp;конкретном стиле, который вы&nbsp;<em>доводите до&nbsp;нужного через инлайн-комментарии и&nbsp;слайдеры</em>, без&nbsp;текстовых правок после первой версии. Тренируем границы инструментов.</p>
+            <p class="goal" lang="en">Goal: one poster for a favourite film in a chosen style, refined to where you want it via <em>inline comments and sliders</em> only&nbsp;&mdash; no text corrections after the first version. We train tool boundaries.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Выберите фильм. Любой, который сами хорошо помните.</li>
+                <li>Выберите стиль постера. Хорошие варианты: «как Польская школа плаката 70-х» (Świerzy, Lenica), «как у&nbsp;Saul&nbsp;Bass» (Anatomy of a Murder), «японский постер 60-х» (как у&nbsp;Yusaku Kamekura).</li>
+                <li>Новый проект. Развёрнутый промпт по&nbsp;четырём слоям:
+                    <pre class="shell">&gt; цель: постер для художественного фильма «In the Mood for Love» (2000) Wong Kar-wai.
+&gt; формат: вертикальный 700×1000, как для кинотеатра.
+&gt; стиль: японский плакат середины XX века, в духе Yusaku Kamekura.
+&gt;   приглушённая, сложная палитра (тёмно-винный, песочный, тёмная зелень),
+&gt;   крупная японская типографика для названия (или тонкая стилизация под неё),
+&gt;   минимум визуальных элементов, простое геометрическое решение.
+&gt; структура:
+&gt;   крупный графический символ или элемент в верхней половине,
+&gt;     намекающий на тему фильма (например — два силуэта, неоновая вывеска, окно);
+&gt;   название «In the Mood for Love» в нижней трети, крупно;
+&gt;   подзаголовок одной строкой;
+&gt;   мелко внизу — режиссёр и год.</pre>
+                </li>
+                <li>Дождитесь первой версии. Скорее всего, что-то будет не&nbsp;совсем так: фигура слишком крупная, цвет «не&nbsp;тот», название сместилось.</li>
+                <li><strong>Не&nbsp;пишите текстовый промпт.</strong> Только инлайн-комментарии и&nbsp;слайдеры. Это и&nbsp;есть упражнение.</li>
+                <li>Привяжите инлайн-комментарии:
+                    <ul>
+                        <li>На&nbsp;графический элемент: «в&nbsp;два раза меньше, сдвиньте чуть вниз и&nbsp;вправо».</li>
+                        <li>На&nbsp;название: «другой шрифт&nbsp;&mdash; не&nbsp;modern serif, а&nbsp;что-то вроде каллиграфической ручной работы».</li>
+                        <li>На&nbsp;год и&nbsp;режиссёра внизу: «уберите режиссёра, оставьте только год».</li>
+                    </ul>
+                </li>
+                <li>Подвигайте слайдеры цвета и&nbsp;контраста. Найдите момент, когда палитра становится «винной», как в&nbsp;кадрах фильма.</li>
+                <li>Если кажется, что не&nbsp;хватает текстового промпта&nbsp;&mdash; задайте себе вопрос: «это смысловая правка или композиционная?». Если композиционная&nbsp;&mdash; продолжайте инлайн или слайдер.</li>
+                <li>Когда нравится&nbsp;&mdash; <em>Export → PNG</em>. Сохраните Internal URL.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Pick a film. Any film you remember well yourself.</li>
+                <li>Pick a poster style. Good options: &ldquo;Polish poster school of the 70s&rdquo; (Świerzy, Lenica), &ldquo;Saul Bass&rdquo; (Anatomy of a Murder), &ldquo;1960s Japanese poster&rdquo; (Yusaku Kamekura).</li>
+                <li>New project. Full four-layer prompt:
+                    <pre class="shell">&gt; goal: poster for the film "In the Mood for Love" (2000) by Wong Kar-wai.
+&gt; format: vertical 700×1000, cinema-style.
+&gt; style: mid-20th-century Japanese poster, à la Yusaku Kamekura.
+&gt;   muted, complex palette (deep wine, sand, dark green),
+&gt;   large Japanese typography for the title (or a tight stylisation thereof),
+&gt;   minimal elements, a simple geometric solution.
+&gt; structure:
+&gt;   one large graphic symbol or element in the upper half,
+&gt;     hinting at the film's theme (two silhouettes, a neon sign, a window);
+&gt;   title "In the Mood for Love" in the lower third, large;
+&gt;   subtitle in one line;
+&gt;   small at the bottom — director and year.</pre>
+                </li>
+                <li>Wait for the first take. Likely something is off: the figure too large, the colour off, the title shifted.</li>
+                <li><strong>Do not write a text prompt.</strong> Only inline comments and sliders. That is the exercise.</li>
+                <li>Attach inline comments:
+                    <ul>
+                        <li>On the graphic element: &ldquo;half the size, shift down-right.&rdquo;</li>
+                        <li>On the title: &ldquo;different typeface&nbsp;&mdash; not a modern serif, something like calligraphic handwork.&rdquo;</li>
+                        <li>On the year/director at the bottom: &ldquo;drop the director, keep only the year.&rdquo;</li>
+                    </ul>
+                </li>
+                <li>Pull the colour and contrast sliders. Catch the moment the palette turns &ldquo;wine,&rdquo; as in the film&rsquo;s frames.</li>
+                <li>If you feel the urge to add a text prompt&nbsp;&mdash; ask yourself: &ldquo;is this a semantic edit or a compositional one?&rdquo; If compositional&nbsp;&mdash; stay on inline/slider.</li>
+                <li>When happy&nbsp;&mdash; <em>Export → PNG</em>. Save the Internal URL.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>выбирать инструмент по&nbsp;типу задачи (а&nbsp;не&nbsp;«всё текстом»);</li>
+                <li>работать с&nbsp;инлайн-комментариями для точечных композиционных правок;</li>
+                <li>тонко подстраивать палитру слайдером, не&nbsp;ломая концепцию.</li>
+            </ul>
+            <ul lang="en">
+                <li>matching tool to task type (not &ldquo;everything by text&rdquo;);</li>
+                <li>using inline comments for pointed compositional corrections;</li>
+                <li>fine-tuning palette with sliders without breaking the concept.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши темы</span><span lang="en">Same moves, your themes</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Эти задачи&nbsp;&mdash; <em>вариации</em> только что разобранных проектов. Никаких новых концепций. Если что-то идёт не&nbsp;так&nbsp;&mdash; вернитесь к&nbsp;инструкциям&nbsp;A&nbsp;и&nbsp;B и&nbsp;посмотрите, как там было сформулировано.</p>
+        <p class="reading" lang="en">These are <em>variations</em> of the projects we just walked through. No new concepts. If something goes wrong&nbsp;&mdash; return to projects A and B and check the wording.</p>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек на&nbsp;ваш выбор</span><span lang="en">Project C · solo · track of your choice</span></span>
+            <h3><span lang="ru">Лендинг своего проекта в&nbsp;трёх стилях</span><span lang="en">Your project landing in three styles</span></h3>
+            <p class="goal" lang="ru">Цель: один и&nbsp;тот&nbsp;же лендинг (тема&nbsp;&mdash; ваш реальный или планируемый проект) собран в&nbsp;трёх разных стилевых системах. Минимум один из&nbsp;трёх стилей должен быть таким, каким вы&nbsp;<em>не&nbsp;стали&nbsp;бы делать</em> по&nbsp;умолчанию&nbsp;&mdash; это раздвинет ваш визуальный диапазон.</p>
+            <p class="goal" lang="en">Goal: one landing (topic&nbsp;&mdash; a real or planned project of yours) assembled in three stylistic systems. At least one of the three should be a style you would <em>not</em> default to&nbsp;&mdash; that stretches your visual range.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Темы на&nbsp;выбор по&nbsp;трекам:
+                    <ul>
+                        <li><strong>Квартира.</strong> Лендинг услуг дизайн-бюро интерьеров.</li>
+                        <li><strong>Игра.</strong> Steam-страница вашей воображаемой инди-игры.</li>
+                        <li><strong>Финансы.</strong> Лендинг финансового приложения (например, «Личный инвест-кабинет» из&nbsp;этапа&nbsp;06 основного курса).</li>
+                        <li><strong>Кофейня.</strong> Меню или лендинг другой кофейни (не&nbsp;«Северный край»).</li>
+                        <li><strong>Личное.</strong> Ваш собственный портфолио-сайт.</li>
+                    </ul>
+                </li>
+                <li>Стили&nbsp;&mdash; используйте те&nbsp;три, что в&nbsp;проекте&nbsp;A (Swiss / editorial / brutalist), <em>или</em> подберите свои с&nbsp;конкретным именем (минимум одно из&nbsp;«Польская школа», «Memphis 1980s», «японская графика», «Bauhaus», «Y2K aesthetic», «glitch art»).</li>
+                <li>Развёрнутый промпт&nbsp;&mdash; обязательно. Все четыре слоя.</li>
+            </ul>
+            <ul lang="en">
+                <li>Topic by track:
+                    <ul>
+                        <li><strong>Apartment.</strong> Landing for an interior design studio.</li>
+                        <li><strong>Game.</strong> Steam page of your imaginary indie game.</li>
+                        <li><strong>Finance.</strong> Landing of a finance app (e.g. the &ldquo;Personal Investment Office&rdquo; from etape 06 of the main course).</li>
+                        <li><strong>Café.</strong> Menu or landing for a different café (not &ldquo;Northern Coast&rdquo;).</li>
+                        <li><strong>Personal.</strong> Your own portfolio site.</li>
+                    </ul>
+                </li>
+                <li>Styles&nbsp;&mdash; use the three from project A (Swiss / editorial / brutalist), <em>or</em> pick your own with concrete names (at least one of &ldquo;Polish poster school,&rdquo; &ldquo;Memphis 1980s,&rdquo; &ldquo;Japanese graphic,&rdquo; &ldquo;Bauhaus,&rdquo; &ldquo;Y2K aesthetic,&rdquo; &ldquo;glitch art&rdquo;).</li>
+                <li>Full four-layer prompt&nbsp;&mdash; mandatory. All four layers.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть три экспортированных HTML-папки или PDF, каждая&nbsp;&mdash; в&nbsp;своём стиле;</li>
+                        <li>в&nbsp;каждом промпте у&nbsp;вас явно прописаны все четыре слоя;</li>
+                        <li>в&nbsp;каждом стиле есть конкретный референс (имя дизайнера/направления/публикации), а&nbsp;не&nbsp;только эпитет;</li>
+                        <li>один из&nbsp;трёх стилей&nbsp;&mdash; неожиданный для вас (не&nbsp;тот, что вы&nbsp;«всегда любите»);</li>
+                        <li>вы&nbsp;можете на&nbsp;15 секундах объяснить близкому человеку, чем отличаются три ваши версии и&nbsp;для какой аудитории какая.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>three exported HTML folders or PDFs, each in its own style;</li>
+                        <li>each prompt explicitly carries all four layers;</li>
+                        <li>each style has a concrete reference (designer/movement/publication name), not just an epithet;</li>
+                        <li>one of the three is unexpected for you (not the one you &ldquo;always love&rdquo;);</li>
+                        <li>in 15 seconds you can explain to a friend what makes the three versions different and which audience each fits.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        В&nbsp;любом из&nbsp;трёх диалогов: <em>«посмотри на&nbsp;три моих варианта одного лендинга. Не&nbsp;как ассистент, а&nbsp;как редактор журнала про дизайн&nbsp;&mdash; какой из&nbsp;них самый цельный? в&nbsp;каком стиле я&nbsp;допустила компромисс? что бы&nbsp;ты&nbsp;сделал иначе?»</em>. Claude может видеть холсты в&nbsp;истории проектов&nbsp;&mdash; используйте это.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        In any of the three dialogues: <em>&ldquo;look at my three landing variants. Not as assistant, as a design-magazine editor&nbsp;&mdash; which is most cohesive? where did I compromise? what would you do differently?&rdquo;</em> Claude can see canvases across project history&nbsp;&mdash; use it.
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек на&nbsp;ваш выбор</span><span lang="en">Project D · solo · track of your choice</span></span>
+            <h3><span lang="ru">Один холст, цикл всех трёх инструментов</span><span lang="en">One canvas, the full three-tool cycle</span></h3>
+            <p class="goal" lang="ru">Цель: один артефакт (постер, обложка, карточка)&nbsp;&mdash; и&nbsp;на&nbsp;нём проведите полный цикл уточнений: один текстовый промпт, минимум три инлайн-комментария, минимум два слайдера. Это «упражнение на&nbsp;осознанность инструментов».</p>
+            <p class="goal" lang="en">Goal: one artefact (poster, cover, card)&nbsp;&mdash; and run the full refinement cycle on it: one text prompt, at least three inline comments, at least two slider pulls. A &ldquo;tool awareness&rdquo; drill.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Тема и&nbsp;трек&nbsp;&mdash; на&nbsp;ваш выбор. Подойдёт что-то, для чего <em>один</em> экран достаточно: афиша, обложка плейлиста, key art игры, baner для соцсетей.</li>
+                <li>Перед каждой правкой говорите вслух (буквально): «это смысловая правка&nbsp;&mdash; текст», или «это точечная правка&nbsp;&mdash; инлайн», или «это финальная отделка&nbsp;&mdash; слайдер». Через 5–6 правок навык станет рефлексом.</li>
+                <li>Если ловите себя на&nbsp;мысли «опять через текст»&nbsp;&mdash; стоп, попробуйте другим инструментом. Это и&nbsp;есть содержание упражнения.</li>
+                <li>В&nbsp;конце&nbsp;&mdash; <em>Export → PNG</em>. Артефакт пригодится в&nbsp;этапе&nbsp;08 (multi-page брендинг).</li>
+            </ul>
+            <ul lang="en">
+                <li>Topic and track&nbsp;&mdash; your choice. Pick something where <em>one</em> canvas is enough: a poster, playlist cover, game key art, social banner.</li>
+                <li>Before each correction, say aloud (literally): &ldquo;this is semantic&nbsp;&mdash; text,&rdquo; or &ldquo;this is pointed&nbsp;&mdash; inline,&rdquo; or &ldquo;this is final polish&nbsp;&mdash; slider.&rdquo; In 5–6 corrections the habit becomes reflex.</li>
+                <li>When you catch yourself thinking &ldquo;text again&rdquo;&nbsp;&mdash; stop, try another tool. That is the exercise.</li>
+                <li>At the end&nbsp;&mdash; <em>Export → PNG</em>. The artefact will return in etape 08 (multi-page branding).</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>один экспортированный файл (PNG или PDF) на&nbsp;вашем компьютере;</li>
+                        <li>в&nbsp;истории диалога видно: один текстовый промпт (после первой версии), минимум три инлайн-комментария, минимум два движения слайдера;</li>
+                        <li>каждое движение вы&nbsp;можете обосновать категорией задачи (смысл&nbsp;/ точечно&nbsp;/ финальная отделка);</li>
+                        <li>финальная версия лучше первой&nbsp;&mdash; и&nbsp;вы&nbsp;можете объяснить, в&nbsp;чём именно.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>one exported file (PNG or PDF) on your computer;</li>
+                        <li>history shows: one text prompt (after the first take), three+ inline comments, two+ slider pulls;</li>
+                        <li>each move can be justified by its task category (semantic / pointed / final polish);</li>
+                        <li>the final version is better than the first&nbsp;&mdash; and you can say where exactly.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Покажи мне историю моих правок. Где я&nbsp;использовала текст, инлайн или слайдер не&nbsp;по&nbsp;назначению? как должно было быть?»</em>. Это и&nbsp;есть автокалибровка по&nbsp;инструментам&nbsp;&mdash; в&nbsp;этапе&nbsp;02 мы&nbsp;будем строить на&nbsp;этом навыке.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>&ldquo;Walk me through my edit history. Where did I reach for the wrong tool? what should it have been?&rdquo;</em> That is tool self-calibration&nbsp;&mdash; etape 02 builds on this skill.
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Новые слова, которые встретились</span><span lang="en">New words that came up</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">В&nbsp;тексте этапа эти слова подчёркнуты пунктиром&nbsp;&mdash; наведите или коснитесь, и&nbsp;всплывёт короткая справка. Здесь&nbsp;&mdash; полный словарь для закрепления.</p>
+        <p class="reading" lang="en">Inside the text these words are underlined with dots&nbsp;&mdash; hover or tap to see a short tooltip. Here is the full glossary for reinforcement.</p>
+
+        <dl class="glossary">
+            <dt><span lang="ru">Референс</span><span lang="en">Reference</span></dt>
+            <dd>
+                <span lang="ru">Конкретное имя, задающее стилевую систему. Имя продукта («Stripe.com»), дизайнера («Müller-Brockmann»), эпохи («Bauhaus»), издания («<em>Wallpaper</em>»). Эпитеты («стильный», «современный») референсами <em>не&nbsp;являются</em>. Перед использованием нишевого имени&nbsp;&mdash; проверьте, что Claude его «знает» (см.&nbsp;тему «Как проверить»).</span>
+                <span lang="en">A concrete name that anchors a stylistic system. A product (&ldquo;Stripe.com&rdquo;), a designer (&ldquo;Müller-Brockmann&rdquo;), an era (&ldquo;Bauhaus&rdquo;), a publication (&ldquo;<em>Wallpaper</em>&rdquo;). Epithets (&ldquo;stylish,&rdquo; &ldquo;modern&rdquo;) are <em>not</em> references. Before citing a niche name&nbsp;&mdash; verify Claude knows it (see &ldquo;how to check&rdquo;).</span>
+            </dd>
+
+            <dt><span lang="ru">Контр-промпт</span><span lang="en">Counter-prompt</span></dt>
+            <dd>
+                <span lang="ru">Приём, когда вы&nbsp;<em>сначала</em> просите Claude дать варианты направлений или референсов («назови пять стилей для X»), и&nbsp;только потом запускаете дизайн с&nbsp;конкретным выбранным именем. Полезен, когда у&nbsp;вас нет своего имени для нужной стилистики.</span>
+                <span lang="en">A move where you <em>first</em> ask Claude to suggest directions or references (&ldquo;name five styles for X&rdquo;), then run the design with a specific chosen name. Useful when you do not have a name yet for the look you want.</span>
+            </dd>
+
+            <dt><span lang="ru">Правило четырёх итераций</span><span lang="en">The four-iteration rule</span></dt>
+            <dd>
+                <span lang="ru">Эмпирическое: если после четырёх итераций в&nbsp;одном проекте дизайн не&nbsp;близко к&nbsp;нужному, начинайте новый проект с&nbsp;улучшенным промптом. Накопленный «мусор» в&nbsp;диалоге мешает чистым правкам. Это специфика persistent-history Claude Design&nbsp;&mdash; в&nbsp;Claude Code такого почти не&nbsp;бывает.</span>
+                <span lang="en">Empirical: if after four iterations in one project the design is not close, start a new project with a sharper prompt. The dialogue&rsquo;s accumulated &ldquo;debris&rdquo; gets in the way of clean edits. A Claude Design quirk thanks to its persistent history&nbsp;&mdash; in Claude Code this rarely surfaces.</span>
+            </dd>
+
+            <dt><span lang="ru">Swiss design</span><span lang="en">Swiss design</span></dt>
+            <dd>
+                <span lang="ru">Стиль середины&nbsp;XX&nbsp;века: модульная сетка, sans-serif (Helvetica, Inter), чёткая иерархия размера, минимум цвета, никаких декораций. Имена-референсы: Müller-Brockmann, Armin Hofmann, Max Bill.</span>
+                <span lang="en">A mid-20th-century style: modular grid, sans-serif (Helvetica, Inter), sharp size hierarchy, minimal colour, no ornament. Reference names: Müller-Brockmann, Armin Hofmann, Max Bill.</span>
+            </dd>
+
+            <dt><span lang="ru">Editorial</span><span lang="en">Editorial</span></dt>
+            <dd>
+                <span lang="ru">Стиль «толстого журнала»: крупная serif-типографика, асимметричная композиция, тёплая палитра, ощущение редакторской заметки. Имена-референсы: <em>Wallpaper</em>, <em>Monocle</em>, обложки <em>NYT&nbsp;Sunday</em>, <em>The Gentlewoman</em>.</span>
+                <span lang="en">The &ldquo;thick magazine&rdquo; style: large serif type, asymmetric composition, warm palette, the feel of an editor&rsquo;s note. References: <em>Wallpaper</em>, <em>Monocle</em>, <em>NYT Sunday</em> covers, <em>The Gentlewoman</em>.</span>
+            </dd>
+
+            <dt><span lang="ru">Brutalist</span><span lang="en">Brutalist</span></dt>
+            <dd>
+                <span lang="ru">Стиль «обнажённой структуры»: гипертрофированные размеры, разбитая сетка, сырые контрасты, ощущение наспех собранного. Имя-референс: David Carson (90-е, журнал <em>Ray&nbsp;Gun</em>).</span>
+                <span lang="en">The &ldquo;raw structure&rdquo; style: hypertrophied sizes, broken grid, raw contrasts, hastily-assembled feel. Reference name: David Carson (90s, <em>Ray Gun</em> magazine).</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Постарайтесь сначала ответить мысленно или вслух&nbsp;&mdash; и&nbsp;только потом раскрыть «правильный ответ». После того как сверились, отметьте: <em>знал</em> или <em>не знал</em>.</p>
+        <p class="reading" lang="en">Try answering mentally or out loud first&nbsp;&mdash; only then reveal the &ldquo;right answer.&rdquo; After comparing, mark it: <em>knew</em> or <em>did not know</em>.</p>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">В&nbsp;чём три ключевых отличия дизайн-промпта от&nbsp;код-промпта?</span>
+                        <span lang="en">What are the three key differences between a design prompt and a code prompt?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>1.&nbsp;Формат стал обязательным.</strong> Без расширения файла Claude нечем «заякориться»&nbsp;&mdash; нужно явно указать 1280×800 / A4 / 1080×1080. <strong>2.&nbsp;Стиль задаётся именем, не&nbsp;описанием.</strong> Эпитеты («стильно», «современно») в&nbsp;дизайне работают плохо&nbsp;&mdash; имя дизайнера/продукта/эпохи в&nbsp;десять раз сильнее. <strong>3.&nbsp;Структура&nbsp;&mdash; пространственная.</strong> Описывайте в&nbsp;терминах зон холста («вверху&nbsp;X», «в&nbsp;центре три колонки&nbsp;Y»), а&nbsp;не&nbsp;последовательно.</p>
+                        <p lang="en"><strong>1. Format became mandatory.</strong> Without a file extension Claude has no anchor&nbsp;&mdash; you must specify 1280×800 / A4 / 1080×1080 explicitly. <strong>2. Style is set by name, not description.</strong> Epithets (&ldquo;stylish,&rdquo; &ldquo;modern&rdquo;) work badly in design&nbsp;&mdash; a designer/product/era name is ten times stronger. <strong>3. Structure is spatial.</strong> Describe in terms of canvas zones (&ldquo;top X,&rdquo; &ldquo;centre three columns Y&rdquo;), not sequentially.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Почему «современный, минималистичный, стильный»&nbsp;&mdash; плохой стилевой промпт?</span>
+                        <span lang="en">Why is &ldquo;modern, minimalist, stylish&rdquo; a bad style prompt?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Это эпитеты, а&nbsp;не&nbsp;референсы. В&nbsp;обучающих данных Claude тысячи разных стилей помечены этими словами&nbsp;&mdash; модель усреднит их&nbsp;до&nbsp;«никакого». Конкретный референс («как у&nbsp;Stripe.com», «Müller-Brockmann», «Wallpaper magazine»)&nbsp;&mdash; задаёт точную стилевую систему.</p>
+                        <p lang="en">Those are epithets, not references. Thousands of distinct styles in Claude&rsquo;s training data are tagged with those words&nbsp;&mdash; the model averages to &ldquo;nothing.&rdquo; A concrete reference (&ldquo;like Stripe.com,&rdquo; &ldquo;Müller-Brockmann,&rdquo; &ldquo;Wallpaper magazine&rdquo;) anchors a precise stylistic system.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Какой инструмент лучше всего подходит, чтобы заменить раздел «доставка» на&nbsp;«кофе и&nbsp;завтраки»?</span>
+                        <span lang="en">Which tool best fits replacing the &ldquo;delivery&rdquo; section with &ldquo;coffee and breakfasts&rdquo;?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Текстовый промпт. Это смысловая правка с&nbsp;заменой раздела&nbsp;&mdash; именно сюда текст подходит лучше всего. Инлайн&nbsp;&mdash; для одного элемента, слайдер&nbsp;&mdash; для тонкой подстройки spacing/color.</p>
+                        <p lang="en">A text prompt. A semantic edit replacing a section&nbsp;&mdash; right where text fits best. Inline is for a single element, slider for fine spacing/colour tuning.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">А&nbsp;для «логотип в&nbsp;два раза мельче и&nbsp;сдвинуть вниз»?</span>
+                        <span lang="en">And for &ldquo;logo half the size, shift down&rdquo;?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Инлайн-комментарий, привязанный к&nbsp;логотипу. Точечная правка одного элемента&nbsp;&mdash; именно это сильная сторона инлайна. Текстом можно ошибиться (Claude уменьшит другой логотип или все вместе).</p>
+                        <p lang="en">An inline comment attached to the logo. A pointed edit on one element&nbsp;&mdash; the inline tool&rsquo;s sweet spot. By text you might miss (Claude could resize another logo, or all of them).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">А&nbsp;для «палитра чуть теплее, без&nbsp;чёткой цели»?</span>
+                        <span lang="en">And for &ldquo;palette a touch warmer, no specific target&rdquo;?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Слайдер тёплости. Тонкая подстройка без&nbsp;слов&nbsp;&mdash; именно для этого слайдер существует. Текстом «теплее на&nbsp;15%» вы&nbsp;только запутаете Claude (он&nbsp;не&nbsp;умеет в&nbsp;15%).</p>
+                        <p lang="en">A warmth slider. Wordless fine tuning&nbsp;&mdash; exactly what sliders are for. Asking by text for &ldquo;15% warmer&rdquo; only confuses Claude (it is not great at 15%).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Что говорит «правило четырёх итераций»?</span>
+                        <span lang="en">What does the &ldquo;four-iteration rule&rdquo; say?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Если после четырёх итераций в&nbsp;одном проекте вы&nbsp;не&nbsp;близко к&nbsp;нужному&nbsp;&mdash; начинайте новый проект с&nbsp;улучшенным промптом, а&nbsp;не&nbsp;дотачивайте этот. Накопленный «мусор» в&nbsp;диалоге мешает чистым правкам.</p>
+                        <p lang="en">If after four iterations in one project you are not close, start a new project with a sharper prompt&nbsp;&mdash; do not polish this one. The dialogue&rsquo;s accumulated &ldquo;debris&rdquo; gets in the way of clean edits.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Что такое «контр-промпт» и&nbsp;когда он&nbsp;уместен?</span>
+                        <span lang="en">What is a &ldquo;counter-prompt&rdquo; and when is it useful?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Это когда вы&nbsp;<em>сначала</em> просите Claude дать варианты направлений или референсов, и&nbsp;только потом запускаете дизайн с&nbsp;конкретным выбранным именем. Полезен, когда не&nbsp;знаете «как назвать стиль», который вам нужен. Делает референс конкретным&nbsp;&mdash; и&nbsp;первая версия дизайна резко улучшается.</p>
+                        <p lang="en">A move where you <em>first</em> ask Claude to suggest directions or references, then run the design with the chosen name. Useful when you do not know &ldquo;what to call&rdquo; the style you want. Makes the reference concrete&nbsp;&mdash; and the first take improves sharply.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Отметьте галочками, что освоено уверенно. Если на&nbsp;одном из&nbsp;пунктов сомневаетесь&nbsp;&mdash; вернитесь к&nbsp;соответствующей теме или практике. Этап готов к&nbsp;закрытию, когда все галочки стоят.</p>
+        <p class="reading" lang="en">Tick what you have nailed. If unsure on a point&nbsp;&mdash; return to the relevant topic or practice. The etape is ready to close when all ticks are up.</p>
+
+        <ul class="checklist">
+            <li data-key="d1-anatomy">
+                <span lang="ru">Знаю три отличия дизайн-промпта от&nbsp;код-промпта: формат обязателен, стиль задаётся именем (не&nbsp;описанием), структура&nbsp;&mdash; пространственная (по&nbsp;зонам холста).</span>
+                <span lang="en">I know the three differences between a design prompt and a code prompt: format is mandatory, style is set by name (not description), structure is spatial (canvas zones).</span>
+            </li>
+            <li data-key="d1-reference">
+                <span lang="ru">Не&nbsp;использую эпитеты («стильно», «современно»). Всегда даю конкретный референс&nbsp;&mdash; имя дизайнера, направления, продукта или издания.</span>
+                <span lang="en">I do not use epithets (&ldquo;stylish,&rdquo; &ldquo;modern&rdquo;). I always hand over a concrete reference&nbsp;&mdash; a designer, movement, product, or publication name.</span>
+            </li>
+            <li data-key="d1-text">
+                <span lang="ru">Понимаю, что текстовый промпт&nbsp;&mdash; для смены концепции, замены раздела, добавления блока. Не&nbsp;для точечных правок.</span>
+                <span lang="en">I get that the text prompt is for concept swap, section replacement, adding a block. Not for pointed corrections.</span>
+            </li>
+            <li data-key="d1-inline">
+                <span lang="ru">Уверенно использую инлайн-комментарии для точечных правок одного элемента: размер, позиция, шрифт.</span>
+                <span lang="en">I confidently use inline comments for pointed one-element edits: size, position, typeface.</span>
+            </li>
+            <li data-key="d1-slider">
+                <span lang="ru">Понимаю, что слайдер&nbsp;&mdash; финальная отделка spacing/color/layout. Не&nbsp;для смены концепции.</span>
+                <span lang="en">I get that the slider is final polish for spacing/colour/layout. Not for concept swap.</span>
+            </li>
+            <li data-key="d1-rule">
+                <span lang="ru">Знаю «правило четырёх итераций»: после четырёх неудачных итераций&nbsp;&mdash; новый проект с&nbsp;улучшенным промптом, а&nbsp;не&nbsp;дотачивание тупикового.</span>
+                <span lang="en">I know the &ldquo;four-iteration rule&rdquo;: after four failed iterations, a new project with a sharper prompt&nbsp;&mdash; not endless polishing.</span>
+            </li>
+            <li data-key="d1-deliverables">
+                <span lang="ru">Сделал артефакты этапа: лендинг кофейни в&nbsp;трёх стилях (Swiss / editorial / brutalist), постер фильма, лендинг своего проекта в&nbsp;трёх стилях, и&nbsp;один холст с&nbsp;полным циклом всех трёх инструментов.</span>
+                <span lang="en">Etape artefacts done: a café landing in three styles (Swiss / editorial / brutalist), a film poster, a landing for my own project in three styles, one canvas with the full three-tool cycle.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="design-01" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="claude-design-00.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">00 · Подготовка</span><span lang="en">00 · Setup</span></span>
+            </a>
+            <a class="next disabled" href="#" aria-disabled="true">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">02 · Загрузка контекста <em>(скоро)</em></span><span lang="en">02 · Uploading Context <em>(soon)</em></span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Хороший промпт&nbsp;&mdash; это десять минут работы, которые экономят два часа правок».</p>
+            <p class="signature" lang="en">&ldquo;A good prompt is ten minutes of work that saves two hours of corrections.&rdquo;</p>
+            <p lang="ru">Этап&nbsp;01 пройден&nbsp;&mdash; теперь у&nbsp;вас есть рабочий промпт-каркас и&nbsp;осознанный выбор инструмента под каждую задачу. Дальше учимся <strong>загружать контекст</strong>: бриф в&nbsp;DOCX, табличку в&nbsp;XLSX, шаблон деки в&nbsp;PPTX&nbsp;&mdash; и&nbsp;Claude собирает дизайн уже из&nbsp;вашего материала.</p>
+            <p lang="en">Etape 01 is behind you&nbsp;&mdash; you now own a working prompt skeleton and a conscious tool-pick per task. Next we learn to <strong>upload context</strong>: a brief in DOCX, a sheet in XLSX, a deck template in PPTX&nbsp;&mdash; and Claude builds the design from your own material.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="claude-design-00.html"><span lang="ru">← Этап&nbsp;00</span><span lang="en">← Etape 00</span></a></li>
+                <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

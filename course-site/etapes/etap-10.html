@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 10 · Автопилот, фоновые задачи и мониторинг — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 10 курса по Claude Code: cron, schedule, push-уведомления в Telegram, фоновые задачи, PostHog LLM Analytics. Финансовый дворецкий и дневник на автопилоте.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="10">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 10</span><span lang="en">Etape 10</span></span> &nbsp;·&nbsp; <span lang="ru">Автопилот, фоновые задачи и&nbsp;мониторинг</span><span lang="en">Autopilot, background tasks &amp; monitoring</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Claude работает, <em>пока вы&nbsp;спите</em>.</span>
+            <span lang="en">Claude works <em>while you sleep</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            До&nbsp;этого вы&nbsp;запускали Claude вручную. Сегодня учим его работать <em>сам</em>: каждое утро в&nbsp;8:30 присылать сводку по&nbsp;портфелю в&nbsp;Telegram, по&nbsp;пятницам делать недельный обзор, мгновенно реагировать на&nbsp;падение цены, и&nbsp;вести через PostHog статистику собственных запусков.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Until now you launched Claude by hand. Today we teach it to work <em>on its own</em>: send a portfolio digest to Telegram every morning at 8:30, deliver a weekly review on Fridays, react instantly to price drops, and log its own runs through PostHog.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">7–9 дней · 2–4&nbsp;ч/день</span><span lang="en">7–9 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">cron · schedule · фоновые задачи · push · мониторинг</span><span lang="en">cron · schedule · background tasks · push · monitoring</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">Claude работает по&nbsp;расписанию без&nbsp;вашего участия</span><span lang="en">Claude runs on a schedule without your involvement</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">«Финансовый дворецкий» в&nbsp;Telegram + «Дневник на&nbsp;автопилоте»</span><span lang="en">a “Financial Butler” in Telegram + a “Diary on Autopilot”</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что устанавливаем перед началом</span><span lang="en">What to install before you start</span></h2>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · аккаунт</span><span lang="en">required · account</span></span>
+            <h3><span lang="ru">Telegram-бот через @BotFather</span><span lang="en">Telegram bot via @BotFather</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> ваш собственный Telegram-бот, через которого Claude будет писать вам сообщения и&nbsp;получать ответы.<br>
+            <strong>Зачем сейчас:</strong> push-канал для&nbsp;всех автоматизаций.<br>
+            <strong>Как получить:</strong> в&nbsp;Telegram найдите <a href="https://t.me/BotFather">@BotFather</a>, нажмите <code>/newbot</code>, дайте имя и&nbsp;username. В&nbsp;ответ&nbsp;&mdash; <code>token</code> вида <code>123456:ABC-DEF...</code>. <strong>Никому не&nbsp;показывайте</strong>: с&nbsp;ним любой может писать от&nbsp;имени бота.<br>
+            <strong>Куда положить:</strong> в&nbsp;<code>.env</code>: <code>TELEGRAM_BOT_TOKEN=&lt;token&gt;</code>. На&nbsp;Railway/сервере&nbsp;&mdash; через env vars dashboard.<br>
+            <strong>Свой <code>chat_id</code>:</strong> напишите боту любое сообщение, потом откройте <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code>&nbsp;&mdash; в&nbsp;JSON будет <code>chat.id</code>. Запишите в&nbsp;<code>.env</code> как <code>TELEGRAM_CHAT_ID</code>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> your own Telegram bot through which Claude pushes messages and gets replies.<br>
+            <strong>Why now:</strong> the push channel for all automations.<br>
+            <strong>How to get:</strong> in Telegram find <a href="https://t.me/BotFather">@BotFather</a>, send <code>/newbot</code>, pick a name and username. You receive a <code>token</code> like <code>123456:ABC-DEF...</code>. <strong>Never share</strong>: anyone can post as your bot.<br>
+            <strong>Where to put:</strong> in <code>.env</code>: <code>TELEGRAM_BOT_TOKEN=&lt;token&gt;</code>. On Railway/server — via env vars dashboard.<br>
+            <strong>Your <code>chat_id</code>:</strong> message the bot anything, then open <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> — JSON contains <code>chat.id</code>. Save to <code>.env</code> as <code>TELEGRAM_CHAT_ID</code>.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · аккаунт + skill</span><span lang="en">recommended · account + skill</span></span>
+            <h3>PostHog + skill <code>posthog:llma-cc-setup</code></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> PostHog&nbsp;&mdash; продуктовая аналитика. Skill <code>llma-cc-setup</code> учит Claude отправлять туда логи каждой своей сессии (с&nbsp;токенами, ошибками, моделью). На&nbsp;дашборде вы&nbsp;видите, во&nbsp;что вам обходится автопилот.<br>
+            <strong>Зачем сейчас:</strong> когда у&nbsp;вас 4&nbsp;cron-задачи, легко не&nbsp;заметить, что одна крутится впустую и&nbsp;тратит токены. PostHog подсветит.<br>
+            <strong>Как получить:</strong> регистрация на&nbsp;<a href="https://posthog.com">posthog.com</a> (бесплатно до&nbsp;1М событий/мес). Получите project API key, положите в&nbsp;<code>.env</code> как <code>POSTHOG_API_KEY</code>.<br>
+            <strong>Установка skill:</strong></p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> PostHog — product analytics. The <code>llma-cc-setup</code> skill teaches Claude to send each session’s logs (tokens, errors, model). On the dashboard you see what your autopilot costs.<br>
+            <strong>Why now:</strong> with 4 cron tasks it’s easy to miss that one is spinning empty and burning tokens. PostHog surfaces that.<br>
+            <strong>How to get:</strong> sign up at <a href="https://posthog.com">posthog.com</a> (free up to 1M events/month). Grab a project API key, save in <code>.env</code> as <code>POSTHOG_API_KEY</code>.<br>
+            <strong>Install the skill:</strong></p>
+            <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest skill add posthog/llma-cc-setup --agent claude-code</pre>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · ОС</span><span lang="en">required · OS</span></span>
+            <h3><span lang="ru">Планировщик задач: cron или Task Scheduler</span><span lang="en">Task scheduler: cron or Task Scheduler</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> встроенный планировщик ОС, запускающий программы по&nbsp;расписанию. <em>Linux/macOS</em>&nbsp;&mdash; <code>cron</code> через <code>crontab -e</code>. <em>Windows</em>&nbsp;&mdash; Task Scheduler через <code>taskschd.msc</code> или <code>schtasks</code>.<br>
+            <strong>Зачем сейчас:</strong> чтобы скрипт «утренний отчёт» запускался каждый день в&nbsp;8:30 без&nbsp;вашего участия.<br>
+            <strong>Альтернатива&nbsp;&mdash; Railway Cron:</strong> если ваш бот живёт на&nbsp;Railway (этап&nbsp;06), там есть встроенный cron в&nbsp;настройках сервиса.<br>
+            <strong>Проверить:</strong> на&nbsp;Linux/macOS <code>crontab -l</code> покажет ваш текущий список. На&nbsp;Windows <code>schtasks /query</code>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the built-in OS scheduler that runs programs on a clock. <em>Linux/macOS</em> — <code>cron</code> via <code>crontab -e</code>. <em>Windows</em> — Task Scheduler via <code>taskschd.msc</code> or <code>schtasks</code>.<br>
+            <strong>Why now:</strong> so a “morning report” script fires daily at 8:30 unattended.<br>
+            <strong>Alternative — Railway Cron:</strong> if your bot lives on Railway (etape 06), there’s a built-in cron in the service settings.<br>
+            <strong>Verify:</strong> on Linux/macOS <code>crontab -l</code> shows your list. On Windows <code>schtasks /query</code>.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3>schedule + loop</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> два встроенных skill Claude Code. <code>schedule</code> создаёт «удалённых агентов», работающих по&nbsp;cron в&nbsp;облаке Anthropic (без&nbsp;вашего сервера). <code>loop</code>&nbsp;&mdash; запускает скрипт повторно с&nbsp;интервалом, не&nbsp;отлучаясь из&nbsp;текущей сессии.<br>
+            <strong>Зачем сейчас:</strong> для&nbsp;вариантов «не&nbsp;хочу разбираться с&nbsp;cron» используем <code>schedule</code>. Для&nbsp;«проверить статус долгого деплоя каждые 5&nbsp;минут»&nbsp;&mdash; <code>loop</code>.<br>
+            <strong>Проверить:</strong> <code>/skills</code>&nbsp;&mdash; должны быть в&nbsp;списке (часто встроены по&nbsp;умолчанию).</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What they are:</strong> two Claude Code built-in skills. <code>schedule</code> creates “remote agents” that run on cron in Anthropic’s cloud (no server of yours). <code>loop</code> reruns a script at an interval without leaving the current session.<br>
+            <strong>Why now:</strong> for “I don’t want to deal with cron” paths we use <code>schedule</code>. For “check a long deploy every 5 minutes” — <code>loop</code>.<br>
+            <strong>Check:</strong> <code>/skills</code> — likely already in the list (often built-in).</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3><span lang="ru">Из&nbsp;этапов 06–09</span><span lang="en">From etapes 06–09</span></h3>
+            <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Backend на&nbsp;Railway (этап&nbsp;06) или другой сервер, где будут жить cron-задачи;</li>
+                <li>MCP «Daily Trader» из&nbsp;этапа&nbsp;09 (для&nbsp;<code>get_price</code> в&nbsp;скриптах);</li>
+                <li>ANTHROPIC_API_KEY из&nbsp;этапа&nbsp;06 (для&nbsp;Claude API в&nbsp;ваших скриптах);</li>
+                <li>ALPHAVANTAGE_KEY из&nbsp;этапа&nbsp;03.</li>
+            </ul>
+            <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>A backend on Railway (etape 06) or another server hosting your cron tasks;</li>
+                <li>The Daily Trader MCP from etape 09 (for <code>get_price</code> in your scripts);</li>
+                <li>ANTHROPIC_API_KEY from etape 06 (for Claude API inside your scripts);</li>
+                <li>ALPHAVANTAGE_KEY from etape 03.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что нужно понимать про&nbsp;автоматизацию</span><span lang="en">What you must understand about automation</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Cron-расписание: как сказать машине «каждый день в&nbsp;8:30»</span><span lang="en">Cron expressions: telling the machine “every day at 8:30”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><dfn class="term" tabindex="0" data-def="строка из 5 полей: минута, час, день месяца, месяц, день недели. Описывает, когда запускать программу. «30 8 * * *» — каждый день в 8:30.">Cron-выражение</dfn>&nbsp;&mdash; пять полей через пробел:</p>
+                    <pre class="shell"> ┌─────────── минута (0–59)
+ │ ┌───────── час (0–23)
+ │ │ ┌─────── день месяца (1–31)
+ │ │ │ ┌───── месяц (1–12)
+ │ │ │ │ ┌─── день недели (0–6, 0 = воскресенье)
+ │ │ │ │ │
+ 30 8 * * *    <span class="cmt"># <span lang="ru">каждый день в 8:30</span><span lang="en">every day at 8:30</span></span>
+ 0 19 * * 5    <span class="cmt"># <span lang="ru">каждую пятницу в 19:00</span><span lang="en">every Friday at 19:00</span></span>
+ 0 9 1 * *     <span class="cmt"># <span lang="ru">первое число месяца в 9:00</span><span lang="en">1st of month at 9:00</span></span>
+ */15 * * * *  <span class="cmt"># <span lang="ru">каждые 15 минут</span><span lang="en">every 15 minutes</span></span></pre>
+                    <p>Запоминать не&nbsp;нужно. Скажите Claude <em>«каждый рабочий день в&nbsp;8:30»</em>&nbsp;&mdash; он&nbsp;сам построит выражение. Ваше дело&nbsp;&mdash; понимать, что эти пять цифр означают «когда».</p>
+                    <p><strong>Часовые пояса.</strong> Cron на&nbsp;сервере живёт в&nbsp;часовом поясе сервера. Если ваш Railway-сервер в&nbsp;UTC, а&nbsp;вам нужно «в&nbsp;8:30 по&nbsp;Москве»&nbsp;&mdash; ставите <code>30 5 * * *</code>. Лучшая практика&nbsp;&mdash; задать TZ в&nbsp;конфиге cron.</p>
+                </div>
+                <div lang="en">
+                    <p>A <dfn class="term" tabindex="0" data-def="a 5-field string: minute, hour, day of month, month, day of week. Tells when to run a program. “30 8 * * *” — every day at 8:30.">cron expression</dfn> is five space-separated fields:</p>
+                    <pre class="shell"> ┌─────────── minute (0–59)
+ │ ┌───────── hour (0–23)
+ │ │ ┌─────── day of month (1–31)
+ │ │ │ ┌───── month (1–12)
+ │ │ │ │ ┌─── day of week (0–6, 0 = Sunday)
+ │ │ │ │ │
+ 30 8 * * *    <span class="cmt"># every day at 8:30</span>
+ 0 19 * * 5    <span class="cmt"># every Friday at 19:00</span>
+ 0 9 1 * *     <span class="cmt"># 1st of month at 9:00</span>
+ */15 * * * *  <span class="cmt"># every 15 minutes</span></pre>
+                    <p>You don’t need to memorise it. Tell Claude <em>“every weekday at 8:30”</em> — it builds the expression. Your job is to know those five digits mean “when.”</p>
+                    <p><strong>Timezones.</strong> Cron on a server lives in the server’s TZ. Railway in UTC, you want “8:30 Moscow time” — set <code>30 5 * * *</code>. Best practice — set TZ in the cron config.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Где живёт расписание: cron, Railway, schedule-skill</span><span lang="en">Where schedules live: cron, Railway, schedule skill</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Три варианта запустить «каждый день в&nbsp;8:30»:</p>
+                    <ol>
+                        <li><strong>Системный cron</strong> на&nbsp;вашем компьютере. Подходит, если компьютер всегда включён. Минус&nbsp;&mdash; если ноутбук закрыт, расписание не&nbsp;сработает.</li>
+                        <li><strong>Railway Cron</strong> (или другой облачный хост). Сервис всегда поднят, расписание в&nbsp;настройках. Лучше всего для&nbsp;долгоживущих автоматизаций.</li>
+                        <li><strong>Skill <code>schedule</code></strong> от&nbsp;Anthropic. Создаёт «remote agent», работающий в&nbsp;облаке Anthropic. Без&nbsp;вашего сервера. Идеально для&nbsp;учебных и&nbsp;личных задач.</li>
+                    </ol>
+                    <p>Сравнение:</p>
+                    <table style="width:100%; margin: 1rem 0; border-collapse: collapse;">
+                        <thead style="border-bottom: 2px solid var(--rule);">
+                            <tr><th style="text-align:left; padding: 0.4rem 0;"></th><th style="text-align:left;">Простота</th><th style="text-align:left;">Стоимость</th><th style="text-align:left;">Когда</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Системный cron</td><td>средне</td><td>бесплатно</td><td>сервер всегда включён</td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Railway Cron</td><td>легко</td><td>$5/мес</td><td>уже есть бэкенд</td></tr>
+                            <tr><td style="padding: 0.4rem 0;">schedule skill</td><td>проще всего</td><td>токены Claude</td><td>лёгкие задачи без&nbsp;своего сервера</td></tr>
+                        </tbody>
+                    </table>
+                    <p>В&nbsp;курсе используем все три. «Финансовый дворецкий» с&nbsp;тяжёлой логикой&nbsp;&mdash; на&nbsp;Railway. Лёгкие напоминалки и&nbsp;«дневник»&nbsp;&mdash; через <code>schedule</code> skill.</p>
+                </div>
+                <div lang="en">
+                    <p>Three places to run “every day at 8:30”:</p>
+                    <ol>
+                        <li><strong>System cron</strong> on your computer. Good if your machine is always on. Downside — laptop closed, schedule misses.</li>
+                        <li><strong>Railway Cron</strong> (or another cloud host). The service is always up, schedule is in settings. Best for long-lived automations.</li>
+                        <li><strong>The <code>schedule</code> skill</strong> from Anthropic. Creates a “remote agent” running in Anthropic’s cloud. No server of yours. Perfect for learning and personal tasks.</li>
+                    </ol>
+                    <p>Comparison:</p>
+                    <table style="width:100%; margin: 1rem 0; border-collapse: collapse;">
+                        <thead style="border-bottom: 2px solid var(--rule);">
+                            <tr><th style="text-align:left; padding: 0.4rem 0;"></th><th style="text-align:left;">Simplicity</th><th style="text-align:left;">Cost</th><th style="text-align:left;">When</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">System cron</td><td>medium</td><td>free</td><td>always-on server</td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Railway Cron</td><td>easy</td><td>$5/mo</td><td>backend already exists</td></tr>
+                            <tr><td style="padding: 0.4rem 0;">schedule skill</td><td>easiest</td><td>Claude tokens</td><td>light tasks, no server</td></tr>
+                        </tbody>
+                    </table>
+                    <p>We use all three. The “Financial Butler” with heavy logic on Railway. Light reminders and the “diary” — via the <code>schedule</code> skill.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Push-уведомления: Telegram как универсальный канал</span><span lang="en">Push notifications: Telegram as the universal channel</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Когда автоматизация что-то готова сообщить, нужен <em>канал доставки</em>. Опции:</p>
+                    <ul>
+                        <li>Email&nbsp;&mdash; универсально, но&nbsp;часто теряется в&nbsp;ящике;</li>
+                        <li>Slack&nbsp;&mdash; хорошо для&nbsp;команд, требует Slack-аккаунт у&nbsp;всех;</li>
+                        <li><strong>Telegram</strong>&nbsp;&mdash; мгновенно, бесплатно, у&nbsp;всех на&nbsp;телефоне.</li>
+                    </ul>
+                    <p>Для&nbsp;курса берём Telegram. Минимум, чтобы отправить сообщение себе:</p>
+                    <pre class="shell"><span class="prompt">$</span> curl -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
+       -d "chat_id=$CHAT_ID" \
+       -d "text=Hello from Claude"</pre>
+                    <p>Одна строка bash. Никаких SDK, библиотек, авторизации&nbsp;&mdash; просто HTTP-вызов.</p>
+                    <p>В&nbsp;Python с&nbsp;библиотекой <code>python-telegram-bot</code>&nbsp;&mdash; ещё проще:</p>
+                    <pre class="shell">from telegram import Bot
+bot = Bot(token=os.environ["TELEGRAM_BOT_TOKEN"])
+bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
+                    <p>Бот может не&nbsp;только отправлять, но&nbsp;и&nbsp;<em>принимать</em> сообщения от&nbsp;вас (для&nbsp;«дневника на&nbsp;автопилоте»). Для&nbsp;этого&nbsp;&mdash; webhook на&nbsp;вашем backend, либо <code>polling</code> в&nbsp;скрипте.</p>
+                </div>
+                <div lang="en">
+                    <p>When automation has something to say, it needs a <em>delivery channel</em>. Options:</p>
+                    <ul>
+                        <li>Email — universal but often lost in the inbox;</li>
+                        <li>Slack — great for teams, requires accounts;</li>
+                        <li><strong>Telegram</strong> — instant, free, on everyone’s phone.</li>
+                    </ul>
+                    <p>The course goes Telegram. Minimal “send myself a message”:</p>
+                    <pre class="shell"><span class="prompt">$</span> curl -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
+       -d "chat_id=$CHAT_ID" \
+       -d "text=Hello from Claude"</pre>
+                    <p>One bash line. No SDK, no libraries, no auth — just HTTP.</p>
+                    <p>In Python with <code>python-telegram-bot</code> — even simpler:</p>
+                    <pre class="shell">from telegram import Bot
+bot = Bot(token=os.environ["TELEGRAM_BOT_TOKEN"])
+bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
+                    <p>The bot can also <em>receive</em> from you (for the “diary on autopilot”). For that — a webhook on your backend, or <code>polling</code> in a script.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Фоновые задачи и&nbsp;Monitor: «уйди и&nbsp;дай знать, когда готово»</span><span lang="en">Background tasks and Monitor: “go away, ping me when ready”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;Claude Code есть две нативные возможности для&nbsp;долгих задач:</p>
+                    <ol>
+                        <li><strong><code>run_in_background: true</code></strong>&nbsp;&mdash; запускает Bash-команду в&nbsp;фоне. Главный Claude получает ID&nbsp;процесса и&nbsp;продолжает работать. Можно проверить статус позже.</li>
+                        <li><strong>Monitor</strong>&nbsp;&mdash; инструмент «следи за&nbsp;потоком». Подходит, чтобы дождаться завершения процесса (например, build на&nbsp;15 минут): Claude засыпает, просыпается на&nbsp;каждой строке&nbsp;stdout, реагирует.</li>
+                    </ol>
+                    <p>Когда полезно:</p>
+                    <ul>
+                        <li>Долгий деплой&nbsp;&mdash; запустили в&nbsp;фоне, продолжаете другие задачи, проверяете через 5&nbsp;минут;</li>
+                        <li>Цепочка из&nbsp;нескольких subagents&nbsp;&mdash; пока один работает, готовите brief для&nbsp;следующего;</li>
+                        <li>Локальный сервер&nbsp;&mdash; запустили <code>uvicorn</code>, переключились на&nbsp;тестирование через playwright.</li>
+                    </ul>
+                    <pre class="shell">&gt; запусти uvicorn в фоне (run_in_background) на порту 8000.
+&gt; через playwright проверь, что http://localhost:8000/docs открывается.
+&gt; если всё ок — оставь сервер работать, мы будем тестировать.
+&gt; если упал — покажи логи и killни процесс.</pre>
+                </div>
+                <div lang="en">
+                    <p>Claude Code has two native facilities for long tasks:</p>
+                    <ol>
+                        <li><strong><code>run_in_background: true</code></strong> — runs a Bash command in the background. Main Claude gets a process ID and keeps working. You can check status later.</li>
+                        <li><strong>Monitor</strong> — a “follow the stream” tool. Good for waiting on a process (e.g., a 15-minute build): Claude sleeps, wakes on each stdout line, reacts.</li>
+                    </ol>
+                    <p>When useful:</p>
+                    <ul>
+                        <li>A long deploy — fire in the background, do other tasks, check in 5 minutes;</li>
+                        <li>A chain of subagents — while one works, prep the next brief;</li>
+                        <li>A local server — start <code>uvicorn</code>, switch to playwright testing.</li>
+                    </ul>
+                    <pre class="shell">&gt; start uvicorn in background (run_in_background) on port 8000.
+&gt; via playwright verify http://localhost:8000/docs opens.
+&gt; if all ok — leave the server running, we'll test.
+&gt; if it crashed — show logs and kill the process.</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="свойство задачи: запуск её повторно даёт тот же результат и не вредит. Утренний отчёт можно прислать дважды — пользователь увидит дубль, но ничего не сломается. Удалить файл «по cron» — НЕ идемпотентно.">Идемпотентность</dfn>: запустилось дважды&nbsp;&mdash; ничего не&nbsp;сломалось</span><span lang="en"><dfn class="term" tabindex="0" data-def="A task’s property: running it again yields the same result without harm. Sending the morning digest twice — user sees a duplicate, nothing breaks. Cron-deleting a file — NOT idempotent.">Idempotency</dfn>: ran twice — no damage</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Cron в&nbsp;реальной жизни срабатывает не&nbsp;всегда «один раз»: бывают дубли (сервер перезапустился, расписание сработало два&nbsp;раза), пропуски (сервер был выключен), сдвиги по&nbsp;timezone.</p>
+                    <p>Правило: <strong>каждая cron-задача должна быть идемпотентной</strong>. Запуск дважды&nbsp;&mdash; не&nbsp;ломает ничего.</p>
+                    <p>Что это значит на&nbsp;практике:</p>
+                    <ul>
+                        <li>Утренний отчёт может прислать дубль&nbsp;&mdash; неприятно, но&nbsp;не&nbsp;катастрофа.</li>
+                        <li>«Удалить старые файлы»&nbsp;&mdash; <em>не&nbsp;идемпотентно</em>: первый запуск удалил, второй удалит ещё. Решение&nbsp;&mdash; в&nbsp;скрипте проверять «есть&nbsp;ли что удалять».</li>
+                        <li>«Купить акцию по&nbsp;сигналу»&nbsp;&mdash; <em>опасно</em>: дубль = двойная покупка. Нужен механизм блокировки.</li>
+                    </ul>
+                    <p>Дисциплина: перед каждой cron-задачей задайтесь вопросом <em>«что произойдёт, если она сработает дважды подряд?»</em>. Если ответ «ничего страшного»&nbsp;&mdash; идём дальше. Если «деньги пропадут»&nbsp;&mdash; добавляем защиту.</p>
+                </div>
+                <div lang="en">
+                    <p>Cron in real life is not always “exactly once”: duplicates (server restart, fired twice), misses (server was off), TZ shifts.</p>
+                    <p>Rule: <strong>every cron task must be idempotent</strong>. Running twice — no damage.</p>
+                    <p>In practice:</p>
+                    <ul>
+                        <li>The morning digest may double — annoying, not a disaster.</li>
+                        <li>“Delete old files” — <em>not idempotent</em>: first run deletes, second deletes more. Fix — check “is there anything to delete” in the script.</li>
+                        <li>“Buy on signal” — <em>dangerous</em>: a duplicate = double purchase. Needs a lock.</li>
+                    </ul>
+                    <p>Discipline: before each cron task ask <em>“what happens if it fires twice in a row?”</em> If “no big deal” — go ahead. If “money disappears” — add protection.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">PostHog LLM Analytics: видеть, во&nbsp;что обходится автопилот</span><span lang="en">PostHog LLM Analytics: seeing what your autopilot costs</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Когда у&nbsp;вас 3–4 cron-задачи и&nbsp;Telegram-бот, легко не&nbsp;заметить, что одна из&nbsp;них:</p>
+                    <ul>
+                        <li>Сожгла лимит Anthropic за&nbsp;неделю;</li>
+                        <li>Запускается дважды (cron сошёл с&nbsp;ума);</li>
+                        <li>Отдаёт пустые ответы из-за&nbsp;истёкшего ключа.</li>
+                    </ul>
+                    <p>PostHog LLM Analytics&nbsp;&mdash; это дашборд, на&nbsp;котором видно <em>каждый</em> запуск Claude из&nbsp;ваших скриптов: модель, токены, цена, ошибки, длительность. Skill <code>posthog:llma-cc-setup</code> добавляет в&nbsp;Claude Code автоматическую отправку телеметрии.</p>
+                    <p>Что вы&nbsp;увидите на&nbsp;дашборде:</p>
+                    <ul>
+                        <li>Тренд токенов в&nbsp;день&nbsp;&mdash; «утренний отчёт стал жирнее, надо сократить контекст»;</li>
+                        <li>Распределение по&nbsp;моделям&nbsp;&mdash; «слишком много Opus, переключить на&nbsp;Sonnet»;</li>
+                        <li>Top-N&nbsp;ошибок&nbsp;&mdash; «90% сбоев из-за&nbsp;rate limit Alpha Vantage»;</li>
+                        <li>Cost-per-task&nbsp;&mdash; «каждый утренний отчёт обходится в&nbsp;5 центов».</li>
+                    </ul>
+                    <p>Когда вы&nbsp;<em>не&nbsp;следите</em>, автопилот тихо разоряет вас на&nbsp;токенах. Когда следите&nbsp;&mdash; видите, что оптимизировать.</p>
+                </div>
+                <div lang="en">
+                    <p>With 3–4 cron tasks and a Telegram bot, it’s easy to miss that one is:</p>
+                    <ul>
+                        <li>burning your weekly Anthropic budget;</li>
+                        <li>firing twice (cron gone wild);</li>
+                        <li>returning empty replies because the key expired.</li>
+                    </ul>
+                    <p>PostHog LLM Analytics is a dashboard that shows <em>every</em> Claude invocation from your scripts: model, tokens, cost, errors, latency. The <code>posthog:llma-cc-setup</code> skill wires automatic telemetry into Claude Code.</p>
+                    <p>On the dashboard you see:</p>
+                    <ul>
+                        <li>Daily token trend — “the morning report got fat, trim the context”;</li>
+                        <li>Model distribution — “too much Opus, switch to Sonnet”;</li>
+                        <li>Top-N errors — “90% of failures from Alpha Vantage rate limit”;</li>
+                        <li>Cost-per-task — “each morning report costs 5 cents.”</li>
+                    </ul>
+                    <p>Without monitoring, autopilot quietly drains your token budget. With it — you see what to optimise.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Дисциплина автопилота: четыре правила</span><span lang="en">Autopilot discipline: four rules</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Перед тем как ставить задачу «работать самостоятельно», прогоните её&nbsp;по&nbsp;четырём правилам:</p>
+                    <ol>
+                        <li><strong>Идемпотентность.</strong> Что произойдёт, если задача сработает дважды? Если плохо&nbsp;&mdash; добавьте защиту (флаг-файл, lock в&nbsp;БД, проверка «уже было сегодня»).</li>
+                        <li><strong>Граница времени.</strong> Сколько максимум может длиться задача? Если больше N&nbsp;минут&nbsp;&mdash; убивать. Иначе застрявший процесс будет жечь ресурсы.</li>
+                        <li><strong>Кнопка «стоп».</strong> Как быстро остановить автоматизацию, если что-то пошло не&nbsp;так? Команда <code>/stop_autopilot</code> в&nbsp;вашем Telegram-боте&nbsp;&mdash; хорошая практика.</li>
+                        <li><strong>Канал ошибок.</strong> Куда уходят сообщения «сбой»? Если только в&nbsp;логи&nbsp;&mdash; вы&nbsp;их&nbsp;не&nbsp;увидите. Хороший шаблон: ошибки приходят в&nbsp;тот&nbsp;же Telegram-чат, что и&nbsp;успехи, но&nbsp;с&nbsp;маркером ⚠.</li>
+                    </ol>
+                    <p>Без&nbsp;этих правил «автопилот» превращается в&nbsp;«чёрную дыру», в&nbsp;которой что-то происходит, но&nbsp;вы&nbsp;не&nbsp;знаете что. С&nbsp;ними&nbsp;&mdash; вы&nbsp;контролируете автономный процесс с&nbsp;любого экрана.</p>
+                </div>
+                <div lang="en">
+                    <p>Before sending a task to “run on its own,” walk it through four rules:</p>
+                    <ol>
+                        <li><strong>Idempotency.</strong> What happens if it fires twice? If bad — add protection (flag file, DB lock, “already done today” check).</li>
+                        <li><strong>Time bound.</strong> Max duration? If above N minutes — kill it. Otherwise a stuck process burns resources forever.</li>
+                        <li><strong>“Stop” button.</strong> How fast can you halt it if it goes off the rails? A <code>/stop_autopilot</code> command in your Telegram bot is good practice.</li>
+                        <li><strong>Error channel.</strong> Where do “failure” messages go? Only logs — you’ll never see them. Pattern: errors land in the same Telegram chat as successes, but with a ⚠ marker.</li>
+                    </ol>
+                    <p>Without these rules, “autopilot” becomes a black hole — something happens, you don’t know what. With them — you control an autonomous process from any screen.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">«Hello, autopilot»: первое расписание</span><span lang="en">“Hello, autopilot”: your first schedule</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · сообщение в&nbsp;Telegram по&nbsp;cron</span><span lang="en">Run · a Telegram message on cron</span></h4>
+            <ol lang="ru">
+                <li>Создайте Telegram-бота через @BotFather, получите <code>TELEGRAM_BOT_TOKEN</code>.</li>
+                <li>Напишите боту любое сообщение, в&nbsp;<code>https://api.telegram.org/bot$TOKEN/getUpdates</code> найдите <code>chat.id</code>&nbsp;&mdash; это ваш <code>TELEGRAM_CHAT_ID</code>. Положите оба в&nbsp;<code>.env</code>.</li>
+                <li>Создайте папку <code>autopilot-warmup</code>, запустите <code>claude</code>.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; составь bash-скрипт ping.sh:
+&gt; читает .env, шлёт через telegram api сообщение
+&gt; "🟢 autopilot ping at $(date '+%Y-%m-%d %H:%M')".
+&gt; протестируй — запусти, проверь что сообщение пришло.</pre>
+                </li>
+                <li>Если пришло&nbsp;&mdash; добавьте в&nbsp;cron на&nbsp;каждые 5&nbsp;минут (для&nbsp;теста):
+                    <pre class="shell">&gt; добавь cron-задачу: запускать ping.sh каждые 5 минут.
+&gt; на linux/macos — через crontab.
+&gt; на windows — через schtasks.
+&gt; покажи мне получившуюся запись.</pre>
+                </li>
+                <li>Дождитесь следующих 5&nbsp;минут&nbsp;&mdash; ещё одно сообщение должно прийти. Если да&nbsp;&mdash; cron работает.</li>
+                <li>Удалите тестовый cron, чтобы не&nbsp;спамить себя:
+                    <pre class="shell">&gt; убери задачу из cron / schtasks. подтверди что она удалилась.</pre>
+                </li>
+                <li>Альтернативный путь&nbsp;&mdash; через skill <code>schedule</code>:
+                    <pre class="shell">&gt; используя skill schedule, создай remote agent
+&gt; "test-ping": каждый день в 12:00 шлёт мне в telegram
+&gt; короткое сообщение "📅 daily ping".
+&gt; покажи список моих текущих агентов.</pre>
+                </li>
+                <li>Сравните: где удобнее? Что вы&nbsp;будете использовать дальше&nbsp;&mdash; OS-cron или skill?</li>
+            </ol>
+            <ol lang="en">
+                <li>Create a Telegram bot via @BotFather, get <code>TELEGRAM_BOT_TOKEN</code>.</li>
+                <li>Send the bot any message, find <code>chat.id</code> in <code>https://api.telegram.org/bot$TOKEN/getUpdates</code> — that’s your <code>TELEGRAM_CHAT_ID</code>. Save both to <code>.env</code>.</li>
+                <li>Create <code>autopilot-warmup</code>, launch <code>claude</code>.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; build a bash script ping.sh:
+&gt; reads .env, posts via telegram api the message
+&gt; "🟢 autopilot ping at $(date '+%Y-%m-%d %H:%M')".
+&gt; test it — run, confirm the message arrived.</pre>
+                </li>
+                <li>If it arrived — add to cron every 5 minutes (test):
+                    <pre class="shell">&gt; add a cron task: run ping.sh every 5 minutes.
+&gt; on linux/macos — via crontab.
+&gt; on windows — via schtasks.
+&gt; show me the resulting line.</pre>
+                </li>
+                <li>Wait 5 minutes — another message should arrive. If yes — cron works.</li>
+                <li>Remove the test cron so you don’t self-spam:
+                    <pre class="shell">&gt; remove the cron / schtasks task. confirm it’s gone.</pre>
+                </li>
+                <li>Alternative path — via the <code>schedule</code> skill:
+                    <pre class="shell">&gt; using the schedule skill, create a remote agent
+&gt; "test-ping": every day at 12:00 send me a short telegram
+&gt; message "📅 daily ping".
+&gt; show my current agents.</pre>
+                </li>
+                <li>Compare: which is more convenient? What will you use going forward — OS cron or the skill?</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>цепочку «cron → bash → telegram»</strong> от&nbsp;нуля до&nbsp;живого пуша на&nbsp;ваш телефон.</p>
+            <p lang="en">What we train: <strong>the “cron → bash → telegram” chain</strong> from zero to a live push to your phone.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Финансовый дворецкий и&nbsp;дневник на&nbsp;автопилоте</span><span lang="en">Financial Butler and Diary on Autopilot</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">«Финансовый дворецкий» в&nbsp;Telegram</span><span lang="en">“Financial Butler” in Telegram</span></h3>
+            <p class="goal" lang="ru">Цель: четыре расписания, работающих параллельно. Ежедневная сводка по&nbsp;портфелю, пятничный обзор, real-time алерт при падении больше 1%, месячный аудит трат. Все&nbsp;&mdash; в&nbsp;один Telegram-чат, с&nbsp;дисциплиной из&nbsp;§&nbsp;I.</p>
+            <p class="goal" lang="en">Goal: four schedules running in parallel. A daily portfolio digest, a Friday review, a real-time alert on drops over 1%, a monthly spending audit. All in one Telegram chat, with the discipline from § I.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>В&nbsp;Plan Mode (этап&nbsp;04) попросите Claude составить <code>spec.md</code> для&nbsp;«Финансового дворецкого»: четыре расписания, источники данных (portfolio-journal CSV, Daily Trader MCP), формат каждого сообщения.</li>
+                <li>Создайте папку <code>financial-butler/</code> на&nbsp;Railway-репо. Структура:
+                    <pre class="shell">financial-butler/
+├── scripts/
+│   ├── morning_digest.py     # 8:30 каждый день
+│   ├── friday_review.py      # 19:00 пятницы
+│   ├── price_alert.py        # каждые 15 минут (real-time)
+│   └── monthly_audit.py      # 1-е число в 9:00
+├── lib/
+│   ├── telegram.py           # отправка сообщений
+│   ├── posthog.py            # запись телеметрии
+│   └── lock.py               # идемпотентность через файл-флаг
+├── .env.example              # шаблон без значений
+└── railway.json              # описание cron-задач</pre>
+                </li>
+                <li><strong>morning_digest.py.</strong> Считает текущие позиции (через Daily Trader MCP <code>get_price</code>), вчерашние изменения, новости по&nbsp;holdings (через WebSearch + summarisation Claude API). Шлёт markdown-сводку в&nbsp;Telegram. Цена&nbsp;&mdash; кэшируется на&nbsp;15&nbsp;минут.</li>
+                <li><strong>friday_review.py.</strong> За&nbsp;неделю: общий рост, лучший и&nbsp;худший тикер, прогноз на&nbsp;неделю через ваш skill «инвест-аналитик». Использует Claude API с&nbsp;Sonnet и&nbsp;prompt caching (этап&nbsp;06).</li>
+                <li><strong>price_alert.py.</strong> Каждые 15 минут проверяет: упала&nbsp;ли цена больше 1% за&nbsp;сутки? Если да&nbsp;&mdash; шлёт алерт. <strong>Идемпотентность</strong>: ведёт <code>data/alerts-sent.json</code>, чтобы не&nbsp;слать одно и&nbsp;то&nbsp;же дважды.</li>
+                <li><strong>monthly_audit.py.</strong> 1-го числа считает: куда ушли деньги в&nbsp;прошлом месяце (по&nbsp;дашборду из&nbsp;этапа&nbsp;04), три самых неожиданных факта.</li>
+                <li>Подключите PostHog: используя skill <code>posthog:llma-cc-setup</code>, добавьте телеметрию во&nbsp;все четыре скрипта. Каждый запуск пишет: модель, токены, длительность, успех/ошибка.</li>
+                <li>Настройте Railway Cron в&nbsp;<code>railway.json</code>:
+                    <pre class="shell">{
+  "$schema": "https://railway.app/railway.schema.json",
+  "deploy": {
+    "cronJobs": [
+      { "schedule": "30 5 * * *",  "command": "python scripts/morning_digest.py" },
+      { "schedule": "0 16 * * 5",  "command": "python scripts/friday_review.py" },
+      { "schedule": "*/15 * * * *","command": "python scripts/price_alert.py" },
+      { "schedule": "0 6 1 * *",   "command": "python scripts/monthly_audit.py" }
+    ]
+  }
+}</pre>
+                    <p>(Все времена&nbsp;&mdash; в&nbsp;UTC, привычные московские часы пересчитайте.)</p>
+                </li>
+                <li>Задеплойте на&nbsp;Railway. Дождитесь первого срабатывания каждой задачи (для&nbsp;real-time alert&nbsp;&mdash; 15&nbsp;минут, для&nbsp;morning digest&nbsp;&mdash; следующее утро). Если что-то не&nbsp;пришло&nbsp;&mdash; смотрите Railway logs.</li>
+                <li>Дисциплина «кнопка стоп»: добавьте отдельную команду <code>/pause</code> в&nbsp;вашем Telegram-боте&nbsp;&mdash; она ставит флаг-файл, и&nbsp;все четыре скрипта при старте проверяют этот флаг. Удобно, когда вы&nbsp;в&nbsp;отпуске и&nbsp;не&nbsp;хотите пушей.</li>
+                <li>Verification через subagent: <em>«запусти red-team subagent. brief: представь, что один из&nbsp;скриптов завис. что произойдёт за&nbsp;неделю? где бы&nbsp;ты&nbsp;добавил защиту?»</em></li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>In Plan Mode (etape 04) have Claude draft <code>spec.md</code> for the “Financial Butler”: four schedules, data sources (portfolio-journal CSV, Daily Trader MCP), message format per schedule.</li>
+                <li>Create <code>financial-butler/</code> in your Railway repo. Layout:
+                    <pre class="shell">financial-butler/
+├── scripts/
+│   ├── morning_digest.py     # 8:30 daily
+│   ├── friday_review.py      # 19:00 Friday
+│   ├── price_alert.py        # every 15 min (real-time)
+│   └── monthly_audit.py      # 1st at 9:00
+├── lib/
+│   ├── telegram.py           # message sending
+│   ├── posthog.py            # telemetry write
+│   └── lock.py               # idempotency via flag file
+├── .env.example              # template without values
+└── railway.json              # cron-job declarations</pre>
+                </li>
+                <li><strong>morning_digest.py.</strong> Computes current positions (Daily Trader MCP <code>get_price</code>), yesterday’s deltas, news on holdings (WebSearch + Claude API summarisation). Sends a markdown digest to Telegram. Prices cached for 15 minutes.</li>
+                <li><strong>friday_review.py.</strong> Weekly: total return, best/worst ticker, weekly outlook through your “investing analyst” skill. Uses Claude API with Sonnet and prompt caching (etape 06).</li>
+                <li><strong>price_alert.py.</strong> Every 15 minutes checks: did price drop more than 1% in 24h? If so — push the alert. <strong>Idempotency</strong>: maintains <code>data/alerts-sent.json</code> so the same alert isn’t sent twice.</li>
+                <li><strong>monthly_audit.py.</strong> On the 1st: where did money go last month (the etape-04 dashboard), three biggest surprises.</li>
+                <li>Wire PostHog: with the <code>posthog:llma-cc-setup</code> skill add telemetry to all four scripts. Each run logs model, tokens, latency, success/error.</li>
+                <li>Configure Railway Cron in <code>railway.json</code>:
+                    <pre class="shell">{
+  "$schema": "https://railway.app/railway.schema.json",
+  "deploy": {
+    "cronJobs": [
+      { "schedule": "30 5 * * *",  "command": "python scripts/morning_digest.py" },
+      { "schedule": "0 16 * * 5",  "command": "python scripts/friday_review.py" },
+      { "schedule": "*/15 * * * *","command": "python scripts/price_alert.py" },
+      { "schedule": "0 6 1 * *",   "command": "python scripts/monthly_audit.py" }
+    ]
+  }
+}</pre>
+                    <p>(Times in UTC; convert to your local TZ.)</p>
+                </li>
+                <li>Deploy to Railway. Wait for the first hit of each task (15 minutes for the alert, next morning for the digest). Anything missing — check Railway logs.</li>
+                <li>“Stop button” discipline: add a <code>/pause</code> command to your Telegram bot — sets a flag file, and all four scripts check it on start. Useful for vacations.</li>
+                <li>Verification via subagent: <em>“spawn a red-team subagent. brief: pretend one script froze. what happens in a week? where would you add protection?”</em></li>
+            </ol>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">«Дневник на&nbsp;автопилоте»</span><span lang="en">“Diary on Autopilot”</span></h3>
+            <p class="goal" lang="ru">Цель: каждый вечер бот задаёт вам пять вопросов, по&nbsp;воскресеньям&nbsp;&mdash; пишет аналитический отчёт о&nbsp;вашей неделе. Бот <em>и&nbsp;спрашивает, и&nbsp;отчитывается</em>: вы&nbsp;всё ведёте через Telegram, не&nbsp;открывая компьютер.</p>
+            <p class="goal" lang="en">Goal: every evening the bot asks you five questions; on Sundays it writes an analytical week report. The bot <em>both asks and reports</em>: you handle everything via Telegram, no laptop required.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте репо <code>diary-bot/</code>. Используйте опыт этапа&nbsp;06 (FastAPI + PostgreSQL) или просто SQLite-файл.</li>
+                <li>Модель данных: <code>entries(date, q1, q2, q3, q4, q5, raw_chat)</code>.</li>
+                <li>Расписание (cron / Railway):
+                    <ul>
+                        <li><code>0 19 * * *</code>&nbsp;&mdash; 22:00 по&nbsp;Москве (UTC+3): бот шлёт первый вопрос;</li>
+                        <li><code>0 11 * * 0</code>&nbsp;&mdash; 14:00 воскресенье: бот шлёт еженедельный отчёт.</li>
+                    </ul>
+                </li>
+                <li>Скрипт «пять вопросов»:
+                    <pre class="shell">&gt; составь python-скрипт ask_five_questions.py:
+&gt; шлёт пять вопросов поочерёдно, каждый в новом сообщении telegram.
+&gt; пять вопросов (сначала жёстко зашитые, потом будем варьировать):
+&gt;   1) что было самым ярким сегодня?
+&gt;   2) на чём вы сегодня фокусировались?
+&gt;   3) что вас выбило из колеи?
+&gt;   4) кто вам сегодня запомнился?
+&gt;   5) одна благодарность дню.
+&gt; ждёт ответ на каждый (через polling api telegram).
+&gt; сохраняет в БД entries.</pre>
+                </li>
+                <li>Скрипт «еженедельный отчёт»:
+                    <pre class="shell">&gt; составь weekly_report.py:
+&gt; читает entries за последнюю неделю.
+&gt; через claude api (sonnet с prompt caching):
+&gt;   - находит 3 повторяющиеся темы;
+&gt;   - указывает 2 «эмоциональных пика» и что их вызвало;
+&gt;   - находит 2 «дыры» (молчаливые дни — почему?);
+&gt;   - формулирует одну рекомендацию на следующую неделю.
+&gt; шлёт markdown-отчёт в telegram.</pre>
+                </li>
+                <li>Сделайте <code>/skip</code> в&nbsp;боте&nbsp;&mdash; пользователь может пропустить вечерний опрос. <code>/replay 2024-04-15</code>&nbsp;&mdash; повторно показать пять вопросов того дня (если вы&nbsp;забыли). <code>/last</code>&nbsp;&mdash; последний еженедельный отчёт.</li>
+                <li>Privacy. Записи чувствительные. Зашифруйте <code>raw_chat</code> в&nbsp;БД (например, через <code>cryptography.fernet</code>) и&nbsp;ключ держите в&nbsp;Railway env vars. <em>Если ключ потеряется&nbsp;&mdash; данные не&nbsp;восстановить</em>; это намеренно.</li>
+                <li>Подключите PostHog только для&nbsp;<em>метрик</em>: количество ответов, длительность, ошибки. <strong>Никаких содержательных полей</strong>&nbsp;&mdash; чтобы дневник не&nbsp;утекал в&nbsp;PostHog.</li>
+                <li>Verification: запустите <code>/replay</code> на&nbsp;вчерашних вопросах, проверьте что неделя ещё не&nbsp;собралась (если вы&nbsp;только что начали). На&nbsp;следующий понедельник&nbsp;&mdash; должен прийти первый еженедельный отчёт.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create a <code>diary-bot/</code> repo. Use the etape-06 muscle (FastAPI + PostgreSQL) or just SQLite.</li>
+                <li>Data model: <code>entries(date, q1, q2, q3, q4, q5, raw_chat)</code>.</li>
+                <li>Schedule (cron / Railway):
+                    <ul>
+                        <li><code>0 19 * * *</code> — 22:00 Moscow (UTC+3): bot fires the first question;</li>
+                        <li><code>0 11 * * 0</code> — 14:00 Sunday: bot fires the weekly report.</li>
+                    </ul>
+                </li>
+                <li>“Five questions” script:
+                    <pre class="shell">&gt; build python script ask_five_questions.py:
+&gt; sends five questions one by one, each as a new telegram message.
+&gt; five (hardcoded for now, vary later):
+&gt;   1) what was the brightest moment today?
+&gt;   2) what did you focus on today?
+&gt;   3) what threw you off?
+&gt;   4) who stood out to you today?
+&gt;   5) one gratitude for the day.
+&gt; waits for each answer (via telegram polling api).
+&gt; saves to DB entries.</pre>
+                </li>
+                <li>“Weekly report” script:
+                    <pre class="shell">&gt; build weekly_report.py:
+&gt; reads last week's entries.
+&gt; via claude api (sonnet with prompt caching):
+&gt;   - finds 3 recurring themes;
+&gt;   - identifies 2 emotional peaks and the triggers;
+&gt;   - finds 2 silences (skipped days — why?);
+&gt;   - one recommendation for next week.
+&gt; sends a markdown report to telegram.</pre>
+                </li>
+                <li>Add <code>/skip</code> — user skips today’s prompt. <code>/replay 2024-04-15</code> — re-shows that day’s five questions if you forgot. <code>/last</code> — last weekly report.</li>
+                <li>Privacy. Entries are sensitive. Encrypt <code>raw_chat</code> in the DB (e.g., <code>cryptography.fernet</code>); keep the key in Railway env vars. <em>If the key is lost — data is unrecoverable</em>; intentional.</li>
+                <li>Connect PostHog for <em>metrics only</em>: response counts, latencies, errors. <strong>No content fields</strong> — diary must not leak to PostHog.</li>
+                <li>Verification: run <code>/replay</code> on yesterday’s questions, check the week hasn’t aggregated (if you just started). Next Monday — the first weekly report should land.</li>
+            </ol>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Свой автопилот, ваш ритм</span><span lang="en">Your own autopilot, your rhythm</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">«Daily стратег»&nbsp;&mdash; рынок до&nbsp;завтрака</span><span lang="en">“Daily Strategist” — markets before breakfast</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A под&nbsp;ваши интересы. <em>Не&nbsp;только</em> сводку портфеля, а&nbsp;утренний «брифинг трейдера»: ключевые движения за&nbsp;ночь, события дня (макро календарь), технические сигналы по&nbsp;вашим тикерам, и&nbsp;одно «слово дня» от&nbsp;Claude в&nbsp;роли стратега. Один Telegram-пуш в&nbsp;7:30, читается за&nbsp;90 секунд.</p>
+            <p class="goal" lang="en">Goal: variation of project A. <em>Not only</em> a portfolio digest — a “trader’s briefing”: overnight movements, today’s macro calendar, technical signals on your tickers, and one “word of the day” from Claude as a strategist. One Telegram push at 7:30, readable in 90 seconds.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Структура та&nbsp;же, что в&nbsp;A&nbsp;&mdash; Railway cron + python-скрипт + telegram api + Daily Trader MCP. Меняется содержание брифа.</li>
+                <li>Источники: Alpha Vantage (overnight closes), economic calendar (через WebFetch с&nbsp;Forex Factory или похожего), ваш Daily Trader MCP для&nbsp;<code>compute_signal</code>.</li>
+                <li>Длина ограничьте: 90&nbsp;секунд чтения = ~250 слов, 5–7 буллетов max. Краткость&nbsp;&mdash; ключ.</li>
+                <li>Идемпотентность: записывайте дату последнего успешного пуша, не&nbsp;шлите дважды за&nbsp;утро.</li>
+                <li>Стиль: попросите Claude использовать ваш output style <code>cfo</code> (этап&nbsp;08a) или сделайте новый <code>strategist</code>: сухо, факты, никаких «возможно».</li>
+            </ul>
+            <ul lang="en">
+                <li>Same structure as A — Railway cron + python script + telegram api + Daily Trader MCP. Different content.</li>
+                <li>Sources: Alpha Vantage (overnight closes), an economic calendar (via WebFetch on Forex Factory or similar), your Daily Trader MCP for <code>compute_signal</code>.</li>
+                <li>Cap the length: 90 seconds of reading ≈ 250 words, 5–7 bullets max. Brevity wins.</li>
+                <li>Idempotency: store the last successful send date, don’t double-fire in a morning.</li>
+                <li>Style: have Claude use your <code>cfo</code> output style (etape 08a) or create a new <code>strategist</code>: dry, facts, no “maybe.”</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>в&nbsp;Telegram приходит брифинг строго в&nbsp;7:30 (или вашее время) каждый рабочий день;</li>
+                        <li>длина &lt; 250 слов, читается меньше чем за&nbsp;90&nbsp;секунд;</li>
+                        <li>есть пять блоков: рынок overnight, макрокалендарь дня, ваши тикеры, технические сигналы, «слово дня»;</li>
+                        <li>идемпотентность работает (тестировали запуск дважды&nbsp;&mdash; пришёл один пуш, второй пометил «already sent»);</li>
+                        <li>в&nbsp;PostHog видно стоимость и&nbsp;токены;</li>
+                        <li>есть команда <code>/pause</code> и&nbsp;<code>/resume</code>, чтобы поставить на&nbsp;паузу на&nbsp;отпуск.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>the briefing arrives in Telegram exactly at 7:30 (or your local time) every weekday;</li>
+                        <li>length &lt; 250 words, reads in under 90 seconds;</li>
+                        <li>five blocks present: overnight market, today’s macro calendar, your tickers, technical signals, “word of the day”;</li>
+                        <li>idempotency works (you tested a double run — only one push, second marked “already sent”);</li>
+                        <li>PostHog shows cost and tokens;</li>
+                        <li>a <code>/pause</code> and <code>/resume</code> command exists for vacations.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Прогони неделю моих брифингов через subagent с&nbsp;ролью «строгий главный редактор финансового издания». Brief: какой брифинг был лучшим, какой&nbsp;&mdash; самым слабым? Что бы&nbsp;я&nbsp;сократил, что добавил, чтобы превратить это в&nbsp;ежедневный платный рассылку?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Run a week of my briefings through a subagent with the ‘strict editor of a financial daily’ role. Brief: which briefing was the best, which the weakest? What would I trim, what add, to turn this into a paid daily?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">«Личная газета»: персональный дайджест по&nbsp;запросу</span><span lang="en">“Personal Newspaper”: a personal digest on demand</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;B по&nbsp;структуре («бот спрашивает + бот отчитывается»), но&nbsp;для&nbsp;другой задачи. Бот спрашивает у&nbsp;вас один раз: <em>«какие три темы вам интересны на&nbsp;этой неделе?»</em> и&nbsp;<em>«какие три тикера / города / спортсмена / явления вы&nbsp;следите?»</em>. Дальше каждое утро&nbsp;&mdash; персональный дайджест ровно по&nbsp;этим темам.</p>
+            <p class="goal" lang="en">Goal: same shape as project B (“bot asks + bot reports”) but for a different domain. Once a week the bot asks: <em>“which three topics interest you this week?”</em> and <em>“which three tickers / cities / athletes / phenomena do you follow?”</em>. Each morning — a personal digest on exactly those topics.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Используйте опыт этапа&nbsp;03 (RSS) и&nbsp;Claude API для&nbsp;саммаризации.</li>
+                <li>Хранение «интересов» недели&nbsp;&mdash; в&nbsp;<code>data/interests.json</code>.</li>
+                <li>Воскресенье вечером&nbsp;&mdash; бот спрашивает «обновить интересы?». Если ответили «нет»&nbsp;&mdash; используем прошлые.</li>
+                <li>Тематика на&nbsp;ваш выбор: <em>не&nbsp;обязательно финансы</em>. Архитектура, кулинария, спорт&nbsp;&mdash; что хотите узнавать.</li>
+                <li>Длина дайджеста: ровно столько, сколько вы&nbsp;готовы прочитать с&nbsp;утренним кофе.</li>
+            </ul>
+            <ul lang="en">
+                <li>Use the etape-03 muscle (RSS) and Claude API for summarisation.</li>
+                <li>Weekly “interests” live in <code>data/interests.json</code>.</li>
+                <li>Sunday evening — bot asks “update interests?”. “No” — keep last week’s.</li>
+                <li>Topic is your call: <em>not necessarily finance</em>. Architecture, cooking, sports — anything you want to learn about.</li>
+                <li>Digest length: exactly what you’ll read with morning coffee.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>раз в&nbsp;неделю бот спрашивает про&nbsp;интересы, сохраняет в&nbsp;<code>data/interests.json</code>;</li>
+                        <li>каждое утро&nbsp;&mdash; персональный дайджест ровно по&nbsp;этим темам, не&nbsp;шире;</li>
+                        <li>пройдена «неделя на&nbsp;вылов»: вы&nbsp;давали разные интересы, дайджест менялся;</li>
+                        <li>тематика&nbsp;&mdash; <em>не&nbsp;финансы</em> (или другая, отличная от&nbsp;предыдущих проектов&nbsp;&mdash; чтобы не&nbsp;дублировать);</li>
+                        <li>идемпотентность, стоп-кнопка, PostHog&nbsp;&mdash; всё на&nbsp;месте, как в&nbsp;A.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>once a week the bot asks for interests and saves to <code>data/interests.json</code>;</li>
+                        <li>each morning — a personal digest on exactly those topics, no wider;</li>
+                        <li>a “catch week” is in: you provided different interests, the digest shifted;</li>
+                        <li>topic is <em>not finance</em> (or different from prior projects — no duplicates);</li>
+                        <li>idempotency, stop button, PostHog — all in place, as in A.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Запусти subagent с&nbsp;ролью «редактор Substack-рассылки». Brief: можно&nbsp;ли мою «личную газету» превратить в&nbsp;платную для&nbsp;маленькой аудитории? Что бы&nbsp;ты&nbsp;добавил, что убрал? Какие три темы стоит мне попробовать?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Spawn a subagent with the ‘Substack newsletter editor’ role. Brief: could my ‘personal newspaper’ become a paid product for a small audience? What would you add, what cut? Three topics I should try?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>Cron</dt>
+            <dd>
+                <span lang="ru">Системный планировщик задач на&nbsp;Linux/macOS. Запускает программы по&nbsp;расписанию. Расписание задаётся cron-выражением из&nbsp;5&nbsp;полей. Аналог в&nbsp;Windows&nbsp;&mdash; Task Scheduler.</span>
+                <span lang="en">A system task scheduler on Linux/macOS. Runs programs on a schedule. Set via a 5-field cron expression. Windows analogue — Task Scheduler.</span>
+            </dd>
+
+            <dt><span lang="ru">Cron-выражение</span><span lang="en">Cron expression</span></dt>
+            <dd>
+                <span lang="ru">Строка из&nbsp;5&nbsp;полей: минута, час, день месяца, месяц, день недели. <code>30 8 * * *</code>&nbsp;&mdash; «каждый день в&nbsp;8:30».</span>
+                <span lang="en">A 5-field string: minute, hour, day of month, month, day of week. <code>30 8 * * *</code> — “every day at 8:30.”</span>
+            </dd>
+
+            <dt>Railway Cron</dt>
+            <dd>
+                <span lang="ru">Облачный cron внутри Railway. Расписания задаются в&nbsp;<code>railway.json</code>. Удобно, когда ваш бэкенд уже там живёт.</span>
+                <span lang="en">A cloud cron inside Railway. Schedules in <code>railway.json</code>. Convenient when your backend already lives there.</span>
+            </dd>
+
+            <dt>schedule (skill)</dt>
+            <dd>
+                <span lang="ru">Встроенный skill Claude Code, создающий «remote agent» на&nbsp;cron-расписании в&nbsp;облаке Anthropic. Не&nbsp;требует своего сервера.</span>
+                <span lang="en">A built-in Claude Code skill that creates a “remote agent” on a cron schedule in Anthropic’s cloud. No server of your own.</span>
+            </dd>
+
+            <dt>loop (skill)</dt>
+            <dd>
+                <span lang="ru">Встроенный skill, повторяющий скрипт через интервал в&nbsp;текущей сессии. Полезно для&nbsp;«проверь статус деплоя каждые 5&nbsp;минут».</span>
+                <span lang="en">A built-in skill that re-runs a script at intervals in the current session. Good for “check the deploy every 5 minutes.”</span>
+            </dd>
+
+            <dt><span lang="ru">Push-уведомление</span><span lang="en">Push notification</span></dt>
+            <dd>
+                <span lang="ru">Сообщение, инициированное автоматизацией и&nbsp;доставленное вам мгновенно. В&nbsp;курсе&nbsp;&mdash; через Telegram Bot API.</span>
+                <span lang="en">A message initiated by automation and delivered to you instantly. In this course — via the Telegram Bot API.</span>
+            </dd>
+
+            <dt><span lang="ru">Telegram Bot API</span><span lang="en">Telegram Bot API</span></dt>
+            <dd>
+                <span lang="ru">HTTP-API Telegram для&nbsp;ботов. Главные методы: <code>sendMessage</code>, <code>getUpdates</code>, <code>setWebhook</code>. Авторизация через token от&nbsp;@BotFather.</span>
+                <span lang="en">Telegram’s HTTP API for bots. Main methods: <code>sendMessage</code>, <code>getUpdates</code>, <code>setWebhook</code>. Auth — token from @BotFather.</span>
+            </dd>
+
+            <dt><span lang="ru">Идемпотентность</span><span lang="en">Idempotency</span></dt>
+            <dd>
+                <span lang="ru">Свойство задачи: повторный запуск даёт тот&nbsp;же результат и&nbsp;не&nbsp;вредит. Обязательное требование для&nbsp;cron-задач&nbsp;&mdash; cron бывает срабатывает дважды.</span>
+                <span lang="en">A task property: re-running yields the same result without harm. Mandatory for cron tasks — cron occasionally double-fires.</span>
+            </dd>
+
+            <dt><span lang="ru">Background task</span><span lang="en">Background task</span></dt>
+            <dd>
+                <span lang="ru">Bash-команда, запущенная в&nbsp;фоне (<code>run_in_background: true</code>). Главный Claude получает PID и&nbsp;продолжает работу. Используется для&nbsp;долгих процессов: серверов, билдов, deployments.</span>
+                <span lang="en">A Bash command run in the background (<code>run_in_background: true</code>). Main Claude gets a PID and keeps working. Used for long processes: servers, builds, deployments.</span>
+            </dd>
+
+            <dt>Monitor</dt>
+            <dd>
+                <span lang="ru">Инструмент Claude Code «следить за&nbsp;потоком». Подходит для&nbsp;ожидания завершения долгого процесса с&nbsp;реакцией на&nbsp;каждую новую строку stdout.</span>
+                <span lang="en">A Claude Code tool — “follow the stream.” Good for waiting on a long process while reacting to each new stdout line.</span>
+            </dd>
+
+            <dt>PostHog LLM Analytics</dt>
+            <dd>
+                <span lang="ru">Дашборд для&nbsp;слежки за&nbsp;запусками LLM: токены, модель, цена, ошибки, длительность. Skill <code>posthog:llma-cc-setup</code> добавляет автоматическую отправку телеметрии из&nbsp;Claude Code.</span>
+                <span lang="en">A dashboard for LLM-run telemetry: tokens, model, cost, errors, latency. The <code>posthog:llma-cc-setup</code> skill wires automatic telemetry from Claude Code.</span>
+            </dd>
+
+            <dt><span lang="ru">Стоп-кнопка</span><span lang="en">Stop button</span></dt>
+            <dd>
+                <span lang="ru">Команда (например, <code>/pause</code> в&nbsp;Telegram-боте), останавливающая все автоматизации одним нажатием. Реализуется через флаг-файл, который скрипты проверяют на&nbsp;старте.</span>
+                <span lang="en">A command (e.g., <code>/pause</code> in your Telegram bot) that halts all automations with one tap. Implemented as a flag file scripts check on start.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Что означает cron-выражение <code>30 8 * * 1-5</code>?</span><span lang="en">What does the cron expression <code>30 8 * * 1-5</code> mean?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">«Каждый рабочий день (понедельник&nbsp;&mdash; пятница) в&nbsp;8:30». Поля: минута 30, час 8, любой день месяца, любой месяц, дни недели 1–5.</p>
+                        <p lang="en">“Every weekday (Mon–Fri) at 8:30.” Fields: minute 30, hour 8, any day-of-month, any month, weekdays 1–5.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Где лучше держать cron-задачи: на&nbsp;своём ноутбуке, на&nbsp;Railway или через skill <code>schedule</code>? Почему?</span><span lang="en">Where to keep cron tasks: on your laptop, on Railway, or via the <code>schedule</code> skill? Why?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Зависит. Ноутбук&nbsp;&mdash; только если он&nbsp;всегда включён (редко). Railway&nbsp;&mdash; если у&nbsp;вас уже там бэкенд, удобно держать всё в&nbsp;одном месте. <code>schedule</code> skill&nbsp;&mdash; самое простое для&nbsp;учебных и&nbsp;личных задач, не&nbsp;нужен свой сервер. Все три используем в&nbsp;курсе под разные сценарии.</p>
+                        <p lang="en">Depends. Laptop — only if always-on (rarely). Railway — if your backend is already there, nice to keep everything together. <code>schedule</code> skill — simplest for learning and personal tasks, no server. All three are used in the course for different scenarios.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое идемпотентность и&nbsp;почему она обязательна для&nbsp;cron-задач?</span><span lang="en">What is idempotency and why is it mandatory for cron tasks?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Идемпотентность&nbsp;&mdash; задача можно запустить дважды, и&nbsp;результат тот&nbsp;же, ничего не&nbsp;ломается. Обязательна, потому что cron реально срабатывает дважды (перезапуск сервера, сдвиги timezone). «Купить акцию по&nbsp;сигналу» неидемпотентно: дубль = двойная покупка. Защита&nbsp;&mdash; флаг-файл «уже сделано».</p>
+                        <p lang="en">Idempotency — a task can fire twice, same result, no damage. Mandatory because cron really does double-fire (server restart, TZ shifts). “Buy on signal” is not idempotent: a duplicate = double buy. Defence — a flag file “already done.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Чем отличается background task от&nbsp;cron-задачи?</span><span lang="en">How does a background task differ from a cron task?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Background task&nbsp;&mdash; запуск программы <em>в&nbsp;фоне внутри текущей сессии</em>, она работает «параллельно» с&nbsp;Claude. Cron&nbsp;&mdash; запуск <em>по&nbsp;расписанию</em>, в&nbsp;будущем, без&nbsp;вашего участия. Background для&nbsp;«сейчас, но&nbsp;не&nbsp;блокирует», cron для&nbsp;«регулярно».</p>
+                        <p lang="en">Background task — runs a program <em>in the background of the current session</em>, “in parallel” with Claude. Cron — runs <em>on schedule</em>, in the future, unattended. Background = “now, but non-blocking,” cron = “recurring.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Почему обязательно подключать PostHog к&nbsp;автопилоту?</span><span lang="en">Why connect PostHog to your autopilot?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Чтобы видеть, во&nbsp;что обходится автопилот: токены, ошибки, длительность, тренды. Без&nbsp;мониторинга одна сломавшаяся задача может тихо жечь деньги недели, прежде чем заметите. PostHog&nbsp;&mdash; глаза, без&nbsp;которых автономный процесс «слепой».</p>
+                        <p lang="en">To see what your autopilot costs: tokens, errors, latency, trends. Without monitoring, one broken task can silently burn money for weeks before you notice. PostHog is the eyes — without it the autonomous process is blind.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Почему в&nbsp;«Дневнике на&nbsp;автопилоте» содержательные поля шифруются, а&nbsp;в&nbsp;PostHog уходят только метрики?</span><span lang="en">Why are content fields encrypted in the “Diary” while only metrics go to PostHog?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Содержание дневника&nbsp;&mdash; чувствительные личные данные. Они не&nbsp;должны быть доступны никому, кроме вас. Шифрование с&nbsp;ключом в&nbsp;env гарантирует, что даже если БД утечёт&nbsp;&mdash; данные не&nbsp;прочитают. В&nbsp;PostHog отправляем только обезличенные метрики (количество ответов, длительность, ошибки)&nbsp;&mdash; они полезны для&nbsp;мониторинга, но&nbsp;не&nbsp;утекают в&nbsp;стороннюю аналитику ваши мысли.</p>
+                        <p lang="en">Diary content is sensitive personal data. Nobody but you should access it. Encryption with the key in env ensures that even a DB leak yields unreadable data. PostHog gets only anonymised metrics (response counts, latencies, errors) — useful for monitoring without leaking your thoughts to third-party analytics.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Какие четыре правила «дисциплины автопилота»?</span><span lang="en">What are the four “autopilot discipline” rules?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>1) Идемпотентность</strong>&nbsp;&mdash; повторный запуск не&nbsp;ломает. <strong>2) Граница времени</strong>&nbsp;&mdash; задача убивается, если работает дольше N&nbsp;минут. <strong>3) Кнопка стоп</strong>&nbsp;&mdash; одна команда останавливает всё. <strong>4) Канал ошибок</strong>&nbsp;&mdash; ошибки приходят туда&nbsp;же, куда успехи (например, в&nbsp;Telegram), с&nbsp;маркером ⚠.</p>
+                        <p lang="en"><strong>1) Idempotency</strong> — re-running breaks nothing. <strong>2) Time bound</strong> — task killed if it runs over N minutes. <strong>3) Stop button</strong> — one command halts everything. <strong>4) Error channel</strong> — errors land in the same channel as successes (Telegram), with a ⚠ marker.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e10-cron"><span lang="ru">Понимаю cron-выражения и&nbsp;умею описывать любое расписание словами.</span><span lang="en">I understand cron expressions and can describe any schedule in words.</span></li>
+            <li data-key="e10-channels"><span lang="ru">Знаю три канала расписания: системный cron, Railway Cron, skill <code>schedule</code>.</span><span lang="en">I know three schedule channels: system cron, Railway Cron, the <code>schedule</code> skill.</span></li>
+            <li data-key="e10-telegram"><span lang="ru">Создал Telegram-бота, отправляю и&nbsp;принимаю сообщения через Bot API.</span><span lang="en">I created a Telegram bot and send/receive messages via the Bot API.</span></li>
+            <li data-key="e10-idempotent"><span lang="ru">Делаю cron-задачи идемпотентными (флаг-файл, проверка «уже было»).</span><span lang="en">I make cron tasks idempotent (flag files, “already done” checks).</span></li>
+            <li data-key="e10-monitoring"><span lang="ru">Подключил PostHog LLM Analytics и&nbsp;вижу токены/стоимость каждого запуска.</span><span lang="en">I wired PostHog LLM Analytics and see tokens/cost per run.</span></li>
+            <li data-key="e10-discipline"><span lang="ru">Применяю 4&nbsp;правила автопилота: идемпотентность, граница времени, стоп-кнопка, канал ошибок.</span><span lang="en">I apply the 4 autopilot rules: idempotency, time bound, stop button, error channel.</span></li>
+            <li data-key="e10-delivery"><span lang="ru">Сделал четыре проекта: Финансовый дворецкий, Дневник на&nbsp;автопилоте, Daily стратег, Личная газета.</span><span lang="en">Built four projects: Financial Butler, Diary on Autopilot, Daily Strategist, Personal Newspaper.</span></li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-10" type="button"><span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span></button>
+        </div>
+    </div>
+</section>
+
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-09.html"><span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span><span class="step-title"><span lang="ru">09 · MCP-серверы и&nbsp;плагины</span><span lang="en">09 · MCP Servers &amp; Plugins</span></span></a>
+            <a class="next" href="etap-11.html"><span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span><span class="step-title"><span lang="ru">11 · Claude Agent SDK (опционально)</span><span lang="en">11 · Claude Agent SDK (optional)</span></span></a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Когда автоматизация работает&nbsp;&mdash; вы&nbsp;её&nbsp;не&nbsp;замечаете. Когда замечаете&nbsp;&mdash; что-то сломалось. Дисциплина мониторинга и&nbsp;есть искусство «не&nbsp;замечать»&nbsp;&mdash; долго, дёшево, надёжно».</p>
+            <p class="signature" lang="en">“When automation works — you don’t notice it. When you notice — something broke. Monitoring discipline is the art of ‘not noticing’ — for long, cheap, reliable.”</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-09.html"><span lang="ru">← Этап&nbsp;09</span><span lang="en">← Etape 09</span></a></li>
+                <li><a href="etap-11.html"><span lang="ru">→ Этап&nbsp;11</span><span lang="en">→ Etape 11</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1215 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 11 · Claude Agent SDK (опционально) — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 11 курса по Claude Code (опциональный): Claude как библиотека внутри ваших скриптов. Headless mode, CI/CD, Twitter-сигналы и AI-консьерж в Telegram.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="11">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 11 · опционально</span><span lang="en">Etape 11 · optional</span></span> &nbsp;·&nbsp; <span lang="ru">Claude Agent SDK</span><span lang="en">Claude Agent SDK</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Claude как <em>библиотека</em>.</span>
+            <span lang="en">Claude as a <em>library</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            <em>Опциональный этап для&nbsp;тех, кто хочет идти дальше.</em> До&nbsp;этого мы&nbsp;использовали Claude через CLI и&nbsp;через Claude API внутри backend (этап&nbsp;06). Здесь&nbsp;&mdash; <strong>Claude Agent SDK</strong>: тот&nbsp;же агент с&nbsp;циклом «prompt → tools → result», но&nbsp;запускаемый из&nbsp;ваших Python/Node-скриптов. Без&nbsp;Claude Code-обёртки. Headless. Готов работать в&nbsp;Twitter-демоне, Telegram-боте, GitHub Actions.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            <em>An optional etape for those who want to go further.</em> So far we used Claude via the CLI and the Claude API inside a backend (etape 06). Here — the <strong>Claude Agent SDK</strong>: the same agent with a “prompt → tools → result” loop, but invoked from your Python/Node scripts. No Claude Code wrapper. Headless. Ready to power a Twitter daemon, a Telegram bot, GitHub Actions.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">7–10 дней · 2–4&nbsp;ч/день</span><span lang="en">7–10 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">Agent SDK · agent loop · headless · CI/CD · daemon</span><span lang="en">Agent SDK · agent loop · headless · CI/CD · daemon</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">Claude встроен в&nbsp;ваши скрипты и&nbsp;инфраструктуру</span><span lang="en">Claude embedded in your scripts and infrastructure</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">Twitter-демон + AI-консьерж в&nbsp;Telegram + автоматический code review в&nbsp;PR</span><span lang="en">a Twitter daemon + an AI concierge in Telegram + auto code review on PRs</span></dd>
+            </div>
+        </dl>
+
+        <div class="note" style="margin-top:2rem;">
+            <strong lang="ru">⚠ Этот этап&nbsp;&mdash; для&nbsp;«следующего шага».</strong>
+            <strong lang="en">⚠ This etape is for “the next step.”</strong>
+            <span lang="ru">До&nbsp;этапа&nbsp;10 включительно курс был «AI-нативный без&nbsp;программирования». Этап&nbsp;11&nbsp;&mdash; уже про&nbsp;<em>программирование с&nbsp;Claude</em>: вы&nbsp;будете писать (точнее, направлять Claude писать) Python-скрипты, которые сами вызывают Claude API. Если этого не&nbsp;нужно&nbsp;&mdash; пропускайте, переходите к&nbsp;капстоуну.</span>
+            <span lang="en">Through etape 10, the course was “AI-native without programming.” Etape 11 is about <em>programming with Claude</em>: you will write (or rather steer Claude into writing) Python scripts that call the Claude API themselves. If you don’t need this — skip to the capstone.</span>
+        </div>
+    </div>
+</section>
+
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что устанавливаем перед началом</span><span lang="en">What to install before you start</span></h2>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3>ANTHROPIC_API_KEY + skill <code>claude-api</code></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> ключ от&nbsp;Anthropic API (этап&nbsp;06) + skill, который учит Claude писать код с&nbsp;Anthropic SDK правильно: prompt caching, выбор модели, обработка ошибок.<br>
+            <strong>Зачем сейчас:</strong> весь этап стоит на&nbsp;них. Без&nbsp;ключа SDK не&nbsp;запустится; без&nbsp;skill код будет «плоским» и&nbsp;дорогим.<br>
+            <strong>Где взять:</strong> ключ на&nbsp;<a href="https://console.anthropic.com/settings/keys">console.anthropic.com</a>; skill <code>claude-api</code>&nbsp;&mdash; <em>встроенный</em>, ставить ничего не&nbsp;надо (см.&nbsp;этап&nbsp;06). Проверка&nbsp;&mdash; <code>/skills</code>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the Anthropic API key (etape 06) + a skill that teaches Claude to write proper Anthropic-SDK code: prompt caching, model selection, error handling.<br>
+            <strong>Why now:</strong> everything in this etape rides on them. Without the key the SDK won’t launch; without the skill the code is flat and expensive.<br>
+            <strong>Where:</strong> key at <a href="https://console.anthropic.com/settings/keys">console.anthropic.com</a>; the <code>claude-api</code> skill is <em>built-in</em>, no install needed (see etape 06). Verify with <code>/skills</code>.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · среда</span><span lang="en">required · runtime</span></span>
+            <h3><span lang="ru">Python 3.10+ или Node.js 20+</span><span lang="en">Python 3.10+ or Node.js 20+</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> язык, на&nbsp;котором мы&nbsp;будем запускать Claude как библиотеку. В&nbsp;курсе&nbsp;&mdash; Python, потому что у&nbsp;нас уже есть python-окружение из&nbsp;этапа&nbsp;03. Если предпочитаете Node&nbsp;&mdash; Anthropic SDK для&nbsp;него тоже есть.<br>
+            <strong>Зачем сейчас:</strong> Claude Agent SDK поставляется как пакет под&nbsp;конкретный язык.<br>
+            <strong>Установка пакета:</strong></p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the language we’ll run Claude as a library in. The course uses Python (we already have a Python environment from etape 03). Node works too — Anthropic ships an SDK for it.<br>
+            <strong>Why now:</strong> the Claude Agent SDK ships as a per-language package.<br>
+            <strong>Install the package:</strong></p>
+            <pre class="shell"><span class="cmt"># Python</span>
+<span class="prompt">$</span> pip install anthropic
+
+<span class="cmt"># Node.js</span>
+<span class="prompt">$</span> npm install @anthropic-ai/sdk</pre>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · аккаунт</span><span lang="en">recommended · account</span></span>
+            <h3><span lang="ru">X (Twitter) Developer + ключи API</span><span lang="en">X (Twitter) Developer + API keys</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> доступ к&nbsp;X&nbsp;API для&nbsp;первого проекта (Twitter-сигналы).<br>
+            <strong>Зачем сейчас:</strong> чтобы стрим твитов попадал в&nbsp;ваш демон.<br>
+            <strong>Где взять:</strong> <a href="https://developer.x.com/">developer.x.com</a>. Бесплатный тариф ограничен; для&nbsp;учебного проекта может хватить либо «basic» паблик стрим. Если не&nbsp;хочется регистрироваться&nbsp;&mdash; в&nbsp;проекте есть «офлайн-демо» из&nbsp;готового файла твитов.<br>
+            <strong>Куда положить:</strong> <code>X_BEARER_TOKEN</code> в&nbsp;<code>.env</code>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> X API access for the first project (Twitter signals).<br>
+            <strong>Why now:</strong> so a tweet stream lands in your daemon.<br>
+            <strong>Where:</strong> <a href="https://developer.x.com/">developer.x.com</a>. The free tier is limited; for a learning project the “basic” public stream may do. Skip the signup — the project has an “offline demo” from a tweets file.<br>
+            <strong>Place:</strong> <code>X_BEARER_TOKEN</code> in <code>.env</code>.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3><span lang="ru">Из&nbsp;этапов 06 и&nbsp;10</span><span lang="en">From etapes 06 and 10</span></h3>
+            <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Telegram-бот из&nbsp;этапа&nbsp;10 (для&nbsp;push-уведомлений и&nbsp;консьержа);</li>
+                <li>Backend на&nbsp;Railway (этап&nbsp;06)&nbsp;&mdash; будем туда деплоить демон.</li>
+            </ul>
+            <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>The Telegram bot from etape 10 (for push and the concierge);</li>
+                <li>A backend on Railway (etape 06) — for deploying the daemon.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Из&nbsp;CLI&nbsp;&mdash; в&nbsp;«Claude как библиотека»</span><span lang="en">From CLI to “Claude as a library”</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Claude Code, Claude API и&nbsp;Claude Agent SDK&nbsp;&mdash; в&nbsp;чём разница</span><span lang="en">Claude Code, Claude API, Claude Agent SDK — the difference</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Три способа использовать Claude:</p>
+                    <ol>
+                        <li><strong>Claude Code (CLI)</strong>&nbsp;&mdash; интерактивный диалог в&nbsp;терминале. Это всё, что мы&nbsp;делали с&nbsp;этапа&nbsp;00 по&nbsp;10. Удобно для&nbsp;<em>работы человека с&nbsp;Claude</em>.</li>
+                        <li><strong>Claude API (chat completions)</strong>&nbsp;&mdash; HTTP-вызов «вход → текст». Этап&nbsp;06: ваш backend шлёт промпт, получает ответ. Удобно для&nbsp;<em>встраивания одного ответа</em> внутрь приложения. Без&nbsp;tools, без&nbsp;цикла.</li>
+                        <li><strong>Claude Agent SDK</strong>&nbsp;&mdash; полный «агентский» цикл из&nbsp;вашего скрипта: <em>prompt → tool calls → tool results → next prompt → ...</em> до&nbsp;завершения. С&nbsp;<dfn class="term" tabindex="0" data-def="внутренний цикл агента: модель думает, решает использовать tool, вы выполняете tool, отдаёте результат, модель продолжает думать. Повторяется, пока модель не скажет «готово».">agent loop</dfn>, tools, prompt caching, выбор модели.</li>
+                    </ol>
+                    <p>Когда что:</p>
+                    <table style="width:100%; margin: 1rem 0; border-collapse: collapse;">
+                        <thead style="border-bottom: 2px solid var(--rule);">
+                            <tr><th style="text-align:left; padding: 0.4rem 0;">Сценарий</th><th style="text-align:left;">Что использовать</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Я&nbsp;разрабатываю проект, направляя Claude</td><td><strong>Claude Code</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Веб-приложение шлёт один промпт пользователю</td><td><strong>Claude API</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Скрипт-демон ловит данные, использует tools, шлёт результат</td><td><strong>Agent SDK</strong></td></tr>
+                            <tr><td style="padding: 0.4rem 0;">CI/CD: автоматический code review на&nbsp;каждом PR</td><td><strong>Agent SDK</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div lang="en">
+                    <p>Three ways to use Claude:</p>
+                    <ol>
+                        <li><strong>Claude Code (CLI)</strong> — interactive dialogue in the terminal. Everything we did from etape 00 through 10. Best for <em>a human working with Claude</em>.</li>
+                        <li><strong>Claude API (chat completions)</strong> — an HTTP “input → text” call. Etape 06: your backend sends a prompt, gets a reply. Best for <em>embedding a single reply</em> inside an app. No tools, no loop.</li>
+                        <li><strong>Claude Agent SDK</strong> — the full agent loop from your script: <em>prompt → tool calls → tool results → next prompt → ...</em> until done. With an <dfn class="term" tabindex="0" data-def="the agent’s inner loop: the model thinks, decides to use a tool, you run the tool, hand back the result, the model thinks again. Repeats until the model says “done.”">agent loop</dfn>, tools, prompt caching, model selection.</li>
+                    </ol>
+                    <p>When what:</p>
+                    <table style="width:100%; margin: 1rem 0; border-collapse: collapse;">
+                        <thead style="border-bottom: 2px solid var(--rule);">
+                            <tr><th style="text-align:left; padding: 0.4rem 0;">Scenario</th><th style="text-align:left;">Use</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">I’m building a project, steering Claude</td><td><strong>Claude Code</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Web app sends one prompt for a user</td><td><strong>Claude API</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">A daemon script ingests data, uses tools, ships a result</td><td><strong>Agent SDK</strong></td></tr>
+                            <tr><td style="padding: 0.4rem 0;">CI/CD: auto code review on every PR</td><td><strong>Agent SDK</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Agent loop: внутренний цикл агента в&nbsp;коде</span><span lang="en">Agent loop: the agent’s loop in your code</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Когда вы&nbsp;пишете промпт в&nbsp;Claude Code и&nbsp;Claude вызывает tools&nbsp;&mdash; цикл крутится <em>внутри</em> Claude Code, вы&nbsp;его не&nbsp;видите. В&nbsp;Agent SDK этот&nbsp;же цикл&nbsp;&mdash; <strong>ваш собственный код</strong>:</p>
+                    <pre class="shell">messages = [{"role": "user", "content": "проанализируй акцию AAPL"}]
+
+while True:
+    response = client.messages.create(
+        model="claude-sonnet-4-6",
+        tools=my_tools,        # список tools, которыми может пользоваться
+        messages=messages,
+    )
+    messages.append({"role": "assistant", "content": response.content})
+
+    if response.stop_reason == "end_turn":
+        # модель закончила
+        break
+
+    if response.stop_reason == "tool_use":
+        # модель просит вызвать tool
+        for tool_call in response.content:
+            if tool_call.type == "tool_use":
+                result = execute_tool(tool_call.name, tool_call.input)
+                messages.append({"role": "user", "content": [
+                    {"type": "tool_result", "tool_use_id": tool_call.id, "content": result}
+                ]})
+        # цикл повторяется: модель видит tool_result и продолжает</pre>
+                    <p>Это и&nbsp;есть «agent loop». Claude Code прячет его, SDK&nbsp;&mdash; даёт в&nbsp;руки. Вы&nbsp;контролируете каждую итерацию: можете остановить раньше, поменять tools на&nbsp;ходу, добавить логи, тайм-ауты, защиту.</p>
+                    <p>Skill <code>claude-api</code> делает шаблон ещё лучше: добавляет prompt caching, retry на&nbsp;ошибках, ограничение по&nbsp;шагам цикла, защиту от&nbsp;«infinite tool call».</p>
+                </div>
+                <div lang="en">
+                    <p>When you prompt in Claude Code and Claude uses tools, the loop runs <em>inside</em> Claude Code — you don’t see it. In the Agent SDK that same loop is <strong>your own code</strong>:</p>
+                    <pre class="shell">messages = [{"role": "user", "content": "analyse stock AAPL"}]
+
+while True:
+    response = client.messages.create(
+        model="claude-sonnet-4-6",
+        tools=my_tools,        # tool list the model may use
+        messages=messages,
+    )
+    messages.append({"role": "assistant", "content": response.content})
+
+    if response.stop_reason == "end_turn":
+        # the model is done
+        break
+
+    if response.stop_reason == "tool_use":
+        # the model wants a tool call
+        for tool_call in response.content:
+            if tool_call.type == "tool_use":
+                result = execute_tool(tool_call.name, tool_call.input)
+                messages.append({"role": "user", "content": [
+                    {"type": "tool_result", "tool_use_id": tool_call.id, "content": result}
+                ]})
+        # loop repeats: the model sees tool_result and continues</pre>
+                    <p>That is the agent loop. Claude Code hides it; the SDK hands it to you. You control each iteration: stop early, swap tools mid-flight, add logs, timeouts, guards.</p>
+                    <p>The <code>claude-api</code> skill makes the template even better: prompt caching, retries on errors, step caps, “infinite tool call” guards.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Headless mode и&nbsp;CI/CD: Claude как «функция»</span><span lang="en">Headless mode and CI/CD: Claude as a “function”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><dfn class="term" tabindex="0" data-def="режим, в котором Claude запускается без интерактивного TTY: на сервере, в CI, в скрипте-демоне. Никакого диалога с пользователем.">Headless mode</dfn>&nbsp;&mdash; запуск Claude в&nbsp;окружении без&nbsp;интерактивного терминала. Сервер, CI-pipeline, daemon&nbsp;&mdash; никто не&nbsp;ждёт ваших ответов на&nbsp;вопросы Claude.</p>
+                    <p>Что это меняет:</p>
+                    <ul>
+                        <li>Никаких <em>«Claude спросил подтверждение, я&nbsp;нажал y»</em>. Все разрешения&nbsp;&mdash; в&nbsp;коде заранее.</li>
+                        <li>Все секреты&nbsp;&mdash; через env vars, не&nbsp;через интерактивный prompt.</li>
+                        <li>Тайм-ауты обязательны. Зависший агент в&nbsp;CI&nbsp;&mdash; падает билд.</li>
+                        <li>Логирование&nbsp;&mdash; обязательное и&nbsp;структурированное (JSON), чтобы потом разобрать.</li>
+                    </ul>
+                    <p>Пример&nbsp;&mdash; GitHub Action для&nbsp;auto code review:</p>
+                    <pre class="shell"># .github/workflows/claude-review.yml
+name: Claude Code Review
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install anthropic
+      - run: python .github/scripts/claude_review.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}</pre>
+                    <p>Скрипт <code>claude_review.py</code> через Agent SDK:</p>
+                    <ol>
+                        <li>Получает diff PR через GitHub&nbsp;API;</li>
+                        <li>Шлёт в&nbsp;Claude с&nbsp;промптом «найди 3–5 проблем»;</li>
+                        <li>Через tool <code>post_comment</code>&nbsp;&mdash; постит замечания прямо в&nbsp;PR.</li>
+                    </ol>
+                </div>
+                <div lang="en">
+                    <p><dfn class="term" tabindex="0" data-def="a mode where Claude runs without an interactive TTY: on a server, in CI, in a daemon script. No user dialogue.">Headless mode</dfn> — running Claude in an environment with no interactive terminal. A server, a CI pipeline, a daemon — nobody waits to answer Claude’s questions.</p>
+                    <p>What changes:</p>
+                    <ul>
+                        <li>No <em>“Claude asked, I pressed y.”</em> All permissions in code, upfront.</li>
+                        <li>Secrets — via env vars, not interactive prompts.</li>
+                        <li>Timeouts mandatory. A stuck agent in CI fails the build.</li>
+                        <li>Logging — mandatory and structured (JSON), to parse later.</li>
+                    </ul>
+                    <p>Example — a GitHub Action for auto code review:</p>
+                    <pre class="shell"># .github/workflows/claude-review.yml
+name: Claude Code Review
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install anthropic
+      - run: python .github/scripts/claude_review.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}</pre>
+                    <p>The <code>claude_review.py</code> script via the Agent SDK:</p>
+                    <ol>
+                        <li>Pulls the PR diff via GitHub API;</li>
+                        <li>Sends to Claude with “find 3–5 issues” prompt;</li>
+                        <li>Via a <code>post_comment</code> tool — posts comments straight into the PR.</li>
+                    </ol>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Tool definitions для&nbsp;SDK: не&nbsp;MCP, а&nbsp;Python-функции</span><span lang="en">Tool definitions in the SDK: not MCP, but Python functions</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;Claude Code мы&nbsp;давали Claude tools <em>через MCP</em>. В&nbsp;SDK&nbsp;&mdash; через определения прямо в&nbsp;коде:</p>
+                    <pre class="shell">my_tools = [
+    {
+        "name": "get_price",
+        "description": "Возвращает текущую цену акции по тикеру.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "ticker": {"type": "string", "description": "тикер, e.g. AAPL"}
+            },
+            "required": ["ticker"]
+        }
+    },
+    {
+        "name": "post_telegram",
+        "description": "Шлёт сообщение пользователю в Telegram.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "text": {"type": "string"}
+            },
+            "required": ["text"]
+        }
+    }
+]</pre>
+                    <p>Когда Claude решает вызвать tool, ваш цикл получает <code>tool_use</code> с&nbsp;именем и&nbsp;аргументами&nbsp;&mdash; и&nbsp;вы&nbsp;<em>сами</em> вызываете соответствующую Python-функцию. То&nbsp;есть SDK не&nbsp;интегрируется с&nbsp;MCP&nbsp;&mdash; tools определяются и&nbsp;исполняются у&nbsp;вас в&nbsp;коде.</p>
+                    <p>Зачем разница: в&nbsp;CI или daemon&nbsp;&mdash; нет процесса для&nbsp;MCP-сервера, нет конфига Claude Code. SDK даёт самодостаточный, переносимый агент в&nbsp;одном файле.</p>
+                </div>
+                <div lang="en">
+                    <p>In Claude Code we gave Claude tools <em>via MCP</em>. In the SDK — via definitions in code:</p>
+                    <pre class="shell">my_tools = [
+    {
+        "name": "get_price",
+        "description": "Returns the current stock price by ticker.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "ticker": {"type": "string", "description": "ticker, e.g. AAPL"}
+            },
+            "required": ["ticker"]
+        }
+    },
+    {
+        "name": "post_telegram",
+        "description": "Sends a Telegram message to the user.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "text": {"type": "string"}
+            },
+            "required": ["text"]
+        }
+    }
+]</pre>
+                    <p>When Claude decides to call a tool, your loop receives a <code>tool_use</code> with name and args — and <em>you</em> invoke the matching Python function. So the SDK does not integrate with MCP — tools are defined and executed in your code.</p>
+                    <p>Why: in CI or a daemon there’s no MCP-server process, no Claude Code config. The SDK gives a self-contained portable agent in a single file.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Prompt caching и&nbsp;batch API: оптимизация стоимости</span><span lang="en">Prompt caching and the batch API: cost optimisation</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong>Prompt caching</strong>&nbsp;&mdash; вы&nbsp;уже видели в&nbsp;этапе&nbsp;06. В&nbsp;SDK активируется одним полем:</p>
+                    <pre class="shell">response = client.messages.create(
+    model="claude-sonnet-4-6",
+    system=[
+        {"type": "text", "text": "Большой системный промпт...",
+         "cache_control": {"type": "ephemeral"}}
+    ],
+    messages=messages,
+)</pre>
+                    <p>Эта часть кэшируется на&nbsp;5&nbsp;минут. На&nbsp;повторных вызовах с&nbsp;тем&nbsp;же системным промптом стоимость падает в&nbsp;10 раз. Идеально для&nbsp;Twitter-демона, где каждый твит идёт через один и&nbsp;тот&nbsp;же «инструктаж».</p>
+                    <p><strong>Batch API</strong>&nbsp;&mdash; асинхронный режим: отправляете 100&nbsp;промптов одной пачкой, ответы готовы через ~30&nbsp;минут, цена в&nbsp;2 раза ниже. Подходит для&nbsp;«не&nbsp;срочных» задач: ночная классификация всех вчерашних твитов, переоценка портфеля раз в&nbsp;день, обработка длинной очереди задач.</p>
+                    <p>Не&nbsp;подходит&nbsp;&mdash; для&nbsp;интерактивных бот-задач, где пользователь ждёт ответ.</p>
+                </div>
+                <div lang="en">
+                    <p><strong>Prompt caching</strong> — you saw it in etape 06. In the SDK it’s one field:</p>
+                    <pre class="shell">response = client.messages.create(
+    model="claude-sonnet-4-6",
+    system=[
+        {"type": "text", "text": "A long system prompt...",
+         "cache_control": {"type": "ephemeral"}}
+    ],
+    messages=messages,
+)</pre>
+                    <p>This section is cached for 5 minutes. On repeats with the same system prompt the cost drops 10×. Ideal for the Twitter daemon, where every tweet runs through the same “briefing.”</p>
+                    <p><strong>Batch API</strong> — async mode: you ship 100 prompts in one batch, answers in ~30 minutes, 2× cheaper. Fits “not urgent” jobs: nightly classification of yesterday’s tweets, daily portfolio rescore, long task queues.</p>
+                    <p>Does not fit — interactive bot tasks where the user is waiting.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Безопасность headless: что отличается от&nbsp;Claude Code</span><span lang="en">Headless safety: how it differs from Claude Code</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;Claude Code вы&nbsp;нажимаете «yes/no» на&nbsp;каждое опасное действие. В&nbsp;headless такого нет&nbsp;&mdash; всё решается заранее. Что обязательно:</p>
+                    <ol>
+                        <li><strong>Список разрешённых tools&nbsp;&mdash; узкий.</strong> В&nbsp;Twitter-демоне нет смысла давать tool «удалить файл». Ограничьте только теми, что нужны.</li>
+                        <li><strong>Ограничение шагов цикла.</strong> <code>max_iterations = 10</code>. Иначе при ошибке агент будет крутиться вечно, жгя токены.</li>
+                        <li><strong>Тайм-аут на&nbsp;запрос.</strong> 60&nbsp;секунд&nbsp;&mdash; и&nbsp;убиваем. В&nbsp;CI это критично: иначе билд висит.</li>
+                        <li><strong>Аудит-лог.</strong> Каждое действие&nbsp;&mdash; в&nbsp;лог-файл с&nbsp;timestamp. PostHog (этап&nbsp;10) для&nbsp;агрегации.</li>
+                        <li><strong>Бюджет.</strong> На&nbsp;запуск и&nbsp;на&nbsp;день. Если превысили&nbsp;&mdash; останавливаемся, шлём алерт.</li>
+                        <li><strong>Sandboxing.</strong> Если агент пишет в&nbsp;файлы&nbsp;&mdash; пусть пишет в&nbsp;tmp/, а&nbsp;не&nbsp;в&nbsp;корень репо. В&nbsp;CI&nbsp;&mdash; в&nbsp;artifact-папку.</li>
+                    </ol>
+                    <p>В&nbsp;Claude Code эти правила «по&nbsp;умолчанию». В&nbsp;SDK&nbsp;&mdash; ваша ответственность.</p>
+                </div>
+                <div lang="en">
+                    <p>In Claude Code you press “yes/no” for every dangerous action. Headless has none — everything is decided upfront. Mandatory:</p>
+                    <ol>
+                        <li><strong>Narrow allowed-tools list.</strong> A Twitter daemon doesn’t need a “delete file” tool. Restrict to what’s needed.</li>
+                        <li><strong>Loop step cap.</strong> <code>max_iterations = 10</code>. Otherwise on an error the agent spins forever, burning tokens.</li>
+                        <li><strong>Per-request timeout.</strong> 60 seconds — kill. Critical in CI: builds would hang otherwise.</li>
+                        <li><strong>Audit log.</strong> Every action — into a log file with a timestamp. PostHog (etape 10) for aggregation.</li>
+                        <li><strong>Budget.</strong> Per run and per day. Over budget — stop, alert.</li>
+                        <li><strong>Sandboxing.</strong> If the agent writes files — into tmp/, not the repo root. In CI — into an artifact folder.</li>
+                    </ol>
+                    <p>Claude Code applies these by default. In the SDK — your responsibility.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Долговременная память агента: разговор «с&nbsp;продолжением»</span><span lang="en">Long-term agent memory: a conversation with continuity</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Агент в&nbsp;скрипте по&nbsp;умолчанию забывает всё после <code>break</code>. Для&nbsp;Telegram-консьержа нужно «помнить вас»: что любите, что искали вчера, какие задачи стоят.</p>
+                    <p>Шаблоны:</p>
+                    <ol>
+                        <li><strong>В&nbsp;БД</strong>&nbsp;&mdash; <code>conversations(user_id, messages_json)</code>. Загружаете при старте сессии, сохраняете перед выходом.</li>
+                        <li><strong>В&nbsp;файле на&nbsp;диск</strong>&nbsp;&mdash; <code>~/.concierge/&lt;user_id&gt;.json</code>. Простое, для&nbsp;одного пользователя.</li>
+                        <li><strong>Через summarisation</strong>&nbsp;&mdash; когда история длинная, прогоняете её&nbsp;через Claude и&nbsp;получаете «сжатую память». Дальше работаете с&nbsp;summary, а&nbsp;не&nbsp;с&nbsp;полной историей. Экономит токены.</li>
+                    </ol>
+                    <p>Дисциплина:</p>
+                    <ul>
+                        <li>Не&nbsp;храните пароли и&nbsp;ключи в&nbsp;истории сообщений&nbsp;&mdash; это утечка ждущая случиться;</li>
+                        <li>Шифруйте, если хранится в&nbsp;облаке (этап&nbsp;10, дневник на&nbsp;автопилоте);</li>
+                        <li>Дайте пользователю команду <code>/forget</code>&nbsp;&mdash; удалить всю историю одной кнопкой. GDPR.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>The script-agent forgets everything after <code>break</code> by default. A Telegram concierge needs to “remember you”: what you like, what you searched yesterday, what tasks are pending.</p>
+                    <p>Patterns:</p>
+                    <ol>
+                        <li><strong>DB</strong> — <code>conversations(user_id, messages_json)</code>. Load at session start, save before exit.</li>
+                        <li><strong>Disk file</strong> — <code>~/.concierge/&lt;user_id&gt;.json</code>. Simple, single-user.</li>
+                        <li><strong>Via summarisation</strong> — when the history is long, run it through Claude for a “compressed memory.” Then work with the summary, not the full history. Saves tokens.</li>
+                    </ol>
+                    <p>Discipline:</p>
+                    <ul>
+                        <li>Never store passwords or keys in message history — a leak waiting to happen;</li>
+                        <li>Encrypt if cloud-stored (etape 10, the diary);</li>
+                        <li>Give the user a <code>/forget</code> command to wipe history in one tap. GDPR.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">«Hello agent»: первый цикл из&nbsp;пяти строк</span><span lang="en">“Hello agent”: a first 5-line loop</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · агент с&nbsp;одним tool за&nbsp;15 минут</span><span lang="en">Run · agent with one tool in 15 minutes</span></h4>
+            <ol lang="ru">
+                <li>Создайте папку <code>hello-agent</code>, в&nbsp;<code>.env</code>&nbsp;&mdash; <code>ANTHROPIC_API_KEY</code>.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; используя skill claude-api,
+&gt; составь Python-скрипт agent.py:
+&gt;   - один tool «get_time», возвращает текущее время в ISO;
+&gt;   - agent loop с max_iterations=5;
+&gt;   - prompt: «который сейчас час и какой день?»;
+&gt;   - модель claude-haiku-4-5 (дешёвая для теста).
+&gt; запусти, покажи трассу: какие tool_use появились, что Claude ответил.</pre>
+                </li>
+                <li>Проверьте, что Claude действительно вызвал <code>get_time</code> через tool, а&nbsp;не&nbsp;«придумал» из&nbsp;своих знаний.</li>
+                <li>Усложните: добавьте второй tool «post_telegram» (если Telegram-бот из&nbsp;этапа&nbsp;10 готов). Промпт:
+                    <pre class="shell">&gt; модифицируй agent.py: добавь tool post_telegram(text).
+&gt; новый prompt: «получи время и пришли мне в telegram
+&gt; «доброе утро» с этим временем».
+&gt; убедись, что агент сделал ДВА tool_use по очереди:
+&gt; сначала get_time, потом post_telegram, и завершился.</pre>
+                </li>
+                <li>Проверка идемпотентности: запустите дважды&nbsp;&mdash; должны прийти два сообщения.</li>
+                <li>Бюджет токенов: добавьте <code>max_tokens=200</code> на&nbsp;запрос. Запустите ещё раз. Логи&nbsp;&mdash; через PostHog skill этапа&nbsp;10.</li>
+            </ol>
+            <ol lang="en">
+                <li>Create <code>hello-agent</code>, drop <code>ANTHROPIC_API_KEY</code> into <code>.env</code>.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; using the claude-api skill,
+&gt; build a python script agent.py:
+&gt;   - one tool "get_time", returns current ISO time;
+&gt;   - agent loop with max_iterations=5;
+&gt;   - prompt: "what time is it and what day?";
+&gt;   - model claude-haiku-4-5 (cheap for testing).
+&gt; run it, show the trace: which tool_use appeared, what Claude replied.</pre>
+                </li>
+                <li>Confirm Claude actually called <code>get_time</code> via the tool, not “made it up” from its knowledge.</li>
+                <li>Level up: add a second tool <code>post_telegram</code> (if your etape-10 bot is up). Prompt:
+                    <pre class="shell">&gt; modify agent.py: add tool post_telegram(text).
+&gt; new prompt: "get the time and send me telegram
+&gt; "good morning" with that time".
+&gt; confirm the agent did TWO tool_uses in order:
+&gt; get_time, then post_telegram, then finished.</pre>
+                </li>
+                <li>Idempotency check: run twice — two messages should arrive.</li>
+                <li>Token budget: add <code>max_tokens=200</code> per request. Run again. Logs — via the etape-10 PostHog skill.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>скелет агента в&nbsp;5–10 строк Python</strong>, который сам решает, когда вызывать tools, и&nbsp;завершается, когда задача выполнена.</p>
+            <p lang="en">What we train: <strong>a 5–10-line Python agent skeleton</strong> that decides when to call tools and finishes when the task is done.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Twitter-сигналы и&nbsp;AI-консьерж</span><span lang="en">Twitter signals and an AI concierge</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Twitter-сигналы в&nbsp;реальном времени</span><span lang="en">Twitter signals in real time</span></h3>
+            <p class="goal" lang="ru">Цель: Python-демон на&nbsp;Railway, ловит твиты по&nbsp;вашим тикерам через X&nbsp;API. Через Claude Agent SDK&nbsp;&mdash; sentiment + влияние на&nbsp;цену. При срабатывании порога&nbsp;&mdash; push в&nbsp;Telegram. Идея «trading signals», но&nbsp;используем для&nbsp;<em>обучения</em>, не&nbsp;для&nbsp;реальных сделок.</p>
+            <p class="goal" lang="en">Goal: a Python daemon on Railway that catches tweets on your tickers via the X API. Through the Claude Agent SDK — sentiment + price-impact score. On threshold — push to Telegram. The idea is “trading signals,” but for <em>learning</em>, not real trades.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте репо <code>twitter-signals/</code>. Структура:
+                    <pre class="shell">twitter-signals/
+├── daemon.py            # главный цикл
+├── agent.py             # Claude Agent SDK
+├── tools/
+│   ├── price.py         # get_price через Alpha Vantage
+│   └── telegram.py      # post_telegram
+├── data/
+│   └── tickers.json     # тикеры для слежки
+├── .env.example
+└── railway.json</pre>
+                </li>
+                <li>Если у&nbsp;вас есть X&nbsp;API&nbsp;&mdash; <code>daemon.py</code> подключается к&nbsp;streaming-эндпоинту и&nbsp;ловит твиты. Если нет&nbsp;&mdash; demo-режим, читает <code>data/sample-tweets.json</code> по&nbsp;одному в&nbsp;5&nbsp;секунд.</li>
+                <li><code>agent.py</code>&nbsp;&mdash; Claude Agent SDK с&nbsp;тремя tools:
+                    <ul>
+                        <li><code>get_price(ticker)</code>&nbsp;&mdash; текущая цена;</li>
+                        <li><code>get_my_position(ticker)</code>&nbsp;&mdash; есть&nbsp;ли у&nbsp;меня эта акция (читает <code>portfolio-journal/data/operations.csv</code>);</li>
+                        <li><code>post_telegram(text)</code>&nbsp;&mdash; уведомление.</li>
+                    </ul>
+                </li>
+                <li>Системный промпт (с&nbsp;prompt caching, потому что одинаков на&nbsp;каждом твите):
+                    <pre class="shell">Ты — финансовый аналитик-скептик. Каждый твит про акцию
+оцени по шкале 1–10:
+  - sentiment (1 = очень плохо, 10 = очень хорошо);
+  - вероятность влияния на цену в ближайший день;
+  - твоя степень уверенности.
+
+Если sentiment &lt; 3 ИЛИ &gt; 8 И влияние &gt; 7 И уверенность &gt; 6 —
+И у пользователя есть позиция (через get_my_position) —
+ОДИН раз вызови post_telegram с кратким резюме.
+
+Иначе — ничего не делай, просто заверши.
+
+Никаких советов «купить/продать». Только наблюдение.</pre>
+                </li>
+                <li>Дисциплина (см. §&nbsp;I):
+                    <ul>
+                        <li><code>max_iterations = 5</code> в&nbsp;agent loop;</li>
+                        <li><code>max_tokens = 300</code>&nbsp;&mdash; короткие ответы;</li>
+                        <li>модель <strong>haiku</strong>&nbsp;&mdash; дёшево для&nbsp;потока твитов;</li>
+                        <li>дневной бюджет $0.50 на&nbsp;агента, прерываемся при превышении;</li>
+                        <li>идемпотентность: <code>data/sent-alerts.json</code>&nbsp;&mdash; не&nbsp;шлём один и&nbsp;тот&nbsp;же сигнал дважды.</li>
+                    </ul>
+                </li>
+                <li>Деплой на&nbsp;Railway как «worker»-сервис (не&nbsp;cron, а&nbsp;всегда работающий процесс):
+                    <pre class="shell">{
+  "deploy": {
+    "startCommand": "python daemon.py",
+    "restartPolicyType": "ON_FAILURE",
+    "numReplicas": 1
+  }
+}</pre>
+                </li>
+                <li>Verification:
+                    <pre class="shell">&gt; запусти red-team subagent. brief:
+&gt; представь, что я случайно скачал tweet-flood
+&gt; (100 твитов в минуту). что произойдёт с моим бюджетом
+&gt; и API ключом? какие три защиты мне нужны?</pre>
+                </li>
+                <li>Дисклеймер обязателен: каждый push в&nbsp;Telegram заканчивается строкой «<em>наблюдение, не&nbsp;инвестиционный совет</em>».</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create a <code>twitter-signals/</code> repo. Layout:
+                    <pre class="shell">twitter-signals/
+├── daemon.py            # main loop
+├── agent.py             # Claude Agent SDK
+├── tools/
+│   ├── price.py         # get_price via Alpha Vantage
+│   └── telegram.py      # post_telegram
+├── data/
+│   └── tickers.json     # watched tickers
+├── .env.example
+└── railway.json</pre>
+                </li>
+                <li>If you have X API access — <code>daemon.py</code> connects to a streaming endpoint and catches tweets. If not — demo mode reads <code>data/sample-tweets.json</code> one every 5 seconds.</li>
+                <li><code>agent.py</code> — Claude Agent SDK with three tools:
+                    <ul>
+                        <li><code>get_price(ticker)</code> — current price;</li>
+                        <li><code>get_my_position(ticker)</code> — do I hold the stock (reads <code>portfolio-journal/data/operations.csv</code>);</li>
+                        <li><code>post_telegram(text)</code> — alert.</li>
+                    </ul>
+                </li>
+                <li>System prompt (with caching — identical on every tweet):
+                    <pre class="shell">You are a sceptical financial analyst. Each stock-related tweet
+score on 1–10:
+  - sentiment (1 = very bad, 10 = very good);
+  - probability of price impact in the next day;
+  - your confidence.
+
+If sentiment &lt; 3 OR &gt; 8 AND impact &gt; 7 AND confidence &gt; 6 —
+AND the user holds the position (via get_my_position) —
+call post_telegram ONCE with a short summary.
+
+Otherwise — do nothing, just finish.
+
+No "buy/sell" advice. Observation only.</pre>
+                </li>
+                <li>Discipline (see § I):
+                    <ul>
+                        <li><code>max_iterations = 5</code> in the agent loop;</li>
+                        <li><code>max_tokens = 300</code> — short replies;</li>
+                        <li>model <strong>haiku</strong> — cheap for a tweet stream;</li>
+                        <li>daily budget $0.50 per agent, abort on overage;</li>
+                        <li>idempotency: <code>data/sent-alerts.json</code> — never push the same signal twice.</li>
+                    </ul>
+                </li>
+                <li>Deploy to Railway as a “worker” service (not cron, an always-on process):
+                    <pre class="shell">{
+  "deploy": {
+    "startCommand": "python daemon.py",
+    "restartPolicyType": "ON_FAILURE",
+    "numReplicas": 1
+  }
+}</pre>
+                </li>
+                <li>Verification:
+                    <pre class="shell">&gt; run a red-team subagent. brief:
+&gt; pretend I accidentally pulled a tweet-flood
+&gt; (100 tweets/min). what happens to my budget
+&gt; and API key? what three safeguards do I need?</pre>
+                </li>
+                <li>Disclaimer mandatory: every Telegram push ends with “<em>observation, not investment advice</em>.”</li>
+            </ol>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">AI-консьерж в&nbsp;Telegram</span><span lang="en">AI concierge in Telegram</span></h3>
+            <p class="goal" lang="ru">Цель: Telegram-бот на&nbsp;Agent SDK с&nbsp;долговременной памятью. Любые задачи: <em>«куда поехать на&nbsp;3&nbsp;дня в&nbsp;апреле, бюджет 50к»</em>, <em>«найди подарок для&nbsp;сестры, любит керамику»</em>, <em>«меню на&nbsp;неделю под&nbsp;мои предпочтения»</em>. Бот помнит ваши прошлые запросы и&nbsp;подстраивается.</p>
+            <p class="goal" lang="en">Goal: a Telegram bot on the Agent SDK with long-term memory. Any tasks: <em>“where to go for 3 days in April, budget 50k”</em>, <em>“find a gift for my sister, she likes ceramics”</em>, <em>“weekly menu to my taste”</em>. The bot remembers past requests and adapts.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Репо <code>concierge-bot/</code>. На&nbsp;Railway worker-сервис.</li>
+                <li>Память: PostgreSQL-таблица <code>memory(user_id, key, value, updated_at)</code>. Хранит «факты» о&nbsp;пользователе: предпочтения, города, бюджет по&nbsp;умолчанию, история запросов.</li>
+                <li>Tools для&nbsp;агента:
+                    <ul>
+                        <li><code>remember(key, value)</code>&nbsp;&mdash; запомнить факт;</li>
+                        <li><code>recall(key)</code>&nbsp;&mdash; извлечь факт;</li>
+                        <li><code>web_search(query)</code>&nbsp;&mdash; поиск в&nbsp;интернете;</li>
+                        <li><code>web_fetch(url)</code>&nbsp;&mdash; чтение страницы;</li>
+                        <li><code>send_message(text)</code>&nbsp;&mdash; ответ пользователю.</li>
+                    </ul>
+                </li>
+                <li>Системный промпт:
+                    <pre class="shell">Ты — личный ассистент. Перед каждой задачей:
+1) recall интересные факты про пользователя (предпочтения, бюджеты);
+2) если задача требует свежих данных — web_search и web_fetch;
+3) сформулируй конкретный ответ: 3-5 пунктов, не «возможно»;
+4) если узнал что-то новое о пользователе — remember.
+
+НЕ выдумывай факты. Если не знаешь — спрашивай через send_message.</pre>
+                </li>
+                <li>Цикл: получили сообщение от&nbsp;пользователя → запустили agent loop с&nbsp;историей последних 10 сообщений + всеми <code>recall</code>-ами → агент работает → завершился → сохраняем последний ответ в&nbsp;memory.</li>
+                <li>Команды бота:
+                    <ul>
+                        <li><code>/forget</code>&nbsp;&mdash; очистить всю память (GDPR);</li>
+                        <li><code>/recall</code>&nbsp;&mdash; показать, что бот про&nbsp;вас «знает»;</li>
+                        <li><code>/budget</code>&nbsp;&mdash; показать сколько токенов потрачено за&nbsp;месяц.</li>
+                    </ul>
+                </li>
+                <li>Test-drive:
+                    <pre class="shell">[вы]   привет, я люблю керамику и небольшие путешествия
+[бот]  записал 👋 чем могу помочь?
+[вы]   куда поехать на 3 дня в апреле, бюджет 50к
+[бот]  с учётом «небольшие путешествия» и «керамика»:
+       1) Гжельский завод + Подмосковье...
+       2) Сетка Псков + псковская керамика...
+       3) Фарфор Императорский завод (Питер)...
+[вы]   /recall
+[бот]  про вас:
+       - любит керамику
+       - предпочитает небольшие путешествия
+       - типичный бюджет на 3-дневную поездку: ~50к</pre>
+                </li>
+                <li>Безопасность: <code>max_tokens=1500</code>, <code>max_iterations=8</code>, дневной бюджет на&nbsp;пользователя $1, шифрование <code>memory.value</code> в&nbsp;БД (как в&nbsp;дневнике этапа&nbsp;10).</li>
+                <li>Verification: запустите subagent с&nbsp;ролью «privacy-аудит». Brief: представь, что бот утёк через дамп БД. Что увидит атакующий? Что нельзя восстановить?</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Repo <code>concierge-bot/</code>. Railway worker service.</li>
+                <li>Memory: a PostgreSQL <code>memory(user_id, key, value, updated_at)</code> table. Stores “facts” about the user: preferences, cities, default budget, request history.</li>
+                <li>Agent tools:
+                    <ul>
+                        <li><code>remember(key, value)</code> — store a fact;</li>
+                        <li><code>recall(key)</code> — fetch a fact;</li>
+                        <li><code>web_search(query)</code> — internet search;</li>
+                        <li><code>web_fetch(url)</code> — read a page;</li>
+                        <li><code>send_message(text)</code> — reply to the user.</li>
+                    </ul>
+                </li>
+                <li>System prompt:
+                    <pre class="shell">You are a personal assistant. Before every task:
+1) recall relevant facts about the user (preferences, budgets);
+2) if the task needs fresh data — web_search and web_fetch;
+3) phrase a concrete answer: 3-5 bullets, no "maybe";
+4) if you learned something new — remember.
+
+DO NOT invent facts. If you don't know — ask via send_message.</pre>
+                </li>
+                <li>Loop: a user message arrives → run the agent loop with the last 10 messages + all <code>recall</code>s → agent works → finishes → save the last reply to memory.</li>
+                <li>Bot commands:
+                    <ul>
+                        <li><code>/forget</code> — wipe all memory (GDPR);</li>
+                        <li><code>/recall</code> — show what the bot “knows” about you;</li>
+                        <li><code>/budget</code> — show monthly token spend.</li>
+                    </ul>
+                </li>
+                <li>Test drive:
+                    <pre class="shell">[you] hi, I like ceramics and short trips
+[bot] noted 👋 how can I help?
+[you] where to go for 3 days in April, budget 50k
+[bot] given "short trips" and "ceramics":
+      1) Gzhel ceramics factory + the suburbs...
+      2) Pskov + Pskov ceramics museum...
+      3) Imperial porcelain factory (St. Petersburg)...
+[you] /recall
+[bot] about you:
+      - likes ceramics
+      - prefers short trips
+      - typical 3-day budget: ~50k</pre>
+                </li>
+                <li>Safety: <code>max_tokens=1500</code>, <code>max_iterations=8</code>, daily per-user budget $1, encryption of <code>memory.value</code> in the DB (as in the etape-10 diary).</li>
+                <li>Verification: run a “privacy audit” subagent. Brief: imagine the bot leaked via a DB dump. What does the attacker see? What can’t be reconstructed?</li>
+            </ol>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Свои агенты в&nbsp;вашей инфраструктуре</span><span lang="en">Your own agents in your infrastructure</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">GitHub Action: автоматический Claude code review на&nbsp;каждый PR</span><span lang="en">GitHub Action: automatic Claude code review on every PR</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; тот&nbsp;же стек (headless agent), но&nbsp;другая среда (CI). При каждом PR в&nbsp;ваш репо <code>my-personal-office</code> (этап&nbsp;09) или <code>my-investing</code> (этап&nbsp;06) GitHub Action запускает Claude Agent SDK&nbsp;&mdash; и&nbsp;он&nbsp;через tool <code>post_review_comment</code> постит замечания прямо в&nbsp;PR.</p>
+            <p class="goal" lang="en">Goal: a variation of project A — same stack (headless agent), different environment (CI). On every PR to your <code>my-personal-office</code> (etape 09) or <code>my-investing</code> (etape 06) repo, a GitHub Action runs the Claude Agent SDK — and through a <code>post_review_comment</code> tool it posts comments straight into the PR.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>В&nbsp;<code>.github/workflows/claude-review.yml</code>&nbsp;&mdash; триггер <code>pull_request: opened, synchronize</code>.</li>
+                <li>В&nbsp;<code>.github/scripts/claude_review.py</code>&nbsp;&mdash; ваш агент. Получает diff через <code>gh pr diff</code>, постит комментарии через <code>gh pr review --comment</code>.</li>
+                <li>Tools агента: <code>get_diff</code>, <code>read_file</code>, <code>post_review_comment</code>, <code>finalize_review(verdict)</code>.</li>
+                <li>Системный промпт: ищем 3–5 проблем, никаких style-наг (это для&nbsp;линтеров), фокус на&nbsp;баги/безопасность/неочевидное.</li>
+                <li>Бюджет: <code>max_tokens=2000</code>, <code>max_iterations=10</code>, тайм-аут 5&nbsp;минут (CI должно быстро отвечать).</li>
+                <li>Поставьте на&nbsp;один из&nbsp;ваших проектов&nbsp;&mdash; и&nbsp;откройте тестовый PR.</li>
+            </ul>
+            <ul lang="en">
+                <li>In <code>.github/workflows/claude-review.yml</code> — trigger <code>pull_request: opened, synchronize</code>.</li>
+                <li>In <code>.github/scripts/claude_review.py</code> — your agent. Pulls diff via <code>gh pr diff</code>, posts comments via <code>gh pr review --comment</code>.</li>
+                <li>Agent tools: <code>get_diff</code>, <code>read_file</code>, <code>post_review_comment</code>, <code>finalize_review(verdict)</code>.</li>
+                <li>System prompt: find 3–5 issues, no style nags (linters do that), focus on bugs/security/non-obvious.</li>
+                <li>Budget: <code>max_tokens=2000</code>, <code>max_iterations=10</code>, 5-minute timeout (CI must reply quickly).</li>
+                <li>Wire it onto one of your projects — and open a test PR.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>в&nbsp;вашем репо есть <code>.github/workflows/claude-review.yml</code> и&nbsp;<code>scripts/claude_review.py</code>;</li>
+                        <li>при открытии тестового PR через 1–2 минуты появляются комментарии Claude;</li>
+                        <li>замечания осмысленные (не&nbsp;«увеличьте отступ», а&nbsp;«здесь возможен SQL-инъекция»);</li>
+                        <li>тайм-аут срабатывает (тестировали с&nbsp;<code>max_iterations=1</code>&nbsp;&mdash; агент не&nbsp;зависает);</li>
+                        <li>через PostHog видно стоимость каждого review;</li>
+                        <li>агент не&nbsp;имеет права делать ничего, кроме <code>post_review_comment</code>&nbsp;&mdash; вы&nbsp;явно ограничили.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>your repo has <code>.github/workflows/claude-review.yml</code> and <code>scripts/claude_review.py</code>;</li>
+                        <li>opening a test PR yields Claude comments within 1–2 minutes;</li>
+                        <li>comments are meaningful (not “increase indent,” but “possible SQL injection here”);</li>
+                        <li>the timeout works (tested with <code>max_iterations=1</code> — the agent doesn’t hang);</li>
+                        <li>PostHog shows cost per review;</li>
+                        <li>the agent can do nothing beyond <code>post_review_comment</code> — you locked it down.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Запусти subagent с&nbsp;ролью «security-инженер». Brief: посмотри мой workflow и&nbsp;script. Найди три места, где злонамеренный PR (от&nbsp;человека, который форкнул мой репо) может через мой workflow исчерпать мой ANTHROPIC_API_KEY или утечь его. Как защититься?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Spawn a subagent as ‘security engineer.’ Brief: look at my workflow and script. Find three ways a malicious PR (from a forker) could drain my ANTHROPIC_API_KEY or leak it through my workflow. How to defend?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">«Утренний агент»&nbsp;&mdash; кастом под&nbsp;вашу повседневность</span><span lang="en">A “morning agent” — custom for your daily life</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;B (агент с&nbsp;долговременной памятью), но&nbsp;для&nbsp;<em>не&nbsp;универсальных задач</em>&nbsp;&mdash; для&nbsp;вашего конкретного утреннего ритуала. Например: «каждое утро в&nbsp;7:30 агент проверяет мой Google Calendar, погоду, выбирает оптимальный маршрут до&nbsp;первой встречи с&nbsp;учётом пробок, шлёт one-message сводку».</p>
+            <p class="goal" lang="en">Goal: a variation of project B (long-memory agent) but for <em>non-universal tasks</em> — your specific morning ritual. E.g.: “every morning at 7:30 the agent checks my Google Calendar, the weather, picks the best route to my first meeting with traffic, sends a one-message digest.”</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Это та&nbsp;же архитектура, что в&nbsp;B (Agent SDK + tools + долговременная память), но&nbsp;другие tools&nbsp;&mdash; под&nbsp;<em>ваш</em> ритуал.</li>
+                <li>Запуск&nbsp;&mdash; cron из&nbsp;этапа&nbsp;10 (не&nbsp;daemon, потому что один раз в&nbsp;день).</li>
+                <li>Возможные tools: Google Calendar API, Open-Meteo (погода без&nbsp;ключа), 2GIS/Google Maps (для&nbsp;маршрута), Telegram&nbsp;для&nbsp;ответа.</li>
+                <li>Долговременная память: ваши «правила» (любите кофе перед встречами, не&nbsp;ходите в&nbsp;спортзал по&nbsp;четвергам), которые агент учитывает в&nbsp;сводке.</li>
+                <li>Длина: ровно один Telegram-message, читается за&nbsp;30 секунд за&nbsp;утренним кофе.</li>
+            </ul>
+            <ul lang="en">
+                <li>Same architecture as B (Agent SDK + tools + long memory), but different tools tailored to <em>your</em> ritual.</li>
+                <li>Trigger — etape-10 cron (not a daemon, once a day).</li>
+                <li>Possible tools: Google Calendar API, Open-Meteo (no-key weather), 2GIS/Google Maps for routing, Telegram for the reply.</li>
+                <li>Long memory: your “rules” (coffee before meetings, no gym on Thursdays) the agent factors into the digest.</li>
+                <li>Length: exactly one Telegram message, readable in 30 seconds with morning coffee.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>агент стартует по&nbsp;cron в&nbsp;7:30 каждое утро без&nbsp;вашего участия;</li>
+                        <li>в&nbsp;Telegram приходит ровно одно сообщение на&nbsp;30 секунд чтения;</li>
+                        <li>сообщение учитывает ваши «правила» из&nbsp;памяти (тестировали&nbsp;&mdash; добавили правило, на&nbsp;следующее утро оно отразилось);</li>
+                        <li>есть <code>/forget</code> и&nbsp;<code>/recall</code>&nbsp;&mdash; как в&nbsp;консьерже;</li>
+                        <li>стоимость одного запуска видна в&nbsp;PostHog (по&nbsp;опыту&nbsp;&mdash; 3–5 центов);</li>
+                        <li>в&nbsp;течение недели вы&nbsp;ни&nbsp;разу не&nbsp;трогали агента руками&nbsp;&mdash; работает сам.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>the agent fires on cron at 7:30 daily without your involvement;</li>
+                        <li>exactly one Telegram message arrives, 30 seconds of reading;</li>
+                        <li>the message reflects your “rules” from memory (you tested — added a rule, next morning it showed);</li>
+                        <li><code>/forget</code> and <code>/recall</code> exist — like in the concierge;</li>
+                        <li>PostHog shows the per-run cost (typically 3–5 cents);</li>
+                        <li>over a week you didn’t touch it manually — it ran on its own.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Прогуляйся по&nbsp;неделе моих сводок как «коуч продуктивности». Brief: что в&nbsp;моих утренних сообщениях повторяется (и&nbsp;потому шумит), что важно но&nbsp;иногда теряется? Какую структуру я&nbsp;мог&nbsp;бы попробовать на&nbsp;следующей неделе?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Walk through a week of my digests as a ‘productivity coach.’ Brief: what repeats and becomes noise in my morning messages, what matters but sometimes slips? Which structure could I try next week?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>Claude Agent SDK</dt>
+            <dd>
+                <span lang="ru">Библиотека Anthropic (<code>anthropic</code> для&nbsp;Python, <code>@anthropic-ai/sdk</code> для&nbsp;Node), позволяющая запускать Claude как агента из&nbsp;вашего скрипта. Полный agent loop, tools, prompt caching&nbsp;&mdash; всё в&nbsp;ваших руках.</span>
+                <span lang="en">An Anthropic library (<code>anthropic</code> for Python, <code>@anthropic-ai/sdk</code> for Node) that lets you run Claude as an agent from your script. Full agent loop, tools, prompt caching — all yours.</span>
+            </dd>
+
+            <dt>Agent loop</dt>
+            <dd>
+                <span lang="ru">Внутренний цикл агента: <em>prompt → tool calls → tool results → next prompt → ...</em> до&nbsp;<code>stop_reason: end_turn</code>. В&nbsp;Claude Code скрыт, в&nbsp;SDK&nbsp;&mdash; ваш код.</span>
+                <span lang="en">The agent’s inner loop: <em>prompt → tool calls → tool results → next prompt → ...</em> until <code>stop_reason: end_turn</code>. Hidden in Claude Code, your code in the SDK.</span>
+            </dd>
+
+            <dt>Headless mode</dt>
+            <dd>
+                <span lang="ru">Запуск Claude без&nbsp;интерактивного TTY: на&nbsp;сервере, в&nbsp;CI, в&nbsp;daemon-скрипте. Все разрешения, секреты, тайм-ауты&nbsp;&mdash; в&nbsp;коде заранее.</span>
+                <span lang="en">Running Claude without an interactive TTY: server, CI, daemon script. All permissions, secrets, timeouts — in code upfront.</span>
+            </dd>
+
+            <dt>Tool definition</dt>
+            <dd>
+                <span lang="ru">Описание tool в&nbsp;SDK: имя, description, JSON-schema параметров. Передаётся в&nbsp;<code>messages.create(tools=...)</code>. Когда модель решает вызвать tool&nbsp;&mdash; ваш код исполняет соответствующую функцию.</span>
+                <span lang="en">A tool description for the SDK: name, description, JSON-schema parameters. Passed to <code>messages.create(tools=...)</code>. When the model decides to call — your code runs the matching function.</span>
+            </dd>
+
+            <dt>Daemon</dt>
+            <dd>
+                <span lang="ru">Долгоживущий процесс, постоянно работающий в&nbsp;фоне. На&nbsp;Railway&nbsp;&mdash; «worker»-сервис. Используется для&nbsp;стримов (Twitter), ботов (Telegram), мониторов.</span>
+                <span lang="en">A long-running process always alive in the background. On Railway — a “worker” service. Used for streams (Twitter), bots (Telegram), monitors.</span>
+            </dd>
+
+            <dt>Batch API</dt>
+            <dd>
+                <span lang="ru">Асинхронный режим Anthropic API: 100&nbsp;промптов одной пачкой, ответы через ~30&nbsp;минут, в&nbsp;2 раза дешевле. Подходит для&nbsp;несрочных задач (ночная классификация, переоценка портфеля).</span>
+                <span lang="en">Async Anthropic API mode: 100 prompts in one batch, replies in ~30 minutes, 2× cheaper. Fits non-urgent jobs (nightly classification, portfolio rescore).</span>
+            </dd>
+
+            <dt>CI/CD</dt>
+            <dd>
+                <span lang="ru">Continuous Integration / Continuous Deployment&nbsp;&mdash; автоматизация сборки, тестов и&nbsp;деплоя. В&nbsp;курсе&nbsp;&mdash; через GitHub Actions: на&nbsp;каждый push/PR запускается набор скриптов, в&nbsp;т.&nbsp;ч. Claude code review.</span>
+                <span lang="en">Continuous Integration / Continuous Deployment — build, test and deploy automation. Here — via GitHub Actions: on every push/PR a script set runs, including Claude code review.</span>
+            </dd>
+
+            <dt>GitHub Actions</dt>
+            <dd>
+                <span lang="ru">Встроенная CI-система GitHub. Workflow описывается YAML-файлом в&nbsp;<code>.github/workflows/</code>. На&nbsp;триггер&nbsp;&mdash; запускает шаги: setup среды, выполнение скриптов, постинг результатов.</span>
+                <span lang="en">GitHub’s built-in CI. Workflows are YAML files in <code>.github/workflows/</code>. On a trigger — runs steps: env setup, scripts, result posting.</span>
+            </dd>
+
+            <dt>max_iterations</dt>
+            <dd>
+                <span lang="ru">Ограничение количества шагов agent loop. Без&nbsp;него агент при ошибке может крутиться вечно. Стандартно&nbsp;&mdash; 5–10 для&nbsp;большинства задач.</span>
+                <span lang="en">A cap on agent-loop steps. Without it, on an error the agent loops forever. Default — 5–10 for most tasks.</span>
+            </dd>
+
+            <dt><span lang="ru">Долговременная память</span><span lang="en">Long-term memory</span></dt>
+            <dd>
+                <span lang="ru">Хранение информации о&nbsp;пользователе между сессиями агента. БД, файл, или сжатая через summarisation. Обязательная команда <code>/forget</code> для&nbsp;GDPR.</span>
+                <span lang="en">Storing per-user information across agent sessions. DB, file, or summarisation-compressed. A <code>/forget</code> command is mandatory for GDPR.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">В&nbsp;каком сценарии лучше Claude API, а&nbsp;не&nbsp;Agent SDK?</span><span lang="en">When is Claude API better than the Agent SDK?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Когда вам нужно <em>один</em> ответ на&nbsp;один промпт, без&nbsp;tools и&nbsp;без&nbsp;цикла. Например: чат-приложение, которое получает вопрос и&nbsp;возвращает ответ. Claude API проще, дешевле и&nbsp;не&nbsp;требует определять tools.</p>
+                        <p lang="en">When you need <em>one</em> reply to one prompt, no tools, no loop. E.g., a chat app that takes a question and returns an answer. Claude API is simpler, cheaper, no tool definitions.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Что делает <code>stop_reason: tool_use</code> в&nbsp;agent loop?</span><span lang="en">What does <code>stop_reason: tool_use</code> mean in the agent loop?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Это сигнал: «модель просит тебя вызвать tool». Ваш код должен исполнить запрошенные tool-функции, передать результаты обратно как <code>tool_result</code>, и&nbsp;продолжить цикл&nbsp;&mdash; модель увидит результаты и&nbsp;либо вызовет ещё tool, либо завершит с&nbsp;<code>end_turn</code>.</p>
+                        <p lang="en">It’s the signal “model asks you to call a tool.” Your code runs the requested tool functions, sends results back as <code>tool_result</code>, and continues the loop — the model sees the results and either calls another tool or finishes with <code>end_turn</code>.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем обязательно ограничение <code>max_iterations</code> в&nbsp;headless?</span><span lang="en">Why is a <code>max_iterations</code> cap mandatory headless?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">При ошибке (плохой tool, неудачный prompt, цикл из&nbsp;«попробуй снова») агент может крутиться вечно, жгя токены. В&nbsp;Claude Code пользователь нажмёт Esc&nbsp;&mdash; в&nbsp;headless этого нет. <code>max_iterations</code>&nbsp;&mdash; страховка: после N&nbsp;шагов&nbsp;&mdash; принудительный выход с&nbsp;ошибкой, которую можно увидеть в&nbsp;логах.</p>
+                        <p lang="en">On an error (bad tool, unfortunate prompt, “try again” loop) the agent can spin forever, burning tokens. In Claude Code the user hits Esc — headless has none. <code>max_iterations</code> is the insurance: after N steps — a forced exit with an error visible in logs.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Где живут tools в&nbsp;Agent SDK&nbsp;&mdash; в&nbsp;MCP-сервере или в&nbsp;вашем коде?</span><span lang="en">Where do tools live in the Agent SDK — in an MCP server or in your code?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">В&nbsp;вашем коде. SDK&nbsp;&mdash; это <em>агент в&nbsp;скрипте</em>, без&nbsp;Claude Code-обёртки и&nbsp;без&nbsp;конфигов MCP. Tools определяются как Python-функции (или Node) и&nbsp;передаются в&nbsp;<code>messages.create(tools=...)</code>. Это даёт переносимость&nbsp;&mdash; один файл-скрипт работает в&nbsp;CI, на&nbsp;сервере, в&nbsp;любом окружении.</p>
+                        <p lang="en">In your code. The SDK is an <em>agent in a script</em>, no Claude Code wrapper, no MCP configs. Tools are Python (or Node) functions passed to <code>messages.create(tools=...)</code>. This gives portability — one script file runs in CI, on a server, anywhere.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Когда уместен Batch API, а&nbsp;когда нет?</span><span lang="en">When does the Batch API fit, and when not?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Уместен:</strong> большие пачки несрочных задач&nbsp;&mdash; ночная классификация, переоценка портфеля раз в&nbsp;день, обработка очереди задач. В&nbsp;2 раза дешевле, ответ через ~30&nbsp;минут. <strong>Не&nbsp;уместен:</strong> интерактивные сценарии, где пользователь ждёт ответ (Telegram-бот, AI-консьерж).</p>
+                        <p lang="en"><strong>Fits:</strong> big batches of non-urgent tasks — nightly classification, daily portfolio rescore, queue processing. 2× cheaper, replies in ~30 minutes. <strong>Doesn’t fit:</strong> interactive flows where the user waits (Telegram bot, AI concierge).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем команда <code>/forget</code> в&nbsp;AI-консьерже?</span><span lang="en">Why a <code>/forget</code> command in the AI concierge?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">GDPR и&nbsp;здравый смысл. Бот хранит факты о&nbsp;пользователе&nbsp;&mdash; пользователь должен иметь возможность их&nbsp;удалить одной кнопкой. Без&nbsp;<code>/forget</code> ваш бот не&nbsp;соответствует европейскому регулированию (а&nbsp;кроме того&nbsp;&mdash; неэтичен).</p>
+                        <p lang="en">GDPR and common sense. The bot stores facts about the user — the user must wipe them with one button. Without <code>/forget</code> your bot doesn’t meet EU rules (and beyond that — it’s unethical).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Какие шесть мер безопасности обязательны в&nbsp;headless-агенте?</span><span lang="en">What six safety measures are mandatory in a headless agent?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">1) Узкий список разрешённых tools; 2) <code>max_iterations</code> на&nbsp;agent loop; 3) тайм-аут на&nbsp;каждый запрос; 4) аудит-лог в&nbsp;файл/PostHog; 5) бюджет (на&nbsp;запуск, на&nbsp;день); 6) sandboxing файловых операций (tmp/ или artifact-папка). В&nbsp;Claude Code это «по&nbsp;умолчанию», в&nbsp;SDK&nbsp;&mdash; ваша ответственность.</p>
+                        <p lang="en">1) Narrow allowed-tools list; 2) <code>max_iterations</code> on the agent loop; 3) per-request timeout; 4) audit log to file/PostHog; 5) budget (per run, per day); 6) sandbox file operations (tmp/ or artifact folder). Default in Claude Code, your duty in the SDK.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e11-three-ways"><span lang="ru">Различаю Claude Code, Claude API и&nbsp;Claude Agent SDK&nbsp;&mdash; и&nbsp;знаю, когда какой нужен.</span><span lang="en">I tell apart Claude Code, Claude API, Claude Agent SDK — and know when each is right.</span></li>
+            <li data-key="e11-loop"><span lang="ru">Понимаю agent loop и&nbsp;могу прочитать/написать его в&nbsp;5–10 строк Python.</span><span lang="en">I understand the agent loop and can read/write one in 5–10 lines of Python.</span></li>
+            <li data-key="e11-tools"><span lang="ru">Определяю tools для&nbsp;SDK через JSON-schema и&nbsp;связываю с&nbsp;Python-функциями.</span><span lang="en">I define SDK tools via JSON-schema and bind them to Python functions.</span></li>
+            <li data-key="e11-headless"><span lang="ru">Запускаю Claude в&nbsp;headless: на&nbsp;daemon-сервере и&nbsp;в&nbsp;GitHub Actions.</span><span lang="en">I run Claude headless: on a daemon server and in GitHub Actions.</span></li>
+            <li data-key="e11-safety"><span lang="ru">Применяю шесть мер безопасности headless (tools, max_iterations, тайм-аут, лог, бюджет, sandbox).</span><span lang="en">I apply the six headless safety measures (tools, max_iterations, timeout, log, budget, sandbox).</span></li>
+            <li data-key="e11-memory"><span lang="ru">Делаю долговременную память агента с&nbsp;командой <code>/forget</code> и&nbsp;шифрованием.</span><span lang="en">I build long-term agent memory with a <code>/forget</code> command and encryption.</span></li>
+            <li data-key="e11-delivery"><span lang="ru">Сделал четыре проекта: Twitter-сигналы, AI-консьерж, GitHub-action review, утренний агент.</span><span lang="en">Built four projects: Twitter signals, AI concierge, GitHub Action review, morning agent.</span></li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-11" type="button"><span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span></button>
+        </div>
+    </div>
+</section>
+
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-10.html"><span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span><span class="step-title"><span lang="ru">10 · Автопилот, фоновые задачи и&nbsp;мониторинг</span><span lang="en">10 · Autopilot, Background Tasks &amp; Monitoring</span></span></a>
+            <a class="next" href="capstone.html"><span class="step-label"><span lang="ru">Финал →</span><span lang="en">Finale →</span></span><span class="step-title"><span lang="ru">§ Финальный капстоун-проект</span><span lang="en">§ Final Capstone Project</span></span></a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Claude Code&nbsp;&mdash; это для&nbsp;диалога. Claude Agent SDK&nbsp;&mdash; для&nbsp;того, что должно работать без&nbsp;вас. Граница между ними&nbsp;&mdash; в&nbsp;том, есть&nbsp;ли у&nbsp;Claude собеседник».</p>
+            <p class="signature" lang="en">“Claude Code is for dialogue. The Claude Agent SDK is for things that must work without you. The border between them — does Claude have an interlocutor.”</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-10.html"><span lang="ru">← Этап&nbsp;10</span><span lang="en">← Etape 10</span></a></li>
+                <li><a href="capstone.html"><span lang="ru">→ Финальный капстоун</span><span lang="en">→ Final capstone</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

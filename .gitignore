@@ -1,0 +1,18 @@
+# Screenshots from prior Claude Code sessions (per CLAUDE.md "Repo-root noise")
+/*.png
+
+# PDF build scratch dirs
+preview/
+__pycache__/
+*.pyc
+
+# Local Claude Code environment (settings, installed skills, MCP session logs)
+.claude/
+.playwright-mcp/
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/

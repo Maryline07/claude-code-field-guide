@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Полевое руководство по Claude Design · A Field Guide to Claude Design</title>
+<meta name="description" content="Авторский практический тьюториал по Claude Design — продукту Anthropic Labs для совместного создания дизайна, прототипов, дек и лендингов прямо в браузере. Для тех, кто направляет, а не двигает прямоугольники.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ D</span>
+            <a href="claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a>
+        </div>
+        <nav>
+            <a href="index.html"><span lang="ru">основной курс</span><span lang="en">main course</span></a>
+            <a href="#manifest"><span lang="ru">от автора</span><span lang="en">preface</span></a>
+            <a href="#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#capstone"><span lang="ru">капстоун</span><span lang="en">capstone</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW · С 17 АПР 2026</span><span lang="en">RESEARCH PREVIEW · SINCE 17 APR 2026</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+    <div class="shell inner">
+        <p class="meta rise d1">
+            <span><span class="dot"></span>&nbsp;&nbsp;<span lang="ru">A FIELD GUIDE · CLAUDE DESIGN</span><span lang="en">A FIELD GUIDE · CLAUDE DESIGN</span></span>
+            <span><span lang="ru">10 ЭТАПОВ + 1 ОПЦ. + КАПСТОУН</span><span lang="en">10 ETAPES + 1 OPT. + CAPSTONE</span></span>
+            <span><span lang="ru">≈ 45 ДНЕЙ ПРАКТИКИ</span><span lang="en">≈ 45 DAYS OF PRACTICE</span></span>
+            <span><span lang="ru">1&ndash;2&nbsp;Ч / ДЕНЬ</span><span lang="en">1&ndash;2&nbsp;HRS / DAY</span></span>
+        </p>
+
+        <h1 class="display rise d2">
+            <span lang="ru">Полевое руководство<br>по&nbsp;<em>Claude&nbsp;Design</em></span>
+            <span lang="en">A Field Guide<br>to&nbsp;<em>Claude&nbsp;Design</em></span>
+        </h1>
+
+        <p class="standfirst rise d3" lang="ru">
+            <strong>Claude&nbsp;Design</strong>&nbsp;&mdash; новый продукт Anthropic&nbsp;Labs, запущенный 17&nbsp;апреля 2026&nbsp;года и&nbsp;живущий по&nbsp;адресу <code>claude.ai/design</code>. Это рабочее пространство, где Claude помогает собрать прототипы, дашборды, лендинги, питч-деки и&nbsp;маркетинговые ассеты прямо в&nbsp;браузере: вы&nbsp;даёте бриф или загружаете <code>.docx</code>&nbsp;/ <code>.pptx</code>&nbsp;/ <code>.xlsx</code>&nbsp;/ codebase&nbsp;&mdash; на&nbsp;выходе экспорт в&nbsp;PDF, PPTX, Canva, HTML или handoff в&nbsp;Claude&nbsp;Code. Курс для тех, кто хочет <em>направлять</em>, а&nbsp;не&nbsp;<em>двигать прямоугольники</em>.
+        </p>
+        <p class="standfirst rise d3" lang="en">
+            <strong>Claude&nbsp;Design</strong> is a new Anthropic Labs product launched on 17&nbsp;April&nbsp;2026 and living at <code>claude.ai/design</code>. It is a workspace where Claude helps assemble prototypes, dashboards, landings, pitch decks and marketing assets right in the browser: you give a brief or upload <code>.docx</code>&nbsp;/ <code>.pptx</code>&nbsp;/ <code>.xlsx</code>&nbsp;/ a codebase&nbsp;&mdash; you get out PDF, PPTX, Canva, HTML, or a handoff bundle to Claude&nbsp;Code. A course for people who want to <em>steer</em> rather than <em>push rectangles</em>.
+        </p>
+
+        <div class="stat-row rise d4">
+            <div class="stat">
+                <span class="num">17/04</span>
+                <span class="label"><span lang="ru">2026 · запуск research preview</span><span lang="en">2026 · research preview launch</span></span>
+            </div>
+            <div class="stat">
+                <span class="num">Opus<em>&nbsp;4.7</em></span>
+                <span class="label"><span lang="ru">vision-модель под капотом</span><span lang="en">vision model under the hood</span></span>
+            </div>
+            <div class="stat">
+                <span class="num">5</span>
+                <span class="label"><span lang="ru">форматов экспорта</span><span lang="en">export formats</span></span>
+            </div>
+            <div class="stat">
+                <span class="num">2</span>
+                <span class="label"><span lang="ru">промпта вместо 20<em>+</em> <small style="font-style:italic;">(Brilliant)</small></span><span lang="en">prompts instead of 20<em>+</em> <small style="font-style:italic;">(Brilliant)</small></span></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== MANIFESTO ===================== -->
+<section id="manifest" class="manifesto">
+    <div class="shell">
+        <div class="row cols-2">
+            <div>
+                <span class="eyebrow"><span class="sect">§ II</span> &nbsp;·&nbsp; <span lang="ru">От автора</span><span lang="en">From the author</span></span>
+                <h2>
+                    <span lang="ru">Дизайн-инструмент, в&nbsp;котором не&nbsp;нужно <em>уметь дизайнить</em>&nbsp;&mdash; нужно уметь&nbsp;<em>попросить</em>.</span>
+                    <span lang="en">A design tool where you do not need to <em>know design</em>&nbsp;&mdash; you need to know how to <em>ask</em>.</span>
+                </h2>
+                <div class="cols-text body" lang="ru">
+                    <p class="has-drop">Claude&nbsp;Design&nbsp;&mdash; не&nbsp;Figma и&nbsp;не&nbsp;Canva. Это разговор. Вы&nbsp;описываете, что нужно, прикрепляете бриф в&nbsp;<code>.docx</code> или таблицу в&nbsp;<code>.xlsx</code>, при необходимости показываете на&nbsp;свой&nbsp;сайт или кодбазу&nbsp;&mdash; Claude собирает дизайн. Дальше вы&nbsp;уточняете: инлайн-комментарии к&nbsp;элементам, прямая правка текста, слайдеры spacing&nbsp;/ color&nbsp;/ layout.</p>
+                    <p>Те&nbsp;же навыки, что у&nbsp;арт-директора с&nbsp;дизайнером в&nbsp;штате: вы&nbsp;ничего не&nbsp;двигаете сами, но&nbsp;обязаны видеть достаточно, чтобы сказать «контраст слабый», «правый блок тяжелее левого», «нет, эта типографика чужая бренду».</p>
+                    <p>Тьюториал ведёт через все возможности Claude&nbsp;Design на&nbsp;примерах из&nbsp;четырёх ниш: <strong>кофейня</strong> (открытие малого бизнеса), <strong>дизайн-проект квартиры</strong> (мудборд → 3D-тур → презентация заказчику), <strong>инди-игра</strong> (UI меню → лендинг → Steam-страница → дек для инвестора) и&nbsp;<strong>финансовый продукт</strong> (продолжение основного курса). В&nbsp;каждом этапе&nbsp;&mdash; два проекта по&nbsp;инструкции на&nbsp;конкретных треках и&nbsp;два самостоятельных, где трек выбираете вы. К&nbsp;концу курса в&nbsp;портфолио работы по&nbsp;всем четырём.</p>
+                    <p>Принцип каждого этапа: то, что вы&nbsp;делаете самостоятельно,&nbsp;&mdash; всегда вариация только что разобранного. Новых концепций в&nbsp;solo-проекте не&nbsp;появится&nbsp;&mdash; только новый бриф.</p>
+                    <p>В&nbsp;начале каждого этапа&nbsp;&mdash; «<strong>Подготовка</strong>»: какая подписка нужна (Pro&nbsp;/ Max&nbsp;/ Team&nbsp;/ Enterprise), что включить в&nbsp;настройках организации, какие материалы подготовить заранее.</p>
+                </div>
+                <div class="cols-text body" lang="en">
+                    <p class="has-drop">Claude&nbsp;Design is not Figma and not Canva. It is a conversation. You describe what is needed, attach a <code>.docx</code> brief or an <code>.xlsx</code> sheet, optionally point at a website or codebase&nbsp;&mdash; Claude assembles the design. Then you refine: inline comments on elements, direct text editing, sliders for spacing&nbsp;/ colour&nbsp;/ layout.</p>
+                    <p>The same skills as an art director with a designer on staff: you do not push anything yourself, but you must see enough to say &ldquo;contrast is weak,&rdquo; &ldquo;the right block is heavier than the left,&rdquo; &ldquo;no, this typography is foreign to the brand.&rdquo;</p>
+                    <p>The tutorial walks through every Claude&nbsp;Design capability through examples drawn from four niches: a <strong>café</strong> (small-business launch), an <strong>apartment interior project</strong> (mood board → 3D tour → client pitch), an <strong>indie game</strong> (menu UI → landing → Steam page → investor deck), and a <strong>financial product</strong> (a continuation of the main course). Each etape carries two guided projects on specific tracks and two solo projects where you pick the track. By the end your portfolio carries work across all four.</p>
+                    <p>Principle of every etape: what you do on your own is always a variation of what we just walked through. No new concepts appear in solo work&nbsp;&mdash; only a new brief.</p>
+                    <p>Each etape opens with a &ldquo;<strong>Setup</strong>&rdquo; block: which subscription you need (Pro&nbsp;/ Max&nbsp;/ Team&nbsp;/ Enterprise), what to enable in organisation settings, which materials to prepare in advance.</p>
+                </div>
+            </div>
+
+            <aside>
+                <div class="aside-card">
+                    <span class="label"><span lang="ru">Метод</span><span lang="en">Method</span></span>
+                    <h3><span lang="ru">Промпт · загрузка контекста · итерация · экспорт</span><span lang="en">Prompt · upload context · iterate · export</span></h3>
+                    <p lang="ru">Каждый этап заканчивается живым артефактом&nbsp;&mdash; pdf, pptx, ссылкой на&nbsp;Canva, HTML-папкой или handoff-пакетом для Claude&nbsp;Code. К&nbsp;концу курса у&nbsp;вас 18+ готовых дизайн-материалов в&nbsp;выбранной нише: бренд кофейни, дизайн-проект квартиры, запуск инди-игры или финансовый продукт.</p>
+                    <p lang="en">Every etape ends with a live artefact&nbsp;&mdash; a PDF, a PPTX, a Canva link, an HTML folder or a Claude&nbsp;Code handoff bundle. By the end you have 18+ ready design assets in your chosen niche: a café brand, an apartment design project, an indie-game launch, or a financial product.</p>
+                </div>
+                <div class="aside-card" style="margin-top:1.5rem;">
+                    <span class="label"><span lang="ru">После курса</span><span lang="en">After the course</span></span>
+                    <h3><span lang="ru">Вы&nbsp;&mdash; AI-нативный дизайн-директор без штата</span><span lang="en">You become an AI-native design director without a team</span></h3>
+                    <p lang="ru">В&nbsp;одиночку делаете то, на&nbsp;что раньше нужна была студия, маркетолог и&nbsp;3D-визуализатор: бренд-систему кофейни, 3D-тур по&nbsp;квартире для заказчика, UI&nbsp;меню инди-игры, питч-дек, серию социалок, handoff в&nbsp;Claude&nbsp;Code. Условие: визуал собирает Claude&nbsp;Design, вы&nbsp;направляете и&nbsp;принимаете.</p>
+                    <p lang="en">Solo, you do what used to need a studio, a marketer and a 3D visualiser: a café brand, a 3D apartment tour for the client, an indie-game menu UI, a pitch deck, a social series, a handoff to Claude&nbsp;Code. On one condition: Claude&nbsp;Design assembles the visual, you steer and approve.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<hr class="rule double" style="max-width:76rem; margin-left:auto; margin-right:auto;">
+
+<!-- ===================== CONTENTS ===================== -->
+<section id="contents">
+    <div class="shell">
+        <div class="toc-head">
+            <h2><span style="color:var(--accent); font-style:italic; font-weight:400;">§</span> <span lang="ru">Содержание</span><span lang="en">Contents</span></h2>
+            <span class="meta"><span lang="ru">10 этапов · 1 опциональный · капстоун</span><span lang="en">10 etapes · 1 optional · capstone</span></span>
+        </div>
+
+        <ol class="etap-list">
+
+            <li><a class="etap-row" data-id="design-00" href="etapes/claude-design-00.html">
+                <div class="num">00</div>
+                <div class="body">
+                    <h3><span lang="ru">Подготовка: подписка, доступ, первый запуск</span><span lang="en">Setup: Subscription, Access, First Launch</span></h3>
+                    <p lang="ru">Подписки Pro&nbsp;/ Max&nbsp;/ Team&nbsp;/ Enterprise. Включение Claude&nbsp;Design в&nbsp;настройках организации. Открываем <code>claude.ai/design</code>, разбираем интерфейс, делаем первый «hello-world»&nbsp;&mdash; обложку.</p>
+                    <p lang="en">Pro&nbsp;/ Max&nbsp;/ Team&nbsp;/ Enterprise subscriptions. Enabling Claude&nbsp;Design in organisation settings. Open <code>claude.ai/design</code>, walk through the interface, ship a first &ldquo;hello world&rdquo;&nbsp;&mdash; a cover.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">1–2 дня</span><span lang="en">1–2 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="design-01" href="etapes/claude-design-01.html">
+                <div class="num">01</div>
+                <div class="body">
+                    <h3><span lang="ru">Первый промпт и&nbsp;три рефайнмент-инструмента</span><span lang="en">First Prompt &amp; the Three Refinement Tools</span></h3>
+                    <p lang="ru">Анатомия дизайн-промпта в&nbsp;Claude&nbsp;Design. Лендинг на&nbsp;выбор&nbsp;&mdash; кофейня, инди-игра, дизайн-бюро или финансовое приложение&nbsp;&mdash; в&nbsp;трёх стилях. Уточнения: инлайн-комментарии на&nbsp;элементах, прямое редактирование текста, слайдеры spacing&nbsp;/ color&nbsp;/ layout.</p>
+                    <p lang="en">Anatomy of a design prompt in Claude&nbsp;Design. A landing of your choice&nbsp;&mdash; café, indie game, design bureau, or finance app&nbsp;&mdash; in three styles. Refinement: inline comments on elements, direct text editing, sliders for spacing&nbsp;/ colour&nbsp;/ layout.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">3–4 дня</span><span lang="en">3–4 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="design-02" href="etapes/claude-design-02.html">
+                <div class="num">02</div>
+                <div class="body">
+                    <h3><span lang="ru">Загрузка контекста: <code>.docx</code>, <code>.pptx</code>, <code>.xlsx</code></span><span lang="en">Uploading Context: <code>.docx</code>, <code>.pptx</code>, <code>.xlsx</code></span></h3>
+                    <p lang="ru">Бриф в&nbsp;DOCX (бариста-меню&nbsp;/ ТЗ&nbsp;на&nbsp;ремонт квартиры&nbsp;/ концепт игры), шаблон деки в&nbsp;PPTX, спецификация в&nbsp;XLSX (план комнат&nbsp;/ уровни игры&nbsp;/ показатели портфеля). Claude&nbsp;Design собирает дизайн из&nbsp;вашего материала. Захват элементов с&nbsp;живых сайтов как референса.</p>
+                    <p lang="en">A DOCX brief (barista menu&nbsp;/ apartment renovation spec&nbsp;/ game concept), a PPTX template, an XLSX sheet (floor plan&nbsp;/ game levels&nbsp;/ portfolio metrics). Claude&nbsp;Design assembles a design from your own material. Capturing elements from live websites as references.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">4–5 дней</span><span lang="en">4–5 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="design-03" href="etapes/claude-design-03.html">
+                <div class="num">03</div>
+                <div class="body">
+                    <h3><span lang="ru">Brand system из кода и&nbsp;Figma</span><span lang="en">Brand System from Code &amp; Figma</span></h3>
+                    <p lang="ru">Подключаем codebase или design-files. Claude автоматически извлекает цвета, типографику, компоненты и&nbsp;применяет ко&nbsp;всем будущим проектам. Бренд на&nbsp;выбор: сеть кофеен, инди-студия игр, дизайн-бюро интерьеров или «Личный инвест-кабинет»&nbsp;&mdash; всё, что в&nbsp;будущем будет рисоваться, наследует бренд автоматически.</p>
+                    <p lang="en">Plug in your codebase or design files. Claude automatically extracts colours, typography and components and applies them to every future project. A brand of your choice: a café chain, an indie-game studio, an interior bureau, or the Personal Investment Office&nbsp;&mdash; every future asset inherits the brand automatically.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">4–5 дней</span><span lang="en">4–5 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="design-04" href="etapes/claude-design-04.html">
+                <div class="num">04</div>
+                <div class="body">
+                    <h3><span lang="ru">Интерактивный прототип для user&nbsp;testing</span><span lang="en">An Interactive Prototype for User Testing</span></h3>
+                    <p lang="ru">Многоэкранный кликабельный прототип на&nbsp;выбор: <strong>UI меню мобильной игры</strong> (главный экран → выбор персонажа → бой → инвентарь → магазин), <strong>приложение бронирования столика</strong> в&nbsp;кофейне, <strong>«Личный инвест-кабинет»</strong> (вход → дашборд → прогноз → экспорт) или <strong>конфигуратор отделки квартиры</strong> (выбор стиля → комната → материалы → смета). Состояния, переходы, пустые экраны. Тестируем на&nbsp;5&nbsp;живых пользователях, собираем правки.</p>
+                    <p lang="en">A multi-screen clickable prototype, your pick: a <strong>mobile-game menu UI</strong> (home → character select → battle → inventory → shop), a <strong>café table-booking app</strong>, the <strong>Personal Investment Office</strong> (log-in → dashboard → forecast → export), or an <strong>apartment-finishes configurator</strong> (style → room → materials → estimate). States, transitions, empty screens. Test on 5 real users and collect feedback.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">5–6 дней</span><span lang="en">5–6 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row special" data-id="design-05" href="etapes/claude-design-05.html">
+                <div class="num">05</div>
+                <div class="body">
+                    <h3><span lang="ru">Handoff в&nbsp;Claude&nbsp;Code</span><span lang="en">Handoff to Claude Code</span></h3>
+                    <p lang="ru">Прототип упаковывается в&nbsp;handoff-bundle и&nbsp;передаётся напрямую в&nbsp;Claude&nbsp;Code. Полный цикл: бриф → дизайн → пакет → живой код → деплой. Замыкаем мост с&nbsp;основным курсом.</p>
+                    <p lang="en">The prototype packs into a handoff bundle and goes straight to Claude&nbsp;Code. The full loop: brief → design → bundle → live code → deploy. We close the bridge to the main course.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">4–5 дней</span><span lang="en">4–5 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="design-06" href="etapes/claude-design-06.html">
+                <div class="num">06</div>
+                <div class="body">
+                    <h3><span lang="ru">12-слайдовый питч-дек из <code>.xlsx</code></span><span lang="en">A 12-Slide Pitch Deck from <code>.xlsx</code></span></h3>
+                    <p lang="ru">Загружаем XLSX с&nbsp;показателями, Claude&nbsp;Design генерирует дек на&nbsp;выбор: <strong>инди-студия для&nbsp;инвестора</strong> (концепт, рынок, прототип, монетизация, команда), <strong>инвест-фонд</strong> (thesis, портфель, return, риски), <strong>дизайн-бюро для тендера</strong> (кейсы, методология, команда, цены) или <strong>франшиза кофейни</strong> (юнит-экономика, локации, бренд, рост). Экспорт в&nbsp;PPTX и&nbsp;PDF.</p>
+                    <p lang="en">Upload an XLSX with metrics; Claude&nbsp;Design generates a deck of your choice: <strong>indie studio for investors</strong> (concept, market, prototype, monetisation, team), <strong>investment fund</strong> (thesis, portfolio, return, risks), <strong>design bureau tender</strong> (cases, methodology, team, prices), or <strong>café franchise</strong> (unit economics, locations, brand, growth). Export to PPTX and PDF.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">4–5 дней</span><span lang="en">4–5 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="design-07" href="etapes/claude-design-07.html">
+                <div class="num">07</div>
+                <div class="body">
+                    <h3><span lang="ru">Маркетинговые ассеты: социалки, баннеры, OG</span><span lang="en">Marketing Assets: Social, Banners, OG</span></h3>
+                    <p lang="ru">Серия для запуска инди-игры в&nbsp;Steam, посты-открытие кофейни, фотосет «до&nbsp;/ после» для дизайн-проекта квартиры, инвест-обновление в&nbsp;Telegram. Email-баннеры, og-image, обложки соцсетей. Один бренд&nbsp;&mdash; десять форматов. Экспорт в&nbsp;Canva для финальной шлифовки.</p>
+                    <p lang="en">A Steam launch series for an indie game, a café-opening post set, a &ldquo;before&nbsp;/ after&rdquo; reveal for an apartment project, an investment update for Telegram. Email banners, og-image, social covers. One brand&nbsp;&mdash; ten formats. Export to Canva for final polish.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">3–4 дня</span><span lang="en">3–4 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row special" data-id="design-08" href="etapes/claude-design-08.html">
+                <div class="num">08</div>
+                <div class="body">
+                    <h3><span lang="ru">Code-powered прототипы: голос, видео, 3D</span><span lang="en">Code-Powered Prototypes: Voice, Video, 3D</span></h3>
+                    <p lang="ru">Возможности, которых нет в&nbsp;Figma и&nbsp;Canva: <strong>3D-тур по&nbsp;концепту квартиры</strong> с&nbsp;переключением отделки и&nbsp;освещения, <strong>shader-фон</strong> для hero-лендинга игры, <strong>3D-демо игровой механики</strong>, микрофон в&nbsp;интерфейсе AI-консультанта, <strong>3D-визуализация диверсификации портфеля</strong>. Прототип, который реально работает.</p>
+                    <p lang="en">Things Figma and Canva cannot do: a <strong>3D tour of an apartment concept</strong> with switchable finishes and lighting, a <strong>shader background</strong> for a game hero, a <strong>3D game-mechanic demo</strong>, a microphone in the AI advisor UI, a <strong>3D portfolio diversification visual</strong>. A prototype that actually works.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">5–7 дней</span><span lang="en">5–7 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="design-09" href="etapes/claude-design-09.html">
+                <div class="num">09</div>
+                <div class="body">
+                    <h3><span lang="ru">Командная работа и&nbsp;ревью</span><span lang="en">Teamwork &amp; Review</span></h3>
+                    <p lang="ru">Org-scoped sharing: private&nbsp;/ view-only&nbsp;/ edit-access. Групповой разговор с&nbsp;Claude. Три варианта брендинга на&nbsp;ревью (кофейня&nbsp;&mdash; с&nbsp;бариста и&nbsp;маркетологом, квартира&nbsp;&mdash; с&nbsp;заказчиком и&nbsp;супругом, игра&nbsp;&mdash; с&nbsp;инвестором и&nbsp;комьюнити, налоговая студия&nbsp;&mdash; с&nbsp;партнёром). Сводный комментарий-лист, итоговый выбор.</p>
+                    <p lang="en">Org-scoped sharing: private&nbsp;/ view-only&nbsp;/ edit access. A group conversation with Claude. Three brand variants reviewed with stakeholders (a café&nbsp;&mdash; barista and marketer; an apartment&nbsp;&mdash; client and spouse; a game&nbsp;&mdash; investor and community; a tax studio&nbsp;&mdash; partner). A summary comment sheet, the final pick.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">3–4 дня</span><span lang="en">3–4 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="design-10" href="etapes/claude-design-10.html">
+                <div class="num">10<span style="font-size:0.55em; color:var(--ink-muted); margin-left:0.2em;">opt</span></div>
+                <div class="body">
+                    <h3><span lang="ru">Canva-pipeline <span style="color:var(--ink-muted); font-weight:400;">(опционально)</span></span><span lang="en">Canva Pipeline <span style="color:var(--ink-muted); font-weight:400;">(optional)</span></span></h3>
+                    <p lang="ru">Когда нужно отдать материал маркетологу без&nbsp;дизайнера. Экспорт черновиков в&nbsp;Canva, доработка шаблонами, серия публикаций по&nbsp;каналам. Принципы, что оставить за&nbsp;Claude, что&nbsp;&mdash; за&nbsp;человеком.</p>
+                    <p lang="en">When you need to hand material to a marketer without a designer. Export drafts to Canva, refine with templates, ship a series of posts across channels. Principles for what stays with Claude and what goes to a human.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">3–4 дня</span><span lang="en">3–4 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row special" data-id="design-capstone" href="etapes/claude-design-capstone.html">
+                <div class="num">§</div>
+                <div class="body">
+                    <h3><span lang="ru">Капстоун Claude&nbsp;Design</span><span lang="en">Claude Design Capstone</span></h3>
+                    <p lang="ru">Полный визуальный пакет в&nbsp;одной из&nbsp;четырёх ниш на&nbsp;выбор (кофейня&nbsp;/ квартира&nbsp;/ инди-игра&nbsp;/ финансы): бренд-система&nbsp;+ лендинг&nbsp;+ интерактивный прототип&nbsp;+ 12-слайдовый дек&nbsp;+ серия социалок&nbsp;+ handoff в&nbsp;Claude&nbsp;Code&nbsp;+ публичный URL. От&nbsp;брифа до&nbsp;живого продукта за&nbsp;неделю.</p>
+                    <p lang="en">A complete visual package in one of four niches of your choice (café&nbsp;/ apartment&nbsp;/ indie game&nbsp;/ finance): brand system&nbsp;+ landing&nbsp;+ interactive prototype&nbsp;+ 12-slide deck&nbsp;+ social series&nbsp;+ handoff to Claude&nbsp;Code&nbsp;+ public URL. From brief to a live product in one week.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">7–10 дней</span><span lang="en">7–10 days</span></span>
+                    <span class="status"><span lang="ru">доступно</span><span lang="en">available</span></span>
+                </div>
+            </a></li>
+
+        </ol>
+    </div>
+</section>
+
+<!-- ===================== WHAT YOU'LL MASTER ===================== -->
+<section>
+    <div class="shell">
+        <div class="toc-head">
+            <h2><span style="color:var(--accent); font-style:italic; font-weight:400;">§</span> <span lang="ru">Что вы освоите</span><span lang="en">What you will master</span></h2>
+            <span class="meta"><span lang="ru">семь навыков-стержней Claude&nbsp;Design</span><span lang="en">seven core Claude&nbsp;Design skills</span></span>
+        </div>
+
+        <div class="learn-grid">
+            <div class="learn-item">
+                <span class="roman">i.</span>
+                <div>
+                    <h4><span lang="ru">Промпт + загрузка контекста</span><span lang="en">Prompt + context upload</span></h4>
+                    <p lang="ru">Текстовый бриф, прикреплённые <code>.docx</code>&nbsp;/ <code>.pptx</code>&nbsp;/ <code>.xlsx</code>, ссылки на&nbsp;кодбазу или захват с&nbsp;сайта. Первая итерация Claude&nbsp;Design&nbsp;&mdash; уже близко к&nbsp;нужной.</p>
+                    <p lang="en">A text brief, attached <code>.docx</code>&nbsp;/ <code>.pptx</code>&nbsp;/ <code>.xlsx</code>, codebase pointers, or website captures. Claude&nbsp;Design&rsquo;s first attempt is already close.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">ii.</span>
+                <div>
+                    <h4><span lang="ru">Brand system из&nbsp;кода</span><span lang="en">Brand system from code</span></h4>
+                    <p lang="ru">Автоматическое извлечение токенов, типографики, компонентов из&nbsp;вашей кодбазы или Figma. Один источник истины&nbsp;&mdash; для всех будущих ассетов.</p>
+                    <p lang="en">Automatic extraction of tokens, typography and components from your codebase or Figma. One source of truth for every future asset.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">iii.</span>
+                <div>
+                    <h4><span lang="ru">Три инструмента уточнения</span><span lang="en">The three refinement tools</span></h4>
+                    <p lang="ru">Инлайн-комментарии на&nbsp;элементах, прямая правка текста, слайдеры spacing&nbsp;/ color&nbsp;/ layout. Когда какой использовать&nbsp;&mdash; и&nbsp;почему текстовый промпт не&nbsp;всегда лучший выбор.</p>
+                    <p lang="en">Inline comments on elements, direct text editing, sliders for spacing&nbsp;/ colour&nbsp;/ layout. When to reach for which&nbsp;&mdash; and why a text prompt is not always the right tool.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">iv.</span>
+                <div>
+                    <h4><span lang="ru">Прототип vs&nbsp;ассет</span><span lang="en">Prototype vs. asset</span></h4>
+                    <p lang="ru">Когда делать кликабельный прототип для user&nbsp;testing, а&nbsp;когда&nbsp;&mdash; финальный экспорт. Состояния, переходы, пустые экраны. Сценарии тестирования.</p>
+                    <p lang="en">When to build a clickable prototype for user testing and when to ship a final export. States, transitions, empty screens. Test scenarios.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">v.</span>
+                <div>
+                    <h4><span lang="ru">Handoff в&nbsp;Claude&nbsp;Code</span><span lang="en">Handoff to Claude&nbsp;Code</span></h4>
+                    <p lang="ru">Дизайн упаковывается в&nbsp;bundle и&nbsp;уходит напрямую в&nbsp;Claude&nbsp;Code на&nbsp;имплементацию. Цикл бриф → дизайн → код → деплой замыкается без&nbsp;ручной интеграции.</p>
+                    <p lang="en">A design packs into a bundle and goes straight to Claude&nbsp;Code for implementation. The brief → design → code → deploy loop closes with no manual integration.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">vi.</span>
+                <div>
+                    <h4><span lang="ru">Команда и&nbsp;ревью</span><span lang="en">Team &amp; review</span></h4>
+                    <p lang="ru">Org-scoped sharing с&nbsp;тремя уровнями доступа. Групповой разговор с&nbsp;Claude. Сведение комментариев, выбор финальной версии.</p>
+                    <p lang="en">Org-scoped sharing with three access levels. A group conversation with Claude. Consolidating comments, picking the final version.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">vii.</span>
+                <div>
+                    <h4><span lang="ru">Pipeline экспорта</span><span lang="en">Export pipeline</span></h4>
+                    <p lang="ru">PDF, PPTX, Canva, HTML, folder, internal&nbsp;URL. Какой формат&nbsp;&mdash; для какой задачи. Что отдать маркетологу, что&nbsp;&mdash; разработчику, что&nbsp;&mdash; инвестору.</p>
+                    <p lang="en">PDF, PPTX, Canva, HTML, folder, internal URL. Which format&nbsp;&mdash; for which job. What goes to the marketer, the developer, the investor.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CAPSTONE BLOCK ===================== -->
+<section id="capstone">
+    <div class="shell">
+        <span class="eyebrow"><span class="sect">§ FINALE</span> &nbsp;·&nbsp; <span lang="ru">Капстоун-проект</span><span lang="en">Capstone project</span></span>
+        <div class="callout-big">
+            <span class="stamp"><span lang="ru">7–10 дней</span><span lang="en">7–10 days</span></span>
+            <h2>
+                <span lang="ru">Один продукт.<br>Полный визуальный пакет.</span>
+                <span lang="en">One product.<br>One full visual package.</span>
+            </h2>
+            <p class="lead" lang="ru">К&nbsp;этому моменту в&nbsp;руках весь арсенал Claude&nbsp;Design: бриф, загрузка контекста, brand&nbsp;system из&nbsp;кода, прототипы, дек, ассеты, handoff в&nbsp;Claude&nbsp;Code. Капстоун&nbsp;&mdash; выбрать одну из&nbsp;четырёх ниш (кофейня, квартира, игра, финансы) и&nbsp;собрать вокруг неё полный визуальный пакет с&nbsp;публичной ссылкой.</p>
+            <p class="lead" lang="en">By now you have the full Claude&nbsp;Design arsenal: brief, context upload, brand system from code, prototypes, deck, assets, handoff to Claude&nbsp;Code. The capstone&nbsp;&mdash; pick one of four niches (café, apartment, game, finance) and assemble a complete visual package around it, with a public link.</p>
+
+            <div style="margin-top: 2rem; display: grid; gap: 1.5rem;">
+                <div>
+                    <span class="eyebrow"><span class="sect"><span lang="ru">вариант&nbsp;A · кофейня</span><span lang="en">option&nbsp;A · café</span></span></span>
+                    <span lang="ru"><strong>Открытие крафтовой кофейни.</strong> Полный визуальный пакет: логотип, бренд-система, меню (печать&nbsp;+ цифровое табло), вывеска, упаковка стакана и&nbsp;грейн-крафта, лендинг с&nbsp;картой, прототип приложения для бронирования столика, серия Instagram-постов, дек для инвестора-партнёра. От&nbsp;брифа до&nbsp;запуска.</span>
+                    <span lang="en"><strong>Opening a craft café.</strong> A full visual pack: logo, brand system, menu (print + digital screen), signage, cup &amp; bag packaging, a landing with a map, a prototype table-booking app, an Instagram series, an investor-partner deck. From brief to launch day.</span>
+                </div>
+                <div>
+                    <span class="eyebrow"><span class="sect"><span lang="ru">вариант&nbsp;B · квартира</span><span lang="en">option&nbsp;B · apartment</span></span></span>
+                    <span lang="ru"><strong>Дизайн-проект квартиры под ключ.</strong> Мудборд из&nbsp;DOCX-брифа заказчика, план комнат из&nbsp;XLSX, 3D-тур с&nbsp;переключением отделки и&nbsp;освещения, спецификация материалов и&nbsp;смета в&nbsp;PDF, презентация-разворот для финального согласования, мини-сайт с&nbsp;частной&nbsp;ссылкой для заказчика.</span>
+                    <span lang="en"><strong>Turn-key apartment design project.</strong> A mood board from the client&rsquo;s DOCX brief, a floor plan from XLSX, a 3D tour with switchable finishes and lighting, materials spec and budget as PDF, a spread-style sign-off presentation, a private mini-site link for the client.</span>
+                </div>
+                <div>
+                    <span class="eyebrow"><span class="sect"><span lang="ru">вариант&nbsp;C · игра</span><span lang="en">option&nbsp;C · game</span></span></span>
+                    <span lang="ru"><strong>Запуск инди-игры в&nbsp;Steam.</strong> Бренд (логотип, ключевой арт, типографика), кликабельный прототип UI меню (главный экран → выбор персонажа → бой → магазин), shader-hero лендинга, Steam-страница, дек для&nbsp;инвестора и&nbsp;издателя, серия публикаций для X, Discord и&nbsp;TikTok, handoff в&nbsp;Claude&nbsp;Code на&nbsp;имплементацию.</span>
+                    <span lang="en"><strong>An indie-game Steam launch.</strong> Brand (logo, key art, typography), a clickable menu UI prototype (home → character → battle → shop), a shader hero for the landing, a Steam page, an investor &amp; publisher deck, a series for X, Discord and TikTok, handoff to Claude&nbsp;Code for implementation.</span>
+                </div>
+                <div>
+                    <span class="eyebrow"><span class="sect"><span lang="ru">вариант&nbsp;D · финансы</span><span lang="en">option&nbsp;D · finance</span></span></span>
+                    <span lang="ru"><strong>Бренд-пакет финансового продукта.</strong> Для тех, кто параллельно идёт по&nbsp;основному курсу: brand&nbsp;system из&nbsp;кодбазы 06&nbsp;/ 08b&nbsp;/ капстоуна, лендинг, прототип дашборда с&nbsp;3D-диверсификацией, 12-слайдовый дек инвестору из&nbsp;XLSX, годовой отчёт фонда в&nbsp;PDF, серия социалок, handoff в&nbsp;Claude&nbsp;Code и&nbsp;деплой. Замыкает основной курс визуально.</span>
+                    <span lang="en"><strong>Financial-product brand pack.</strong> For learners running the main course in parallel: a brand system from the codebase of etape 06&nbsp;/ 08b&nbsp;/ the capstone, a landing, a dashboard prototype with 3D diversification, a 12-slide investor deck from XLSX, an annual fund report in PDF, a social series, handoff to Claude&nbsp;Code and deploy. Closes the main course visually.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«От&nbsp;грубой идеи до&nbsp;работающего прототипа&nbsp;&mdash; пока никто не&nbsp;вышел из&nbsp;комнаты». <em>&mdash; Datadog о&nbsp;Claude&nbsp;Design</em></p>
+            <p class="signature" lang="en">&ldquo;From a rough idea to a working prototype&nbsp;&mdash; before anyone leaves the room.&rdquo; <em>&mdash; Datadog on Claude&nbsp;Design</em></p>
+            <p lang="ru">Тьюториал собран и&nbsp;вёрстан вручную, без&nbsp;фреймворков и&nbsp;сборщиков, как часть учебного материала&nbsp;&mdash; чтобы первый&nbsp;же этап подкрепился узнаваемостью инструментария.</p>
+            <p lang="en">The tutorial is hand-built and hand-typeset, without frameworks or bundlers, as part of the curriculum itself&nbsp;&mdash; so the very first etape is reinforced by familiar tooling.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Колофон</span><span lang="en">Colophon</span></h5>
+            <ul>
+                <li><span lang="ru">Claude&nbsp;Design на&nbsp;Opus&nbsp;4.7</span><span lang="en">Claude&nbsp;Design on Opus&nbsp;4.7</span></li>
+                <li><a href="https://claude.ai/design"><code>claude.ai/design</code></a></li>
+                <li><a href="https://www.anthropic.com/news/claude-design-anthropic-labs"><span lang="ru">анонс · 17 апр 2026</span><span lang="en">launch announcement · 17 Apr 2026</span></a></li>
+                <li><span lang="ru">Pro · Max · Team · Enterprise</span><span lang="en">Pro · Max · Team · Enterprise</span></li>
+                <li><span lang="ru">research preview</span><span lang="en">research preview</span></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Навигация</span><span lang="en">Navigation</span></h5>
+            <ul>
+                <li><a href="index.html"><span lang="ru">→ Основной курс</span><span lang="en">→ Main course</span></a></li>
+                <li><a href="#manifest"><span lang="ru">От автора</span><span lang="en">Preface</span></a></li>
+                <li><a href="#contents"><span lang="ru">Содержание</span><span lang="en">Contents</span></a></li>
+                <li><a href="#capstone"><span lang="ru">Капстоун</span><span lang="en">Capstone</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="progress.js" defer></script>
+</body>
+</html>

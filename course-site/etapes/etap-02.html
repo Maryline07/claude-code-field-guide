@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 02 · Контекст и память Claude Code — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 02 курса по Claude Code: CLAUDE.md, @-ссылки, auto-memory, многофайловые проекты, дашборд инвестиционного портфеля из CSV.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="02">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 02</span><span lang="en">Etape 02</span></span> &nbsp;·&nbsp; <span lang="ru">Контекст проекта и память Claude Code</span><span lang="en">Project context &amp; Claude Code memory</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Чтобы Claude <em>помнил</em> ваш проект.</span>
+            <span lang="en">So Claude <em>remembers</em> your project.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Сегодня учим Claude помнить правила, стиль и&nbsp;контекст вашего проекта&nbsp;&mdash; чтобы каждое утро не&nbsp;объяснять одно и&nbsp;то&nbsp;же. Файл <code>CLAUDE.md</code>, ссылки <code>@file</code>, и&nbsp;auto-memory в&nbsp;<code>~/.claude/memory/</code>.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Today we teach Claude to remember the rules, style and context of your project&nbsp;&mdash; so you don’t re-explain the same thing every morning. The <code>CLAUDE.md</code> file, <code>@file</code> mentions, and auto-memory in <code>~/.claude/memory/</code>.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">5–7 дней · 2–4&nbsp;ч/день</span><span lang="en">5–7 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru"><code>CLAUDE.md</code> · <code>@file</code> · auto-memory · многофайловые проекты</span><span lang="en"><code>CLAUDE.md</code> · <code>@file</code> · auto-memory · multi-file projects</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">Claude знает ваш проект, не&nbsp;задаёт повторных вопросов</span><span lang="en">Claude knows your project, no repeated questions</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">дневник инвест-операций и&nbsp;дашборд портфеля из&nbsp;брокерской выписки</span><span lang="en">an investing journal and a portfolio dashboard from a broker statement</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что понадобится перед началом</span><span lang="en">What you need before you start</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Один skill для&nbsp;качественного UI&nbsp;&mdash; нужен на&nbsp;второй проект (дашборд). Если ставили в&nbsp;этапе&nbsp;00, проверьте, что он&nbsp;на&nbsp;месте.</p>
+        <p class="reading" lang="en">One skill for quality UI — needed for the second project (the dashboard). If installed in etape 00, just verify it’s there.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3><span lang="ru">Из этапов 00–01</span><span lang="en">From etapes 00–01</span></h3>
+            <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li><strong>Node.js</strong>, <strong>Claude&nbsp;Code</strong>, <strong>VS&nbsp;Code</strong>&nbsp;&mdash; те&nbsp;же, что были раньше.</li>
+                <li>Привычка работать итерациями (этап 01).</li>
+            </ul>
+            <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li><strong>Node.js</strong>, <strong>Claude Code</strong>, <strong>VS Code</strong> — same as before.</li>
+                <li>The iteration habit from etape 01.</li>
+            </ul>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно</span><span lang="en">recommended</span></span>
+            <h3><span lang="ru">Skill <code>frontend-design</code></span><span lang="en">Skill <code>frontend-design</code></span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill от&nbsp;Anthropic, который учит Claude делать узнаваемые, авторские интерфейсы&nbsp;&mdash; не&nbsp;«AI-усреднённые». Включает альтернативные эстетики (журнальная вёрстка, brutalism, retro-future, и&nbsp;т.&nbsp;д.).<br>
+            <strong>Зачем сейчас:</strong> для&nbsp;дашборда портфеля&nbsp;&mdash; чтобы он&nbsp;выглядел как настоящий финансовый продукт, а&nbsp;не&nbsp;«типовая html-страница».<br>
+            <strong>Проверить, не&nbsp;стоит&nbsp;ли уже:</strong> в&nbsp;Claude Code напечатайте <code>/skills</code>&nbsp;&mdash; <code>frontend-design</code> должен быть в&nbsp;списке.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> Anthropic skill that teaches Claude to build distinctive, authored interfaces — not “AI-default” ones. Includes alternative aesthetics (editorial, brutalism, retro-future, etc.).<br>
+            <strong>Why now:</strong> for the portfolio dashboard — so it looks like a real financial product, not a stock html page.<br>
+            <strong>Check if already installed:</strong> in Claude Code type <code>/skills</code> — <code>frontend-design</code> should appear.</p>
+            <pre class="shell"><span class="cmt"># <span lang="ru">если ещё не стоит</span><span lang="en">if not installed yet</span></span>
+<span class="prompt">$</span> npx @smithery/cli@latest skill add anthropics/frontend-design --agent claude-code</pre>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> <a href="https://smithery.ai/skills/anthropics/frontend-design">smithery.ai/skills/anthropics/frontend-design</a>.<br>
+            <strong>Проверка:</strong> попросите Claude <em>«сделай страницу в&nbsp;стиле финансовой газеты XX&nbsp;века»</em>&nbsp;&mdash; результат должен быть характерным, а&nbsp;не&nbsp;«типичным».</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> <a href="https://smithery.ai/skills/anthropics/frontend-design">smithery.ai/skills/anthropics/frontend-design</a>.<br>
+            <strong>Verify:</strong> ask Claude <em>“make a page in the style of a 20th-century financial newspaper”</em> — the result should look distinctive, not generic.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">данные для&nbsp;второго проекта</span><span lang="en">data for the 2nd project</span></span>
+            <h3><span lang="ru">Брокерская выписка в&nbsp;CSV</span><span lang="en">A broker statement in CSV</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> CSV-файл со&nbsp;списком ваших операций по&nbsp;инвестициям (покупки, продажи, дивиденды).<br>
+            <strong>Зачем сейчас:</strong> на&nbsp;ней мы&nbsp;строим дашборд портфеля.<br>
+            <strong>Где взять:</strong> экспорт из&nbsp;брокерского кабинета (Тинькофф, IBKR, Robinhood&nbsp;&mdash; везде есть «выгрузить отчёт за&nbsp;период в&nbsp;CSV»). Если у&nbsp;вас нет своего&nbsp;&mdash; не&nbsp;беда: на&nbsp;первом промпте попросим Claude <em>сгенерировать пример</em> CSV на&nbsp;30&nbsp;операций.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a CSV with your investing operations (buys, sells, dividends).<br>
+            <strong>Why now:</strong> we build the portfolio dashboard on it.<br>
+            <strong>Where:</strong> export from your broker (TD, IBKR, Robinhood — they all have “export period to CSV”). If you have none — no problem: in the first prompt we’ll ask Claude to <em>generate a sample</em> CSV with 30 operations.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Как сделать так, чтобы Claude знал ваш проект</span><span lang="en">How to make Claude know your project</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Папка проекта как «рабочее пространство»</span><span lang="en">A project folder as a “workspace”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>До&nbsp;этого этапа мы&nbsp;работали так: «одна папка&nbsp;&mdash; одна задача» (карточка обо&nbsp;мне, калькулятор процента и&nbsp;т.&nbsp;д.). Теперь&nbsp;&mdash; «одна папка&nbsp;&mdash; многоэтапный проект, в&nbsp;который мы&nbsp;возвращаемся неделями».</p>
+                    <p>Что это даёт:</p>
+                    <ul>
+                        <li>Claude видит <em>все ваши файлы сразу</em> и&nbsp;может между ними переключаться;</li>
+                        <li>правила проекта пишутся <em>один раз</em>&nbsp;&mdash; больше не&nbsp;нужно повторять «всегда категоризируй по&nbsp;X» в&nbsp;каждой сессии;</li>
+                        <li>проект можно отдать Claude «свежему» (новая сессия)&nbsp;&mdash; и&nbsp;он&nbsp;через 30&nbsp;секунд снова в&nbsp;контексте.</li>
+                    </ul>
+                    <p>Главный инструмент для&nbsp;этого&nbsp;&mdash; файл <code>CLAUDE.md</code> в&nbsp;корне проекта. О&nbsp;нём&nbsp;&mdash; следующая тема.</p>
+                </div>
+                <div lang="en">
+                    <p>Up to this etape we worked “one folder — one task” (about-me card, compound calculator, etc.). Now — “one folder — a multi-step project we return to over weeks.”</p>
+                    <p>This gives:</p>
+                    <ul>
+                        <li>Claude sees <em>all your files at once</em> and can switch between them;</li>
+                        <li>project rules are written <em>once</em> — no need to repeat “always categorise by X” every session;</li>
+                        <li>you can hand the project to a “fresh” Claude (new session) — and within 30 seconds it’s back in context.</li>
+                    </ul>
+                    <p>The key tool for this is the <code>CLAUDE.md</code> file in the project root. Next topic.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="специальный файл в корне папки. Claude читает его автоматически в начале каждой сессии и применяет как «правила проекта».">CLAUDE.md</dfn>: правила, которые Claude помнит сам</span><span lang="en"><dfn class="term" tabindex="0" data-def="a special file at the project root. Claude reads it automatically at the start of every session and applies it as “project rules.”">CLAUDE.md</dfn>: rules Claude reads on its own</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><code>CLAUDE.md</code>&nbsp;&mdash; это обычный markdown-файл, который вы&nbsp;кладёте в&nbsp;корень папки проекта. Claude читает его автоматически в&nbsp;начале каждой новой сессии в&nbsp;этой папке.</p>
+                    <p>Что туда писать:</p>
+                    <ul>
+                        <li><strong>Стиль и&nbsp;тон:</strong> «комментарии на&nbsp;русском», «короткие имена переменных», «никаких лишних emoji».</li>
+                        <li><strong>Структура проекта:</strong> где у&nbsp;нас данные, где код, где отчёты.</li>
+                        <li><strong>Правила работы:</strong> «всегда добавляй дату в&nbsp;ISO», «не&nbsp;коммить файлы из&nbsp;<code>data/</code>».</li>
+                        <li><strong>Тематические допущения:</strong> «валюта по&nbsp;умолчанию&nbsp;&mdash; рубль», «ставка налога&nbsp;&mdash; 13%».</li>
+                        <li><strong>Что не&nbsp;делать:</strong> «не&nbsp;используй сторонние API без&nbsp;спроса», «не&nbsp;удаляй файлы старше 30&nbsp;дней без&nbsp;подтверждения».</li>
+                    </ul>
+                    <p>Главное правило: <strong>пишите коротко и&nbsp;только то, чего нельзя угадать из&nbsp;кода</strong>. Не&nbsp;пишите туда историю проекта, биографию или то, что и&nbsp;так очевидно.</p>
+                    <p>Пример хорошего <code>CLAUDE.md</code> для&nbsp;инвест-проекта:</p>
+                    <pre class="shell"><span class="cmt"># Investing Journal — правила проекта</span>
+
+## Стек
+- одностраничные html, без сборщиков
+- chart.js через CDN, никаких других зависимостей
+
+## Данные
+- источник: data/operations.csv (date, ticker, side, qty, price, currency)
+- валюта по умолчанию — USD
+- даты в ISO: YYYY-MM-DD
+
+## Стиль
+- editorial / paper-and-ink, тёплая палитра (как сайт курса)
+- засечковый шрифт, IBM Plex Mono для цифр
+
+## Правила
+- НЕ добавляй emoji в код
+- комментарии на английском, тексты UI на русском
+- перед удалением файлов из data/ — спрашивай</pre>
+                </div>
+                <div lang="en">
+                    <p><code>CLAUDE.md</code> is a plain markdown file at the project root. Claude reads it automatically at the start of every new session in that folder.</p>
+                    <p>What to put inside:</p>
+                    <ul>
+                        <li><strong>Style and tone:</strong> “comments in English,” “short variable names,” “no decorative emoji.”</li>
+                        <li><strong>Project layout:</strong> where data is, where code is, where reports go.</li>
+                        <li><strong>Working rules:</strong> “always add ISO dates,” “never commit files from <code>data/</code>.”</li>
+                        <li><strong>Domain assumptions:</strong> “default currency USD,” “tax rate 13%.”</li>
+                        <li><strong>What not to do:</strong> “don’t use third-party APIs without asking,” “don’t delete files older than 30 days without confirmation.”</li>
+                    </ul>
+                    <p>Key rule: <strong>keep it short and only put things that can’t be guessed from the code</strong>. Don’t add history, biography, or the obvious.</p>
+                    <p>Example of a good <code>CLAUDE.md</code> for an investing project:</p>
+                    <pre class="shell"><span class="cmt"># Investing Journal — project rules</span>
+
+## Stack
+- single-page html, no bundlers
+- chart.js via CDN, no other deps
+
+## Data
+- source: data/operations.csv (date, ticker, side, qty, price, currency)
+- default currency — USD
+- ISO dates: YYYY-MM-DD
+
+## Style
+- editorial / paper-and-ink, warm palette
+- serif type, IBM Plex Mono for numerals
+
+## Rules
+- NO emoji in code
+- comments in English, UI text in Russian
+- ask before deleting from data/</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="точечная ссылка на файл прямо в промпте: «@operations.csv». Claude прочитает только этот файл, а не сканирует всю папку.">@-ссылки</dfn>: указать Claude конкретный файл</span><span lang="en"><dfn class="term" tabindex="0" data-def="a pointer to a specific file in your prompt: “@operations.csv.” Claude reads exactly that file instead of scanning the whole folder.">@-mentions</dfn>: pointing Claude to a specific file</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Если в&nbsp;вашем проекте десятки файлов, Claude может тратить время на&nbsp;их&nbsp;«сканирование» при каждой задаче. Когда вы&nbsp;уже знаете, какой именно файл нужен, проще указать его напрямую через <code>@</code>:</p>
+                    <pre class="shell">&gt; посмотри @data/operations.csv и собери short-отчёт по тикерам.
+&gt; используй формат, описанный в @docs/report-template.md.</pre>
+                    <p>Что Claude делает:</p>
+                    <ul>
+                        <li>Прочитает указанные файлы <em>сразу</em>, без&nbsp;сканирования папки;</li>
+                        <li>Не&nbsp;будет «угадывать», какие ещё файлы могут пригодиться;</li>
+                        <li>В&nbsp;ответе явно укажет, что использовал именно эти.</li>
+                    </ul>
+                    <p>Удобно для:</p>
+                    <ul>
+                        <li>длинных проектов с&nbsp;десятками файлов;</li>
+                        <li>задач, где важна точность («только этот&nbsp;CSV, не&nbsp;трогай остальные»);</li>
+                        <li>повторяющихся задач&nbsp;&mdash; быстрее, чем заново описывать структуру.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>If your project has dozens of files, Claude may waste time “scanning” them every task. When you already know which file matters, point at it directly with <code>@</code>:</p>
+                    <pre class="shell">&gt; look at @data/operations.csv and produce a per-ticker short report.
+&gt; use the layout described in @docs/report-template.md.</pre>
+                    <p>What Claude does:</p>
+                    <ul>
+                        <li>reads those files <em>right away</em>, no folder-scan;</li>
+                        <li>doesn’t “guess” which other files might matter;</li>
+                        <li>states which files it used in the reply.</li>
+                    </ul>
+                    <p>Handy for:</p>
+                    <ul>
+                        <li>long projects with many files;</li>
+                        <li>tasks where precision matters (“only this CSV, leave the rest”);</li>
+                        <li>repeating tasks — faster than re-explaining structure.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="долгосрочная память Claude между сессиями. Хранится в файлах ~/.claude/memory/. Claude сам решает, что туда записать.">Auto-memory</dfn>: что Claude помнит между сессиями</span><span lang="en"><dfn class="term" tabindex="0" data-def="Claude’s long-term memory across sessions. Stored in ~/.claude/memory/. Claude decides what to write there.">Auto-memory</dfn>: what Claude remembers across sessions</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><code>CLAUDE.md</code> живёт <em>в&nbsp;проекте</em>&nbsp;&mdash; его читают только когда работают именно с&nbsp;этой папкой. Auto-memory&nbsp;&mdash; <em>глобальная</em>: всё, что Claude в&nbsp;ней запомнил, доступно в&nbsp;любой папке, любой сессии.</p>
+                    <p>Файлы лежат в&nbsp;<code>~/.claude/memory/</code>. Главный из&nbsp;них&nbsp;&mdash; <code>MEMORY.md</code>, индекс. Туда Claude сам пишет, когда узнаёт что-то полезное на&nbsp;будущее.</p>
+
+                    <p><strong>Четыре типа записей:</strong></p>
+                    <ol>
+                        <li><strong>user</strong>&nbsp;&mdash; о&nbsp;вас: роль, опыт, предпочтения. <em>«Пользователь&nbsp;&mdash; финансовый аналитик, любит таблицы, не&nbsp;любит длинные комментарии»</em>.</li>
+                        <li><strong>feedback</strong>&nbsp;&mdash; ваши указания, как работать или как НЕ&nbsp;работать. <em>«Не&nbsp;используй mock-данные для&nbsp;интеграционных тестов&nbsp;&mdash; в&nbsp;прошлый раз пропустили баг»</em>.</li>
+                        <li><strong>project</strong>&nbsp;&mdash; контекст текущих работ: дедлайны, инициативы, причины решений. <em>«Переход с&nbsp;старого API&nbsp;&mdash; до&nbsp;1&nbsp;июня, по&nbsp;требованию compliance»</em>.</li>
+                        <li><strong>reference</strong>&nbsp;&mdash; «где искать»: ссылки на&nbsp;Linear, Jira, Slack, дашборды. <em>«Пайплайн-баги&nbsp;&mdash; в&nbsp;Linear-проекте INGEST»</em>.</li>
+                    </ol>
+                    <p>Полезные команды:</p>
+                    <pre class="shell"><span class="cmt"># просмотреть, что Claude помнит</span>
+&gt; покажи мою auto-memory
+
+<span class="cmt"># попросить запомнить</span>
+&gt; запомни: я предпочитаю tabular layout для финансовых отчётов
+
+<span class="cmt"># попросить забыть</span>
+&gt; забудь, что я говорил про предпочтение dark theme</pre>
+                    <p>Важное: Claude <em>сам решает</em>, когда писать в&nbsp;auto-memory. Но&nbsp;вы&nbsp;можете прямо попросить.</p>
+                </div>
+                <div lang="en">
+                    <p><code>CLAUDE.md</code> lives <em>in the project</em> — only read inside that folder. Auto-memory is <em>global</em>: anything Claude saved there is available in any folder, any session.</p>
+                    <p>Files live in <code>~/.claude/memory/</code>. The main one is <code>MEMORY.md</code>, the index. Claude writes there on its own when it learns something useful for the future.</p>
+
+                    <p><strong>Four record types:</strong></p>
+                    <ol>
+                        <li><strong>user</strong> — about you: role, experience, preferences. <em>“User is a financial analyst, likes tables, dislikes long comments.”</em></li>
+                        <li><strong>feedback</strong> — your guidance on how to work or NOT work. <em>“Don’t use mock data in integration tests — last time it hid a bug.”</em></li>
+                        <li><strong>project</strong> — current-work context: deadlines, initiatives, reasons. <em>“Old-API migration — by June 1st, per compliance.”</em></li>
+                        <li><strong>reference</strong> — “where to look”: pointers to Linear, Jira, Slack, dashboards. <em>“Pipeline bugs — in Linear project INGEST.”</em></li>
+                    </ol>
+                    <p>Useful commands:</p>
+                    <pre class="shell"><span class="cmt"># show what Claude remembers</span>
+&gt; show my auto-memory
+
+<span class="cmt"># ask to remember</span>
+&gt; remember: I prefer a tabular layout for financial reports
+
+<span class="cmt"># ask to forget</span>
+&gt; forget what I said about preferring dark theme</pre>
+                    <p>Important: Claude <em>decides</em> when to write to auto-memory. But you can ask explicitly.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Чтение существующего проекта: «расскажи, что тут происходит»</span><span lang="en">Reading an existing project: “tell me what’s going on here”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Когда вы&nbsp;открываете <em>чужой</em> проект (или свой, в&nbsp;который не&nbsp;заглядывали полгода), не&nbsp;нужно «вчитываться вручную». Запустите Claude и&nbsp;попросите ввести в&nbsp;курс:</p>
+                    <pre class="shell">&gt; расскажи, что это за проект:
+&gt; — что он делает (одна-две фразы),
+&gt; — какая структура папок,
+&gt; — какие главные файлы,
+&gt; — что нетипично, на что мне стоит обратить внимание.</pre>
+                    <p>Claude пройдётся по&nbsp;файлам и&nbsp;даст вам краткий «бриф». Это особенно полезно перед тем, как:</p>
+                    <ul>
+                        <li>добавлять новую функцию в&nbsp;старый проект;</li>
+                        <li>возвращаться к&nbsp;курсу после паузы;</li>
+                        <li>взять чужой код (например, скачали с&nbsp;GitHub) и&nbsp;хотите понять, что там.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>When you open <em>someone else’s</em> project (or your own, untouched for half a year), do not “read manually.” Launch Claude and ask for an intro:</p>
+                    <pre class="shell">&gt; tell me about this project:
+&gt; — what it does (one or two sentences),
+&gt; — folder structure,
+&gt; — the key files,
+&gt; — anything unusual I should pay attention to.</pre>
+                    <p>Claude walks the files and gives you a short brief. Useful right before:</p>
+                    <ul>
+                        <li>adding a new feature to an old project;</li>
+                        <li>returning to the course after a break;</li>
+                        <li>opening third-party code (e.g. cloned from GitHub) and wanting to know what’s inside.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="изменения сразу в нескольких файлах одной просьбой. Claude видит все связи и обновляет их вместе.">Multi-file edits</dfn>: правки в&nbsp;нескольких файлах сразу</span><span lang="en"><dfn class="term" tabindex="0" data-def="changes across several files in one request. Claude sees the links and updates them together.">Multi-file edits</dfn>: changes across several files at once</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;многофайловом проекте часто одно изменение влияет на&nbsp;несколько файлов: переименовали колонку в&nbsp;CSV&nbsp;&mdash; нужно поправить и&nbsp;парсер, и&nbsp;дашборд, и&nbsp;документацию.</p>
+                    <p>Claude умеет делать это одной просьбой:</p>
+                    <pre class="shell">&gt; в operations.csv поле «side» переименовалось в «direction».
+&gt; найди все упоминания «side» во всех файлах проекта и обнови.
+&gt; покажи список изменений перед применением.</pre>
+                    <p>Чем такой подход лучше «по&nbsp;файлу за&nbsp;раз»:</p>
+                    <ul>
+                        <li>Claude видит <em>все связи</em>&nbsp;&mdash; не&nbsp;забывает обновить какой-то файл;</li>
+                        <li>можно потребовать <em>«покажи план перед применением»</em>&nbsp;&mdash; и&nbsp;сначала посмотреть список;</li>
+                        <li>откат проще: «верни всё, что ты&nbsp;только что изменил».</li>
+                    </ul>
+                    <div class="note">
+                        <span lang="ru">Хорошая привычка: для&nbsp;крупных правок ставить <code>plan mode</code> (этап&nbsp;00) или просить «сначала покажи список изменений, я&nbsp;утвержу&nbsp;&mdash; потом применяй».</span>
+                        <span lang="en">Good habit: for large edits switch to <code>plan mode</code> (etape 00) or ask “show the change list first, I’ll approve, then apply.”</span>
+                    </div>
+                </div>
+                <div lang="en">
+                    <p>In a multi-file project one change often touches many files: rename a column in a CSV — and you need to update the parser, the dashboard, and the docs.</p>
+                    <p>Claude does this in one request:</p>
+                    <pre class="shell">&gt; in operations.csv the field "side" became "direction".
+&gt; find every mention of "side" across all files and update.
+&gt; show the change list before applying.</pre>
+                    <p>Why this beats one-file-at-a-time:</p>
+                    <ul>
+                        <li>Claude sees <em>all the connections</em> — won’t forget a file;</li>
+                        <li>you can demand <em>“show the plan before applying”</em> — review the list first;</li>
+                        <li>rollback is simpler: “undo everything you just changed.”</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Превращаем калькулятор из&nbsp;этапа&nbsp;01 в&nbsp;«проект»</span><span lang="en">Turn the etape-01 calculator into a “project”</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Возьмите папку <code>compound</code> из&nbsp;этапа&nbsp;01. Там у&nbsp;вас три файла: <code>compound-classic.html</code>, <code>compound-dark.html</code>, <code>compound-print.html</code>. Сейчас сделаем из&nbsp;них «настоящий проект».</p>
+        <p class="reading" lang="en">Take the <code>compound</code> folder from etape 01. You have three files there: <code>compound-classic.html</code>, <code>compound-dark.html</code>, <code>compound-print.html</code>. We turn them into a “real project.”</p>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · CLAUDE.md, @-ссылки, multi-file edit</span><span lang="en">Run · CLAUDE.md, @-mentions, multi-file edit</span></h4>
+            <ol lang="ru">
+                <li>Зайдите в&nbsp;папку <code>compound</code>, запустите <code>claude</code>.</li>
+                <li>Попросите Claude составить <code>CLAUDE.md</code>:
+                    <pre class="shell">&gt; составь файл CLAUDE.md в корне этого проекта.
+&gt; зафиксируй: стек (плоский html, chart.js через CDN),
+&gt; стиль (минимализм, тёплая бумажная палитра),
+&gt; правила (без emoji, всё одним файлом, открывается двойным кликом),
+&gt; что у меня сейчас три варианта: classic / dark / print.</pre>
+                </li>
+                <li>Откройте <code>CLAUDE.md</code> в&nbsp;VS&nbsp;Code, прочитайте, поправьте если нужно.</li>
+                <li>Закройте Claude (<code>/exit</code>), откройте заново. Попросите: <em>«добавь в&nbsp;dark-версию кнопку «сбросить» рядом с&nbsp;«посчитать»»</em>. Заметьте: Claude сразу знает, какой стиль вам нужен&nbsp;&mdash; он&nbsp;прочитал <code>CLAUDE.md</code> при старте.</li>
+                <li>Попробуйте <strong>multi-file edit</strong>:
+                    <pre class="shell">&gt; во всех трёх файлах compound-*.html
+&gt; добавь сверху ссылку «← к остальным версиям»,
+&gt; которая переключает между classic / dark / print.
+&gt; покажи план перед применением.</pre>
+                </li>
+                <li>Утвердите план, дайте применить, откройте все три файла&nbsp;&mdash; должна появиться навигация.</li>
+                <li>Попробуйте <strong>@-ссылку</strong>:
+                    <pre class="shell">&gt; глядя на @compound-classic.html, опиши его в одном абзаце —
+&gt; так, как написал бы дизайн-критик.</pre>
+                </li>
+                <li>Финал: попросите <em>«запомни на&nbsp;будущее: я&nbsp;предпочитаю тёплые палитры с&nbsp;охряным акцентом»</em>. Это уйдёт в&nbsp;<code>~/.claude/memory/</code>. На&nbsp;следующих этапах увидите, как Claude учитывает это в&nbsp;других проектах.</li>
+            </ol>
+            <ol lang="en">
+                <li>Enter the <code>compound</code> folder, launch <code>claude</code>.</li>
+                <li>Ask Claude to draft <code>CLAUDE.md</code>:
+                    <pre class="shell">&gt; draft a CLAUDE.md at the project root.
+&gt; capture: stack (flat html, chart.js via CDN),
+&gt; style (minimalism, warm paper palette),
+&gt; rules (no emoji, one file, opens with double-click),
+&gt; that I currently have three variants: classic / dark / print.</pre>
+                </li>
+                <li>Open <code>CLAUDE.md</code> in VS Code, read it, edit if needed.</li>
+                <li>Exit Claude (<code>/exit</code>), launch again. Ask: <em>“add a ‘reset’ button to the dark version next to ‘calculate.’”</em> Notice: Claude already knows the style you want — it read <code>CLAUDE.md</code> at start.</li>
+                <li>Try a <strong>multi-file edit</strong>:
+                    <pre class="shell">&gt; across all three compound-*.html files
+&gt; add a "← other versions" link at the top,
+&gt; that toggles between classic / dark / print.
+&gt; show the plan before applying.</pre>
+                </li>
+                <li>Approve the plan, let it apply, open all three files — navigation should appear.</li>
+                <li>Try an <strong>@-mention</strong>:
+                    <pre class="shell">&gt; looking at @compound-classic.html, describe it in one paragraph —
+&gt; as a design critic would.</pre>
+                </li>
+                <li>Finally: ask <em>“remember for the future: I prefer warm palettes with an ochre accent.”</em> This goes into <code>~/.claude/memory/</code>. On further etapes you’ll see Claude apply it across projects.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>писать <code>CLAUDE.md</code></strong>, <strong>работать с&nbsp;несколькими файлами одной просьбой</strong>, <strong>попадать в&nbsp;файл точечно через&nbsp;<code>@</code></strong>, <strong>передавать заметку в&nbsp;auto-memory</strong>.</p>
+            <p lang="en">What we train: <strong>writing <code>CLAUDE.md</code></strong>, <strong>multi-file edits in one request</strong>, <strong>targeting files via <code>@</code></strong>, <strong>handing a note to auto-memory</strong>.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Дневник операций и&nbsp;дашборд портфеля</span><span lang="en">Operations journal and portfolio dashboard</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Оба проекта используют один и&nbsp;тот&nbsp;же набор данных&nbsp;&mdash; ваш CSV с&nbsp;инвестиционными операциями. Если своего нет&nbsp;&mdash; первый проект сгенерирует тестовые данные, и&nbsp;второй сможет на&nbsp;них работать.</p>
+        <p class="reading" lang="en">Both projects use the same data — your CSV of investing operations. If you don’t have one, project A generates a test set, and project B will work on it.</p>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Дневник инвестиционных операций</span><span lang="en">Investing operations journal</span></h3>
+            <p class="goal" lang="ru">Цель: многофайловый проект с&nbsp;<code>CLAUDE.md</code>. Хранилище&nbsp;&mdash; CSV. Веб-страница для&nbsp;добавления операций (покупка/продажа/дивиденд) и&nbsp;их&nbsp;просмотра с&nbsp;фильтрами.</p>
+            <p class="goal" lang="en">Goal: a multi-file project with <code>CLAUDE.md</code>. Storage — CSV. A web page to add operations (buy / sell / dividend) and view them with filters.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>portfolio-journal</code> в&nbsp;<code>claude-course</code>, запустите там <code>claude</code>.</li>
+                <li>Сначала&nbsp;&mdash; CLAUDE.md:
+                    <pre class="shell">&gt; составь CLAUDE.md для этого проекта:
+&gt;   - стек: одна html-страница + один csv-файл рядом, без бэкенда
+&gt;   - данные: data/operations.csv с колонками
+&gt;     date, ticker, side (buy/sell/dividend), qty, price, currency, note
+&gt;   - стиль: editorial, тёплая палитра, IBM Plex Mono для цифр
+&gt;   - правила: даты ISO, currency по умолчанию USD, без emoji</pre>
+                </li>
+                <li>Сгенерируйте тестовые данные (если нет своих):
+                    <pre class="shell">&gt; создай data/operations.csv с 30 реалистичными операциями
+&gt; за последние 12 месяцев. шесть тикеров (AAPL, MSFT, GOOGL,
+&gt; NVDA, BRK.B, VOO), buy/sell/dividend смешаны.</pre>
+                </li>
+                <li>Сделайте страницу-просмотрщик:
+                    <pre class="shell">&gt; сделай index.html — страница «дневник операций».
+&gt; читает data/operations.csv (через fetch), показывает таблицу
+&gt; с сортировкой по дате (новое сверху).
+&gt; фильтры сверху: тикер (выпадашка), тип операции, период.
+&gt; форма «добавить» внизу — сохранение в localStorage,
+&gt; отдельная кнопка «выгрузить в csv» — сливает данные обратно в файл.</pre>
+                </li>
+                <li>Откройте через локальный сервер (или попросите Claude поднять <code>python -m http.server</code>). Поработайте с&nbsp;интерфейсом.</li>
+                <li>Уточните то, что не&nbsp;понравилось:
+                    <ul>
+                        <li><em>«сделай строки таблицы зеброй для&nbsp;удобства»</em>;</li>
+                        <li><em>«добавь итог снизу: общее количество операций, сумма покупок и&nbsp;продаж»</em>;</li>
+                        <li><em>«выделяй sell красным, buy зелёным, dividend охряным»</em>.</li>
+                    </ul>
+                </li>
+                <li>Финальный аудит: <em>«перечисли в&nbsp;виде списка, что ты&nbsp;принял за&nbsp;меня&nbsp;&mdash; форматы, валюту, цвета, чего нет в&nbsp;CLAUDE.md»</em>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create <code>portfolio-journal</code> inside <code>claude-course</code>, launch <code>claude</code> there.</li>
+                <li>First — CLAUDE.md:
+                    <pre class="shell">&gt; draft CLAUDE.md for this project:
+&gt;   - stack: one html page + one csv next to it, no backend
+&gt;   - data: data/operations.csv with columns
+&gt;     date, ticker, side (buy/sell/dividend), qty, price, currency, note
+&gt;   - style: editorial, warm palette, IBM Plex Mono for numbers
+&gt;   - rules: ISO dates, default currency USD, no emoji</pre>
+                </li>
+                <li>Generate test data (if you have none):
+                    <pre class="shell">&gt; create data/operations.csv with 30 realistic operations
+&gt; for the last 12 months. six tickers (AAPL, MSFT, GOOGL,
+&gt; NVDA, BRK.B, VOO), buy/sell/dividend mixed.</pre>
+                </li>
+                <li>Make the viewer page:
+                    <pre class="shell">&gt; make index.html — the "operations journal" page.
+&gt; reads data/operations.csv (via fetch), shows a table
+&gt; sorted by date (newest first).
+&gt; filters at the top: ticker (dropdown), op type, period.
+&gt; an "add" form at the bottom — saves to localStorage,
+&gt; an "export csv" button merges back into the file.</pre>
+                </li>
+                <li>Open through a local server (or ask Claude to spin up <code>python -m http.server</code>). Play with the UI.</li>
+                <li>Refine what didn’t click:
+                    <ul>
+                        <li><em>“zebra-stripe the rows”</em>;</li>
+                        <li><em>“add a footer with total ops, buys total, sells total”</em>;</li>
+                        <li><em>“colour sell red, buy green, dividend ochre”</em>.</li>
+                    </ul>
+                </li>
+                <li>Final audit: <em>“list what you assumed for me — formats, currency, colours, anything not in CLAUDE.md.”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>писать <code>CLAUDE.md</code> для&nbsp;нового проекта;</li>
+                <li>попросить Claude сгенерировать тестовые данные под&nbsp;вашу схему;</li>
+                <li>многофайловый проект (html + csv) с&nbsp;импортом-экспортом данных;</li>
+                <li>аудит с&nbsp;учётом того, что в&nbsp;<code>CLAUDE.md</code> УЖЕ есть.</li>
+            </ul>
+            <ul lang="en">
+                <li>writing <code>CLAUDE.md</code> for a new project;</li>
+                <li>asking Claude to generate test data to your schema;</li>
+                <li>a multi-file project (html + csv) with data import/export;</li>
+                <li>auditing in light of what <code>CLAUDE.md</code> already states.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Дашборд инвестиционного портфеля</span><span lang="en">Investment portfolio dashboard</span></h3>
+            <p class="goal" lang="ru">Цель: страница-дашборд, которая читает <code>operations.csv</code> из&nbsp;проекта&nbsp;A и&nbsp;показывает: текущие позиции по&nbsp;тикерам, P&amp;L, круговую диаграмму распределения, тренд капитала по&nbsp;месяцам.</p>
+            <p class="goal" lang="en">Goal: a dashboard page that reads <code>operations.csv</code> from project A and shows: current positions per ticker, P&amp;L, an allocation pie, a monthly capital trend.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>В&nbsp;той&nbsp;же папке <code>portfolio-journal</code> запустите Claude.</li>
+                <li>Включите <code>frontend-design</code> skill через явное упоминание:
+                    <pre class="shell">&gt; используя skill frontend-design, сделай dashboard.html —
+&gt; финансовый дашборд по моему портфелю.
+&gt; данные: @data/operations.csv (та же схема, что в проекте A).
+&gt; разделы:
+&gt;   1) текущие позиции (тикер, qty, средняя цена, оценка);
+&gt;   2) P&amp;L по позициям (реализованный и нереализованный);
+&gt;   3) круговая диаграмма распределения капитала по тикерам;
+&gt;   4) график капитала по месяцам.
+&gt; стиль — как страница из financial times, тёплый кремовый,
+&gt; засечковый шрифт для заголовков, IBM Plex Mono для цифр.
+&gt; chart.js через CDN, без других зависимостей.</pre>
+                </li>
+                <li>Откройте <code>dashboard.html</code>. Прокрутите все разделы. Проверьте формулы:
+                    <ul>
+                        <li>текущая позиция = сумма всех buy minus сумма всех sell, по&nbsp;тикеру;</li>
+                        <li>средняя цена = взвешенное среднее по&nbsp;buy-операциям;</li>
+                        <li>оценка = текущая позиция × последняя цена в&nbsp;CSV (или ввод вручную, если нет «текущей»).</li>
+                    </ul>
+                </li>
+                <li>Уточняйте:
+                    <ul>
+                        <li><em>«в&nbsp;P&amp;L раздели реализованный (по&nbsp;закрытым позициям) и&nbsp;нереализованный (по&nbsp;открытым)»</em>;</li>
+                        <li><em>«в&nbsp;круговой диаграмме сделай легенду справа, цвета пастельные»</em>;</li>
+                        <li><em>«в&nbsp;графике капитала добавь линию «вложено» и&nbsp;линию «оценка»&nbsp;&mdash; разница и&nbsp;есть P&amp;L»</em>;</li>
+                        <li><em>«добавь сверху три KPI-плитки: общая стоимость, P&amp;L, доходность за&nbsp;год в&nbsp;%»</em>.</li>
+                    </ul>
+                </li>
+                <li>Зафиксируйте изменения в&nbsp;<code>CLAUDE.md</code>:
+                    <pre class="shell">&gt; обнови CLAUDE.md: добавь раздел «дашборд» —
+&gt; описание секций, формулы, цвета операций (buy/sell/dividend).
+&gt; чтобы при следующих доработках Claude помнил, как тут устроено.</pre>
+                </li>
+                <li>Финальный аудит: <em>«какие три самых важных предположения ты&nbsp;принял про мои данные? что ломается, если они окажутся не&nbsp;такими?»</em></li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>In the same <code>portfolio-journal</code> folder launch Claude.</li>
+                <li>Engage <code>frontend-design</code> skill explicitly:
+                    <pre class="shell">&gt; using the frontend-design skill, make dashboard.html —
+&gt; a financial dashboard for my portfolio.
+&gt; data: @data/operations.csv (same schema as project A).
+&gt; sections:
+&gt;   1) current positions (ticker, qty, avg price, value);
+&gt;   2) P&amp;L per position (realised and unrealised);
+&gt;   3) pie chart of capital allocation by ticker;
+&gt;   4) capital trend by month.
+&gt; style — like a Financial Times page, warm cream,
+&gt; serif headings, IBM Plex Mono for numbers.
+&gt; chart.js via CDN, no other deps.</pre>
+                </li>
+                <li>Open <code>dashboard.html</code>. Scroll all sections. Verify formulae:
+                    <ul>
+                        <li>current position = sum of buys minus sum of sells, per ticker;</li>
+                        <li>avg price = weighted average over buys;</li>
+                        <li>value = current position × last price in CSV (or manual input if no “current”).</li>
+                    </ul>
+                </li>
+                <li>Refine:
+                    <ul>
+                        <li><em>“split P&amp;L into realised (closed positions) and unrealised (open)”</em>;</li>
+                        <li><em>“in the pie put the legend on the right, pastel colours”</em>;</li>
+                        <li><em>“on the capital chart add a ‘deposited’ line and a ‘value’ line — the gap is P&amp;L”</em>;</li>
+                        <li><em>“add three KPI tiles at the top: total value, P&amp;L, yearly return %”</em>.</li>
+                    </ul>
+                </li>
+                <li>Lock changes into <code>CLAUDE.md</code>:
+                    <pre class="shell">&gt; update CLAUDE.md: add a "dashboard" section —
+&gt; describe sections, formulae, colours of operations (buy/sell/dividend).
+&gt; so future iterations remember how this is laid out.</pre>
+                </li>
+                <li>Final audit: <em>“what are the three most important assumptions you made about my data? What breaks if they don’t hold?”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>задействовать установленный skill в&nbsp;промпте по&nbsp;имени;</li>
+                <li>дашборд с&nbsp;графиками над&nbsp;живыми CSV-данными;</li>
+                <li>обновлять <code>CLAUDE.md</code> по&nbsp;ходу&nbsp;&mdash; чтобы он&nbsp;«взрослел» вместе с&nbsp;проектом;</li>
+                <li>аудит-вопрос про предположения о&nbsp;данных, не&nbsp;о&nbsp;дизайне.</li>
+            </ul>
+            <ul lang="en">
+                <li>invoking an installed skill by name in your prompt;</li>
+                <li>a dashboard with charts over live CSV data;</li>
+                <li>updating <code>CLAUDE.md</code> as you go — so it “grows up” with the project;</li>
+                <li>an audit question about data assumptions, not just design.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши данные</span><span lang="en">Same moves, your data</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Оба самостоятельных&nbsp;&mdash; вариации проектов&nbsp;A и&nbsp;B. Структура та&nbsp;же: новая папка, <code>CLAUDE.md</code>, тестовые данные через Claude (если нет своих), просмотр + дашборд. Никаких новых концепций.</p>
+        <p class="reading" lang="en">Both solos are variations of A and B. Same structure: new folder, <code>CLAUDE.md</code>, test data via Claude (if you have none), viewer + dashboard. No new concepts.</p>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Журнал пассивного дохода</span><span lang="en">Passive-income journal</span></h3>
+            <p class="goal" lang="ru">Цель: те&nbsp;же три файла (CLAUDE.md + index.html + data/income.csv), но&nbsp;для&nbsp;учёта дивидендов, купонов по&nbsp;облигациям и&nbsp;поступлений по&nbsp;ETF. Просмотр с&nbsp;фильтрами по&nbsp;инструменту.</p>
+            <p class="goal" lang="en">Goal: same three files (CLAUDE.md + index.html + data/income.csv), but for dividends, bond coupons, ETF distributions. Viewer with filters by instrument.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Колонки CSV: <code>date, instrument, type (dividend/coupon/distribution), amount, currency, note</code>.</li>
+                <li>В&nbsp;CLAUDE.md обязательно укажите валюту по&nbsp;умолчанию и&nbsp;что считать «годом» (календарный или fiscal).</li>
+                <li>На&nbsp;странице помимо таблицы&nbsp;&mdash; общий итог за&nbsp;период и&nbsp;средний месячный доход.</li>
+                <li>Фильтры: тип поступления, период, инструмент.</li>
+            </ul>
+            <ul lang="en">
+                <li>CSV columns: <code>date, instrument, type (dividend/coupon/distribution), amount, currency, note</code>.</li>
+                <li>Pin in CLAUDE.md: default currency and what counts as a “year” (calendar or fiscal).</li>
+                <li>Beside the table — period total and average monthly income.</li>
+                <li>Filters: income type, period, instrument.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>в&nbsp;корне есть <code>CLAUDE.md</code>, в&nbsp;нём явно указано: схема данных, валюта, что считать «годом», правила;</li>
+                        <li>есть тестовые или ваши данные в&nbsp;<code>data/income.csv</code>, минимум 20&nbsp;записей;</li>
+                        <li>таблица сортируется и&nbsp;фильтруется без&nbsp;перезагрузки страницы;</li>
+                        <li>сверху виден итог за&nbsp;выбранный период и&nbsp;средний месячный доход;</li>
+                        <li>после <code>/exit</code> и&nbsp;нового запуска <code>claude</code> Claude мгновенно «в&nbsp;курсе» проекта (не&nbsp;задаёт вопросов про схему);</li>
+                        <li>вы&nbsp;провели хотя&nbsp;бы один аудит-промпт.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a <code>CLAUDE.md</code> at the root with explicit data schema, currency, year definition, rules;</li>
+                        <li>test or real data in <code>data/income.csv</code>, at least 20 rows;</li>
+                        <li>the table sorts and filters without a page reload;</li>
+                        <li>at the top — period total and avg monthly income visible;</li>
+                        <li>after <code>/exit</code> and a fresh <code>claude</code>, Claude is immediately “in the loop” (no schema questions);</li>
+                        <li>you ran at least one audit prompt.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Открой новую сессию в&nbsp;этой папке. Прочитай CLAUDE.md. Расскажи мне, как ты&nbsp;понимаешь этот проект, в&nbsp;трёх предложениях. Если CLAUDE.md написан хорошо&nbsp;&mdash; ты&nbsp;опишешь его точно. Если что-то размытое&nbsp;&mdash; это и&nbsp;есть пробел, который нужно дополнить»</em>.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Open a fresh session in this folder. Read CLAUDE.md. Describe how you understand this project, in three sentences. If CLAUDE.md is good — your description will be precise. If anything is vague — that’s the gap to fill.”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Дашборд P&amp;L по&nbsp;закрытым сделкам</span><span lang="en">Closed-trades P&amp;L dashboard</span></h3>
+            <p class="goal" lang="ru">Цель: вторая страница в&nbsp;папке <code>portfolio-journal</code>&nbsp;&mdash; <code>trades.html</code>. Не&nbsp;дублирует основной дашборд, а&nbsp;добавляет: «закрытые сделки» (buy + соответствующий sell по&nbsp;тому&nbsp;же тикеру), реализованный P&amp;L, лучшие/худшие сделки.</p>
+            <p class="goal" lang="en">Goal: a second page in <code>portfolio-journal</code> — <code>trades.html</code>. It does not duplicate the main dashboard but adds: “closed trades” (buy + matching sell on the same ticker), realised P&amp;L, best/worst trades.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Используйте <em>тот&nbsp;же</em> <code>data/operations.csv</code>&nbsp;&mdash; не&nbsp;создавайте новый.</li>
+                <li>Алгоритм закрытия сделки: пара buy + sell по&nbsp;тому&nbsp;же тикеру в&nbsp;порядке FIFO.</li>
+                <li>Реализованный P&amp;L = сумма по&nbsp;каждой закрытой сделке.</li>
+                <li>Перед началом обновите <code>CLAUDE.md</code>&nbsp;&mdash; добавьте раздел про&nbsp;<code>trades.html</code>.</li>
+                <li>На&nbsp;странице&nbsp;&mdash; таблица закрытых сделок, плюс две KPI: лучшая сделка и&nbsp;худшая.</li>
+            </ul>
+            <ul lang="en">
+                <li>Use the <em>same</em> <code>data/operations.csv</code> — don’t create a new one.</li>
+                <li>Trade-closing algorithm: buy + sell pair on the same ticker in FIFO order.</li>
+                <li>Realised P&amp;L = sum across closed trades.</li>
+                <li>Update <code>CLAUDE.md</code> first — add a section about <code>trades.html</code>.</li>
+                <li>On the page — a closed-trades table, plus two KPIs: best trade and worst.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li><code>trades.html</code> работает на&nbsp;тех&nbsp;же данных, что <code>dashboard.html</code>;</li>
+                        <li>в&nbsp;<code>CLAUDE.md</code> описано, что такое «закрытая сделка» и&nbsp;по&nbsp;какой логике (FIFO);</li>
+                        <li>таблица показывает по&nbsp;каждой закрытой сделке: тикер, qty, цена&nbsp;in, цена&nbsp;out, P&amp;L, %&nbsp;к&nbsp;входу;</li>
+                        <li>есть KPI «лучшая сделка» и&nbsp;«худшая» с&nbsp;тикером и&nbsp;%;</li>
+                        <li>навигация между <code>index.html</code>, <code>dashboard.html</code>, <code>trades.html</code> сделана через multi-file edit одной просьбой;</li>
+                        <li>проект остался многофайловым «единым целым», а&nbsp;не&nbsp;тремя независимыми страницами.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li><code>trades.html</code> works on the same data as <code>dashboard.html</code>;</li>
+                        <li><code>CLAUDE.md</code> defines what a “closed trade” is and the matching logic (FIFO);</li>
+                        <li>the table shows per closed trade: ticker, qty, price in, price out, P&amp;L, % to entry;</li>
+                        <li>there are KPIs “best trade” and “worst trade” with ticker and %;</li>
+                        <li>navigation between <code>index.html</code>, <code>dashboard.html</code>, <code>trades.html</code> was added via one multi-file edit request;</li>
+                        <li>the project still feels like one whole, not three separate pages.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Прогони мой trades.html на&nbsp;тестовом сценарии: я&nbsp;купил 10&nbsp;AAPL по&nbsp;100, затем 5&nbsp;по&nbsp;120, потом продал 8&nbsp;по&nbsp;150. Сколько закрытых сделок будет в&nbsp;FIFO? Какой реализованный P&amp;L? Сверь с&nbsp;тем, что показывает страница»</em>.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Walk my trades.html through a test: I bought 10 AAPL at 100, then 5 at 120, then sold 8 at 150. How many closed trades under FIFO? What is the realised P&amp;L? Compare to what the page shows.”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Восемь новых терминов&nbsp;&mdash; вокруг памяти и&nbsp;многофайловых проектов. Подчёркнуты пунктиром в&nbsp;тексте, наведите/коснитесь&nbsp;&mdash; всплывёт справка.</p>
+        <p class="reading" lang="en">Eight new terms — around memory and multi-file projects. Underlined with dots in the text, hover/tap to see a tooltip.</p>
+
+        <dl class="glossary">
+            <dt><code>CLAUDE.md</code></dt>
+            <dd>
+                <span lang="ru">Markdown-файл в&nbsp;корне папки проекта. Claude автоматически читает его в&nbsp;начале каждой сессии и&nbsp;применяет как «правила проекта»: стек, структуру, стиль, ограничения. Главный способ передать Claude <em>контекст без&nbsp;повторения</em>.</span>
+                <span lang="en">A markdown file at the project root. Claude reads it automatically at the start of every session and applies it as “project rules”: stack, layout, style, constraints. The main way to give Claude <em>context without repetition</em>.</span>
+            </dd>
+
+            <dt><span lang="ru">@-ссылка</span><span lang="en">@-mention</span></dt>
+            <dd>
+                <span lang="ru">Точечная ссылка на&nbsp;файл в&nbsp;промпте: <code>@data/operations.csv</code>. Claude читает именно его, не&nbsp;сканируя всю папку. Удобно в&nbsp;больших проектах и&nbsp;для&nbsp;точности.</span>
+                <span lang="en">A pointer to a specific file in your prompt: <code>@data/operations.csv</code>. Claude reads exactly that file, no folder scan. Handy in large projects and for precision.</span>
+            </dd>
+
+            <dt><span lang="ru">Auto-memory</span><span lang="en">Auto-memory</span></dt>
+            <dd>
+                <span lang="ru">Долгосрочная память Claude, общая для&nbsp;всех проектов. Хранится в&nbsp;<code>~/.claude/memory/</code>. Claude сам решает, что туда записать&nbsp;&mdash; но&nbsp;вы&nbsp;можете попросить «запомни&hellip;» или «забудь&hellip;».</span>
+                <span lang="en">Claude’s long-term memory, shared across all projects. Stored in <code>~/.claude/memory/</code>. Claude decides what goes in — but you can ask “remember…” or “forget….”</span>
+            </dd>
+
+            <dt><span lang="ru">Тип памяти (user / feedback / project / reference)</span><span lang="en">Memory type (user / feedback / project / reference)</span></dt>
+            <dd>
+                <span lang="ru">Четыре категории auto-memory:<br>
+                <strong>user</strong>&nbsp;&mdash; о&nbsp;вас, ваших предпочтениях.<br>
+                <strong>feedback</strong>&nbsp;&mdash; ваши указания, как работать.<br>
+                <strong>project</strong>&nbsp;&mdash; контекст текущих инициатив.<br>
+                <strong>reference</strong>&nbsp;&mdash; «где искать» (Linear, Slack, дашборды).</span>
+                <span lang="en">Four auto-memory categories:<br>
+                <strong>user</strong> — about you, your preferences.<br>
+                <strong>feedback</strong> — your guidance on how to work.<br>
+                <strong>project</strong> — context of current initiatives.<br>
+                <strong>reference</strong> — “where to look” (Linear, Slack, dashboards).</span>
+            </dd>
+
+            <dt><span lang="ru">Multi-file edit</span><span lang="en">Multi-file edit</span></dt>
+            <dd>
+                <span lang="ru">Изменения в&nbsp;нескольких файлах одной просьбой. Claude видит все связи и&nbsp;обновляет файлы согласованно. Обычно лучше попросить <em>«покажи план перед применением»</em>.</span>
+                <span lang="en">Changes across several files in one request. Claude sees all the links and updates them consistently. Usually best paired with <em>“show the plan before applying.”</em></span>
+            </dd>
+
+            <dt><span lang="ru">CSV</span><span lang="en">CSV</span></dt>
+            <dd>
+                <span lang="ru">Comma-separated values&nbsp;&mdash; «таблица в&nbsp;текстовом файле». Каждая строка&nbsp;&mdash; запись, поля разделены запятой. Открывается в&nbsp;Excel или Google Sheets, но&nbsp;при этом видна «как есть» в&nbsp;любом редакторе.</span>
+                <span lang="en">Comma-separated values — a “table in a text file.” One line per row, fields separated by commas. Opens in Excel or Google Sheets, yet readable “as is” in any editor.</span>
+            </dd>
+
+            <dt><span lang="ru">Дашборд</span><span lang="en">Dashboard</span></dt>
+            <dd>
+                <span lang="ru">Одна страница с&nbsp;ключевыми показателями и&nbsp;графиками&nbsp;&mdash; чтобы охватить состояние «одним взглядом». В&nbsp;этом этапе&nbsp;&mdash; дашборд по&nbsp;инвестиционному портфелю.</span>
+                <span lang="en">A single page with key metrics and charts — to cover state “at a glance.” On this etape — a portfolio dashboard.</span>
+            </dd>
+
+            <dt><span lang="ru">P&amp;L (Profit and Loss)</span><span lang="en">P&amp;L (Profit and Loss)</span></dt>
+            <dd>
+                <span lang="ru">Прибыли и&nbsp;убытки. <em>Реализованный</em> P&amp;L&nbsp;&mdash; по&nbsp;закрытым сделкам (продали с&nbsp;плюсом или минусом). <em>Нереализованный</em>&nbsp;&mdash; по&nbsp;открытым позициям (на&nbsp;бумаге).</span>
+                <span lang="en">Profit and loss. <em>Realised</em> P&amp;L — on closed trades (sold at a gain or loss). <em>Unrealised</em> — on open positions (paper).</span>
+            </dd>
+
+            <dt>FIFO</dt>
+            <dd>
+                <span lang="ru">First-In-First-Out&nbsp;&mdash; «первым купил, первым продал». Стандартный способ закрытия позиций при подсчёте P&amp;L: первая sell-операция «закрывает» самую старую buy.</span>
+                <span lang="en">First-In-First-Out — “bought first, sold first.” The standard way to close positions when computing P&amp;L: the first sell “closes” the oldest buy.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Сначала ответ&nbsp;&mdash; потом раскрывайте «правильный». После сравнения отметьте: <em>знал</em> / <em>не знал</em>. По&nbsp;итогам подскажу, что повторить.</p>
+        <p class="reading" lang="en">Answer first — then reveal. After comparing, mark <em>knew</em> or <em>did not know</em>. From the totals I will tell you what to revisit.</p>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем нужен файл <code>CLAUDE.md</code> в&nbsp;корне проекта?</span><span lang="en">Why a <code>CLAUDE.md</code> at the project root?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Это «правила проекта»: стек, структура папок, стиль, ограничения, тематические допущения. Claude читает его автоматически в&nbsp;начале каждой сессии в&nbsp;этой папке&nbsp;&mdash; не&nbsp;нужно повторять одно и&nbsp;то&nbsp;же. Главное: писать коротко и&nbsp;только то, что нельзя угадать из&nbsp;кода.</p>
+                        <p lang="en">It’s the “project rules”: stack, layout, style, constraints, domain assumptions. Claude reads it automatically at the start of every session in that folder — no repetition needed. Key: keep it short and only put what cannot be guessed from the code.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Чем <code>CLAUDE.md</code> отличается от&nbsp;auto-memory?</span><span lang="en">How does <code>CLAUDE.md</code> differ from auto-memory?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>CLAUDE.md</code>&nbsp;&mdash; локально, в&nbsp;конкретной папке. Auto-memory (<code>~/.claude/memory/</code>)&nbsp;&mdash; глобально, во&nbsp;всех ваших проектах. Правило: специфика проекта&nbsp;&mdash; в&nbsp;<code>CLAUDE.md</code>, общая информация о&nbsp;вас и&nbsp;ваших привычках&nbsp;&mdash; в&nbsp;auto-memory.</p>
+                        <p lang="en"><code>CLAUDE.md</code> is local to a folder. Auto-memory (<code>~/.claude/memory/</code>) is global across all your projects. Rule: project-specific stuff in <code>CLAUDE.md</code>, general info about you and your habits in auto-memory.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Когда уместно использовать <code>@-ссылку</code> на&nbsp;файл в&nbsp;промпте?</span><span lang="en">When is an <code>@-mention</code> in a prompt appropriate?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Когда вы&nbsp;точно знаете, какой файл нужен Claude&nbsp;&mdash; и&nbsp;не&nbsp;хотите, чтобы он&nbsp;сканировал всю папку. Особенно полезно в&nbsp;больших проектах и&nbsp;для&nbsp;задач, где важна точность («только этот&nbsp;CSV, не&nbsp;трогай остальные»).</p>
+                        <p lang="en">When you know exactly which file Claude needs — and you don’t want it to scan the whole folder. Especially useful in large projects and precision tasks (“only this CSV, leave the rest”).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Какие 4 типа записей бывают в&nbsp;auto-memory? Кратко&nbsp;&mdash; что в&nbsp;каждом.</span><span lang="en">What are the 4 auto-memory record types? Briefly — what goes in each.</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>user</strong>&nbsp;&mdash; о&nbsp;вас, роль, опыт, предпочтения. <strong>feedback</strong>&nbsp;&mdash; ваши указания «как» и&nbsp;«не&nbsp;как» работать. <strong>project</strong>&nbsp;&mdash; контекст текущих инициатив (дедлайны, причины). <strong>reference</strong>&nbsp;&mdash; «где искать» (Linear, Slack, дашборды).</p>
+                        <p lang="en"><strong>user</strong> — about you, role, experience, preferences. <strong>feedback</strong> — your guidance on how / how-not to work. <strong>project</strong> — context of current initiatives (deadlines, reasons). <strong>reference</strong> — “where to look” (Linear, Slack, dashboards).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое multi-file edit и&nbsp;чем он&nbsp;лучше «по&nbsp;файлу за&nbsp;раз»?</span><span lang="en">What is a multi-file edit and why is it better than “one file at a time”?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Изменения в&nbsp;нескольких файлах одной просьбой. Claude видит все связи и&nbsp;обновляет согласованно&nbsp;&mdash; не&nbsp;забывает какой-то файл. Можно потребовать «покажи план перед применением». Откат тоже проще: «верни всё, что только что изменил».</p>
+                        <p lang="en">Changes across several files in one request. Claude sees all the links and updates consistently — won’t forget a file. You can demand “show the plan before applying.” Rollback is also easier: “undo everything you just changed.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Чему равен реализованный P&amp;L, если я&nbsp;купил 10&nbsp;акций по&nbsp;100&nbsp;и&nbsp;продал их&nbsp;по&nbsp;120, а&nbsp;ещё 5&nbsp;по&nbsp;120 у&nbsp;меня всё ещё в&nbsp;портфеле?</span><span lang="en">What is the realised P&amp;L if I bought 10 shares at 100 and sold them at 120, while another 5 at 120 are still in my portfolio?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Реализованный P&amp;L = (120 − 100) × 10 = <strong>200</strong>. Только закрытые сделки. Открытые 5&nbsp;акций по&nbsp;120 в&nbsp;P&amp;L не&nbsp;идут&nbsp;&mdash; они «нереализованные».</p>
+                        <p lang="en">Realised P&amp;L = (120 − 100) × 10 = <strong>200</strong>. Closed trades only. The open 5 shares at 120 do not enter realised P&amp;L — they’re “unrealised.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Как проверить, что ваш <code>CLAUDE.md</code> «достаточен»&nbsp;&mdash; то&nbsp;есть Claude точно понимает проект?</span><span lang="en">How do you verify that your <code>CLAUDE.md</code> is “enough” — i.e. Claude really understands the project?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Закрыть Claude (<code>/exit</code>), открыть свежую сессию в&nbsp;той&nbsp;же папке, попросить: <em>«опиши проект в&nbsp;трёх предложениях»</em>. Если описание точное и&nbsp;конкретное&nbsp;&mdash; <code>CLAUDE.md</code> хорош. Если размыто или Claude задаёт уточняющие вопросы&nbsp;&mdash; добавьте в&nbsp;<code>CLAUDE.md</code> то, что не&nbsp;хватало.</p>
+                        <p lang="en">Exit Claude (<code>/exit</code>), open a fresh session in the same folder, ask: <em>“describe the project in three sentences.”</em> If the description is precise and concrete — <code>CLAUDE.md</code> is good. If vague, or Claude asks clarifying questions — add what was missing.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Отметьте уверенно освоенное. Сомневаетесь&nbsp;&mdash; вернитесь к&nbsp;соответствующей теме. Этап готов закрыть, когда все галочки стоят.</p>
+        <p class="reading" lang="en">Tick what you have nailed. Unsure — return to the relevant topic. Ready to close when all ticks are up.</p>
+
+        <ul class="checklist">
+            <li data-key="e2-claudemd">
+                <span lang="ru">Пишу <code>CLAUDE.md</code> для&nbsp;нового проекта&nbsp;&mdash; стек, данные, стиль, правила.</span>
+                <span lang="en">I write <code>CLAUDE.md</code> for a new project — stack, data, style, rules.</span>
+            </li>
+            <li data-key="e2-mention">
+                <span lang="ru">Использую <code>@</code>-ссылки, чтобы указать на&nbsp;конкретные файлы.</span>
+                <span lang="en">I use <code>@</code>-mentions to point at specific files.</span>
+            </li>
+            <li data-key="e2-memory">
+                <span lang="ru">Знаю, что такое auto-memory и&nbsp;четыре типа записей; могу попросить «запомни» / «забудь».</span>
+                <span lang="en">I know auto-memory and the four record types; I can ask “remember” / “forget.”</span>
+            </li>
+            <li data-key="e2-multifile">
+                <span lang="ru">Делаю multi-file edits одной просьбой с&nbsp;«покажи план перед применением».</span>
+                <span lang="en">I do multi-file edits in one request with “show the plan first.”</span>
+            </li>
+            <li data-key="e2-readproj">
+                <span lang="ru">Прошу Claude «расскажи, что тут происходит» в&nbsp;незнакомом проекте.</span>
+                <span lang="en">I ask Claude “tell me what’s going on here” for an unfamiliar project.</span>
+            </li>
+            <li data-key="e2-csvflow">
+                <span lang="ru">Делаю проект из&nbsp;нескольких файлов с&nbsp;CSV-данными и&nbsp;графиками.</span>
+                <span lang="en">I build a multi-file project with CSV data and charts.</span>
+            </li>
+            <li data-key="e2-delivery">
+                <span lang="ru">Сделал четыре проекта: дневник операций, дашборд портфеля, журнал пассивного дохода, P&amp;L по&nbsp;закрытым сделкам.</span>
+                <span lang="en">I built four projects: operations journal, portfolio dashboard, passive-income journal, closed-trades P&amp;L.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-02" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-01.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">01 · Промпт-инжиниринг для Claude Code</span><span lang="en">01 · Prompt Engineering</span></span>
+            </a>
+            <a class="next" href="etap-03.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">03 · Web, MCP и&nbsp;готовые Skills</span><span lang="en">03 · Web, MCP &amp; Ready-Made Skills</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Хороший проект&nbsp;&mdash; тот, к&nbsp;которому Claude может вернуться через месяц и&nbsp;не&nbsp;спросить, что тут происходит».</p>
+            <p class="signature" lang="en">“A good project is one Claude can return to a month later without asking what is going on.”</p>
+            <p lang="ru">Этап&nbsp;02 пройден&nbsp;&mdash; Claude теперь знает ваш проект. Дальше&nbsp;&mdash; учим его ходить в&nbsp;интернет и&nbsp;использовать готовые skills для&nbsp;живых данных и&nbsp;дизайна.</p>
+            <p lang="en">Etape 02 done — Claude now knows your project. Next — we teach it to reach the internet and use ready-made skills for live data and design.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-01.html"><span lang="ru">← Этап&nbsp;01</span><span lang="en">← Etape 01</span></a></li>
+                <li><a href="etap-03.html"><span lang="ru">→ Этап&nbsp;03</span><span lang="en">→ Etape 03</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

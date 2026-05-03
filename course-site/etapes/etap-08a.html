@@ -1,0 +1,1264 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 08a · Кастомизация Claude Code — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 08a курса по Claude Code: свои skills, slash-команды, hooks, output styles, settings.json. Skill «персональный CFO» и slash-команда /прогноз.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="08">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 08a</span><span lang="en">Etape 08a</span></span> &nbsp;·&nbsp; <span lang="ru">Кастомизация: Skills, Slash, Hooks, Output Styles</span><span lang="en">Customisation: Skills, Slash, Hooks, Output Styles</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Claude Code, заточенный <em>под вас</em>.</span>
+            <span lang="en">Claude Code shaped <em>to you</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            До&nbsp;этого мы&nbsp;ставили чужие skills и&nbsp;MCP. Сегодня делаем <em>свои</em>: skill «персональный CFO», который по&nbsp;одной команде приносит финансовый отчёт; slash-команду <code>/прогноз</code>; hook, считающий рабочее время; и&nbsp;настраиваем поведение Claude через <code>settings.json</code> и&nbsp;output styles.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Until now we installed others’ skills and MCPs. Today we build <em>our own</em>: a “personal CFO” skill that returns a monthly finance report on one command; a <code>/forecast</code> slash command; a hook tracking work hours; and we tune Claude’s behaviour via <code>settings.json</code> and output styles.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">7–9 дней · 2–4&nbsp;ч/день</span><span lang="en">7–9 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">свои skills · slash-команды · hooks · output styles · settings.json</span><span lang="en">custom skills · slash commands · hooks · output styles · settings.json</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">Claude Code превращается в&nbsp;<em>ваш</em> инструмент</span><span lang="en">Claude Code becomes <em>yours</em></span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">skill «персональный CFO», команда <code>/прогноз</code>, hook рабочего времени, свой output&nbsp;style</span><span lang="en">a “personal CFO” skill, a <code>/forecast</code> command, a worktime hook, a custom output style</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что устанавливаем перед началом</span><span lang="en">What to install before you start</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Большинство фич этапа встроены. Один skill полезен для&nbsp;дисциплины написания собственных skills, ещё один&nbsp;&mdash; для&nbsp;настройки клавиатуры. Оба опциональны.</p>
+        <p class="reading" lang="en">Most of this etape’s features are built in. One skill helps with skill-writing discipline, another with keyboard setup. Both optional.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3><span lang="ru">Из этапов 00–07</span><span lang="en">From etapes 00–07</span></h3>
+            <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Claude Code, MCP <code>@playwright/mcp</code> и&nbsp;<code>@upstash/context7-mcp</code>;</li>
+                <li>пакет skills <code>superpowers</code> (для&nbsp;skill-creator и&nbsp;hook-development);</li>
+                <li>проект <code>portfolio-journal</code> или личный инвест-кабинет&nbsp;&mdash; используем как «реальные данные» для&nbsp;своего skill.</li>
+            </ul>
+            <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Claude Code, MCP <code>@playwright/mcp</code> and <code>@upstash/context7-mcp</code>;</li>
+                <li>the <code>superpowers</code> skills package (for skill-creator and hook-development);</li>
+                <li>the <code>portfolio-journal</code> project or your investment office — used as “real data” for the custom skill.</li>
+            </ul>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3>skill-creator</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill, который учит Claude правильно <em>создавать другие skills</em>: какую структуру файлов делать, как писать описание (для&nbsp;authentic триггеринга), как организовать ссылки на&nbsp;дополнительные ресурсы (progressive disclosure).<br>
+            <strong>Зачем сейчас:</strong> для&nbsp;первого проекта (skill «персональный&nbsp;CFO»). Без&nbsp;skill-creator Claude может сделать рабочий, но&nbsp;не&nbsp;«самозапускающийся» skill&nbsp;&mdash; пользователю придётся вспоминать, как его звать.<br>
+            <strong>Где взять:</strong> <a href="https://smithery.ai/skills/anthropics/skill-creator">smithery.ai/skills/anthropics/skill-creator</a></p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude to <em>create other skills</em>: which file layout to use, how to write the description (for authentic triggering), how to organise references to extra resources (progressive disclosure).<br>
+            <strong>Why now:</strong> for the first project (the “personal CFO” skill). Without skill-creator, Claude may build a working skill that doesn’t self-trigger — the user has to recall its name.<br>
+            <strong>Where:</strong> <a href="https://smithery.ai/skills/anthropics/skill-creator">smithery.ai/skills/anthropics/skill-creator</a></p>
+            <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest skill add anthropics/skill-creator --agent claude-code</pre>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">встроено · skill</span><span lang="en">built-in · skill</span></span>
+            <h3>update-config</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill для&nbsp;управления настройками Claude Code через <code>settings.json</code>. Учит Claude добавлять разрешения, переменные окружения, hooks без&nbsp;ручной правки JSON.<br>
+            <strong>Зачем сейчас:</strong> когда настраиваете hooks или output styles, проще сказать Claude «добавь hook на&nbsp;PreToolUse для&nbsp;Bash», чем редактировать конфиг руками.<br>
+            <strong>Устанавливать не&nbsp;нужно:</strong> встроен в&nbsp;Claude Code (как <code>claude-api</code> в&nbsp;этапе&nbsp;06). Проверка&nbsp;&mdash; <code>/skills</code>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that manages Claude Code settings via <code>settings.json</code>. Teaches Claude to add permissions, env vars, hooks without manual JSON editing.<br>
+            <strong>Why now:</strong> when you tune hooks or output styles, it’s easier to say “add a PreToolUse hook for Bash” than to edit the config by hand.<br>
+            <strong>No install needed:</strong> built into Claude Code (like <code>claude-api</code> on etape 06). Verify with <code>/skills</code>.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">встроено · skill</span><span lang="en">built-in · skill</span></span>
+            <h3>keybindings-help</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill для&nbsp;настройки клавиатурных сокращений в&nbsp;Claude Code (через <code>~/.claude/keybindings.json</code>).<br>
+            <strong>Зачем сейчас:</strong> на&nbsp;этапе тренируется привычка «своё&nbsp;&mdash; быстрее»: свои сокращения для&nbsp;частых действий ускоряют работу.<br>
+            <strong>Устанавливать не&nbsp;нужно:</strong> встроен в&nbsp;Claude Code, как <code>update-config</code>. Проверка&nbsp;&mdash; <code>/skills</code>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill for tuning Claude Code keyboard shortcuts (via <code>~/.claude/keybindings.json</code>).<br>
+            <strong>Why now:</strong> the etape trains the “your own = faster” habit: custom shortcuts for frequent actions speed you up.<br>
+            <strong>No install needed:</strong> built into Claude Code, like <code>update-config</code>. Verify with <code>/skills</code>.</p>
+        </div>
+
+        <div class="note" style="margin-top:1.5rem;">
+            <span lang="ru"><strong>Slash-команды и&nbsp;hooks</strong> ставить не&nbsp;нужно&nbsp;&mdash; они просто файлы в&nbsp;<code>.claude/commands/</code> и&nbsp;<code>.claude/hooks/</code> вашего проекта (или в&nbsp;<code>~/.claude/</code> для&nbsp;глобальных). Claude сам всё создаст.</span>
+            <span lang="en"><strong>Slash commands and hooks</strong> need no install — they’re just files in your project’s <code>.claude/commands/</code> and <code>.claude/hooks/</code> (or <code>~/.claude/</code> for global). Claude creates everything for you.</span>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Четыре способа сделать Claude Code «вашим»</span><span lang="en">Four ways to make Claude Code “yours”</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Свои skills: рабочая инструкция, которую Claude сам подхватит</span><span lang="en">Custom skills: a working instruction Claude picks up itself</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>До&nbsp;этого мы&nbsp;ставили чужие skills через Smithery. Они живут в&nbsp;<code>~/.claude/skills/</code> или в&nbsp;<code>.claude/skills/</code> внутри проекта. Свой skill&nbsp;&mdash; это <em>такая&nbsp;же папка</em>, только сделанная вами.</p>
+                    <p>Минимальная структура skill:</p>
+                    <pre class="shell">.claude/skills/personal-cfo/
+├── SKILL.md           # главный файл с описанием и логикой
+├── scripts/           # вспомогательные скрипты (опционально)
+│   └── compute_kpi.py
+├── templates/         # шаблоны (опционально)
+│   └── monthly-report.md
+└── references/        # доп. знания (опционально)
+    └── tax-rates.md</pre>
+                    <p>Главный файл&nbsp;&mdash; <code>SKILL.md</code>. У&nbsp;него фронтматтер с&nbsp;двумя обязательными полями:</p>
+                    <pre class="shell">---
+name: personal-cfo
+description: Используется, когда пользователь просит финансовый отчёт.
+  Например: "сделай отчёт за апрель", "посчитай savings rate",
+  "сравни траты с прошлым кварталом". Анализирует
+  data/operations.csv и выдаёт markdown-отчёт.
+---
+
+# Personal CFO
+
+## Когда использовать
+- запрос финансового отчёта за период;
+- ...
+
+## Структура отчёта
+...</pre>
+                    <p><strong>Главное про&nbsp;<code>description</code></strong>: это «триггер» skill. Claude читает description и&nbsp;<em>сам решает</em>, когда применить skill, без&nbsp;явной команды от&nbsp;вас. Чем точнее description (примеры формулировок, ключевые слова, контексты)&nbsp;&mdash; тем лучше срабатывает.</p>
+                    <p>Skill <code>skill-creator</code> учит Claude писать description правильно. Без&nbsp;него вы&nbsp;получите skill, который придётся вызывать словами «используй skill personal-cfo». С&nbsp;ним&nbsp;&mdash; «сделай отчёт за&nbsp;апрель», и&nbsp;Claude сам подхватит skill.</p>
+                </div>
+                <div lang="en">
+                    <p>So far we installed others’ skills via Smithery. They live in <code>~/.claude/skills/</code> or <code>.claude/skills/</code> inside a project. A custom skill is the <em>same kind of folder</em>, made by you.</p>
+                    <p>Minimal skill layout:</p>
+                    <pre class="shell">.claude/skills/personal-cfo/
+├── SKILL.md           # main description + logic
+├── scripts/           # helper scripts (optional)
+│   └── compute_kpi.py
+├── templates/         # templates (optional)
+│   └── monthly-report.md
+└── references/        # extra knowledge (optional)
+    └── tax-rates.md</pre>
+                    <p>The main file is <code>SKILL.md</code>. Its front matter has two required fields:</p>
+                    <pre class="shell">---
+name: personal-cfo
+description: Use when the user asks for a financial report.
+  Examples: "build me an april report", "compute savings rate",
+  "compare spend to last quarter". Reads
+  data/operations.csv and returns a markdown report.
+---
+
+# Personal CFO
+
+## When to use
+- a financial report for a period;
+- ...
+
+## Report structure
+...</pre>
+                    <p><strong>Key thing about <code>description</code></strong>: it’s the skill’s trigger. Claude reads it and <em>decides on its own</em> when to apply the skill, no explicit command from you. The sharper the description (sample phrasings, keywords, contexts) — the better it triggers.</p>
+                    <p>The <code>skill-creator</code> skill teaches Claude to write descriptions right. Without it you get a skill you must summon by name (“use skill personal-cfo”). With it — “build me an April report,” and Claude pulls the skill itself.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="команды вида /cfo, /прогноз, /отчёт — пользовательские шорткаты, которые вы пишете себе сами. Хранятся в .claude/commands/ как .md-файлы.">Slash-команды</dfn>: шорткаты для&nbsp;частых задач</span><span lang="en"><dfn class="term" tabindex="0" data-def="commands like /cfo, /forecast, /report — user shortcuts you write yourself. Stored in .claude/commands/ as .md files.">Slash commands</dfn>: shortcuts for frequent tasks</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Slash-команды&nbsp;&mdash; это просто файлы в&nbsp;<code>.claude/commands/</code> (для&nbsp;проекта) или <code>~/.claude/commands/</code> (глобально). Один файл&nbsp;&mdash; одна команда.</p>
+                    <p>Файл <code>.claude/commands/прогноз.md</code>:</p>
+                    <pre class="shell">---
+description: Прогноз сбережений с тремя сценариями
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - WebFetch
+---
+
+Сделай прогноз сбережений за период из аргументов.
+
+Аргументы: $ARGUMENTS
+
+Шаги:
+1. Прочитай data/operations.csv;
+2. Вычисли текущий капитал и месячный денежный поток;
+3. Проиграй три сценария (consrv 5%, real 8%, agg 12%);
+4. Запиши результат в reports/forecast-$(date +%Y-%m-%d).md;
+5. Открой через playwright и сделай скриншот.</pre>
+                    <p>После этого в&nbsp;диалоге работает <code>/прогноз 30 лет</code>&nbsp;&mdash; Claude применит инструкцию из&nbsp;файла, подставив <code>30 лет</code> вместо <code>$ARGUMENTS</code>.</p>
+                    <p>Что важно:</p>
+                    <ul>
+                        <li><strong>Slash-команда&nbsp;&mdash; это не&nbsp;skill.</strong> Команда выполняется только когда вы&nbsp;её&nbsp;вызвали (<code>/прогноз</code>). Skill вызывается <em>автоматически</em> по&nbsp;triggers в&nbsp;description.</li>
+                        <li><strong>Slash-команды для&nbsp;проектных рутин</strong> кладут в&nbsp;<code>.claude/commands/</code> и&nbsp;коммитят в&nbsp;git. Команды для&nbsp;всех ваших проектов&nbsp;&mdash; в&nbsp;<code>~/.claude/commands/</code>.</li>
+                        <li><strong>allowed-tools</strong>&nbsp;&mdash; список инструментов, которыми команда может пользоваться. Полезно для&nbsp;безопасности: команда «отчёт» не&nbsp;должна иметь право удалять файлы.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>Slash commands are just files in <code>.claude/commands/</code> (project) or <code>~/.claude/commands/</code> (global). One file — one command.</p>
+                    <p>File <code>.claude/commands/forecast.md</code>:</p>
+                    <pre class="shell">---
+description: Three-scenario savings forecast
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - WebFetch
+---
+
+Build a savings forecast for the period from arguments.
+
+Arguments: $ARGUMENTS
+
+Steps:
+1. Read data/operations.csv;
+2. Compute current capital and monthly cash flow;
+3. Play three scenarios (consrv 5%, real 8%, agg 12%);
+4. Write the result to reports/forecast-$(date +%Y-%m-%d).md;
+5. Open via playwright and screenshot.</pre>
+                    <p>Now <code>/forecast 30 years</code> in the dialogue triggers the file, substituting <code>30 years</code> for <code>$ARGUMENTS</code>.</p>
+                    <p>What matters:</p>
+                    <ul>
+                        <li><strong>A slash command is not a skill.</strong> A command runs only when you call it (<code>/forecast</code>). A skill triggers <em>automatically</em> by description.</li>
+                        <li><strong>Project-wide commands</strong> live in <code>.claude/commands/</code>, committed to git. Commands across all projects — in <code>~/.claude/commands/</code>.</li>
+                        <li><strong>allowed-tools</strong> — the list of tools the command may use. Useful for safety: a “report” command should not be allowed to delete files.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="hook — автоматическое действие, привязанное к событию: перед запуском инструмента (PreToolUse), после (PostToolUse), при остановке (Stop) и т.д. Настраивается в settings.json.">Hooks</dfn>: автоматические действия в&nbsp;ответ на&nbsp;события</span><span lang="en"><dfn class="term" tabindex="0" data-def="a hook — an automatic action tied to an event: before a tool runs (PreToolUse), after (PostToolUse), on stop (Stop), etc. Configured in settings.json.">Hooks</dfn>: automatic actions on events</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Hook&nbsp;&mdash; это команда (или скрипт), которую Claude Code запускает автоматически в&nbsp;ответ на&nbsp;определённое событие. Настраивается в&nbsp;<code>~/.claude/settings.json</code> (глобально) или <code>.claude/settings.json</code> (проектно).</p>
+                    <p>Главные события:</p>
+                    <ul>
+                        <li><strong>PreToolUse</strong>&nbsp;&mdash; перед использованием инструмента (Bash, Edit, Write, и&nbsp;т.&nbsp;д.). Можно <em>заблокировать</em> опасную команду до&nbsp;её&nbsp;запуска.</li>
+                        <li><strong>PostToolUse</strong>&nbsp;&mdash; после использования. Удобно для&nbsp;логирования.</li>
+                        <li><strong>Stop</strong>&nbsp;&mdash; когда Claude закончил отвечать. Можно показать уведомление или открыть результат.</li>
+                        <li><strong>SessionStart</strong>&nbsp;&mdash; при старте сессии. Можно прогреть контекст полезной информацией.</li>
+                        <li><strong>SessionEnd</strong>&nbsp;&mdash; при выходе. Хорошее место для&nbsp;ведения timesheet.</li>
+                        <li><strong>UserPromptSubmit</strong>&nbsp;&mdash; перед обработкой вашего сообщения. Можно перехватить или дополнить контекст.</li>
+                        <li><strong>PreCompact</strong>&nbsp;&mdash; перед <code>/compact</code>. Можно сохранить состояние.</li>
+                    </ul>
+                    <p>Простой hook&nbsp;&mdash; «лог запуска любой Bash-команды»:</p>
+                    <pre class="shell">{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"$(date +%Y-%m-%d_%H:%M) bash\" &gt;&gt; ~/.claude/bash.log"
+          }
+        ]
+      }
+    ]
+  }
+}</pre>
+                    <p>Более полезный hook&nbsp;&mdash; «защита от&nbsp;утечки секретов»: перед каждым <code>git commit</code> сканировать staged-файлы на&nbsp;ключи, и&nbsp;если есть&nbsp;&mdash; блокировать.</p>
+                    <p>Главное правило: <strong>hooks выполняются автоматически</strong>. Если поставите hook, который занимает 5&nbsp;секунд&nbsp;&mdash; каждый запуск Bash будет тормозить на&nbsp;5&nbsp;секунд. Делайте hooks быстрыми.</p>
+                </div>
+                <div lang="en">
+                    <p>A hook is a command (or script) Claude Code runs automatically on a specific event. Configured in <code>~/.claude/settings.json</code> (global) or <code>.claude/settings.json</code> (project).</p>
+                    <p>Main events:</p>
+                    <ul>
+                        <li><strong>PreToolUse</strong> — before a tool (Bash, Edit, Write, etc.). You can <em>block</em> a dangerous command before it runs.</li>
+                        <li><strong>PostToolUse</strong> — after the tool. Handy for logging.</li>
+                        <li><strong>Stop</strong> — when Claude finished answering. Show a notification, open the result.</li>
+                        <li><strong>SessionStart</strong> — at session start. Pre-warm context with useful info.</li>
+                        <li><strong>SessionEnd</strong> — on exit. Good for timesheets.</li>
+                        <li><strong>UserPromptSubmit</strong> — before your message is processed. Can intercept or augment context.</li>
+                        <li><strong>PreCompact</strong> — before <code>/compact</code>. Save state.</li>
+                    </ul>
+                    <p>A simple hook — “log every Bash run”:</p>
+                    <pre class="shell">{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"$(date +%Y-%m-%d_%H:%M) bash\" &gt;&gt; ~/.claude/bash.log"
+          }
+        ]
+      }
+    ]
+  }
+}</pre>
+                    <p>A more useful hook — “secret leak guard”: before every <code>git commit</code> scan staged files for keys, block if any.</p>
+                    <p>Key rule: <strong>hooks run automatically</strong>. A 5-second hook turns every Bash into a 5-second wait. Keep hooks fast.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="output style — режим, который меняет тон и структуру ответов Claude. Встроенные: default, explanatory (с пояснениями), learning (учебный). Можно сделать свой.">Output styles</dfn>: меняем «голос» Claude</span><span lang="en"><dfn class="term" tabindex="0" data-def="output style — a mode that changes the tone and structure of Claude’s answers. Built-in: default, explanatory (with explanations), learning. You can make your own.">Output styles</dfn>: changing Claude’s “voice”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Claude Code умеет переключаться между «стилями ответа». Встроенные:</p>
+                    <ul>
+                        <li><strong>default</strong>&nbsp;&mdash; обычный, лаконичный. Делает задачу, без&nbsp;лишних объяснений.</li>
+                        <li><strong>explanatory</strong>&nbsp;&mdash; с&nbsp;вставками «★&nbsp;Insight» по&nbsp;ходу&nbsp;&mdash; объясняет важные решения и&nbsp;нюансы кода. Для&nbsp;учёбы.</li>
+                        <li><strong>learning</strong>&nbsp;&mdash; ещё медленнее: задаёт вам вопросы, оставляет места «доделать самому», помогает учиться через практику.</li>
+                    </ul>
+                    <p>Переключаются через <code>/output-style</code>.</p>
+                    <p>Можно сделать <strong>свой</strong> output style. Файл <code>~/.claude/output-styles/cfo.md</code>:</p>
+                    <pre class="shell">---
+name: cfo
+description: Финансовый консультант. Сухо, по фактам, с цифрами и %.
+---
+
+Отвечай как финансовый консультант:
+- максимум фактов и цифр, минимум размышлений;
+- каждая цифра с единицей и периодом;
+- никогда не говори «возможно» — либо есть данные, либо нет;
+- в конце короткая «итоговая рекомендация» в одно предложение.</pre>
+                    <p>После создания файла&nbsp;&mdash; <code>/output-style cfo</code>, и&nbsp;все ваши финансовые сессии идут в&nbsp;этом тоне.</p>
+                    <p>Полезно иметь стили под&nbsp;разные задачи: <code>cfo</code> для&nbsp;финансов, <code>tutor</code> для&nbsp;учёбы (с&nbsp;вопросами), <code>terse</code> для&nbsp;быстрых правок.</p>
+                </div>
+                <div lang="en">
+                    <p>Claude Code can switch between “answer styles.” Built-ins:</p>
+                    <ul>
+                        <li><strong>default</strong> — normal, terse. Does the task, no extras.</li>
+                        <li><strong>explanatory</strong> — with “★ Insight” inserts — explains key decisions and code nuances. For learning.</li>
+                        <li><strong>learning</strong> — slower: asks you questions, leaves “fill it in yourself” spots, helps learn by doing.</li>
+                    </ul>
+                    <p>Switch with <code>/output-style</code>.</p>
+                    <p>You can make a <strong>custom</strong> output style. File <code>~/.claude/output-styles/cfo.md</code>:</p>
+                    <pre class="shell">---
+name: cfo
+description: Financial advisor. Dry, fact-driven, numbers + %.
+---
+
+Reply as a financial advisor:
+- max facts and figures, min musing;
+- every number with units and period;
+- never say "maybe" — either you have data or you don't;
+- end with one-sentence "final recommendation".</pre>
+                    <p>After the file lands — <code>/output-style cfo</code>, and all your finance sessions adopt that tone.</p>
+                    <p>Handy to keep styles per task: <code>cfo</code> for finance, <code>tutor</code> for learning (with questions), <code>terse</code> for quick edits.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><code>settings.json</code>: «панель управления» Claude Code</span><span lang="en"><code>settings.json</code>: Claude Code’s “control panel”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Файл <code>~/.claude/settings.json</code>&nbsp;&mdash; центральная конфигурация. Сюда идут:</p>
+                    <ul>
+                        <li><strong>permissions</strong>&nbsp;&mdash; что разрешено без&nbsp;спроса (например, <code>Bash(npm install:*)</code> для&nbsp;npm-команд);</li>
+                        <li><strong>env</strong>&nbsp;&mdash; переменные окружения, видимые Claude (полезно для&nbsp;ANTHROPIC_API_KEY и&nbsp;т.&nbsp;п.);</li>
+                        <li><strong>hooks</strong>&nbsp;&mdash; описанные выше;</li>
+                        <li><strong>statusLine</strong>&nbsp;&mdash; что показывать в&nbsp;нижней строке Claude Code (модель, рабочую папку, токены);</li>
+                        <li><strong>plugins</strong>&nbsp;&mdash; установленные плагины (этап&nbsp;09).</li>
+                    </ul>
+                    <p>Уровни:</p>
+                    <ul>
+                        <li><code>~/.claude/settings.json</code>&nbsp;&mdash; глобально, во&nbsp;всех ваших проектах;</li>
+                        <li><code>.claude/settings.json</code> в&nbsp;корне проекта&nbsp;&mdash; настройки именно этого проекта (приоритетнее глобальных);</li>
+                        <li><code>.claude/settings.local.json</code>&nbsp;&mdash; ваши личные настройки этого проекта (НЕ&nbsp;коммитятся в&nbsp;git, обычно в&nbsp;<code>.gitignore</code>).</li>
+                    </ul>
+                    <p>Хорошая практика: общие настройки команды&nbsp;&mdash; в&nbsp;<code>.claude/settings.json</code> (коммитятся), личные&nbsp;&mdash; в&nbsp;<code>.claude/settings.local.json</code> (нет).</p>
+                </div>
+                <div lang="en">
+                    <p>The <code>~/.claude/settings.json</code> file is the central config. It holds:</p>
+                    <ul>
+                        <li><strong>permissions</strong> — what’s allowed without asking (e.g. <code>Bash(npm install:*)</code> for npm commands);</li>
+                        <li><strong>env</strong> — environment variables Claude sees (handy for ANTHROPIC_API_KEY etc.);</li>
+                        <li><strong>hooks</strong> — covered above;</li>
+                        <li><strong>statusLine</strong> — what shows on Claude Code’s bottom bar (model, working directory, tokens);</li>
+                        <li><strong>plugins</strong> — installed plugins (etape 09).</li>
+                    </ul>
+                    <p>Levels:</p>
+                    <ul>
+                        <li><code>~/.claude/settings.json</code> — global, all your projects;</li>
+                        <li><code>.claude/settings.json</code> at project root — this project only (overrides global);</li>
+                        <li><code>.claude/settings.local.json</code> — your personal settings for this project (NOT committed, typically in <code>.gitignore</code>).</li>
+                    </ul>
+                    <p>Good practice: team-shared settings in <code>.claude/settings.json</code> (committed), personal in <code>.claude/settings.local.json</code> (not).</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Status line, keybindings и&nbsp;другие тонкие настройки</span><span lang="en">Status line, keybindings and other fine settings</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong>Status line</strong>&nbsp;&mdash; нижняя строка интерфейса. По&nbsp;умолчанию там показано базовое. Можно сделать свою&nbsp;&mdash; например, отображать использованные токены, время сессии, текущую ветку git. Настраивается в&nbsp;<code>statusLine</code>-блоке <code>settings.json</code>.</p>
+                    <p><strong>Keybindings</strong>&nbsp;&mdash; клавиатурные сокращения. Например, чтобы <code>Ctrl+L</code> делал <code>/clear</code>, или <code>Ctrl+P</code> вызывал ваш <code>/прогноз</code>. Настраиваются в&nbsp;<code>~/.claude/keybindings.json</code>. Skill <code>keybindings-help</code> поможет составить.</p>
+                    <p><strong>Memory</strong>&nbsp;&mdash; auto-memory из&nbsp;этапа&nbsp;02. Можно явно указать в&nbsp;<code>settings.json</code>, какие типы записей использовать, какие игнорировать. Полезно, если хотите более «приватный» режим.</p>
+                    <p><strong>Permissions</strong>&nbsp;&mdash; ваш «список белого». Чем больше операций разрешено без&nbsp;спроса, тем быстрее работа, но&nbsp;тем выше риск. Хороший компромисс: <em>разрешить чтение всего и&nbsp;запись в&nbsp;текущую папку, но&nbsp;запросить разрешение на&nbsp;удаление, push и&nbsp;деплой</em>.</p>
+                    <pre class="shell">{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit",
+      "Write",
+      "Bash(npm:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(rm:*)"
+    ]
+  }
+}</pre>
+                </div>
+                <div lang="en">
+                    <p><strong>Status line</strong> — the bottom strip of the UI. Default shows the basics. You can customise: tokens used, session time, current git branch. Configured in the <code>statusLine</code> block of <code>settings.json</code>.</p>
+                    <p><strong>Keybindings</strong> — keyboard shortcuts. E.g., <code>Ctrl+L</code> for <code>/clear</code>, or <code>Ctrl+P</code> for your <code>/forecast</code>. Configured in <code>~/.claude/keybindings.json</code>. The <code>keybindings-help</code> skill helps draft them.</p>
+                    <p><strong>Memory</strong> — auto-memory from etape 02. You can explicitly set in <code>settings.json</code> which record types to use or ignore. Useful for a more “private” mode.</p>
+                    <p><strong>Permissions</strong> — your “allow list.” More operations allowed without asking — faster work, higher risk. A good compromise: <em>allow reading everything and writing to the current folder, but ask before delete, push, deploy</em>.</p>
+                    <pre class="shell">{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit",
+      "Write",
+      "Bash(npm:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(rm:*)"
+    ]
+  }
+}</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Что выбрать: skill, slash-команда, hook или style?</span><span lang="en">Which to pick: skill, slash command, hook or style?</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Четыре способа кастомизации легко перепутать. Простое правило выбора:</p>
+                    <table style="width:100%; margin: 1rem 0; border-collapse: collapse;">
+                        <thead style="border-bottom: 2px solid var(--rule);">
+                            <tr><th style="text-align:left; padding: 0.4rem 0;">Когда</th><th style="text-align:left;">Что использовать</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Хочу, чтобы Claude <em>сам</em> понимал, когда делать&nbsp;X</td><td><strong>Skill</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Хочу нажать <code>/X</code> и&nbsp;получить результат</td><td><strong>Slash-команда</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Хочу, чтобы X происходил автоматически перед/после события</td><td><strong>Hook</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Хочу поменять <em>тон</em> ответов Claude</td><td><strong>Output style</strong></td></tr>
+                            <tr><td style="padding: 0.4rem 0;">Хочу разрешить или запретить инструмент глобально</td><td><strong>settings.json</strong></td></tr>
+                        </tbody>
+                    </table>
+                    <p>Один проект может использовать всё одновременно: skill для&nbsp;финансовой аналитики, slash-команды для&nbsp;частых задач, hooks для&nbsp;безопасности и&nbsp;логирования, свой output style для&nbsp;тона ответов.</p>
+                </div>
+                <div lang="en">
+                    <p>Four customisation paths are easy to mix up. A simple rule:</p>
+                    <table style="width:100%; margin: 1rem 0; border-collapse: collapse;">
+                        <thead style="border-bottom: 2px solid var(--rule);">
+                            <tr><th style="text-align:left; padding: 0.4rem 0;">When</th><th style="text-align:left;">Use</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">I want Claude to <em>know on its own</em> when to do X</td><td><strong>Skill</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">I want to press <code>/X</code> and get a result</td><td><strong>Slash command</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">I want X to happen automatically before/after an event</td><td><strong>Hook</strong></td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">I want to change the <em>tone</em> of Claude’s replies</td><td><strong>Output style</strong></td></tr>
+                            <tr><td style="padding: 0.4rem 0;">I want to allow or block a tool globally</td><td><strong>settings.json</strong></td></tr>
+                        </tbody>
+                    </table>
+                    <p>One project can use all of them: a skill for financial analytics, slash commands for frequent tasks, hooks for safety and logging, a custom output style for tone.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Один skill, одна команда, один hook&nbsp;&mdash; за&nbsp;30 минут</span><span lang="en">One skill, one command, one hook — in 30 minutes</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · «приветствие нового проекта»</span><span lang="en">Run · the “new project welcome”</span></h4>
+            <ol lang="ru">
+                <li>Создайте новую папку <code>customisation-warmup</code>, запустите <code>claude</code>.</li>
+                <li><strong>Свой output style.</strong>
+                    <pre class="shell">&gt; используя skill skill-creator,
+&gt; создай мой первый output style:
+&gt; ~/.claude/output-styles/terse.md
+&gt; стиль: лаконично, факты, без лишних слов,
+&gt; без эмодзи, всегда отвечай в виде маркированного списка.
+&gt; покажи итоговый файл и проверь /output-style.</pre>
+                </li>
+                <li>Переключитесь: <code>/output-style terse</code>. Сравните, как Claude отвечает на&nbsp;ту&nbsp;же фразу до&nbsp;и&nbsp;после.</li>
+                <li><strong>Своя slash-команда.</strong>
+                    <pre class="shell">&gt; создай slash-команду /welcome в .claude/commands/welcome.md.
+&gt; что она делает: показывает структуру текущего проекта,
+&gt; перечисляет последние 5 коммитов (если git), напоминает
+&gt; о CLAUDE.md если он есть. arguments не нужны.
+&gt; allowed-tools: Read, Glob, Bash(git log:*).</pre>
+                </li>
+                <li>Попробуйте: <code>/welcome</code>&nbsp;&mdash; должна появиться структура и&nbsp;последние коммиты.</li>
+                <li><strong>Свой простой hook.</strong>
+                    <pre class="shell">&gt; добавь в ~/.claude/settings.json hook на SessionStart:
+&gt; — выводит текущую дату и время в чат как первое сообщение,
+&gt; — показывает текущую рабочую папку.
+&gt; используй skill update-config.</pre>
+                </li>
+                <li>Перезапустите <code>claude</code>. В&nbsp;начале новой сессии должно появиться сообщение с&nbsp;датой и&nbsp;папкой.</li>
+                <li>Финал&nbsp;&mdash; чек-ин:
+                    <pre class="shell">&gt; покажи мне:
+&gt; — список всех skills (&lt;/skills&gt;),
+&gt; — список slash-команд (/help или /commands),
+&gt; — содержимое моего settings.json.
+&gt; что появилось нового по сравнению с предыдущим этапом?</pre>
+                </li>
+            </ol>
+            <ol lang="en">
+                <li>Create a new <code>customisation-warmup</code> folder, launch <code>claude</code>.</li>
+                <li><strong>Custom output style.</strong>
+                    <pre class="shell">&gt; using the skill-creator skill,
+&gt; create my first output style:
+&gt; ~/.claude/output-styles/terse.md
+&gt; style: concise, facts, no fluff,
+&gt; no emoji, always reply as a bulleted list.
+&gt; show the final file and verify with /output-style.</pre>
+                </li>
+                <li>Switch: <code>/output-style terse</code>. Compare how Claude answers the same prompt before and after.</li>
+                <li><strong>Custom slash command.</strong>
+                    <pre class="shell">&gt; create a /welcome slash command in .claude/commands/welcome.md.
+&gt; what it does: shows the current project structure,
+&gt; lists the last 5 commits (if git), reminds of CLAUDE.md
+&gt; if present. no arguments.
+&gt; allowed-tools: Read, Glob, Bash(git log:*).</pre>
+                </li>
+                <li>Try it: <code>/welcome</code> — structure and last commits should appear.</li>
+                <li><strong>Custom simple hook.</strong>
+                    <pre class="shell">&gt; add a SessionStart hook to ~/.claude/settings.json:
+&gt; — prints the current date+time as the first chat message,
+&gt; — shows the current working folder.
+&gt; use the update-config skill.</pre>
+                </li>
+                <li>Restart <code>claude</code>. A message with date and folder should appear at session start.</li>
+                <li>Final check-in:
+                    <pre class="shell">&gt; show me:
+&gt; — the list of skills (/skills),
+&gt; — the list of slash commands (/help or /commands),
+&gt; — the contents of my settings.json.
+&gt; what's new compared to the previous etape?</pre>
+                </li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>создание простых артефактов всех четырёх типов</strong> (output style, slash, hook, проверка settings.json). Дальше&nbsp;&mdash; настоящие проекты.</p>
+            <p lang="en">What we train: <strong>creating simple artefacts of all four types</strong> (output style, slash, hook, settings.json check). Next — real projects.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Свой инвест-аналитик и&nbsp;<code>/прогноз</code></span><span lang="en">Your own investing analyst and <code>/forecast</code></span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Skill «инвест-аналитик»</span><span lang="en">An “investing analyst” skill</span></h3>
+            <p class="goal" lang="ru">Цель: свой skill, который Claude <em>сам</em> подхватывает на&nbsp;запросы вида «оцени мой портфель», «сделай отчёт за&nbsp;апрель», «как я&nbsp;стою относительно прошлого квартала?». На&nbsp;входе&nbsp;&mdash; ваш <code>portfolio-journal/data/operations.csv</code>, на&nbsp;выходе&nbsp;&mdash; markdown-отчёт по&nbsp;шаблону.</p>
+            <p class="goal" lang="en">Goal: a custom skill Claude <em>auto-triggers</em> on “rate my portfolio,” “build me an April report,” “how am I doing vs last quarter?” Input — your <code>portfolio-journal/data/operations.csv</code>, output — a templated markdown report.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Откройте <code>portfolio-journal</code>. Создайте папку <code>.claude/skills/investing-analyst/</code>.</li>
+                <li>Сделайте spec.md и&nbsp;план через Plan Mode (этап&nbsp;04). Spec должен содержать:
+                    <ul>
+                        <li>триггеры skill (5–7 примеров формулировок);</li>
+                        <li>входы (какие файлы читать через <code>@</code>);</li>
+                        <li>структуру отчёта (KPI-блок, по-тикерные таблицы, P&amp;L реализованный/нереализованный, секторная аллокация, тренд капитала);</li>
+                        <li>что вне scope (без&nbsp;прогнозов, без&nbsp;«оптимистичных» выводов).</li>
+                    </ul>
+                </li>
+                <li>Просите Claude:
+                    <pre class="shell">&gt; используя skill skill-creator, создай SKILL.md
+&gt; для investing-analyst по @spec.md.
+&gt; description должен быть достаточно конкретным,
+&gt; чтобы skill срабатывал на 5-7 типовых формулировок.</pre>
+                </li>
+                <li>Создайте <code>.claude/skills/investing-analyst/templates/monthly-report.md</code>&nbsp;&mdash; шаблон отчёта.</li>
+                <li>Опционально: <code>scripts/compute_kpi.py</code> с&nbsp;функциями подсчёта (текущий капитал, P&amp;L, savings rate). Skill будет вызывать их.</li>
+                <li>Тест-драйв в&nbsp;<em>новой</em> сессии (важно&nbsp;&mdash; чтобы убедиться, что skill подхватывается без&nbsp;явного вызова):
+                    <pre class="shell">&gt; (новый запуск claude в portfolio-journal)
+&gt; сделай отчёт по моему портфелю за апрель.</pre>
+                </li>
+                <li>Если Claude НЕ&nbsp;использовал skill&nbsp;&mdash; description слишком расплывчатый. Доработайте: добавьте больше типовых формулировок, ключевых слов, явных triggers («когда пользователь говорит&nbsp;Y»).</li>
+                <li>Когда skill стабильно срабатывает&nbsp;&mdash; добавьте раздел «red flags» в&nbsp;шаблон отчёта: чтобы Claude всегда искал и&nbsp;явно показывал слабые места портфеля (концентрация, забытые позиции, тренд&nbsp;вниз).</li>
+                <li>Финальный аудит: <em>«запусти параллельно три subagents с&nbsp;скриптом «использовать&nbsp;этот skill на&nbsp;разных запросах: 1)&nbsp;«оцени&nbsp;портфель», 2)&nbsp;«отчёт&nbsp;за&nbsp;квартал», 3)&nbsp;«как стою относительно прошлого года». Каждый возвращает результат. Я&nbsp;посмотрю, в&nbsp;каком из&nbsp;трёх skill сработал лучше всего&nbsp;&mdash; и&nbsp;почему»</em>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Open <code>portfolio-journal</code>. Create <code>.claude/skills/investing-analyst/</code>.</li>
+                <li>Build spec.md and a plan via Plan Mode (etape 04). The spec needs:
+                    <ul>
+                        <li>skill triggers (5–7 sample phrasings);</li>
+                        <li>inputs (which files via <code>@</code>);</li>
+                        <li>report structure (KPI block, per-ticker tables, realised/unrealised P&amp;L, sector allocation, capital trend);</li>
+                        <li>out of scope (no forecasts, no “optimistic” conclusions).</li>
+                    </ul>
+                </li>
+                <li>Ask Claude:
+                    <pre class="shell">&gt; using the skill-creator skill, create SKILL.md
+&gt; for investing-analyst from @spec.md.
+&gt; description must be specific enough so the skill triggers
+&gt; on 5-7 typical phrasings.</pre>
+                </li>
+                <li>Create <code>.claude/skills/investing-analyst/templates/monthly-report.md</code> — the report template.</li>
+                <li>Optional: <code>scripts/compute_kpi.py</code> with calculation functions (current capital, P&amp;L, savings rate). The skill will call them.</li>
+                <li>Test drive in a <em>new</em> session (important — to confirm auto-trigger without explicit call):
+                    <pre class="shell">&gt; (new claude in portfolio-journal)
+&gt; build me an april report on my portfolio.</pre>
+                </li>
+                <li>If Claude did NOT use the skill — the description is too vague. Refine: more sample phrasings, keywords, explicit triggers (“when the user says Y”).</li>
+                <li>When the skill triggers reliably — add a “red flags” section to the report template: Claude should always look for and surface weaknesses (concentration, forgotten positions, downtrends).</li>
+                <li>Final audit: <em>“in parallel run three subagents with the brief ‘use this skill on three queries: 1) rate my portfolio, 2) quarterly report, 3) how am I doing vs last year.’ Each returns its result. I’ll see in which of the three the skill triggered best — and why.”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>создание SKILL.md с&nbsp;качественным description-триггером;</li>
+                <li>прогрессивное раскрытие (templates, scripts, references) для&nbsp;лучших skills;</li>
+                <li>тестирование автоматического запуска в&nbsp;новой сессии;</li>
+                <li>итерация description, чтобы skill стабильно срабатывал.</li>
+            </ul>
+            <ul lang="en">
+                <li>writing a SKILL.md with a strong triggering description;</li>
+                <li>progressive disclosure (templates, scripts, references) for good skills;</li>
+                <li>testing auto-trigger in a fresh session;</li>
+                <li>iterating the description until the skill fires reliably.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Slash-команда <code>/прогноз</code></span><span lang="en">Slash command <code>/forecast</code></span></h3>
+            <p class="goal" lang="ru">Цель: команда, которая принимает горизонт (например, «10&nbsp;лет») и&nbsp;выдаёт трёх-сценарный прогноз сбережений (как в&nbsp;этапе&nbsp;04), сохраняя результат в&nbsp;<code>reports/forecast-YYYY-MM-DD.md</code> и&nbsp;HTML-вариант для&nbsp;браузера.</p>
+            <p class="goal" lang="en">Goal: a command that takes a horizon (e.g. “10 years”) and produces a three-scenario savings forecast (etape 04), saving the result to <code>reports/forecast-YYYY-MM-DD.md</code> plus an HTML for the browser.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>В&nbsp;корне <code>portfolio-journal</code> создайте <code>.claude/commands/прогноз.md</code>.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; составь slash-команду /прогноз:
+&gt;   description: трёх-сценарный прогноз сбережений с горизонтом
+&gt;     из аргументов (по умолчанию 10 лет).
+&gt;   allowed-tools: Read, Write, Bash, WebFetch.
+&gt;
+&gt; что делает:
+&gt; 1) читает @data/operations.csv, считает текущий капитал
+&gt;    и средний месячный денежный поток за последние 3 месяца;
+&gt; 2) если ANTHROPIC_API_KEY есть в .env, может вызвать
+&gt;    через bash python claude-api для оценки рисков;
+&gt; 3) считает 3 сценария: консервативный (5%/год),
+&gt;    реалистичный (8%), агрессивный (12%);
+&gt; 4) сохраняет markdown-отчёт reports/forecast-YYYY-MM-DD.md;
+&gt; 5) делает HTML-обёртку с chart.js для графика;
+&gt; 6) открывает HTML через playwright и делает скриншот;
+&gt; 7) возвращает мне итог в три предложения.
+&gt;
+&gt; arguments: $ARGUMENTS — горизонт прогноза (например "10 лет").</pre>
+                </li>
+                <li>Тест: <code>/прогноз 10 лет</code>. Файлы должны появиться в&nbsp;<code>reports/</code>.</li>
+                <li>Уточните:
+                    <ul>
+                        <li><em>«Если ARGUMENTS пустые&nbsp;&mdash; используй 10 лет по&nbsp;умолчанию»</em>;</li>
+                        <li><em>«В&nbsp;HTML добавь форму, чтобы пользователь мог пересчитать с&nbsp;другим горизонтом без&nbsp;запуска команды»</em>;</li>
+                        <li><em>«В&nbsp;конце markdown-файла добавь раздел "что менять", если хочется ускорить достижение цели»</em>.</li>
+                    </ul>
+                </li>
+                <li>Сделайте «глобальный» вариант&nbsp;&mdash; скопируйте в&nbsp;<code>~/.claude/commands/forecast.md</code>, чтобы команда работала и&nbsp;вне <code>portfolio-journal</code>:
+                    <pre class="shell">&gt; сделай глобальную версию команды forecast в ~/.claude/commands/.
+&gt; она должна искать data/operations.csv в текущей папке,
+&gt; либо запросить путь, если файла нет.</pre>
+                </li>
+                <li>Финал: используя <code>keybindings-help</code>, добавьте сокращение <code>Ctrl+Shift+F</code> для&nbsp;запуска <code>/forecast</code> с&nbsp;дефолтными параметрами.</li>
+                <li>Проверка: <em>«запусти команду в&nbsp;новой сессии: <code>/forecast</code> без&nbsp;аргументов&nbsp;&mdash; должны появиться файлы и&nbsp;скриншот»</em>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>In <code>portfolio-journal</code> create <code>.claude/commands/forecast.md</code>.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; build a /forecast slash command:
+&gt;   description: three-scenario savings forecast with a horizon
+&gt;     from arguments (default 10 years).
+&gt;   allowed-tools: Read, Write, Bash, WebFetch.
+&gt;
+&gt; what it does:
+&gt; 1) read @data/operations.csv, compute current capital
+&gt;    and avg monthly cashflow over the last 3 months;
+&gt; 2) if ANTHROPIC_API_KEY is in .env, can call
+&gt;    via bash python claude-api for risk assessment;
+&gt; 3) compute 3 scenarios: conservative (5%/yr),
+&gt;    realistic (8%), aggressive (12%);
+&gt; 4) save markdown report reports/forecast-YYYY-MM-DD.md;
+&gt; 5) build an HTML wrapper with chart.js for the chart;
+&gt; 6) open HTML through playwright and screenshot;
+&gt; 7) return a three-sentence summary to me.
+&gt;
+&gt; arguments: $ARGUMENTS — forecast horizon (e.g. "10 years").</pre>
+                </li>
+                <li>Test: <code>/forecast 10 years</code>. Files should appear in <code>reports/</code>.</li>
+                <li>Refine:
+                    <ul>
+                        <li><em>“If ARGUMENTS is empty — default to 10 years”</em>;</li>
+                        <li><em>“In the HTML add a form so the user can recompute with another horizon without re-running the command”</em>;</li>
+                        <li><em>“At the end of the markdown add a ‘what to change’ section if I want to reach the goal faster”</em>.</li>
+                    </ul>
+                </li>
+                <li>Make a “global” version — copy to <code>~/.claude/commands/forecast.md</code> so the command works outside <code>portfolio-journal</code>:
+                    <pre class="shell">&gt; make a global forecast command in ~/.claude/commands/.
+&gt; it should look for data/operations.csv in the current folder,
+&gt; or ask for a path if the file is missing.</pre>
+                </li>
+                <li>Finally — using <code>keybindings-help</code>, add a <code>Ctrl+Shift+F</code> shortcut to run <code>/forecast</code> with defaults.</li>
+                <li>Check: <em>“in a new session run <code>/forecast</code> with no arguments — files and a screenshot should appear.”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>составление slash-команды с&nbsp;arguments и&nbsp;allowed-tools;</li>
+                <li>проектные vs глобальные команды (две копии под&nbsp;разные сценарии);</li>
+                <li>привязку команды к&nbsp;keybinding для&nbsp;ультра-быстрого запуска;</li>
+                <li>проверку результата через playwright прямо внутри slash-команды.</li>
+            </ul>
+            <ul lang="en">
+                <li>writing a slash command with arguments and allowed-tools;</li>
+                <li>project vs global commands (two copies for two scenarios);</li>
+                <li>binding the command to a key for ultra-fast launch;</li>
+                <li>verifying the result through Playwright inside the slash command.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Свои инструменты «один промпт &mdash; готовый артефакт»</span><span lang="en">Your own “one-prompt → ready-artefact” tools</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Skill «авто-публикатор»: идея в&nbsp;файл&nbsp;&mdash; сайт по&nbsp;ссылке</span><span lang="en">An “auto-publisher” skill: idea in a file → live site URL</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; свой skill, но&nbsp;для&nbsp;другой задачи: вы&nbsp;пишете в&nbsp;файл <code>idea.md</code> описание&nbsp;любого мини-сайта (карточка, лендинг, мини-игра), Claude автоматически распознаёт «у&nbsp;меня появилась идея сайта», собирает страницу, заливает на&nbsp;GitHub Pages и&nbsp;возвращает живую ссылку.</p>
+            <p class="goal" lang="en">Goal: a variation of A — your own skill, different task: write into <code>idea.md</code> a description of a mini-site (card, landing, mini-game), Claude auto-detects “I have a site idea,” builds the page, ships to GitHub Pages, returns the live URL.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Та&nbsp;же структура skill, что в&nbsp;A. Меняется description и&nbsp;шаги внутри SKILL.md.</li>
+                <li>Триггеры: «у&nbsp;меня появилась идея», «опубликуй мини-сайт», «сделай страницу про&nbsp;Y», «возьми этот&nbsp;idea.md и&nbsp;деплой».</li>
+                <li>Внутри skill: использовать <code>frontend-design</code> для&nbsp;качественной вёрстки, <code>gh</code> для&nbsp;создания репо, GitHub Pages для&nbsp;деплоя.</li>
+                <li>Глобальный, а&nbsp;не&nbsp;проектный (живёт в&nbsp;<code>~/.claude/skills/auto-publisher/</code>).</li>
+                <li>В&nbsp;конце&nbsp;&mdash; верните мне URL и&nbsp;скриншот через playwright.</li>
+            </ul>
+            <ul lang="en">
+                <li>Same skill structure as in A. The description and steps inside SKILL.md change.</li>
+                <li>Triggers: “I have an idea,” “publish a mini-site,” “make a page about Y,” “take this idea.md and deploy.”</li>
+                <li>Inside the skill: use <code>frontend-design</code> for solid layout, <code>gh</code> to create the repo, GitHub Pages to deploy.</li>
+                <li>Global, not per-project (lives in <code>~/.claude/skills/auto-publisher/</code>).</li>
+                <li>At the end — return the URL and a Playwright screenshot.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>skill живёт в&nbsp;<code>~/.claude/skills/auto-publisher/</code>;</li>
+                        <li>у&nbsp;него description с&nbsp;5+ примерами фраз-триггеров;</li>
+                        <li>вы&nbsp;провели тест: написали в&nbsp;любой папке файл <code>idea.md</code> с&nbsp;описанием микросайта, в&nbsp;<em>новой</em> сессии Claude сам подхватил skill и&nbsp;опубликовал;</li>
+                        <li>в&nbsp;конце возвращаются URL+скриншот;</li>
+                        <li>skill использует <code>frontend-design</code> и&nbsp;<code>gh</code>&nbsp;&mdash; виден в&nbsp;логе ход вызовов;</li>
+                        <li>идея, на&nbsp;которой тестируете&nbsp;&mdash; нетривиальная (не&nbsp;«hello world»).</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>the skill lives in <code>~/.claude/skills/auto-publisher/</code>;</li>
+                        <li>its description has 5+ trigger-phrase examples;</li>
+                        <li>you tested: in any folder you wrote <code>idea.md</code> with a microsite description, in a <em>fresh</em> session Claude auto-picked the skill and published;</li>
+                        <li>the end returns URL + screenshot;</li>
+                        <li>the skill uses <code>frontend-design</code> and <code>gh</code> — call trail visible in the log;</li>
+                        <li>the test idea is non-trivial (no “hello world”).</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Запусти три параллельных subagents на&nbsp;трёх разных <code>idea.md</code> (придумай мне три идеи: «трекер чашек кофе», «семейный календарь», «генератор имён для&nbsp;питомцев»). Каждый должен довести до&nbsp;живой ссылки. Сравни три деплоя&nbsp;&mdash; что лучше получилось, что&nbsp;&mdash; нет?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Spawn three parallel subagents on three different <code>idea.md</code> (you invent three ideas for me: ‘coffee cup tracker,’ ‘family calendar,’ ‘pet name generator’). Each should reach a live URL. Compare the three deploys — what worked, what didn’t?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Hook «контроль рабочего времени» + slash <code>/timesheet</code></span><span lang="en">A “worktime tracker” hook + a <code>/timesheet</code> command</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;B&nbsp;&mdash; своя slash-команда плюс hook, который её&nbsp;«кормит». Hook на&nbsp;<code>SessionStart</code> и&nbsp;<code>SessionEnd</code> пишет timestamp + папку в&nbsp;<code>~/.claude/timesheet.csv</code>. Slash-команда <code>/timesheet</code> читает CSV и&nbsp;показывает отчёт за&nbsp;неделю.</p>
+            <p class="goal" lang="en">Goal: a variation of B — your own slash command plus a hook that feeds it. Hooks on <code>SessionStart</code> and <code>SessionEnd</code> append timestamp + folder to <code>~/.claude/timesheet.csv</code>. The <code>/timesheet</code> command reads the CSV and shows a weekly report.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Hook&nbsp;&mdash; в&nbsp;<code>~/.claude/settings.json</code> (глобально, чтобы работал во&nbsp;всех проектах).</li>
+                <li>CSV-формат: <code>timestamp,event,folder</code>&nbsp;&mdash; где event это <code>start</code> или <code>stop</code>.</li>
+                <li><code>/timesheet</code>&nbsp;&mdash; глобальная команда в&nbsp;<code>~/.claude/commands/</code>.</li>
+                <li>Отчёт за&nbsp;неделю&nbsp;&mdash; markdown с&nbsp;таблицей: проект | часов | сессий | средняя длительность.</li>
+                <li>Опционально: <code>/timesheet month</code> для&nbsp;месячного, <code>/timesheet --csv</code> для&nbsp;экспорта.</li>
+                <li>Аргумент защиты: hook не&nbsp;должен ломать сессию, если по&nbsp;какой-то причине не&nbsp;может писать в&nbsp;<code>timesheet.csv</code>.</li>
+            </ul>
+            <ul lang="en">
+                <li>The hook lives in <code>~/.claude/settings.json</code> (global, so it works across projects).</li>
+                <li>CSV format: <code>timestamp,event,folder</code> — where event is <code>start</code> or <code>stop</code>.</li>
+                <li><code>/timesheet</code> — a global command in <code>~/.claude/commands/</code>.</li>
+                <li>Weekly report — a markdown table: project | hours | sessions | avg duration.</li>
+                <li>Optional: <code>/timesheet month</code> for monthly, <code>/timesheet --csv</code> for export.</li>
+                <li>Safety: the hook must not break a session if it can’t write <code>timesheet.csv</code>.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </weight>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>после нескольких сессий в&nbsp;разных папках в&nbsp;<code>~/.claude/timesheet.csv</code> накопились строки;</li>
+                        <li><code>/timesheet</code> возвращает корректный недельный отчёт по&nbsp;проектам;</li>
+                        <li>если <code>~/.claude/timesheet.csv</code> временно недоступен (например, диск переполнен)&nbsp;&mdash; сессия НЕ&nbsp;падает;</li>
+                        <li>сами hooks не&nbsp;добавляют видимой задержки (запуск Claude по&nbsp;ощущениям остался прежним);</li>
+                        <li>в&nbsp;<code>settings.json</code> настройки прокомментированы&nbsp;&mdash; через 3&nbsp;месяца понятно, что они делают.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>after a few sessions in different folders, <code>~/.claude/timesheet.csv</code> has rows;</li>
+                        <li><code>/timesheet</code> returns a correct weekly per-project report;</li>
+                        <li>if <code>~/.claude/timesheet.csv</code> is temporarily unwritable (full disk) — the session does NOT fail;</li>
+                        <li>the hooks add no perceptible delay (Claude launch feels unchanged);</li>
+                        <li><code>settings.json</code> entries are commented — three months later it’s still clear what they do.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Запусти subagent с&nbsp;ролью «коуч продуктивности». Brief: прочитай мой timesheet.csv за&nbsp;последний месяц, найди три «нездоровых» паттерна (например, слишком много вечеров, скачки активности, частые короткие сессии). Что бы&nbsp;ты&nbsp;посоветовал? без&nbsp;банальностей»</em>.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Spawn a subagent with the ‘productivity coach’ role. Brief: read my timesheet.csv for the last month, find three ‘unhealthy’ patterns (too many evenings, activity spikes, many short sessions). What would you advise? No platitudes.”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt><span lang="ru">Свой skill</span><span lang="en">Custom skill</span></dt>
+            <dd>
+                <span lang="ru">Папка с&nbsp;<code>SKILL.md</code> и&nbsp;опционально templates/scripts/references. Живёт в&nbsp;<code>~/.claude/skills/</code> или в&nbsp;<code>.claude/skills/</code> проекта. Главное&nbsp;&mdash; description во&nbsp;фронтматтере: по&nbsp;нему Claude сам решает, когда применить skill.</span>
+                <span lang="en">A folder with <code>SKILL.md</code> and optional templates/scripts/references. Lives in <code>~/.claude/skills/</code> or in a project’s <code>.claude/skills/</code>. The key part is the front-matter description: Claude decides on its own when to apply the skill.</span>
+            </dd>
+
+            <dt>SKILL.md</dt>
+            <dd>
+                <span lang="ru">Главный файл skill. Фронтматтер с&nbsp;<code>name</code> и&nbsp;<code>description</code>, дальше markdown с&nbsp;инструкциями для&nbsp;Claude: когда использовать, какие шаги, какой формат вывода.</span>
+                <span lang="en">The skill’s main file. Front matter with <code>name</code> and <code>description</code>, then markdown with instructions: when to use, which steps, which output format.</span>
+            </dd>
+
+            <dt><span lang="ru">Slash-команда</span><span lang="en">Slash command</span></dt>
+            <dd>
+                <span lang="ru">Команда вида <code>/X</code>. Файл в&nbsp;<code>.claude/commands/X.md</code> или <code>~/.claude/commands/X.md</code>. Запускается явно. Принимает аргументы через <code>$ARGUMENTS</code>. В&nbsp;фронтматтере описывается, какими инструментами имеет право пользоваться.</span>
+                <span lang="en">A <code>/X</code>-style command. File at <code>.claude/commands/X.md</code> or <code>~/.claude/commands/X.md</code>. Invoked explicitly. Takes arguments via <code>$ARGUMENTS</code>. The front matter limits the tools it may use.</span>
+            </dd>
+
+            <dt>Hook</dt>
+            <dd>
+                <span lang="ru">Автоматическое действие, привязанное к&nbsp;событию: <code>PreToolUse</code>, <code>PostToolUse</code>, <code>Stop</code>, <code>SessionStart</code>, <code>SessionEnd</code>, и&nbsp;другие. Настраивается в&nbsp;<code>settings.json</code>. Может перехватывать (блокировать) опасные действия.</span>
+                <span lang="en">An automatic action tied to an event: <code>PreToolUse</code>, <code>PostToolUse</code>, <code>Stop</code>, <code>SessionStart</code>, <code>SessionEnd</code>, and others. Configured in <code>settings.json</code>. Can intercept (block) dangerous actions.</span>
+            </dd>
+
+            <dt>Output style</dt>
+            <dd>
+                <span lang="ru">Режим, меняющий тон и&nbsp;структуру ответов Claude. Встроенные: <code>default</code>, <code>explanatory</code>, <code>learning</code>. Можно сделать свой&nbsp;&mdash; файл в&nbsp;<code>~/.claude/output-styles/</code>.</span>
+                <span lang="en">A mode changing the tone and structure of Claude’s answers. Built-in: <code>default</code>, <code>explanatory</code>, <code>learning</code>. You can make your own — a file in <code>~/.claude/output-styles/</code>.</span>
+            </dd>
+
+            <dt>settings.json</dt>
+            <dd>
+                <span lang="ru">Центральная конфигурация Claude Code. Три уровня: глобальный (<code>~/.claude/</code>), проектный (<code>.claude/</code>), личный проектный (<code>.claude/settings.local.json</code>, не&nbsp;коммитится).</span>
+                <span lang="en">Claude Code’s central config. Three levels: global (<code>~/.claude/</code>), project (<code>.claude/</code>), personal-project (<code>.claude/settings.local.json</code>, not committed).</span>
+            </dd>
+
+            <dt>Permissions</dt>
+            <dd>
+                <span lang="ru">«Список белого» в&nbsp;<code>settings.json</code>: какие инструменты Claude может использовать без&nbsp;спроса. Хороший компромисс&nbsp;&mdash; разрешать чтение и&nbsp;запись, но&nbsp;запрашивать удаление, push и&nbsp;деплой.</span>
+                <span lang="en">An “allow list” in <code>settings.json</code>: which tools Claude may use without asking. Good compromise — allow read/write, but ask for delete, push and deploy.</span>
+            </dd>
+
+            <dt><span lang="ru">PreToolUse / PostToolUse / Stop</span><span lang="en">PreToolUse / PostToolUse / Stop</span></dt>
+            <dd>
+                <span lang="ru">Три самых частых события для&nbsp;hooks. <strong>PreToolUse</strong> срабатывает <em>до</em> вызова инструмента (можно заблокировать). <strong>PostToolUse</strong>&nbsp;&mdash; после (логирование). <strong>Stop</strong>&nbsp;&mdash; когда Claude закончил отвечать.</span>
+                <span lang="en">The three most common hook events. <strong>PreToolUse</strong> fires <em>before</em> a tool call (you can block). <strong>PostToolUse</strong> — after (logging). <strong>Stop</strong> — when Claude finished answering.</span>
+            </dd>
+
+            <dt><span lang="ru">Status line</span><span lang="en">Status line</span></dt>
+            <dd>
+                <span lang="ru">Нижняя строка интерфейса Claude Code. Можно настроить через <code>statusLine</code> в&nbsp;<code>settings.json</code>: показать модель, токены, ветку git, текущую папку.</span>
+                <span lang="en">The bottom strip of Claude Code’s UI. Configurable via <code>statusLine</code> in <code>settings.json</code>: show model, tokens, git branch, current folder.</span>
+            </dd>
+
+            <dt>Keybindings</dt>
+            <dd>
+                <span lang="ru">Клавиатурные сокращения. Файл <code>~/.claude/keybindings.json</code>. Полезно для&nbsp;часто используемых slash-команд&nbsp;&mdash; например, <code>Ctrl+Shift+F</code> = <code>/forecast</code>.</span>
+                <span lang="en">Keyboard shortcuts. File <code>~/.claude/keybindings.json</code>. Handy for frequent slash commands — e.g. <code>Ctrl+Shift+F</code> = <code>/forecast</code>.</span>
+            </dd>
+
+            <dt><span lang="ru">Прогрессивное раскрытие (progressive disclosure)</span><span lang="en">Progressive disclosure</span></dt>
+            <dd>
+                <span lang="ru">Принцип хорошего skill: основной <code>SKILL.md</code> короткий, а&nbsp;детали (шаблоны, скрипты, ссылки на&nbsp;справочники) лежат в&nbsp;подпапках&nbsp;&mdash; Claude читает их&nbsp;только когда нужно. Не&nbsp;грузим контекст «впрок».</span>
+                <span lang="en">A good-skill principle: the main <code>SKILL.md</code> is short, while details (templates, scripts, reference links) live in subfolders — Claude reads them only when needed. Don’t bloat the context “just in case.”</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Чем skill отличается от&nbsp;slash-команды?</span><span lang="en">How does a skill differ from a slash command?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Skill</strong> срабатывает <em>автоматически</em>, когда Claude видит подходящий запрос (по&nbsp;description). <strong>Slash-команда</strong> запускается <em>только явно</em>&nbsp;&mdash; вы&nbsp;вводите <code>/X</code>. Skill для&nbsp;«пусть&nbsp;Claude сам поймёт», команда&nbsp;&mdash; для&nbsp;«я&nbsp;знаю, что&nbsp;хочу&nbsp;сделать».</p>
+                        <p lang="en"><strong>Skill</strong> fires <em>automatically</em> when Claude sees a matching request (by description). <strong>Slash command</strong> runs <em>only explicitly</em> — you type <code>/X</code>. Skill for “let Claude figure it out,” command for “I know what I want.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Что важнее в&nbsp;своём skill: <code>name</code> или <code>description</code>?</span><span lang="en">What matters more in a custom skill: <code>name</code> or <code>description</code>?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Description.</strong> Это «триггер» skill&nbsp;&mdash; Claude читает его и&nbsp;решает, когда применить skill. Чем точнее (5–7 примеров формулировок, ключевых слов, контекстов)&nbsp;&mdash; тем стабильнее работает. Name важен только для&nbsp;идентификации в&nbsp;<code>/skills</code>.</p>
+                        <p lang="en"><strong>Description.</strong> It’s the trigger — Claude reads it and decides when to apply the skill. The sharper (5–7 sample phrasings, keywords, contexts) — the more reliable. Name matters only for the <code>/skills</code> listing.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Когда уместен hook&nbsp;PreToolUse?</span><span lang="en">When does a PreToolUse hook fit?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Когда нужно <em>проверить</em> или <em>заблокировать</em> действие <em>до</em> его выполнения. Примеры: блок коммита, если в&nbsp;diff обнаружен ключ; запрет <code>rm</code>&nbsp;-rf; запись лога перед каждым Bash. Преимущество&nbsp;&mdash; hook успевает остановить действие, в&nbsp;отличие от&nbsp;PostToolUse.</p>
+                        <p lang="en">When you want to <em>check</em> or <em>block</em> an action <em>before</em> it runs. Examples: block commit if a key shows up in the diff; deny <code>rm -rf</code>; log before every Bash. The advantage — the hook can stop the action, unlike PostToolUse.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Какие три уровня <code>settings.json</code> существуют?</span><span lang="en">What are the three <code>settings.json</code> levels?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>~/.claude/settings.json</code>&nbsp;&mdash; глобально, для&nbsp;всех проектов. <code>.claude/settings.json</code> в&nbsp;корне проекта&nbsp;&mdash; командные настройки, коммитятся в&nbsp;git. <code>.claude/settings.local.json</code>&nbsp;&mdash; ваши личные настройки, в&nbsp;<code>.gitignore</code>. Приоритет&nbsp;&mdash; от&nbsp;частного к&nbsp;общему: local перебивает project, project перебивает global.</p>
+                        <p lang="en"><code>~/.claude/settings.json</code> — global, all projects. <code>.claude/settings.json</code> at project root — team settings, committed. <code>.claude/settings.local.json</code> — your personal settings, in <code>.gitignore</code>. Priority — narrowest wins: local beats project beats global.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Что делает «прогрессивное раскрытие» в&nbsp;skill?</span><span lang="en">What does “progressive disclosure” do in a skill?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Главный <code>SKILL.md</code> остаётся коротким, а&nbsp;детали (шаблоны, скрипты, справочники) лежат в&nbsp;подпапках. Claude читает их&nbsp;<em>только когда нужно для&nbsp;текущей задачи</em>. Это экономит контекст&nbsp;&mdash; skill можно делать большим, но&nbsp;«дешёвым» в&nbsp;применении.</p>
+                        <p lang="en">The main <code>SKILL.md</code> stays short while details (templates, scripts, references) live in subfolders. Claude reads them <em>only when needed for the current task</em>. Saves context — the skill can be large yet cheap to apply.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем у&nbsp;slash-команды поле <code>allowed-tools</code>?</span><span lang="en">Why does a slash command have <code>allowed-tools</code>?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Безопасность. Команда «отчёт» не&nbsp;должна иметь права удалять файлы или пушить в&nbsp;git. <code>allowed-tools</code>&nbsp;&mdash; явный список инструментов, которыми команда может пользоваться. Если команда попытается выйти за&nbsp;рамки&nbsp;&mdash; Claude её&nbsp;остановит.</p>
+                        <p lang="en">Safety. A “report” command should not be allowed to delete files or push to git. <code>allowed-tools</code> — an explicit list the command may use. If it tries to step out — Claude stops it.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">У&nbsp;вас тёплая палитра, тёмная тема, лаконичный язык. Что выбрать&nbsp;&mdash; output style или CLAUDE.md?</span><span lang="en">You have a warm palette, dark theme, terse voice. Which to use — an output style or CLAUDE.md?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Зависит. <strong>CLAUDE.md</strong>&nbsp;&mdash; для&nbsp;настроек <em>проекта</em> (стек, данные, стиль кода). <strong>Output style</strong>&nbsp;&mdash; для&nbsp;<em>тона</em> вашего общения с&nbsp;Claude. Если «тёплая палитра» относится к&nbsp;конкретному сайту&nbsp;&mdash; CLAUDE.md. Если «лаконичный язык» относится к&nbsp;вашей привычке общаться с&nbsp;Claude в&nbsp;любых проектах&nbsp;&mdash; output style. Идеально&nbsp;&mdash; и&nbsp;то, и&nbsp;другое.</p>
+                        <p lang="en">It depends. <strong>CLAUDE.md</strong> — for <em>project</em> settings (stack, data, code style). <strong>Output style</strong> — for the <em>tone</em> of your dialogue with Claude. “Warm palette” is project-specific → CLAUDE.md. “Terse voice” is your habit across projects → output style. Best — both.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e8a-skill">
+                <span lang="ru">Создал свой skill с&nbsp;<code>SKILL.md</code> и&nbsp;качественным description-триггером.</span>
+                <span lang="en">I built a custom skill with <code>SKILL.md</code> and a strong triggering description.</span>
+            </li>
+            <li data-key="e8a-slash">
+                <span lang="ru">Сделал свою slash-команду с&nbsp;arguments и&nbsp;<code>allowed-tools</code>.</span>
+                <span lang="en">I made a custom slash command with arguments and <code>allowed-tools</code>.</span>
+            </li>
+            <li data-key="e8a-hook">
+                <span lang="ru">Настроил hook (PreToolUse / PostToolUse / SessionStart / SessionEnd).</span>
+                <span lang="en">I configured a hook (PreToolUse / PostToolUse / SessionStart / SessionEnd).</span>
+            </li>
+            <li data-key="e8a-style">
+                <span lang="ru">Создал свой output style и&nbsp;умею переключаться между ними.</span>
+                <span lang="en">I built a custom output style and switch between them.</span>
+            </li>
+            <li data-key="e8a-settings">
+                <span lang="ru">Понимаю три уровня <code>settings.json</code> и&nbsp;умею редактировать их&nbsp;через <code>update-config</code>.</span>
+                <span lang="en">I understand the three <code>settings.json</code> levels and edit them via <code>update-config</code>.</span>
+            </li>
+            <li data-key="e8a-choice">
+                <span lang="ru">Различаю, когда применить skill, slash-команду, hook или output style.</span>
+                <span lang="en">I tell apart when to use a skill, a slash command, a hook or an output style.</span>
+            </li>
+            <li data-key="e8a-delivery">
+                <span lang="ru">Сделал четыре проекта: skill «инвест-аналитик», команду <code>/прогноз</code>, skill «авто-публикатор», hook+команду «timesheet».</span>
+                <span lang="en">I built four projects: investing-analyst skill, <code>/forecast</code> command, auto-publisher skill, timesheet hook+command.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-08a" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-07.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">07 · Subagents и&nbsp;команды агентов</span><span lang="en">07 · Subagents &amp; agent teams</span></span>
+            </a>
+            <a class="next" href="etap-08b.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">08b · AI Tax Assistant USA</span><span lang="en">08b · AI Tax Assistant USA</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Skill Claude уже работает. Свой skill&nbsp;&mdash; работает <em>на&nbsp;вас</em>».</p>
+            <p class="signature" lang="en">“Claude’s built-in skills already work. A skill of your own works <em>for you</em>.”</p>
+            <p lang="ru">Этап&nbsp;08a пройден&nbsp;&mdash; Claude Code теперь ваш персональный инструмент. Дальше&nbsp;&mdash; большой проект 08b: AI Tax Assistant&nbsp;USA, на&nbsp;котором сходятся все навыки курса.</p>
+            <p lang="en">Etape 08a done — Claude Code is now your personal tool. Next — the big project 08b: AI Tax Assistant USA, where all course skills converge.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-07.html"><span lang="ru">← Этап&nbsp;07</span><span lang="en">← Etape 07</span></a></li>
+                <li><a href="etap-08b.html"><span lang="ru">→ Этап&nbsp;08b</span><span lang="en">→ Etape 08b</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

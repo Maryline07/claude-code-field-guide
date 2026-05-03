@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 04 · Интерактивный прототип — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 04 тьюториала по Claude Design: многоэкранные кликабельные прототипы для user-testing — состояния, граф навигации, тест на 5 живых пользователях.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ D</span>
+            <a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a>
+        </div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="04">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 04</span><span lang="en">Etape 04</span></span> &nbsp;·&nbsp; <span lang="ru">Интерактивный прототип</span><span lang="en">Interactive Prototype</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Не&nbsp;mockup.<br>Кликаемая <em>штука</em>.</span>
+            <span lang="en">Not a mockup.<br>A clickable <em>thing</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Mockup отвечает на&nbsp;вопрос «как это&nbsp;выглядит». <dfn class="term" tabindex="0" data-def="кликабельный многоэкранный артефакт с переходами и состояниями. В отличие от mockup, он позволяет пользователю проиграть сценарий: войти, добавить, экспортировать, ошибиться. Главный артефакт для user-testing.">Прототип</dfn> отвечает «как это&nbsp;<em>работает</em>». В&nbsp;Claude Design прототип&nbsp;&mdash; это многоэкранная композиция с&nbsp;графом переходов и&nbsp;<em>состояниями</em> каждого экрана. На&nbsp;этом этапе делаем кликабельные прототипы, которые можно дать живому человеку и&nbsp;посмотреть, что он&nbsp;будет нажимать.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            A mockup answers &ldquo;how it looks.&rdquo; A <dfn class="term" tabindex="0" data-def="a clickable multi-screen artefact with transitions and states. Unlike a mockup, it lets a user play a scenario: log in, add, export, fail. The main artefact for user testing.">prototype</dfn> answers &ldquo;how it <em>works</em>.&rdquo; In Claude Design a prototype is a multi-screen composition with a transition graph and <em>states</em> per screen. This etape ships clickable prototypes you can hand to a real person and watch where they tap.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div><dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt><dd><span lang="ru">5–6 дней · 1–2&nbsp;ч/день</span><span lang="en">5–6 days · 1–2&nbsp;hrs/day</span></dd></div>
+            <div><dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt><dd><span lang="ru">граф навигации · состояния экрана · user testing · итерация по&nbsp;feedback</span><span lang="en">navigation graph · screen states · user testing · feedback iteration</span></dd></div>
+            <div><dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt><dd><span lang="ru">прототип, который реально кликается живым человеком</span><span lang="en">a prototype a real person clicks through</span></dd></div>
+            <div><dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt><dd><span lang="ru">5-экранный кликабельный прототип одного из&nbsp;четырёх треков, протестированный на&nbsp;5 пользователях</span><span lang="en">a 5-screen clickable prototype on one of four tracks, tested on 5 users</span></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что мы&nbsp;пройдём</span><span lang="en">What we will walk through</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Прототип vs&nbsp;mockup: что меняется</span><span lang="en">Prototype vs mockup: what changes</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong>Mockup</strong>&nbsp;&mdash; статичный экран. «Вот как выглядит главная». Хорош, когда нужно показать стиль, типографику, иерархию&nbsp;&mdash; до&nbsp;того, как обсуждать поведение.</p>
+                    <p><strong>Прототип</strong>&nbsp;&mdash; набор экранов с&nbsp;переходами. «Вот как пользователь идёт от&nbsp;входа к&nbsp;экспорту через 4 клика». Хорош, когда нужно проверить пользовательские <em>решения</em>: не&nbsp;«красиво&nbsp;ли», а&nbsp;«понятно&nbsp;ли», «найдут&nbsp;ли», «не&nbsp;запутаются&nbsp;ли».</p>
+                    <p>В&nbsp;Claude Design прототип строится той&nbsp;же дискуссией, что mockup. Вы&nbsp;описываете в&nbsp;промпте экраны и&nbsp;переходы:</p>
+                    <pre class="shell">&gt; интерактивный прототип бронирования столика в кофейне «Северный край».
+&gt; формат: мобильный 375×812.
+&gt; стиль: workspace tokens (загруженные).
+&gt; экраны и переходы:
+&gt;   1. главный (логотип, &laquo;забронировать столик&raquo; кнопка)
+&gt;       → клик &laquo;забронировать&raquo; → экран 2.
+&gt;   2. выбор даты и времени (календарь, доступные слоты)
+&gt;       → выбор слота → экран 3.
+&gt;   3. данные гостя (имя, тел, кол-во гостей, особые пожелания)
+&gt;       → клик &laquo;подтвердить&raquo; → экран 4.
+&gt;   4. подтверждение + опция «добавить в календарь».
+&gt; для каждого экрана покажи default-состояние.
+&gt; для экрана 2 покажи также &laquo;ничего нет на сегодня&raquo; (empty-state).
+&gt; для экрана 3 покажи validation-error (телефон неверного формата).</pre>
+                    <p>На&nbsp;холсте появятся 4 экрана с&nbsp;явными стрелками-переходами между ними, плюс альтернативные состояния. <em>Это и&nbsp;есть прототип</em>.</p>
+                </div>
+                <div lang="en">
+                    <p><strong>Mockup</strong>&nbsp;&mdash; a static screen. &ldquo;Here is what the home looks like.&rdquo; Good when you need to show style, typography, hierarchy&nbsp;&mdash; before discussing behaviour.</p>
+                    <p><strong>Prototype</strong>&nbsp;&mdash; a set of screens with transitions. &ldquo;Here is how the user goes from log-in to export in 4 taps.&rdquo; Good when you need to verify user <em>decisions</em>: not &ldquo;is it pretty,&rdquo; but &ldquo;is it clear,&rdquo; &ldquo;will they find it,&rdquo; &ldquo;will they get lost.&rdquo;</p>
+                    <p>In Claude Design a prototype is built by the same dialogue as a mockup. You describe screens and transitions in the prompt:</p>
+                    <pre class="shell">&gt; interactive table-booking prototype for café "Northern Coast."
+&gt; format: mobile 375×812.
+&gt; style: workspace tokens (loaded).
+&gt; screens and transitions:
+&gt;   1. home (logo, "book a table" button)
+&gt;       → tap "book" → screen 2.
+&gt;   2. date / time picker (calendar, available slots)
+&gt;       → slot tap → screen 3.
+&gt;   3. guest details (name, phone, party size, notes)
+&gt;       → "confirm" → screen 4.
+&gt;   4. confirmation + "add to calendar" option.
+&gt; show default state per screen.
+&gt; on screen 2 also show "nothing available today" (empty state).
+&gt; on screen 3 show validation error (bad phone format).</pre>
+                    <p>The canvas shows the 4 screens with explicit arrows between them, plus alternative states. <em>That is the prototype.</em></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Граф навигации: рисуем поток до&nbsp;экранов</span><span lang="en">Navigation graph: draw the flow before the screens</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Главная ошибка новичков&nbsp;&mdash; начать с&nbsp;«сделай главный экран», потом постепенно нарастить переходы. Это даёт неаккуратный прототип, в&nbsp;котором каждый экран нарисован «сам по&nbsp;себе».</p>
+                    <p>Правильный путь&nbsp;&mdash; <em>сначала граф</em>:</p>
+                    <pre class="shell">&gt; не делай дизайн пока. помоги составить граф навигации
+&gt; для прототипа бронирования столика. опиши:
+&gt;   — узлы (экраны)
+&gt;   — рёбра (переходы между ними)
+&gt;   — для каждого ребра: какое действие пользователя его запускает
+&gt;   — альтернативные пути и тупики (back-buttons, error-states)
+&gt; формат вывода: список узлов + таблица переходов.</pre>
+                    <p>Claude вернёт что-то вроде:</p>
+                    <pre class="shell">УЗЛЫ:
+  S1: home
+  S2: date/time picker
+  S3: guest details
+  S4: confirmation
+  S5: error / "no slots today"
+
+ПЕРЕХОДЫ:
+  S1 →(tap "book")→ S2
+  S2 →(tap slot)→ S3
+  S2 →(no slots loaded)→ S5
+  S3 →(tap "confirm", valid)→ S4
+  S3 →(tap "confirm", invalid phone)→ S3 (error state, stay)
+  S4 →(tap "add to calendar")→ external
+  S2 →(back)→ S1
+  S3 →(back)→ S2</pre>
+                    <p>Теперь у&nbsp;вас понятная карта. Дальше&nbsp;&mdash; промпт «нарисуй экраны по&nbsp;этому графу». Каждый экран будет осознанной частью целого, а&nbsp;не&nbsp;«просто красивая картинка».</p>
+                    <div class="note">Если граф из&nbsp;3+ экранов и&nbsp;5+ переходов&nbsp;&mdash; обязательно проговорите его словами с&nbsp;Claude до&nbsp;дизайна. Несколько минут на&nbsp;граф экономят 30 минут на&nbsp;«ой, тут забыли back».</div>
+                </div>
+                <div lang="en">
+                    <p>The newcomer mistake&nbsp;&mdash; start with &ldquo;make the home screen,&rdquo; then bolt on transitions. Gives a sloppy prototype where each screen is drawn &ldquo;on its own.&rdquo;</p>
+                    <p>The right path&nbsp;&mdash; <em>graph first</em>:</p>
+                    <pre class="shell">&gt; do not design yet. help me draft a navigation graph
+&gt; for a table-booking prototype. describe:
+&gt;   — nodes (screens)
+&gt;   — edges (transitions)
+&gt;   — what user action triggers each edge
+&gt;   — alternative paths and dead-ends (back, errors)
+&gt; output format: list of nodes + transition table.</pre>
+                    <p>Claude returns something like:</p>
+                    <pre class="shell">NODES:
+  S1: home
+  S2: date/time picker
+  S3: guest details
+  S4: confirmation
+  S5: error / "no slots today"
+
+EDGES:
+  S1 →(tap "book")→ S2
+  S2 →(tap slot)→ S3
+  S2 →(no slots loaded)→ S5
+  S3 →(tap "confirm", valid)→ S4
+  S3 →(tap "confirm", invalid phone)→ S3 (error state, stay)
+  S4 →(tap "add to calendar")→ external
+  S2 →(back)→ S1
+  S3 →(back)→ S2</pre>
+                    <p>Now you have a clear map. Then&nbsp;&mdash; the prompt &ldquo;draw the screens per the graph.&rdquo; Each screen is a conscious part of the whole, not &ldquo;just a pretty picture.&rdquo;</p>
+                    <div class="note">If the graph has 3+ screens and 5+ transitions&nbsp;&mdash; always talk it through with Claude before designing. Minutes on the graph save 30 minutes on &ldquo;oh, we forgot the back button.&rdquo;</div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Состояния экрана: default — это только&nbsp;1 из&nbsp;5</span><span lang="en">Screen states: default is just 1 of 5</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Каждый <em>один</em> экран в&nbsp;продакшене существует в&nbsp;нескольких состояниях. Если в&nbsp;прототипе только default&nbsp;&mdash; вы&nbsp;тестируете только идеальный сценарий. Реальные пользователи попадают в&nbsp;остальные.</p>
+                    <p>Пять каноничных состояний:</p>
+                    <ol>
+                        <li><strong>Default</strong>&nbsp;&mdash; данные есть, всё в&nbsp;порядке. Это «парадная» картинка.</li>
+                        <li><strong>Empty</strong>&nbsp;&mdash; данных ещё нет. «Вы&nbsp;ещё не&nbsp;добавили ни&nbsp;одной позиции в&nbsp;портфель»&nbsp;&mdash; что показать вместо пустоты? Хороший empty-state даёт <em>onboarding</em>: пример, призыв к&nbsp;действию, ссылку на&nbsp;помощь.</li>
+                        <li><strong>Loading</strong>&nbsp;&mdash; данные загружаются. Спиннер, скелетон, или контент-плейсхолдер.</li>
+                        <li><strong>Error</strong>&nbsp;&mdash; что-то пошло не&nbsp;так. Сетевой, валидационный, серверный. Хороший error-state объясняет <em>что произошло</em> и&nbsp;<em>что делать</em>.</li>
+                        <li><strong>Success</strong>&nbsp;&mdash; действие совершено. Тосты, чекмарки, переход на&nbsp;экран подтверждения.</li>
+                    </ol>
+                    <p>В&nbsp;промпте к&nbsp;Claude Design можно явно запросить альтернативные состояния:</p>
+                    <pre class="shell">&gt; для экрана «портфель»:
+&gt;   default — 8 позиций;
+&gt;   empty — пользователь только зарегистрировался, ничего не добавил;
+&gt;   loading — данные тянутся с брокера;
+&gt;   error — токен брокера истёк, нужно переавторизоваться.
+&gt; покажи все 4 рядом на холсте.</pre>
+                    <p>Claude разместит четыре варианта одного экрана рядом, чтобы вы&nbsp;видели всю «семью». Это критично для нормального user-testing&nbsp;&mdash; пользователю покажете не&nbsp;только «когда всё хорошо», но&nbsp;и&nbsp;«когда что-то&nbsp;не&nbsp;так».</p>
+                </div>
+                <div lang="en">
+                    <p>Every <em>single</em> screen in production exists in several states. If your prototype only has default, you&rsquo;re testing the ideal scenario. Real users land in the others.</p>
+                    <p>Five canonical states:</p>
+                    <ol>
+                        <li><strong>Default</strong>&nbsp;&mdash; data present, all good. The &ldquo;press&rdquo; picture.</li>
+                        <li><strong>Empty</strong>&nbsp;&mdash; no data yet. &ldquo;You haven&rsquo;t added any positions to your portfolio&rdquo;&nbsp;&mdash; what shows instead of emptiness? A good empty state offers <em>onboarding</em>: example, CTA, help link.</li>
+                        <li><strong>Loading</strong>&nbsp;&mdash; data loading. Spinner, skeleton, or content placeholder.</li>
+                        <li><strong>Error</strong>&nbsp;&mdash; something went wrong. Network, validation, server. A good error state explains <em>what happened</em> and <em>what to do</em>.</li>
+                        <li><strong>Success</strong>&nbsp;&mdash; action completed. Toasts, checkmarks, jump to confirmation.</li>
+                    </ol>
+                    <p>In the prompt you can ask explicitly for alt states:</p>
+                    <pre class="shell">&gt; for the "portfolio" screen:
+&gt;   default — 8 positions;
+&gt;   empty — user just signed up, added nothing;
+&gt;   loading — pulling from broker;
+&gt;   error — broker token expired, needs reauth.
+&gt; show all 4 side by side on canvas.</pre>
+                    <p>Claude lays the four next to each other so you see the whole &ldquo;family.&rdquo; Critical for proper user testing&nbsp;&mdash; show users not only &ldquo;happy path&rdquo; but also &ldquo;something off.&rdquo;</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">User testing: 5 живых людей за&nbsp;один вечер</span><span lang="en">User testing: 5 real people in one evening</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Прототип без&nbsp;тестирования&nbsp;&mdash; просто красивая картинка. Тестирование&nbsp;&mdash; это где прототип <em>обретает смысл</em>. Канон Якоба Нильсена: <strong>5 пользователей ловят 80% проблем юзабилити</strong>. Не&nbsp;нужно 50, не&nbsp;нужно фокус-группы&nbsp;&mdash; пять живых людей и&nbsp;два часа.</p>
+                    <p><strong>Подготовка (10 минут):</strong></p>
+                    <ol>
+                        <li>Откройте Internal&nbsp;URL вашего прототипа в&nbsp;Claude Design&nbsp;&mdash; это и&nbsp;есть «продакшен» для теста.</li>
+                        <li>Сформулируйте <em>задачу</em>, которую попросите выполнить: <em>«забронируй столик на&nbsp;четверг 19:00 на&nbsp;двоих»</em>. Не&nbsp;объясняйте, как&nbsp;&mdash; пусть пробуют сами.</li>
+                        <li>Подготовьте 3 вопроса для после-задачи: «было&nbsp;ли что-то непонятно?», «что заметно лишнее?», «чего не&nbsp;хватает?».</li>
+                    </ol>
+                    <p><strong>Сессия с&nbsp;одним человеком (15–20 минут):</strong></p>
+                    <ol>
+                        <li>Дайте задачу. Просите <em>проговаривать вслух</em> мысли: «вижу кнопку «забронировать»&nbsp;&mdash; нажму». Это «think-aloud»-протокол&nbsp;&mdash; основа.</li>
+                        <li>Не&nbsp;помогайте. Если запутался, говорите: «представьте, что меня нет рядом&nbsp;&mdash; что бы&nbsp;вы&nbsp;сделали?». Запутанность&nbsp;&mdash; это и&nbsp;есть данные.</li>
+                        <li>Записывайте: где спотыкается, что говорит вслух, какие неожиданные места кликает.</li>
+                        <li>В&nbsp;конце&nbsp;&mdash; три вопроса.</li>
+                    </ol>
+                    <p><strong>Итерация (30–60 минут):</strong></p>
+                    <ol>
+                        <li>После 5&nbsp;человек выпишите общие проблемы. Если 3+ человека спотыкаются на&nbsp;одном&nbsp;&mdash; это надо чинить.</li>
+                        <li>Возвращайтесь в&nbsp;Claude Design, описываете правки в&nbsp;диалоге: <em>«пользователи путались на&nbsp;экране&nbsp;3, потому что не&nbsp;понимали, что &laquo;notes&raquo;&nbsp;&mdash; опциональное поле. сделай его явно опциональным&nbsp;&mdash; добавь подпись «по&nbsp;желанию»</em>.</li>
+                        <li>Тестируете повторно на&nbsp;3 новых людях. Если общая проблема ушла&nbsp;&mdash; готово.</li>
+                    </ol>
+                </div>
+                <div lang="en">
+                    <p>An untested prototype is just a pretty picture. Testing is where it <em>earns meaning</em>. Nielsen&rsquo;s canon: <strong>5 users catch 80% of usability issues</strong>. No need for 50, no focus groups&nbsp;&mdash; five real humans and two hours.</p>
+                    <p><strong>Prep (10 min):</strong></p>
+                    <ol>
+                        <li>Open the Internal URL of your prototype&nbsp;&mdash; that&rsquo;s &ldquo;production&rdquo; for the test.</li>
+                        <li>Frame a <em>task</em>: <em>&ldquo;book a table for Thursday 7pm, two people.&rdquo;</em> Don&rsquo;t explain how&nbsp;&mdash; let them try.</li>
+                        <li>Three post-task questions: &ldquo;was anything unclear?&rdquo;, &ldquo;what feels redundant?&rdquo;, &ldquo;what&rsquo;s missing?&rdquo;</li>
+                    </ol>
+                    <p><strong>One-person session (15–20 min):</strong></p>
+                    <ol>
+                        <li>Give the task. Ask them to <em>think aloud</em>: &ldquo;I see &lsquo;book&rsquo; — I&rsquo;ll tap.&rdquo; That&rsquo;s the think-aloud protocol&nbsp;&mdash; the foundation.</li>
+                        <li>Don&rsquo;t help. When stuck, say: &ldquo;pretend I&rsquo;m not here&nbsp;&mdash; what would you do?&rdquo; Confusion <em>is</em> the data.</li>
+                        <li>Note where they stumble, what they say, unexpected taps.</li>
+                        <li>At the end&nbsp;&mdash; three questions.</li>
+                    </ol>
+                    <p><strong>Iteration (30–60 min):</strong></p>
+                    <ol>
+                        <li>After 5 people, list common issues. 3+ people stumbling at the same point&nbsp;&mdash; needs fixing.</li>
+                        <li>Back to Claude Design, describe fixes in the dialogue: <em>&ldquo;users got confused on screen 3 because they didn&rsquo;t see &lsquo;notes&rsquo; was optional. Make it explicitly optional&nbsp;&mdash; add &lsquo;optional&rsquo; label.&rdquo;</em></li>
+                        <li>Re-test on 3 new people. If the common issue is gone&nbsp;&mdash; done.</li>
+                    </ol>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Граф → экраны → состояния</span><span lang="en">Graph → screens → states</span></h2>
+        </div>
+        <div class="practice">
+            <h4><span lang="ru">Прогон · 3-экранный поток за&nbsp;15 минут</span><span lang="en">Run · 3-screen flow in 15 min</span></h4>
+            <ol lang="ru">
+                <li>Возьмите простой пример: «отправить файл другу через ссылку». 3 экрана: загрузка → ссылка готова → копирование/расшаривание.</li>
+                <li>В&nbsp;Claude Design новый проект. Промпт-граф: <em>«помоги составить граф навигации для отправки файла по&nbsp;ссылке. узлы, рёбра, действия. не&nbsp;делай дизайн пока»</em>.</li>
+                <li>Получите граф. Поправьте, если что-то не&nbsp;то.</li>
+                <li>Промпт-дизайн: <em>«нарисуй экраны по&nbsp;этому графу, мобильный 375×812, в&nbsp;workspace tokens. для экрана&nbsp;1 покажи default + drag-and-drop hover. для экрана&nbsp;2 покажи default + loading»</em>.</li>
+                <li>Откройте Internal&nbsp;URL. Покликайте сами&nbsp;&mdash; почувствуйте, что прототип <em>живой</em>.</li>
+            </ol>
+            <ol lang="en">
+                <li>Pick a simple example: &ldquo;send a file to a friend via link.&rdquo; 3 screens: upload → link ready → copy/share.</li>
+                <li>New Claude Design project. Graph prompt: <em>&ldquo;help draft a navigation graph for sending a file via link. nodes, edges, actions. don&rsquo;t design yet.&rdquo;</em></li>
+                <li>Get the graph. Patch what&rsquo;s off.</li>
+                <li>Design prompt: <em>&ldquo;draw the screens per this graph, mobile 375×812, in workspace tokens. for screen 1 show default + drag-and-drop hover. for screen 2 show default + loading.&rdquo;</em></li>
+                <li>Open the Internal URL. Click through yourself&nbsp;&mdash; feel the prototype <em>live</em>.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>порядок «граф → экраны → состояния»</strong>. Это нормальный workflow для всего, что сложнее одной страницы.</p>
+            <p lang="en">What we are training: <strong>the graph → screens → states order</strong>. The normal workflow for anything beyond a single page.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Кликабельные прототипы</span><span lang="en">Clickable prototypes</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;кофейня</span><span lang="en">Project A · guided · café track</span></span>
+            <h3><span lang="ru">Бронирование столика</span><span lang="en">Table booking</span></h3>
+            <p class="goal" lang="ru">Цель: 5-экранный мобильный прототип бронирования с&nbsp;empty/error/success-состояниями. Тестируется на&nbsp;5 живых людях.</p>
+            <p class="goal" lang="en">Goal: a 5-screen mobile booking prototype with empty/error/success states. Tested on 5 real people.</p>
+
+            <ol class="steps" lang="ru">
+                <li>Workspace «Северный край» (с&nbsp;tokens из&nbsp;этапа&nbsp;03 или загруженный заново).</li>
+                <li>Промпт-граф: попросите Claude составить граф для бронирования (5 экранов: home → date → guests → confirm → done; alternate: empty-day, validation-error, success-toast).</li>
+                <li>Сверьтесь с&nbsp;графом. Поправьте.</li>
+                <li>Промпт-дизайн: <em>«нарисуй экраны по&nbsp;графу, мобильный 375×812, workspace tokens. для каждого экрана: default. для экрана&nbsp;2: empty («ничего нет на&nbsp;сегодня, посмотрите завтра»). для экрана&nbsp;3: validation-error на&nbsp;поле «телефон». для экрана&nbsp;5: success-toast «бронь подтверждена&nbsp;✓»»</em>.</li>
+                <li>Откройте Internal&nbsp;URL. Поклассифицируйте сами по&nbsp;3 раза, отметьте свои собственные «спотыкания».</li>
+                <li>Тестируйте на&nbsp;5 живых людях по&nbsp;think-aloud протоколу. Записывайте проблемы.</li>
+                <li>Если 3+ человека спотыкаются на&nbsp;одном&nbsp;&mdash; правьте через диалог Claude. Re-тест на&nbsp;3 новых.</li>
+                <li>Финальный экспорт: handoff bundle (для этапа&nbsp;05).</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Workspace &ldquo;Northern Coast&rdquo; (with etape-03 tokens or reloaded).</li>
+                <li>Graph prompt: ask Claude to draft a graph for booking (5 screens: home → date → guests → confirm → done; alternates: empty-day, validation-error, success-toast).</li>
+                <li>Verify the graph. Patch.</li>
+                <li>Design prompt: <em>&ldquo;draw screens per the graph, mobile 375×812, workspace tokens. each screen: default. screen 2: empty (&lsquo;nothing today, try tomorrow&rsquo;). screen 3: validation-error on the &lsquo;phone&rsquo; field. screen 5: success toast &lsquo;booking confirmed ✓&rsquo;.&rdquo;</em></li>
+                <li>Open the Internal URL. Click through 3 times yourself, note your own stumbles.</li>
+                <li>Test on 5 real people via think-aloud. Note issues.</li>
+                <li>If 3+ people trip on the same thing&nbsp;&mdash; fix via Claude dialogue. Re-test on 3 new ones.</li>
+                <li>Final export: handoff bundle (for etape 05).</li>
+            </ol>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;игра</span><span lang="en">Project B · guided · game track</span></span>
+            <h3><span lang="ru">UI меню мобильной игры</span><span lang="en">Mobile game menu UI</span></h3>
+            <p class="goal" lang="ru">Цель: главный экран → выбор персонажа → бой → инвентарь → магазин (5 экранов). Тренируем графы с&nbsp;циклами и&nbsp;тёплый художественный стиль.</p>
+            <p class="goal" lang="en">Goal: main → character select → battle → inventory → shop (5 screens). Trains graphs with cycles and a warm illustrated style.</p>
+
+            <ol class="steps" lang="ru">
+                <li>Workspace «Aurora Pixel» (из&nbsp;этапа&nbsp;03).</li>
+                <li>Промпт-граф: <em>«граф навигации для главного меню платформера. узлы: главный, character-select, battle, inventory, shop. рёбра в&nbsp;обе стороны (back), плюс из&nbsp;battle есть выход на&nbsp;inventory без&nbsp;возврата на&nbsp;главный. опиши»</em>.</li>
+                <li>Сверьтесь.</li>
+                <li>Промпт-дизайн: <em>«нарисуй экраны по&nbsp;графу, мобильный портрет 1080×1920. стиль workspace. в&nbsp;character-select покажи 4 персонажа карточками. в&nbsp;battle&nbsp;&mdash; верх HP-bars, низ кнопки действий. в&nbsp;inventory&nbsp;&mdash; сетка 4×6. в&nbsp;shop&nbsp;&mdash; 3 категории слева, товары сетка справа»</em>.</li>
+                <li>Состояния: для battle покажи default + low-HP-warning. для shop покажи default + «не&nbsp;хватает монет».</li>
+                <li>Тестируйте на&nbsp;3 живых человеках, кто играет в&nbsp;мобильные платформеры. Замеряйте время до&nbsp;первой победы в&nbsp;battle: если &gt;30 секунд&nbsp;&mdash; иерархия экрана плохая.</li>
+                <li>Экспорт: PNG-набор + handoff bundle.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Workspace &ldquo;Aurora Pixel&rdquo; (from etape 03).</li>
+                <li>Graph prompt: <em>&ldquo;navigation graph for a platformer main menu. Nodes: main, character-select, battle, inventory, shop. Edges both ways (back), plus from battle there is an exit to inventory without returning to main. Describe.&rdquo;</em></li>
+                <li>Verify.</li>
+                <li>Design prompt: <em>&ldquo;screens per graph, mobile portrait 1080×1920. Workspace style. In character-select show 4 cards. In battle&nbsp;&mdash; HP bars top, action buttons bottom. In inventory&nbsp;&mdash; 4×6 grid. In shop&nbsp;&mdash; 3 categories left, item grid right.&rdquo;</em></li>
+                <li>States: battle default + low-HP warning. Shop default + &ldquo;not enough coins.&rdquo;</li>
+                <li>Test on 3 real people who play mobile platformers. Measure time to first battle win: if &gt;30 sec&nbsp;&mdash; screen hierarchy is off.</li>
+                <li>Export: PNG set + handoff bundle.</li>
+            </ol>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши приложения</span><span lang="en">Same moves, your apps</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек&nbsp;квартира</span><span lang="en">Project C · solo · apartment track</span></span>
+            <h3><span lang="ru">Конфигуратор отделки квартиры</span><span lang="en">Apartment finishes configurator</span></h3>
+            <p class="goal" lang="ru">Цель: 5-экранный прототип для дизайн-бюро интерьеров: выбор стиля → комната → материалы → смета → сохранение. Главное упражнение&nbsp;&mdash; many-to-many переходы (можно прыгать между комнатами).</p>
+            <p class="goal" lang="en">Goal: a 5-screen prototype for an interior bureau: style → room → materials → estimate → save. The main exercise is many-to-many transitions (jumping between rooms).</p>
+            <ul lang="ru"><li>Граф здесь сложнее линейного&nbsp;&mdash; пользователь должен иметь возможность вернуться на&nbsp;«комната» и&nbsp;поправить материал в&nbsp;любой момент. Спецификация графа критична.</li><li>Empty/error/success обязательны. На&nbsp;экране «комната»&nbsp;&mdash; empty («вы&nbsp;ещё ничего не&nbsp;выбрали»). На&nbsp;экране «смета»&nbsp;&mdash; success при сохранении.</li><li>Тестируйте на&nbsp;будущих заказчиках или знакомых, у&nbsp;кого был ремонт.</li></ul>
+            <ul lang="en"><li>The graph is non-linear&nbsp;&mdash; user can return to &ldquo;room&rdquo; and tweak materials at any time. Graph spec is critical.</li><li>Empty/error/success required. &ldquo;Room&rdquo; screen&nbsp;&mdash; empty (&ldquo;you haven&rsquo;t picked yet&rdquo;). &ldquo;Estimate&rdquo;&nbsp;&mdash; success on save.</li><li>Test on prospective clients or friends who&rsquo;ve done renovations.</li></ul>
+            <details class="verify"><summary><span lang="ru">раскрыть после самостоятельной работы</span><span lang="en">open after you finish</span></summary><div class="verify-body">
+                <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                <ul lang="ru"><li>есть граф (узлы, рёбра, описание переходов);</li><li>5 экранов с&nbsp;default + минимум 3 alternate-состояния;</li><li>протестировано на&nbsp;3+ живых людях по&nbsp;think-aloud;</li><li>выпущена итерация после feedback.</li></ul>
+                <ul lang="en"><li>a graph (nodes, edges, transitions);</li><li>5 screens with default + at least 3 alt states;</li><li>tested on 3+ real people via think-aloud;</li><li>shipped one iteration after feedback.</li></ul>
+            </div></details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек&nbsp;финансы</span><span lang="en">Project D · solo · finance track</span></span>
+            <h3><span lang="ru">Личный инвест-кабинет</span><span lang="en">Personal Investment Office</span></h3>
+            <p class="goal" lang="ru">Цель: 5-экранный мобильный прототип кабинета: вход → дашборд → детали позиции → прогноз → экспорт. Продолжение проекта&nbsp;06 основного курса в&nbsp;дизайн-форме.</p>
+            <p class="goal" lang="en">Goal: a 5-screen mobile prototype of the office: log-in → dashboard → position details → forecast → export. A continuation of main-course etape 06 in design form.</p>
+            <ul lang="ru"><li>Empty-state дашборда («ещё нет позиций&nbsp;&mdash; давайте добавим первую») критичен&nbsp;&mdash; это onboarding-точка.</li><li>Loading-state на&nbsp;«детали позиции» (тянем котировку) и&nbsp;«прогноз» (считаем сценарии).</li><li>Error-state «токен брокера истёк»&nbsp;&mdash; даёт возможность теста ремонта-без-входа.</li><li>Тестируйте на&nbsp;3 живых людях, у&nbsp;кого есть инвест-портфель.</li></ul>
+            <ul lang="en"><li>Dashboard empty state (&ldquo;no positions yet&nbsp;&mdash; add the first&rdquo;) is critical&nbsp;&mdash; an onboarding moment.</li><li>Loading on &ldquo;position details&rdquo; (pulling quote) and &ldquo;forecast&rdquo; (computing scenarios).</li><li>Error &ldquo;broker token expired&rdquo;&nbsp;&mdash; allows recovery testing without sign-in.</li><li>Test on 3 real people with an investment portfolio.</li></ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Новые слова</span><span lang="en">New words</span></h2>
+        </div>
+        <dl class="glossary">
+            <dt><span lang="ru">Прототип vs&nbsp;mockup</span><span lang="en">Prototype vs mockup</span></dt>
+            <dd>
+                <span lang="ru">Mockup&nbsp;&mdash; статичный экран, отвечает «как выглядит». Прототип&nbsp;&mdash; набор связанных экранов с&nbsp;переходами, отвечает «как работает». Mockup тестирует стиль, прототип&nbsp;&mdash; пользовательские решения.</span>
+                <span lang="en">A mockup is one static screen, answers &ldquo;how it looks.&rdquo; A prototype is connected screens with transitions, answers &ldquo;how it works.&rdquo; Mockup tests style; prototype tests user decisions.</span>
+            </dd>
+            <dt><span lang="ru">Граф навигации</span><span lang="en">Navigation graph</span></dt>
+            <dd>
+                <span lang="ru">Карта прототипа: узлы (экраны), рёбра (переходы), описание действий пользователя на&nbsp;каждом ребре. Составляется ДО&nbsp;дизайна экранов&nbsp;&mdash; иначе прототип получается «каждый экран сам по&nbsp;себе».</span>
+                <span lang="en">The prototype map: nodes (screens), edges (transitions), user-action notes per edge. Drafted BEFORE designing screens, otherwise the prototype reads as &ldquo;each screen on its own.&rdquo;</span>
+            </dd>
+            <dt><span lang="ru">Состояния экрана</span><span lang="en">Screen states</span></dt>
+            <dd>
+                <span lang="ru">Пять каноничных: default, empty, loading, error, success. Прототип только с&nbsp;default тестирует только идеальный сценарий. Реальные пользователи попадают в&nbsp;остальные.</span>
+                <span lang="en">The canonical five: default, empty, loading, error, success. A default-only prototype tests only the happy path. Real users land elsewhere.</span>
+            </dd>
+            <dt><span lang="ru">Empty-state как onboarding</span><span lang="en">Empty state as onboarding</span></dt>
+            <dd>
+                <span lang="ru">Хороший пустой экран&nbsp;&mdash; не&nbsp;«ничего нет», а&nbsp;призыв к&nbsp;первому действию: пример, кнопка «давайте добавим», ссылка на&nbsp;помощь. Это первый момент, где новичок учится продукту.</span>
+                <span lang="en">A good empty screen is not &ldquo;nothing here,&rdquo; it&rsquo;s a CTA for the first action: an example, &ldquo;let&rsquo;s add one&rdquo; button, help link. The first moment a newcomer learns the product.</span>
+            </dd>
+            <dt><span lang="ru">Think-aloud протокол</span><span lang="en">Think-aloud protocol</span></dt>
+            <dd>
+                <span lang="ru">Канонический способ user-testing: пользователь решает задачу и&nbsp;<em>проговаривает вслух</em> мысли. «Вижу кнопку, нажимаю». Запутанность&nbsp;&mdash; это и&nbsp;есть данные.</span>
+                <span lang="en">The canonical user-testing method: the user solves a task and <em>speaks thoughts aloud</em>. &ldquo;I see a button, I tap.&rdquo; Confusion is data.</span>
+            </dd>
+            <dt><span lang="ru">Правило 5&nbsp;пользователей</span><span lang="en">Rule of 5 users</span></dt>
+            <dd>
+                <span lang="ru">Эмпирическое (Якоб Нильсен): 5 живых тестировщиков ловят 80% проблем юзабилити. Не&nbsp;нужно&nbsp;50, не&nbsp;нужно фокус-группы. Если 3+ человека спотыкаются на&nbsp;одном&nbsp;&mdash; точно надо чинить.</span>
+                <span lang="en">Empirical (Nielsen): 5 real testers catch 80% of usability problems. No need for 50, no focus groups. If 3+ trip on the same point&nbsp;&mdash; fix it.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ VI · Quiz</span><h2><span lang="ru">Семь вопросов</span><span lang="en">Seven questions</span></h2></div>
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1"><div class="q"><p class="q-text"><span lang="ru">Чем прототип отличается от&nbsp;mockup?</span><span lang="en">Prototype vs mockup?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Mockup&nbsp;&mdash; один статичный экран, отвечает «как выглядит». Прототип&nbsp;&mdash; связанные экраны с&nbsp;переходами и&nbsp;состояниями, отвечает «как работает». Mockup тестирует стиль, прототип&nbsp;&mdash; пользовательские решения.</p><p lang="en">Mockup is one static screen, &ldquo;how it looks.&rdquo; Prototype is connected screens with transitions and states, &ldquo;how it works.&rdquo; Mockup tests style; prototype tests user decisions.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q2"><div class="q"><p class="q-text"><span lang="ru">Зачем составлять граф ДО&nbsp;экранов?</span><span lang="en">Why graph before screens?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Если рисовать экраны без&nbsp;графа, каждый получается «сам по&nbsp;себе». Граф фиксирует, как они связаны, какие действия запускают переходы, где альтернативные пути и&nbsp;тупики. Несколько минут на&nbsp;граф экономят 30 минут на&nbsp;«ой, забыли back-кнопку».</p><p lang="en">Skipping the graph leaves each screen disconnected. The graph fixes how they relate, which actions trigger transitions, where alt paths and dead-ends sit. Minutes on graph save 30 min on &ldquo;oh, forgot back.&rdquo;</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q3"><div class="q"><p class="q-text"><span lang="ru">Какие пять состояний у&nbsp;экрана?</span><span lang="en">Five screen states?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Default (всё в&nbsp;порядке), empty (нет данных), loading (тянутся), error (что-то не&nbsp;так), success (сделано). Прототип только с&nbsp;default тестирует только happy path.</p><p lang="en">Default, empty, loading, error, success. Default-only tests only the happy path.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q4"><div class="q"><p class="q-text"><span lang="ru">Что должен показывать хороший empty-state?</span><span lang="en">What should a good empty state show?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Не&nbsp;«ничего нет», а&nbsp;призыв к&nbsp;первому действию: пример, кнопка «давайте добавим», ссылка на&nbsp;помощь. Это первый момент onboarding для новичка.</p><p lang="en">Not &ldquo;nothing here,&rdquo; but a CTA for the first action: example, &ldquo;let&rsquo;s add one&rdquo; button, help link. The first onboarding moment.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q5"><div class="q"><p class="q-text"><span lang="ru">Что говорит «правило 5&nbsp;пользователей»?</span><span lang="en">Rule of 5 users?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">5 живых тестировщиков ловят 80% проблем юзабилити (Якоб Нильсен). Не&nbsp;нужно&nbsp;50. Если 3+ человека спотыкаются на&nbsp;одном&nbsp;&mdash; обязательно чинить.</p><p lang="en">5 real testers catch 80% of usability issues (Nielsen). No need for 50. 3+ people tripping on the same thing&nbsp;&mdash; must fix.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q6"><div class="q"><p class="q-text"><span lang="ru">Что такое think-aloud?</span><span lang="en">Think-aloud?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Протокол user-testing: тестировщик решает задачу и&nbsp;<em>проговаривает мысли вслух</em>. «Вижу кнопку, нажимаю». Запутанность&nbsp;&mdash; это и&nbsp;есть данные. Не&nbsp;помогайте, наблюдайте.</p><p lang="en">A user-testing protocol: the tester solves a task while <em>speaking thoughts aloud</em>. &ldquo;I see a button, I tap.&rdquo; Confusion is data. Don&rsquo;t help; observe.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q7"><div class="q"><p class="q-text"><span lang="ru">Когда mockup, когда прототип?</span><span lang="en">When mockup, when prototype?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Mockup&nbsp;&mdash; на&nbsp;ранних этапах для&nbsp;утверждения <em>стиля</em>, до&nbsp;того, как обсуждать поведение. Прототип&nbsp;&mdash; когда нужно проверить пользовательские <em>решения</em>: понятна&nbsp;ли иерархия, найдут&nbsp;ли путь, не&nbsp;запутаются&nbsp;ли в&nbsp;состояниях.</p><p lang="en">Mockup early to lock <em>style</em>, before behaviour. Prototype to verify user <em>decisions</em>: is the hierarchy clear, will they find the path, do states confuse them.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+        </ol>
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span><h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2></div>
+        <ul class="checklist">
+            <li data-key="d4-graph"><span lang="ru">Составляю граф навигации (узлы, рёбра, действия) ДО&nbsp;дизайна экранов.</span><span lang="en">I draft the navigation graph (nodes, edges, actions) BEFORE designing screens.</span></li>
+            <li data-key="d4-states"><span lang="ru">Включаю в&nbsp;прототип default + минимум 3 alt-состояния (empty/loading/error/success).</span><span lang="en">I include default + at least 3 alt states (empty/loading/error/success).</span></li>
+            <li data-key="d4-empty"><span lang="ru">Empty-state делаю как onboarding-точку, а&nbsp;не&nbsp;«заглушку».</span><span lang="en">Empty states are onboarding moments, not placeholders.</span></li>
+            <li data-key="d4-test"><span lang="ru">Тестирую на&nbsp;5 живых людях по&nbsp;think-aloud протоколу.</span><span lang="en">I test on 5 real people via think-aloud.</span></li>
+            <li data-key="d4-iterate"><span lang="ru">После 5 тестов выпускаю минимум одну итерацию по&nbsp;общим проблемам и&nbsp;ре-тест.</span><span lang="en">After 5 tests I ship at least one iteration on common issues and re-test.</span></li>
+            <li data-key="d4-mockup-vs-proto"><span lang="ru">Знаю, когда mockup достаточно, а&nbsp;когда нужен прототип.</span><span lang="en">I know when a mockup suffices and when a prototype is needed.</span></li>
+            <li data-key="d4-deliverables"><span lang="ru">Сделал артефакты: 5-экранный кликабельный прототип на&nbsp;одном из&nbsp;четырёх треков, протестирован, с&nbsp;handoff bundle для этапа&nbsp;05.</span><span lang="en">Etape artefacts: a 5-screen clickable prototype on one of four tracks, tested, with a handoff bundle for etape 05.</span></li>
+        </ul>
+        <div class="complete-bar"><p lang="ru">Готовы закрыть этап?</p><p lang="en">Ready to close the etape?</p>
+            <button class="btn-complete" data-id="design-04" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="tight"><div class="shell"><div class="etap-nav">
+    <a class="prev" href="claude-design-03.html">
+        <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+        <span class="step-title"><span lang="ru">03 · Brand system</span><span lang="en">03 · Brand System</span></span>
+    </a>
+    <a class="next disabled" href="#" aria-disabled="true">
+        <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+        <span class="step-title"><span lang="ru">05 · Handoff в&nbsp;Claude&nbsp;Code <em>(скоро)</em></span><span lang="en">05 · Handoff to Claude Code <em>(soon)</em></span></span>
+    </a>
+</div></div></section>
+
+</main>
+
+<footer class="colophon"><div class="shell inner">
+    <div>
+        <p class="signature" lang="ru">«Прототип, который никто не&nbsp;кликнул, ничего не&nbsp;знает».</p>
+        <p class="signature" lang="en">&ldquo;A prototype no one clicked knows nothing.&rdquo;</p>
+        <p lang="ru">Этап&nbsp;04 пройден. Прототип реально кликается живыми людьми. Дальше&nbsp;&mdash; <strong>handoff в&nbsp;Claude Code</strong>: упаковываем дизайн в&nbsp;bundle и&nbsp;превращаем в&nbsp;живой код одной кнопкой.</p>
+        <p lang="en">Etape 04 done. Real people click your prototype. Next&nbsp;&mdash; <strong>handoff to Claude Code</strong>: pack the design into a bundle and turn it into live code with one button.</p>
+    </div>
+    <div><h5><span lang="ru">Внутри этапа</span><span lang="en">Inside</span></h5><ul><li><a href="#topics">§&nbsp;I</a></li><li><a href="#projects">§&nbsp;III</a></li><li><a href="#glossary">§&nbsp;V</a></li><li><a href="#quiz">§&nbsp;VI</a></li><li><a href="#checklist">§&nbsp;VII</a></li></ul></div>
+    <div><h5><span lang="ru">Курс</span><span lang="en">Course</span></h5><ul>
+        <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Contents</span></a></li>
+        <li><a href="claude-design-03.html"><span lang="ru">← Этап&nbsp;03</span><span lang="en">← Etape 03</span></a></li>
+        <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+    </ul></div>
+</div></footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

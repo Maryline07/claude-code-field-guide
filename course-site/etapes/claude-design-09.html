@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 09 · Командная работа и ревью — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 09: org-scoped sharing, групповой диалог с Claude, ревью со стейкхолдерами и сведение feedback в финальную версию.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand"><span class="mark">§ D</span><a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a></div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="09">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 09</span><span lang="en">Etape 09</span></span> &nbsp;·&nbsp; <span lang="ru">Командная работа и&nbsp;ревью</span><span lang="en">Teamwork &amp; Review</span></p>
+        <h1 class="rise d2"><span lang="ru">Дизайн&nbsp;&mdash; не&nbsp;соло.<br>Это <em>разговор</em> со&nbsp;всеми, кому он&nbsp;нужен.</span><span lang="en">Design is not solo.<br>It&rsquo;s a <em>conversation</em> with everyone who needs it.</span></h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            До&nbsp;этого этапа вы&nbsp;работали с&nbsp;Claude один на&nbsp;один. Реальные продукты редко делаются одним человеком. На&nbsp;этом этапе подключаем стейкхолдеров&nbsp;&mdash; маркетолога, бариста-консультанта, инвестора, супруга-заказчика&nbsp;&mdash; через <em>org-scoped sharing</em> и&nbsp;<em>групповой диалог с&nbsp;Claude</em>. Учимся структурированному ревью, когда у&nbsp;каждого мнение, и&nbsp;своду feedback в&nbsp;одну финальную версию.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Until this etape you worked with Claude one-on-one. Real products are rarely solo. This etape brings stakeholders in&nbsp;&mdash; marketer, barista consultant, investor, spouse-client&nbsp;&mdash; through <em>org-scoped sharing</em> and a <em>group dialogue with Claude</em>. Structured review when everyone has an opinion, and consolidating feedback into one final version.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div><dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt><dd><span lang="ru">3–4 дня · 1–2&nbsp;ч/день</span><span lang="en">3–4 days · 1–2&nbsp;hrs/day</span></dd></div>
+            <div><dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt><dd><span lang="ru">org-sharing · групповой диалог · структурированное ревью · сведение feedback</span><span lang="en">org-sharing · group dialogue · structured review · feedback consolidation</span></dd></div>
+            <div><dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt><dd><span lang="ru">3 версии бренда → ревью → выбор → финал, без&nbsp;«дизайн-комитета по&nbsp;email»</span><span lang="en">3 brand variants → review → pick → final, no &ldquo;design-by-committee email&rdquo;</span></dd></div>
+            <div><dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt><dd><span lang="ru">3 варианта брендинга на&nbsp;ревью, выбранный финал, сводный комментарий-лист</span><span lang="en">3 brand variants on review, the chosen final, a summary comment sheet</span></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span><h2><span lang="ru">Что мы&nbsp;пройдём</span><span lang="en">What we will walk through</span></h2></div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Три уровня доступа: private / view-only / edit</span><span lang="en">Three access levels: private / view-only / edit</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Кнопка <em>Share</em> в&nbsp;workspace даёт три уровня:</p>
+                    <ol>
+                        <li><strong>Private</strong>&nbsp;&mdash; видите только&nbsp;вы. Дефолтный режим. Используйте, пока не&nbsp;готовы показать.</li>
+                        <li><strong>View-only</strong>&nbsp;&mdash; коллеги по&nbsp;ссылке могут смотреть и&nbsp;<em>оставлять комментарии</em>, но&nbsp;не&nbsp;править. 90% случаев ревью&nbsp;&mdash; именно этот уровень. Хорошо для презентации клиенту, для маркетолога, для команды основного курса.</li>
+                        <li><strong>Edit access</strong>&nbsp;&mdash; коллеги могут править дизайн через диалог с&nbsp;Claude. Для close-knit команд, где есть второй дизайнер или техлид-партнёр. Не&nbsp;давайте edit клиенту&nbsp;&mdash; они начнут «причёсывать» вместо того, чтобы дать feedback.</li>
+                    </ol>
+                    <p>Org-scoped означает: ссылка работает только для людей, залогиненных в&nbsp;вашу организацию (Team / Enterprise). Внешним&nbsp;&mdash; экспортируйте артефакт (PDF, PNG) и&nbsp;отправьте файлом или хостингом.</p>
+                    <p>Хорошее правило: <strong>edit&nbsp;&mdash; для тех, кто работает над дизайном; view-only&nbsp;&mdash; для тех, кто решает</strong>. Маркетолог, клиент, инвестор&nbsp;&mdash; всегда view-only. Они дают feedback, не&nbsp;правят.</p>
+                </div>
+                <div lang="en">
+                    <p>The <em>Share</em> button in the workspace gives three levels:</p>
+                    <ol>
+                        <li><strong>Private</strong>&nbsp;&mdash; only you. Default. Use until you&rsquo;re ready to show.</li>
+                        <li><strong>View-only</strong>&nbsp;&mdash; colleagues with the link can view and <em>leave comments</em>, but not edit. 90% of reviews are this. Good for client pitch, marketer, main-course teammates.</li>
+                        <li><strong>Edit access</strong>&nbsp;&mdash; colleagues can edit via the Claude dialogue. For close-knit teams with a second designer or tech-lead partner. Don&rsquo;t give edit to a client&nbsp;&mdash; they&rsquo;ll start &ldquo;polishing&rdquo; instead of giving feedback.</li>
+                    </ol>
+                    <p>Org-scoped means: the link works only for people logged into your org (Team / Enterprise). Outsiders&nbsp;&mdash; export the artefact (PDF, PNG) and send as a file or via hosting.</p>
+                    <p>Good rule: <strong>edit&nbsp;&mdash; for people working on the design; view-only&nbsp;&mdash; for people who decide</strong>. Marketer, client, investor&nbsp;&mdash; always view-only. They give feedback, not edit.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Групповой диалог: команда + Claude в&nbsp;одной комнате</span><span lang="en">Group dialogue: team + Claude in one room</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;edit-режиме ваш диалог с&nbsp;Claude становится <em>групповым</em>. Несколько человек одновременно пишут в&nbsp;тот&nbsp;же chat-thread, Claude видит&nbsp;всё, отвечает по&nbsp;контексту последнего сообщения.</p>
+                    <p>Это сильно отличается от&nbsp;«один пишет, другие читают»:</p>
+                    <ul>
+                        <li><strong>Параллельные правки.</strong> Вы&nbsp;просите «контрастнее заголовок», коллега в&nbsp;то&nbsp;же время&nbsp;&mdash; «больше воздуха». Claude применяет обе. Если они конфликтуют&nbsp;&mdash; явно говорит «вы&nbsp;противоречите друг&nbsp;другу, как лучше?»</li>
+                        <li><strong>Уточнения от&nbsp;разных ролей.</strong> Маркетолог&nbsp;&mdash; «слоган длинный, сократи». Дизайнер&nbsp;&mdash; «иерархия не&nbsp;та, h2 равен h1». Бариста-консультант (для проекта кофейни)&nbsp;&mdash; «espresso&nbsp;&mdash; это процесс, не&nbsp;напиток&nbsp;&mdash; раздел переименуйте». Каждое уточнение приходит из&nbsp;своей экспертизы.</li>
+                        <li><strong>Claude как нейтральный судья.</strong> Если возникает спор&nbsp;&mdash; <em>«мне нужен серьёзный шрифт» vs «мне нужен дружелюбный»</em>&nbsp;&mdash; Claude может предложить третий вариант, объединяющий обе цели, или попросить вас выбрать.</li>
+                    </ul>
+                    <p>Главный риск: <strong>гипертрофированный bikeshedding</strong>&nbsp;&mdash; все начинают править оттенки красного. Лекарство&nbsp;&mdash; жёсткая <em>повестка ревью</em> (см&nbsp;следующую тему).</p>
+                </div>
+                <div lang="en">
+                    <p>In edit mode your Claude dialogue becomes <em>group</em>. Multiple people write to the same chat thread; Claude sees everything, responds in the context of the last message.</p>
+                    <p>Quite different from &ldquo;one writes, others read&rdquo;:</p>
+                    <ul>
+                        <li><strong>Parallel edits.</strong> You ask &ldquo;more contrast on the headline,&rdquo; a colleague at the same time &ldquo;more air.&rdquo; Claude applies both. If they conflict&nbsp;&mdash; it asks: &ldquo;you contradict each other, which way?&rdquo;</li>
+                        <li><strong>Refinements from different roles.</strong> Marketer&nbsp;&mdash; &ldquo;slogan is long, shorten.&rdquo; Designer&nbsp;&mdash; &ldquo;hierarchy is off, h2 equals h1.&rdquo; Barista consultant (café project)&nbsp;&mdash; &ldquo;espresso is a process, not a drink&nbsp;&mdash; rename the section.&rdquo; Each from their own expertise.</li>
+                        <li><strong>Claude as neutral judge.</strong> If a dispute appears&nbsp;&mdash; <em>&ldquo;I want a serious font&rdquo; vs &ldquo;I want a friendly one&rdquo;</em>&nbsp;&mdash; Claude can offer a third option combining both goals, or ask you to pick.</li>
+                    </ul>
+                    <p>The big risk: <strong>hypertrophied bikeshedding</strong>&nbsp;&mdash; everyone starts adjusting shades of red. Cure&nbsp;&mdash; a strict <em>review agenda</em> (next topic).</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Структурированное ревью: повестка и&nbsp;роли</span><span lang="en">Structured review: agenda and roles</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Чтобы ревью не&nbsp;превратилось в&nbsp;«все правят всё»&nbsp;&mdash; структурируйте до&nbsp;встречи:</p>
+                    <p><strong>Повестка ревью</strong> (15–30 минут):</p>
+                    <ol>
+                        <li><strong>Старт (2 мин).</strong> Покажите три варианта рядом. Никаких объяснений&nbsp;&mdash; пусть сначала смотрят.</li>
+                        <li><strong>Первая реакция (3 мин).</strong> Каждый по&nbsp;кругу: «какой первый бросился в&nbsp;глаза», «какой не&nbsp;понравился сразу». Не&nbsp;объяснения, реакция.</li>
+                        <li><strong>Голосование с&nbsp;роли (5 мин).</strong> Каждый говорит со&nbsp;своей ролевой позиции:
+                            <ul>
+                                <li>Маркетолог: «который продаст лучше?»</li>
+                                <li>Бариста: «который ближе к&nbsp;тому, как мы&nbsp;готовим?»</li>
+                                <li>Владелец: «который я&nbsp;хочу видеть на&nbsp;двери каждое утро?»</li>
+                                <li>Клиент-фокус (если возможно): «какой я&nbsp;бы&nbsp;зашёл?»</li>
+                            </ul>
+                        </li>
+                        <li><strong>Обсуждение конфликтов (10 мин).</strong> Если голоса разделились&nbsp;&mdash; обсуждаете, почему. Часто это решает Claude: «комбинируй типографику варианта&nbsp;A с&nbsp;палитрой варианта&nbsp;B&nbsp;&mdash; покажи, что получится».</li>
+                        <li><strong>Финальный выбор (3 мин).</strong> Один человек&nbsp;&mdash; обычно владелец продукта или арт-директор&nbsp;&mdash; принимает решение. Демократия дизайн не&nbsp;улучшает; одна точка ответственности&nbsp;&mdash; улучшает.</li>
+                        <li><strong>Список правок (5 мин).</strong> Записываете 3–5 конкретных правок. Не&nbsp;«сделайте лучше», а&nbsp;«заголовок крупнее на&nbsp;15%, кнопка ярче».</li>
+                    </ol>
+                    <p>Если кто-то начинает «причёсывать оттенки красного»&nbsp;&mdash; вежливо переключайте: <em>«это уже детализация. сейчас выбираем направление, оттенки&nbsp;&mdash; следующая итерация»</em>.</p>
+                </div>
+                <div lang="en">
+                    <p>To keep review from turning into &ldquo;everyone edits everything,&rdquo; structure it before the meeting:</p>
+                    <p><strong>Review agenda</strong> (15–30 min):</p>
+                    <ol>
+                        <li><strong>Open (2 min).</strong> Show three variants side by side. No explanation&nbsp;&mdash; let them look first.</li>
+                        <li><strong>Gut reaction (3 min).</strong> Round-robin: &ldquo;which jumped out,&rdquo; &ldquo;which didn&rsquo;t click.&rdquo; Reactions, not explanations.</li>
+                        <li><strong>Vote by role (5 min).</strong> Each speaks from their seat:
+                            <ul>
+                                <li>Marketer: &ldquo;which sells better?&rdquo;</li>
+                                <li>Barista: &ldquo;which is closer to how we make coffee?&rdquo;</li>
+                                <li>Owner: &ldquo;which do I want to see on the door every morning?&rdquo;</li>
+                                <li>Customer-focus (if available): &ldquo;which would I walk into?&rdquo;</li>
+                            </ul>
+                        </li>
+                        <li><strong>Discuss conflicts (10 min).</strong> Split votes&nbsp;&mdash; discuss why. Often Claude can resolve: &ldquo;combine A&rsquo;s typography with B&rsquo;s palette&nbsp;&mdash; show me.&rdquo;</li>
+                        <li><strong>Final pick (3 min).</strong> One person&nbsp;&mdash; usually product owner or art director&nbsp;&mdash; decides. Democracy doesn&rsquo;t improve design; one point of responsibility does.</li>
+                        <li><strong>Edit list (5 min).</strong> 3–5 concrete edits. Not &ldquo;make it better,&rdquo; but &ldquo;heading 15% bigger, button brighter.&rdquo;</li>
+                    </ol>
+                    <p>If someone starts &ldquo;adjusting shades of red&rdquo;&nbsp;&mdash; politely redirect: <em>&ldquo;that&rsquo;s detail. Right now we&rsquo;re picking direction; shades come next iteration.&rdquo;</em></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Сведение feedback: как из&nbsp;5 мнений сделать одно решение</span><span lang="en">Consolidating feedback: turning 5 opinions into 1 decision</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>После ревью у&nbsp;вас 3–5 человек, каждый сказал что-то. Часто противоречиво. Как свести?</p>
+                    <p><strong>Запишите всё в&nbsp;диалог Claude</strong>:</p>
+                    <pre class="shell">&gt; результаты ревью трёх вариантов брендинга:
+&gt;   — маркетолог выбрал вариант B, ключевая причина: палитра самая «продающая».
+&gt;   — бариста выбрал A, ключ: типографика отражает крафт-подход.
+&gt;   — владелец выбрал C, но согласен на A, если уберём декоративные элементы.
+&gt;   — клиент-фокус (3 человека опрошены) — A 2 голоса, B 1 голос.
+&gt;
+&gt; финальное решение: A с типографикой A, палитрой адаптированной от B
+&gt;   (более тёплая, но не такая яркая), без декоративных элементов.
+&gt;
+&gt; собери финальный вариант по этим параметрам. экспорт в PDF и handoff bundle.</pre>
+                    <p>Claude собирает финал, и&nbsp;<em>история диалога остаётся</em>. Это важно: через месяц, когда кто-то спросит «почему мы&nbsp;выбрали&nbsp;A?», вы&nbsp;откроете диалог и&nbsp;увидите все аргументы. Это лучше, чем «email-цепочка из&nbsp;30 писем».</p>
+                    <p><strong>Сводный комментарий-лист</strong>&nbsp;&mdash; экспортируйте после ревью. В&nbsp;Claude Design это делается одним промптом: <em>«суммаризируй ревью: что выбрано, почему, какие есть открытые вопросы, какие правки в&nbsp;следующей итерации. формат markdown, чтобы можно было закоммитить в&nbsp;git»</em>. У&nbsp;вас остаётся артефакт-документация решения.</p>
+                </div>
+                <div lang="en">
+                    <p>After review you have 3–5 people, each said something. Often contradictory. How to consolidate?</p>
+                    <p><strong>Write everything into the Claude dialogue</strong>:</p>
+                    <pre class="shell">&gt; review results for three brand variants:
+&gt;   — marketer picked B, key reason: most "sales-y" palette.
+&gt;   — barista picked A, key: typography reflects craft approach.
+&gt;   — owner picked C, but accepts A if we drop decorative elements.
+&gt;   — customer focus (3 polled) — A: 2 votes, B: 1.
+&gt;
+&gt; final decision: A with A's typography, palette adapted from B
+&gt;   (warmer, less saturated), no decorative elements.
+&gt;
+&gt; assemble the final per these parameters. Export PDF + handoff bundle.</pre>
+                    <p>Claude assembles the final, and the <em>dialogue history stays</em>. Important: a month later when someone asks &ldquo;why did we pick A?&rdquo; you open the dialogue and see all arguments. Beats &ldquo;an email chain of 30 messages.&rdquo;</p>
+                    <p><strong>Summary comment sheet</strong>&nbsp;&mdash; export after review. In Claude Design one prompt: <em>&ldquo;summarise the review: what was picked, why, open questions, next-iteration edits. Markdown so I can commit to git.&rdquo;</em> Decision documentation as artefact.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell"><div class="section-head"><span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span><h2><span lang="ru">Прогон ревью с&nbsp;двумя людьми</span><span lang="en">Review run with two people</span></h2></div>
+        <div class="practice">
+            <h4><span lang="ru">Прогон · 3 варианта × 2 ревьюера = 1 финал</span><span lang="en">Run · 3 variants × 2 reviewers = 1 final</span></h4>
+            <ol lang="ru">
+                <li>В&nbsp;любом своём workspace сделайте 3 варианта одного артефакта (например, 3 версии лендинга кофейни в&nbsp;разных стилях).</li>
+                <li>Поделитесь Internal&nbsp;URL с&nbsp;двумя людьми в&nbsp;view-only режиме. Один&nbsp;&mdash; «маркетолог» (друг с&nbsp;маркетинговым бэкграундом), второй&nbsp;&mdash; «клиент» (тот, кто ходит в&nbsp;кофейни).</li>
+                <li>За&nbsp;15 минут пройдите повестку: реакция → голос с&nbsp;роли → конфликты → выбор → правки. Записывайте всё в&nbsp;диалог Claude.</li>
+                <li>В&nbsp;конце&nbsp;&mdash; промпт <em>«суммаризируй ревью markdown-ом»</em>. Сохраните файл.</li>
+                <li>Финальный вариант собирается одной командой Claude по&nbsp;сводке.</li>
+            </ol>
+            <ol lang="en">
+                <li>In any workspace make 3 variants of one artefact (e.g., 3 café-landing versions in different styles).</li>
+                <li>Share Internal URL with two people in view-only. One&nbsp;&mdash; &ldquo;marketer&rdquo; (a friend with marketing background); two&nbsp;&mdash; &ldquo;customer&rdquo; (someone who goes to cafés).</li>
+                <li>15 min agenda: reaction → vote by role → conflicts → pick → edits. Write everything into the Claude dialogue.</li>
+                <li>End with prompt: <em>&ldquo;summarise the review as markdown.&rdquo;</em> Save the file.</li>
+                <li>The final assembles via one Claude command from the summary.</li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span><h2><span lang="ru">Командные ревью</span><span lang="en">Team reviews</span></h2></div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;кофейня</span><span lang="en">Project A · guided · café track</span></span>
+            <h3><span lang="ru">Три варианта брендинга кофейни с&nbsp;ревью</span><span lang="en">Three café brand variants with review</span></h3>
+            <p class="goal" lang="ru">Цель: 3 разных бренда для кофейни, ревью с&nbsp;маркетологом и&nbsp;«бариста-консультантом» (живые люди в&nbsp;view-only), сводный документ решения, финальный бренд готов к&nbsp;handoff.</p>
+            <p class="goal" lang="en">Goal: 3 different brands for a café, review with a marketer and a &ldquo;barista consultant&rdquo; (real people in view-only), a decision-summary doc, the final brand ready to handoff.</p>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;квартира</span><span lang="en">Project B · guided · apartment track</span></span>
+            <h3><span lang="ru">3 варианта концепта квартиры с&nbsp;клиентом и&nbsp;супругом</span><span lang="en">3 apartment concept variants with client &amp; spouse</span></h3>
+            <p class="goal" lang="ru">Цель: 3 концепта отделки одной квартиры, ревью с&nbsp;двумя стейкхолдерами одной семьи (часто у&nbsp;них разные мнения), сведение в&nbsp;один окончательный концепт.</p>
+            <p class="goal" lang="en">Goal: 3 finish concepts for one flat, review with two family stakeholders (they usually disagree), consolidating into one final concept.</p>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell"><div class="section-head"><span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span><h2><span lang="ru">Свои командные ревью</span><span lang="en">Your team reviews</span></h2></div>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек&nbsp;игра</span><span lang="en">Project C · solo · game track</span></span>
+            <h3><span lang="ru">3 варианта key art с&nbsp;ревью комьюнити</span><span lang="en">3 key art variants with community review</span></h3>
+            <p class="goal" lang="ru">Цель: 3 разные key art для одной инди-игры, поделиться в&nbsp;Discord-сервере (или Twitter-опросе), собрать голоса, вернуть в&nbsp;Claude и&nbsp;сделать финал на&nbsp;основе народного выбора.</p>
+            <p class="goal" lang="en">Goal: 3 key arts for one indie game, share in a Discord server (or Twitter poll), collect votes, bring back to Claude and craft a final based on the people&rsquo;s pick.</p>
+        </article>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек&nbsp;финансы</span><span lang="en">Project D · solo · finance track</span></span>
+            <h3><span lang="ru">3 варианта дека для&nbsp;LP с&nbsp;ревью партнёра</span><span lang="en">3 LP-deck variants with partner review</span></h3>
+            <p class="goal" lang="ru">Цель: 3 версии дека инвест-фонда, ревью с&nbsp;вашим партнёром (или коллегой-инвестором), детальные комментарии каждый по&nbsp;своей экспертизе, финал.</p>
+            <p class="goal" lang="en">Goal: 3 fund-deck versions, review with your partner (or peer investor), detailed comments by expertise, final.</p>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell"><div class="section-head"><span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span><h2><span lang="ru">Новые слова</span><span lang="en">New words</span></h2></div>
+        <dl class="glossary">
+            <dt><span lang="ru">Org-scoped sharing</span><span lang="en">Org-scoped sharing</span></dt>
+            <dd><span lang="ru">Доступ к&nbsp;workspace для людей, залогиненных в&nbsp;вашу организацию (Team / Enterprise). Три уровня: private, view-only, edit. Для внешних&nbsp;&mdash; экспорт PDF/PNG.</span><span lang="en">Workspace access for people logged into your org (Team / Enterprise). Three levels: private, view-only, edit. External&nbsp;&mdash; export PDF/PNG.</span></dd>
+            <dt><span lang="ru">View-only vs edit</span><span lang="en">View-only vs edit</span></dt>
+            <dd><span lang="ru">View-only&nbsp;&mdash; смотрят и&nbsp;комментируют. Edit&nbsp;&mdash; правят через диалог. Правило: <em>edit для тех, кто работает над дизайном; view-only для тех, кто решает</em>.</span><span lang="en">View-only&nbsp;&mdash; view and comment. Edit&nbsp;&mdash; edit via dialogue. Rule: <em>edit for those working on design; view-only for those who decide</em>.</span></dd>
+            <dt><span lang="ru">Групповой диалог</span><span lang="en">Group dialogue</span></dt>
+            <dd><span lang="ru">Несколько человек в&nbsp;одном чате с&nbsp;Claude. Параллельные правки, уточнения от&nbsp;разных ролей, Claude как нейтральный судья при конфликтах.</span><span lang="en">Several people in one Claude chat. Parallel edits, role-based refinements, Claude as neutral judge on conflicts.</span></dd>
+            <dt><span lang="ru">Повестка ревью</span><span lang="en">Review agenda</span></dt>
+            <dd><span lang="ru">Структура встречи: реакция (3 мин) → голос с&nbsp;роли (5) → конфликты (10) → выбор (3) → правки (5). 25–30 минут на&nbsp;всё. Лекарство от&nbsp;«дизайн-комитета».</span><span lang="en">Meeting structure: gut reaction (3) → vote by role (5) → conflicts (10) → pick (3) → edits (5). 25–30 min total. Cure for &ldquo;design-by-committee.&rdquo;</span></dd>
+            <dt><span lang="ru">Сводный комментарий-лист</span><span lang="en">Summary comment sheet</span></dt>
+            <dd><span lang="ru">Документация решения после ревью: что выбрано, почему, какие открытые вопросы. Экспорт markdown, чтобы коммитить в&nbsp;git. Через месяц&nbsp;&mdash; легко найти контекст.</span><span lang="en">Decision documentation post-review: what was picked, why, open questions. Markdown export for git commit. A month later&nbsp;&mdash; easy to find the context.</span></dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell"><div class="section-head"><span class="num">§ VI · Quiz</span><h2><span lang="ru">Семь вопросов</span><span lang="en">Seven questions</span></h2></div>
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1"><div class="q"><p class="q-text"><span lang="ru">Кому давать view-only, кому&nbsp;edit?</span><span lang="en">View-only vs edit&nbsp;&mdash; for whom?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Edit&nbsp;&mdash; для работающих над дизайном (со-дизайнер, техлид-партнёр). View-only&nbsp;&mdash; для решающих (клиент, маркетолог, инвестор, владелец). Edit клиенту&nbsp;&mdash; и&nbsp;он&nbsp;начнёт причёсывать вместо feedback.</p><p lang="en">Edit&nbsp;&mdash; for those working on design (co-designer, tech-lead partner). View-only&nbsp;&mdash; for deciders (client, marketer, investor, owner). Edit to a client&nbsp;&mdash; they polish instead of giving feedback.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q2"><div class="q"><p class="q-text"><span lang="ru">Что такое org-scoped sharing?</span><span lang="en">Org-scoped sharing?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Ссылка на&nbsp;workspace работает только для людей, залогиненных в&nbsp;вашу организацию (Team/Enterprise). Внешним&nbsp;&mdash; экспорт PDF/PNG.</p><p lang="en">A workspace link works only for people logged into your org (Team/Enterprise). Externals&nbsp;&mdash; export PDF/PNG.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q3"><div class="q"><p class="q-text"><span lang="ru">Как Claude помогает при конфликте мнений?</span><span lang="en">How does Claude help with conflicting opinions?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Как нейтральный судья: предлагает третий вариант, объединяющий обе цели, или просит выбрать&nbsp;явно. Может также показать «комбинированный» дизайн на&nbsp;холсте, чтобы спор перестал быть абстрактным.</p><p lang="en">As neutral judge: offers a third option combining both goals, or asks for explicit pick. Can also draw a &ldquo;combined&rdquo; design on the canvas so the dispute stops being abstract.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q4"><div class="q"><p class="q-text"><span lang="ru">Какие 5 шагов повестки ревью?</span><span lang="en">5 agenda steps?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Реакция (3 мин), голос с&nbsp;роли (5), конфликты (10), выбор (3), правки (5). 25–30 минут на&nbsp;всё. Главное&nbsp;&mdash; <em>не&nbsp;отступать от&nbsp;структуры</em>, иначе превращается в&nbsp;«дизайн-комитет».</p><p lang="en">Gut reaction (3), vote by role (5), conflicts (10), pick (3), edits (5). 25–30 min total. The main thing&nbsp;&mdash; <em>don&rsquo;t deviate from structure</em>, or it becomes &ldquo;design-by-committee.&rdquo;</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q5"><div class="q"><p class="q-text"><span lang="ru">Как сводить feedback в&nbsp;одно решение?</span><span lang="en">How to consolidate feedback into one decision?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Запишите все мнения в&nbsp;диалог Claude как структурированный список (кто что&nbsp;выбрал, ключевая причина), затем&nbsp;&mdash; финальное решение через объединение лучших черт. Claude собирает финал, история диалога остаётся как documentation.</p><p lang="en">Write all opinions into the Claude dialogue as a structured list (who picked what, key reason), then&nbsp;&mdash; final decision combining best traits. Claude assembles the final, dialogue history stays as documentation.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q6"><div class="q"><p class="q-text"><span lang="ru">Что делать с&nbsp;«bikeshedding»&nbsp;&mdash; правкой оттенков на&nbsp;уровне выбора направления?</span><span lang="en">What to do with bikeshedding (shade-tweaking at direction stage)?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Вежливо переключать: «это уже детализация. сейчас выбираем направление, оттенки&nbsp;&mdash; следующая итерация». Записать в&nbsp;parking lot если нужно, но&nbsp;не&nbsp;дать сорвать структуру повестки.</p><p lang="en">Politely redirect: &ldquo;that&rsquo;s detail. Right now we&rsquo;re picking direction; shades come next iteration.&rdquo; Park it on a side list if needed, but don&rsquo;t let it derail the agenda.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q7"><div class="q"><p class="q-text"><span lang="ru">Зачем экспортировать сводный комментарий-лист в&nbsp;markdown?</span><span lang="en">Why export the summary as markdown?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Чтобы закоммитить в&nbsp;git. Через месяц, когда кто-то спросит «почему&nbsp;A?»&nbsp;&mdash; смотрите коммит, видите контекст. Лучше «email-цепочки из&nbsp;30 писем».</p><p lang="en">To commit to git. A month later, &ldquo;why A?&rdquo; — check the commit, see the context. Beats a 30-message email chain.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+        </ol>
+        <div class="quiz-summary"><h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where next?</span></h4><div class="stats"><span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span><span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span><span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span></div><p class="advice"></p></div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell"><div class="section-head"><span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span><h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2></div>
+        <ul class="checklist">
+            <li data-key="d9-share"><span lang="ru">Использую org-scoped sharing с&nbsp;тремя уровнями доступа правильно.</span><span lang="en">I use org-scoped sharing with three levels appropriately.</span></li>
+            <li data-key="d9-group"><span lang="ru">Веду групповой диалог с&nbsp;Claude и&nbsp;несколькими стейкхолдерами одновременно.</span><span lang="en">I run a group Claude dialogue with multiple stakeholders.</span></li>
+            <li data-key="d9-agenda"><span lang="ru">Структурирую ревью повесткой (реакция → роли → конфликты → выбор → правки).</span><span lang="en">I structure review with an agenda (reaction → roles → conflicts → pick → edits).</span></li>
+            <li data-key="d9-bikeshed"><span lang="ru">Сворачиваю bikeshedding и&nbsp;удерживаю структуру встречи.</span><span lang="en">I cut bikeshedding and keep meeting structure.</span></li>
+            <li data-key="d9-summary"><span lang="ru">Свожу feedback в&nbsp;единое решение через диалог Claude.</span><span lang="en">I consolidate feedback into one decision via Claude dialogue.</span></li>
+            <li data-key="d9-doc"><span lang="ru">Экспортирую сводный комментарий-лист в&nbsp;markdown для документации.</span><span lang="en">I export a summary comment sheet as markdown for documentation.</span></li>
+            <li data-key="d9-deliverables"><span lang="ru">Сделал артефакты: 3 варианта брендинга прошли командное ревью, выбран финал, есть документация решения.</span><span lang="en">Etape artefacts: 3 brand variants reviewed in team, final picked, decision documented.</span></li>
+        </ul>
+        <div class="complete-bar"><p lang="ru">Готовы закрыть этап?</p><p lang="en">Ready to close the etape?</p>
+            <button class="btn-complete" data-id="design-09" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="tight"><div class="shell"><div class="etap-nav">
+    <a class="prev" href="claude-design-08.html">
+        <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+        <span class="step-title"><span lang="ru">08 · Code-powered</span><span lang="en">08 · Code-Powered</span></span>
+    </a>
+    <a class="next disabled" href="#" aria-disabled="true">
+        <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+        <span class="step-title"><span lang="ru">10 · Canva-pipeline (опц.) <em>(скоро)</em></span><span lang="en">10 · Canva Pipeline (opt) <em>(soon)</em></span></span>
+    </a>
+</div></div></section>
+
+</main>
+
+<footer class="colophon"><div class="shell inner">
+    <div>
+        <p class="signature" lang="ru">«Дизайн-комитет&nbsp;&mdash; враг хорошего дизайна. Структурированное ревью&nbsp;&mdash; союзник».</p>
+        <p class="signature" lang="en">&ldquo;Design-by-committee is the enemy of good design. Structured review is the ally.&rdquo;</p>
+        <p lang="ru">Этап&nbsp;09 пройден. Команда умеет ревьюить вместе и&nbsp;принимать решения. Дальше&nbsp;&mdash; <strong>опциональный Canva-pipeline</strong>: когда нужно отдать ассеты человеку без&nbsp;дизайнерского бэкграунда.</p>
+        <p lang="en">Etape 09 done. The team reviews together and decides. Next&nbsp;&mdash; <strong>optional Canva pipeline</strong>: when assets must hand off to someone without a design background.</p>
+    </div>
+    <div><h5><span lang="ru">Внутри этапа</span><span lang="en">Inside</span></h5><ul><li><a href="#topics">§&nbsp;I</a></li><li><a href="#projects">§&nbsp;III</a></li><li><a href="#glossary">§&nbsp;V</a></li><li><a href="#quiz">§&nbsp;VI</a></li><li><a href="#checklist">§&nbsp;VII</a></li></ul></div>
+    <div><h5><span lang="ru">Курс</span><span lang="en">Course</span></h5><ul>
+        <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Contents</span></a></li>
+        <li><a href="claude-design-08.html"><span lang="ru">← Этап&nbsp;08</span><span lang="en">← Etape 08</span></a></li>
+        <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+    </ul></div>
+</div></footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

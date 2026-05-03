@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "excalidraw-diagram-generator": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "20bad48f0ec420a42b445ee6562b5d954be42754e9c21f9db8c6b2a7f91cbed5"
+    },
+    "frontend-design": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "e8118284a6365753790d44bb2758a6032b3af27fa84696428d9233f2be0f4e78"
+    },
+    "pdf": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "cfbc539377088ca7e44a813b30c306327385bbd973cd7a721e1743f60837dd62"
+    },
+    "playground": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "a499ef286b1bcda80afe4de53b2d0a5a84c317c11cfdafc2af6e53985c77940d"
+    }
+  }
+}

@@ -1,0 +1,1130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 01 · Промпт-инжиниринг — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 01 курса по Claude Code: анатомия хорошего промпта, итерация, откат, генерация вариантов, чтение результата.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="01">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 01</span><span lang="en">Etape 01</span></span> &nbsp;·&nbsp; <span lang="ru">Промпт-инжиниринг для Claude Code</span><span lang="en">Prompt engineering for Claude Code</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Как просить, <em>чтобы получалось</em>.</span>
+            <span lang="en">How to ask, <em>so it works</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Хороший промпт похож на&nbsp;ТЗ для&nbsp;стажёра: цель, ограничения, формат, иногда пример. На&nbsp;этом этапе мы&nbsp;учимся <em>ставить задачи</em>, <dfn class="term" tabindex="0" data-def="повторный заход по той же задаче с поправкой — «не так, измени», «теперь добавь».">итерировать</dfn>, откатываться, генерировать варианты&nbsp;&mdash; и&nbsp;понимать, что Claude вернул.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            A good prompt is a brief for an intern: goal, constraints, format, sometimes an example. This etape teaches you to <em>state tasks</em>, <dfn class="term" tabindex="0" data-def="going through the same task again with a correction — “not like that, change”, “now add”.">iterate</dfn>, roll back, generate variants&nbsp;&mdash; and read what Claude returned.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">4–6 дней · 2–4&nbsp;ч/день</span><span lang="en">4–6 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">структуру промпта · итерация · откат · варианты · чтение результата</span><span lang="en">prompt structure · iteration · rollback · variants · reading results</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">первая версия от&nbsp;Claude уже близка к&nbsp;нужной</span><span lang="en">first version from Claude is already close to the goal</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">калькулятор сложного процента, игра «угадай число», + ваши вариации</span><span lang="en">a compound-interest calculator, a “guess the number” game, + your variations</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что понадобится перед началом</span><span lang="en">What you need before you start</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">На&nbsp;этом этапе ничего нового устанавливать не&nbsp;нужно&nbsp;&mdash; всё, что мы&nbsp;собрали в&nbsp;этапе&nbsp;00, продолжает работать. Один skill будет полезен, но&nbsp;опционально.</p>
+        <p class="reading" lang="en">No new installations on this etape — everything we set up in etape 00 keeps working. One optional skill will be useful.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3><span lang="ru">Из этапа 00</span><span lang="en">From etape 00</span></h3>
+            <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li><strong>Node.js</strong>, <strong>Claude&nbsp;Code</strong>, <strong>VS&nbsp;Code</strong>&nbsp;&mdash; проверьте: в&nbsp;терминале <code>claude --version</code> должно вывести номер версии, а&nbsp;не&nbsp;«command not found».</li>
+                <li>Аккаунт Anthropic, в&nbsp;который вы&nbsp;вошли в&nbsp;этапе&nbsp;00.</li>
+            </ul>
+            <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li><strong>Node.js</strong>, <strong>Claude Code</strong>, <strong>VS Code</strong> — verify: <code>claude --version</code> in the terminal should print a version, not “command not found”.</li>
+                <li>The Anthropic account you signed in to in etape 00.</li>
+            </ul>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">опционально</span><span lang="en">optional</span></span>
+            <h3><span lang="ru">Skill <code>superpowers:brainstorming</code></span><span lang="en">Skill <code>superpowers:brainstorming</code></span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill, который <em>учит</em> Claude вести с&nbsp;вами короткий брейншторм перед задачей&nbsp;&mdash; задавать уточняющие вопросы, прежде чем что-то делать.<br>
+            <strong>Зачем сейчас:</strong> на&nbsp;первых трёх-четырёх задачах этапа полезно, чтобы Claude задавал «правильные вопросы»&nbsp;&mdash; так мы&nbsp;учимся видеть, чего не&nbsp;хватало в&nbsp;вашем промпте.<br>
+            <strong>Что встанет:</strong> пакет <code>superpowers</code> целиком&nbsp;&mdash; внутри несколько skills (<code>brainstorming</code>, <code>writing-plans</code>, <code>executing-plans</code>, <code>verification-before-completion</code> и&nbsp;другие). Сейчас нам нужен только <code>brainstorming</code>; остальные пригодятся в&nbsp;этапах&nbsp;04 и&nbsp;06.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude to run a short brainstorm before a task&nbsp;&mdash; asking clarifying questions before doing anything.<br>
+            <strong>Why now:</strong> useful for the first three or four tasks on this etape so that Claude asks the “right questions” — that way we see what was missing in our prompt.<br>
+            <strong>What gets installed:</strong> the entire <code>superpowers</code> package — multiple skills inside (<code>brainstorming</code>, <code>writing-plans</code>, <code>executing-plans</code>, <code>verification-before-completion</code>, and others). For now we only need <code>brainstorming</code>; the rest become useful on etapes 04 and 06.</p>
+            <pre class="shell"><span class="cmt"># <span lang="ru">внутри claude (slash-команда, не shell)</span><span lang="en">inside claude (slash command, not shell)</span></span>
+/plugin install superpowers@claude-plugins-official</pre>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> встроенный маркетплейс Claude Code (<code>claude-plugins-official</code>); исходники&nbsp;&mdash; <a href="https://github.com/obra/superpowers">github.com/obra/superpowers</a>.<br>
+            <strong>Проверить установку:</strong> запустите <code>claude</code>, попросите <em>«сделай мне сайт»</em>&nbsp;&mdash; Claude должен сначала задать уточняющие вопросы, а&nbsp;не&nbsp;броситься писать код.</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> Claude Code’s built-in plugin marketplace (<code>claude-plugins-official</code>); source on <a href="https://github.com/obra/superpowers">github.com/obra/superpowers</a>.<br>
+            <strong>Verify:</strong> run <code>claude</code>, say <em>“make me a website”</em>&nbsp;&mdash; Claude should ask clarifying questions first, not rush to code.</p>
+        </div>
+
+        <div class="note" style="margin-top:1.5rem;">
+            <span lang="ru">Если skill не&nbsp;установили&nbsp;&mdash; не&nbsp;страшно, все задачи этапа решаются и&nbsp;без него. Но&nbsp;при первой возможности поставьте: брейншторм-привычка очень помогает на&nbsp;этапах 04 и&nbsp;06.</span>
+            <span lang="en">If you skip the skill — no harm, all etape tasks work without it. But install it when you can: the brainstorming habit pays off heavily on etapes 04 and 06.</span>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Из чего состоит хороший промпт</span><span lang="en">What makes a good prompt</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Анатомия хорошего <dfn class="term" tabindex="0" data-def="формулировка задачи, которую вы отправляете Claude. Хороший промпт содержит: цель, ограничения, формат, иногда пример.">промпта</dfn>: цель / ограничения / формат / пример</span><span lang="en">Anatomy of a good <dfn class="term" tabindex="0" data-def="the wording of a task you send to Claude. A good prompt has goal, constraints, format, sometimes an example.">prompt</dfn>: goal / constraints / format / example</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Сравните три способа попросить одно и&nbsp;то&nbsp;же:</p>
+
+                    <p><strong>Плохо:</strong></p>
+                    <pre class="shell">&gt; сделай калькулятор</pre>
+
+                    <p><strong>Чуть лучше:</strong></p>
+                    <pre class="shell">&gt; сделай калькулятор сложного процента в html</pre>
+
+                    <p><strong>Хорошо:</strong></p>
+                    <pre class="shell">&gt; сделай калькулятор сложного процента — одностраничник index.html.
+&gt; ввод: сумма, ставка %/год, срок в годах.
+&gt; вывод: итоговая сумма + таблица по годам + график.
+&gt; стиль — минималистичный, тёплая бумажная палитра, шрифт засечковый.
+&gt; одним файлом, без зависимостей, чтобы открывалось двойным кликом.</pre>
+
+                    <p>В&nbsp;хорошем промпте есть <strong>четыре слоя</strong>:</p>
+                    <ol>
+                        <li><strong>Цель</strong>&nbsp;&mdash; что должно получиться. <em>«калькулятор сложного процента»</em>.</li>
+                        <li><strong>Ограничения</strong>&nbsp;&mdash; чего не&nbsp;делать или какими средствами. <em>«одним файлом, без&nbsp;зависимостей»</em>.</li>
+                        <li><strong>Формат</strong>&nbsp;&mdash; в&nbsp;каком виде получить результат. <em>«одностраничник index.html»</em>, <em>«ввод&nbsp;X, вывод&nbsp;Y»</em>.</li>
+                        <li><strong>Пример или стиль</strong>&nbsp;&mdash; на&nbsp;что похоже. <em>«минималистичный, тёплая бумажная палитра»</em>.</li>
+                    </ol>
+                    <p>Чем больше ясности в&nbsp;этих четырёх слоях, тем точнее первая версия. Но&nbsp;<em>не</em> переусердствуйте: если каждый раз писать промпт на&nbsp;десять строк, вы&nbsp;потеряете в&nbsp;скорости. На&nbsp;простые задачи&nbsp;&mdash; короткий промпт.</p>
+                </div>
+                <div lang="en">
+                    <p>Compare three ways to ask the same thing:</p>
+
+                    <p><strong>Bad:</strong></p>
+                    <pre class="shell">&gt; make a calculator</pre>
+
+                    <p><strong>A bit better:</strong></p>
+                    <pre class="shell">&gt; make a compound interest calculator in html</pre>
+
+                    <p><strong>Good:</strong></p>
+                    <pre class="shell">&gt; make a compound interest calculator — single-page index.html.
+&gt; inputs: principal, rate %/year, years.
+&gt; outputs: total + yearly table + chart.
+&gt; style: minimalist, warm paper palette, serif type.
+&gt; one file, no dependencies, opens with a double-click.</pre>
+
+                    <p>A good prompt has <strong>four layers</strong>:</p>
+                    <ol>
+                        <li><strong>Goal</strong> — what should appear. <em>“compound interest calculator”</em>.</li>
+                        <li><strong>Constraints</strong> — what not to do, what tools to use. <em>“one file, no deps”</em>.</li>
+                        <li><strong>Format</strong> — how the result should look. <em>“single-page index.html”</em>, <em>“inputs X, outputs Y”</em>.</li>
+                        <li><strong>Example or style</strong> — what it should resemble. <em>“minimalist, warm paper palette”</em>.</li>
+                    </ol>
+                    <p>The clearer those four layers, the closer the first version. But do <em>not</em> overdo: writing a ten-line prompt for every trivial task kills your speed. Simple task — short prompt.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Когда давать длинный <dfn class="term" tabindex="0" data-def="вся информация, которую Claude учитывает в текущем диалоге: ваши промпты, файлы, прошлые ответы. Длинный контекст = больше деталей, больше расходов.">контекст</dfn>, когда короткий</span><span lang="en">When to give long <dfn class="term" tabindex="0" data-def="all the information Claude considers in the current dialogue: your prompts, files, past replies. Long context = more detail, more cost.">context</dfn>, when short</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>«Контекст»&nbsp;&mdash; это вся информация, которую Claude видит в&nbsp;текущем диалоге: ваши промпты, прикреплённые файлы, прошлые ответы. Чем больше контекста, тем больше Claude знает&nbsp;&mdash; но&nbsp;и&nbsp;тем дороже стоит каждый ответ.</p>
+                    <p><strong>Длинный контекст полезен, когда:</strong></p>
+                    <ul>
+                        <li>задача завязана на&nbsp;конкретные файлы/данные;</li>
+                        <li>есть нетривиальные правила или стиль;</li>
+                        <li>важна совместимость с&nbsp;уже сделанным.</li>
+                    </ul>
+                    <p><strong>Короткий контекст лучше, когда:</strong></p>
+                    <ul>
+                        <li>задача типовая;</li>
+                        <li>вы&nbsp;не&nbsp;уверены, чего хотите&nbsp;&mdash; быстрее показать первую версию и&nbsp;уточнить;</li>
+                        <li>вы&nbsp;только начинаете <dfn class="term" tabindex="0" data-def="один диалог с Claude от запуска до выхода. Можно сохранить и продолжить позже через --continue или --resume.">сессию</dfn>.</li>
+                    </ul>
+                    <p>Хорошее правило: <em>сначала короткий промпт, потом доуточняем по&nbsp;ходу</em>. Это быстрее, чем сразу писать большой.</p>
+                </div>
+                <div lang="en">
+                    <p>“Context” is everything Claude sees in the current dialogue: your prompts, attached files, past replies. More context — more knowledge, but each reply costs more.</p>
+                    <p><strong>Long context helps when:</strong></p>
+                    <ul>
+                        <li>the task depends on specific files/data;</li>
+                        <li>there are non-trivial rules or style;</li>
+                        <li>compatibility with prior work matters.</li>
+                    </ul>
+                    <p><strong>Short context is better when:</strong></p>
+                    <ul>
+                        <li>the task is standard;</li>
+                        <li>you are not sure what you want — show v1 fast, then refine;</li>
+                        <li>you are just opening a new <dfn class="term" tabindex="0" data-def="one dialogue with Claude from launch to exit. You can save and resume later with --continue or --resume.">session</dfn>.</li>
+                    </ul>
+                    <p>Good rule: <em>start with a short prompt, refine as you go</em>. Faster than writing a big one upfront.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Итерация: «почти, но&hellip;», «нет, не&nbsp;так», «теперь добавь»</span><span lang="en">Iteration: “almost, but…”, “no, not like that”, “now add”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Главный навык всего курса: <em>не&nbsp;писать «идеальный» промпт сразу, а&nbsp;поправлять короткими шагами</em>.</p>
+                    <p>Полезные фразы для итерации:</p>
+                    <ul>
+                        <li><em>«почти, но&nbsp;шрифт слишком крупный»</em>;</li>
+                        <li><em>«нет, я&nbsp;имел в&nbsp;виду&hellip;»</em>;</li>
+                        <li><em>«сделай ту&nbsp;же страницу, но&nbsp;в&nbsp;тёмной теме»</em>;</li>
+                        <li><em>«добавь кнопку «сбросить» рядом с&nbsp;«посчитать»»</em>;</li>
+                        <li><em>«сохрани текущую версию как v1.html и&nbsp;сделай v2.html, где&hellip;»</em>.</li>
+                    </ul>
+                    <p>Claude быстрый. Пять-шесть итераций по&nbsp;30 секунд работают лучше, чем десять минут шлифовки одного промпта.</p>
+                </div>
+                <div lang="en">
+                    <p>The core habit of the whole course: <em>don’t write a “perfect” prompt — refine in short steps</em>.</p>
+                    <p>Useful iteration phrases:</p>
+                    <ul>
+                        <li><em>“almost, but the type is too big”</em>;</li>
+                        <li><em>“no, I meant…”</em>;</li>
+                        <li><em>“same page but in a dark theme”</em>;</li>
+                        <li><em>“add a ‘reset’ button next to ‘calculate’”</em>;</li>
+                        <li><em>“save the current as v1.html and make a v2.html where…”</em>.</li>
+                    </ul>
+                    <p>Claude is fast. Five-six iterations of thirty seconds beat ten minutes polishing one prompt.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="команда вернуть Claude к предыдущему состоянию: «верни как было», «забудь последнее», или клавиша Esc во время выполнения.">Откат</dfn>: «верни как было», «забудь последнее», Esc</span><span lang="en"><dfn class="term" tabindex="0" data-def="a command to return Claude to a previous state: “undo”, “forget that”, or Esc during execution.">Rollback</dfn>: “undo”, “forget that”, Esc</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Если итерация увела куда-то не&nbsp;туда, нужно уметь возвращаться:</p>
+                    <ul>
+                        <li><strong><code>Esc</code></strong>&nbsp;&mdash; во&nbsp;время выполнения. Останавливает текущее действие, ничего не&nbsp;трогает.</li>
+                        <li><strong><em>«верни файл X как был до&nbsp;последнего изменения»</em></strong>&nbsp;&mdash; Claude использует git или внутренние backup.</li>
+                        <li><strong><em>«забудь то, что я&nbsp;только что сказал, начнём заново с&nbsp;вот этого&hellip;»</em></strong>&nbsp;&mdash; явно говорите, что прошлый промпт «не&nbsp;считается». Claude уберёт его из&nbsp;своих рассуждений.</li>
+                        <li><strong><em>«удали файл X»</em></strong>&nbsp;&mdash; самый прямой откат, если нужно начать с&nbsp;нуля.</li>
+                    </ul>
+                    <p>Привыкайте откатываться без&nbsp;стеснения&nbsp;&mdash; это часть нормальной работы с&nbsp;агентом, а&nbsp;не&nbsp;признак ошибки.</p>
+                </div>
+                <div lang="en">
+                    <p>If iteration drifted somewhere wrong, you need to roll back:</p>
+                    <ul>
+                        <li><strong><code>Esc</code></strong> — during execution. Stops the current action, touches nothing.</li>
+                        <li><strong><em>“revert file X to the state before the last change”</em></strong> — Claude uses git or its internal backup.</li>
+                        <li><strong><em>“forget what I just said, let’s start again from this…”</em></strong> — say explicitly that the previous prompt does not count. Claude removes it from its reasoning.</li>
+                        <li><strong><em>“delete file X”</em></strong> — the most direct rollback when you want to start clean.</li>
+                    </ul>
+                    <p>Get comfortable rolling back — it is normal agent work, not a sign of failure.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Генерация <dfn class="term" tabindex="0" data-def="несколько разных версий одной задачи, сгенерированных одним запросом. «Сделай ещё две версии — в стиле X и Y».">вариантов</dfn>: «сделай ещё две версии»</span><span lang="en">Generating <dfn class="term" tabindex="0" data-def="several different versions of one task, generated in one request. “Make two more variants — in style X and Y.”">variants</dfn>: “make two more versions”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Один из&nbsp;любимых приёмов: попросить Claude сделать <em>несколько вариантов одной задачи</em>. Полезно, когда вы&nbsp;не&nbsp;уверены, какой стиль/подход хотите.</p>
+                    <pre class="shell">&gt; сохрани текущую версию как v1-classic.html.
+&gt; теперь сделай v2-minimal.html (более минималистичную)
+&gt; и v3-playful.html (с яркими цветами и анимацией).
+&gt; одни и те же данные, разный стиль.</pre>
+                    <p>На&nbsp;выходе&nbsp;&mdash; три файла. Открываете все три, сравниваете в&nbsp;браузере, выбираете любимый или просите что-то соединить.</p>
+                    <p>Этот приём незаменим, когда:</p>
+                    <ul>
+                        <li>вы&nbsp;ищете «свой» стиль и&nbsp;ещё не&nbsp;знаете его;</li>
+                        <li>нужно показать заказчику/другу выбор;</li>
+                        <li>хотите быстро увидеть, какие подходы Claude вообще считает уместными.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>A favourite trick: ask Claude to produce <em>several variants of one task</em>. Useful when you are not sure which style/approach you want.</p>
+                    <pre class="shell">&gt; save the current version as v1-classic.html.
+&gt; now make v2-minimal.html (more minimal)
+&gt; and v3-playful.html (bright colours, animations).
+&gt; same data, different styles.</pre>
+                    <p>You get three files. Open all in the browser, compare, pick a favourite or ask to merge.</p>
+                    <p>This is irreplaceable when:</p>
+                    <ul>
+                        <li>you are searching for “your” style and don’t know it yet;</li>
+                        <li>you need options to show a client/friend;</li>
+                        <li>you want a quick look at what approaches Claude considers appropriate.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Чтение результата: что Claude сделал, что предположил, что пропустил</span><span lang="en">Reading the result: what Claude did, assumed, missed</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>После каждого ответа Claude в&nbsp;терминале есть <em>две части</em>:</p>
+                    <ol>
+                        <li><strong>Что он&nbsp;сделал</strong>&nbsp;&mdash; список изменений (созданные/изменённые файлы, выполненные команды). Это видно сразу.</li>
+                        <li><strong>Что он&nbsp;предположил</strong>&nbsp;&mdash; решения, которые он&nbsp;принял за&nbsp;вас. Например: «использовал библиотеку Chart.js», «выбрал тёмную тему», «считал ставку годовой».</li>
+                    </ol>
+                    <p>Привыкайте читать <em>оба слоя</em>. Если Claude предположил что-то не&nbsp;так&nbsp;&mdash; на&nbsp;следующей итерации поправьте: <em>«нет, ставка должна быть месячной»</em>.</p>
+                    <p>Если что-то <em>пропустил</em>&nbsp;&mdash; явно укажите: <em>«ты&nbsp;не&nbsp;добавил кнопку сброса, добавь»</em>.</p>
+                    <p>Это и&nbsp;есть «навык чтения результата»&nbsp;&mdash; один из&nbsp;ключевых для всего курса.</p>
+                </div>
+                <div lang="en">
+                    <p>After every reply Claude has <em>two parts</em>:</p>
+                    <ol>
+                        <li><strong>What it did</strong> — list of changes (files created/modified, commands run). Visible immediately.</li>
+                        <li><strong>What it assumed</strong> — choices it made for you. E.g.: “used Chart.js,” “picked a dark theme,” “treated the rate as yearly.”</li>
+                    </ol>
+                    <p>Get used to reading <em>both layers</em>. If Claude assumed something wrong — fix it next iteration: <em>“no, the rate is monthly.”</em></p>
+                    <p>If something is <em>missing</em> — say so: <em>“you did not add a reset button, add it.”</em></p>
+                    <p>This is the “result-reading skill,” one of the most important across the course.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Сохранение и&nbsp;возобновление сессий: <code>--continue</code>, <code>--resume</code></span><span lang="en">Saving and resuming sessions: <code>--continue</code>, <code>--resume</code></span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Сессия Claude Code не&nbsp;пропадает, когда вы&nbsp;закрываете терминал. Можно вернуться позже:</p>
+                    <pre class="shell"><span class="cmt"># продолжить последнюю сессию в текущей папке</span>
+<span class="prompt">$</span> claude --continue
+
+<span class="cmt"># выбрать одну из недавних сессий из списка</span>
+<span class="prompt">$</span> claude --resume</pre>
+                    <p>Полезно, когда:</p>
+                    <ul>
+                        <li>задача большая, вы&nbsp;вернулись на&nbsp;следующий день;</li>
+                        <li>не&nbsp;хочется заново объяснять контекст;</li>
+                        <li>был сбой и&nbsp;диалог закрылся неожиданно.</li>
+                    </ul>
+                    <p>На&nbsp;этапе 04 разберём, как длинные сессии «уплотнять» через <code>/compact</code>, чтобы Claude не&nbsp;тонул в&nbsp;старых сообщениях.</p>
+                </div>
+                <div lang="en">
+                    <p>A Claude Code session does not vanish when you close the terminal. You can come back:</p>
+                    <pre class="shell"><span class="cmt"># continue the latest session in the current folder</span>
+<span class="prompt">$</span> claude --continue
+
+<span class="cmt"># pick one recent session from a list</span>
+<span class="prompt">$</span> claude --resume</pre>
+                    <p>Useful when:</p>
+                    <ul>
+                        <li>the task is big, you returned the next day;</li>
+                        <li>you don’t want to re-explain context;</li>
+                        <li>a crash closed the dialogue unexpectedly.</li>
+                    </ul>
+                    <p>On etape 04 we cover how to compact long sessions with <code>/compact</code> so Claude does not drown in old messages.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Плохой промпт vs хороший · 5 пар на&nbsp;разбор</span><span lang="en">Bad prompt vs good · 5 pairs to study</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Прочитайте каждую пару и&nbsp;попробуйте сами сформулировать «хороший вариант» для своей задачи&nbsp;&mdash; например, для&nbsp;карточки фильма из&nbsp;этапа&nbsp;00. Дальше будет прогон, где надо применить в&nbsp;диалоге.</p>
+        <p class="reading" lang="en">Read each pair and try to phrase a “good version” for your own task — e.g. the film card from etape 00. Then a hands-on run where you apply this in dialogue.</p>
+
+        <div class="practice">
+            <h4><span lang="ru">Пять пар «плохой → хороший»</span><span lang="en">Five “bad → good” pairs</span></h4>
+            <div lang="ru">
+                <p><strong>1. Сайт</strong></p>
+                <pre class="shell"><span class="cmt"># плохо</span>
+&gt; сделай мне сайт
+<span class="cmt"># хорошо</span>
+&gt; сделай одностраничник про мою кофейню «Утро».
+&gt; вверху имя и слоган, ниже меню (3 категории по 4 позиции),
+&gt; время работы, карта (просто адрес курсивом), футер с инстаграмом.
+&gt; стиль — как в скандинавском кафе, тёплые бежевые тона.</pre>
+
+                <p><strong>2. Калькулятор</strong></p>
+                <pre class="shell"><span class="cmt"># плохо</span>
+&gt; калькулятор
+<span class="cmt"># хорошо</span>
+&gt; калькулятор калорий за день: ввод — продукты с весом,
+&gt; результат — общая калорийность + БЖУ.
+&gt; одна страница html, без зависимостей, простая таблица.</pre>
+
+                <p><strong>3. Игра</strong></p>
+                <pre class="shell"><span class="cmt"># плохо</span>
+&gt; сделай игру
+<span class="cmt"># хорошо</span>
+&gt; сделай браузерную игру «угадай число от 1 до 100».
+&gt; компьютер загадывает, я угадываю, он подсказывает «больше/меньше».
+&gt; 7 попыток, в конце — статистика.
+&gt; одна html-страница, тёмная тема, крупные кнопки.</pre>
+
+                <p><strong>4. Анализ</strong></p>
+                <pre class="shell"><span class="cmt"># плохо</span>
+&gt; проанализируй мои траты
+<span class="cmt"># хорошо</span>
+&gt; в файле expenses.csv — мои траты за квартал (дата, сумма, категория, заметка).
+&gt; собери short-отчёт в expenses-report.md:
+&gt;   1) общая сумма по месяцам;
+&gt;   2) топ-3 категорий;
+&gt;   3) две неожиданные заметки, которые требуют моего внимания.
+&gt; не давай советов «как экономить» — только факты.</pre>
+
+                <p><strong>5. Дизайн</strong></p>
+                <pre class="shell"><span class="cmt"># плохо</span>
+&gt; сделай страницу красивой
+<span class="cmt"># хорошо</span>
+&gt; перепиши index.html в стиле японской газеты shimbun:
+&gt; засечковый шрифт, два столбца, ornate horizontal rules,
+&gt; никаких анимаций, бумажный фон.</pre>
+            </div>
+            <div lang="en">
+                <p><strong>1. Website</strong></p>
+                <pre class="shell"><span class="cmt"># bad</span>
+&gt; make me a website
+<span class="cmt"># good</span>
+&gt; one-pager for my coffee shop "Morning."
+&gt; top — name and tagline, then menu (3 categories x 4 items),
+&gt; opening hours, map (just an italic address), footer with instagram.
+&gt; style — Scandinavian cafe, warm beige tones.</pre>
+
+                <p><strong>2. Calculator</strong></p>
+                <pre class="shell"><span class="cmt"># bad</span>
+&gt; calculator
+<span class="cmt"># good</span>
+&gt; daily calorie calculator: input — foods with weight,
+&gt; output — total calories + protein/fat/carbs.
+&gt; one html page, no deps, simple table.</pre>
+
+                <p><strong>3. Game</strong></p>
+                <pre class="shell"><span class="cmt"># bad</span>
+&gt; make a game
+<span class="cmt"># good</span>
+&gt; browser game "guess a number 1 to 100."
+&gt; computer picks, I guess, it hints "higher/lower."
+&gt; 7 attempts, statistics at the end.
+&gt; one html page, dark theme, large buttons.</pre>
+
+                <p><strong>4. Analysis</strong></p>
+                <pre class="shell"><span class="cmt"># bad</span>
+&gt; analyse my expenses
+<span class="cmt"># good</span>
+&gt; expenses.csv contains my Q1 expenses (date, amount, category, note).
+&gt; produce a short report expenses-report.md:
+&gt;   1) totals by month;
+&gt;   2) top-3 categories;
+&gt;   3) two unusual notes that need my attention.
+&gt; don't suggest "how to save" — facts only.</pre>
+
+                <p><strong>5. Design</strong></p>
+                <pre class="shell"><span class="cmt"># bad</span>
+&gt; make the page beautiful
+<span class="cmt"># good</span>
+&gt; rewrite index.html in Japanese shimbun style:
+&gt; serif type, two columns, ornate horizontal rules,
+&gt; no animations, paper background.</pre>
+            </div>
+            <p lang="ru">Что общего у&nbsp;«хороших»? <strong>Конкретное имя файла или сущности</strong>, <strong>измеримые ограничения</strong> («3 категории по&nbsp;4&nbsp;позиции», «7&nbsp;попыток»), <strong>намёк на&nbsp;стиль</strong> через узнаваемое сравнение («скандинавское кафе», «японская газета shimbun»).</p>
+            <p lang="en">What good prompts share: <strong>a concrete file or entity name</strong>, <strong>measurable constraints</strong> (“3 cats × 4 items,” “7 attempts”), <strong>a style cue via recognisable comparison</strong> (“Scandinavian cafe,” “Japanese shimbun”).</p>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · Одна страница, пять итераций</span><span lang="en">Run · One page, five iterations</span></h4>
+            <ol lang="ru">
+                <li>В&nbsp;папке <code>claude-course</code> создайте новую папку <code>iter</code>, запустите там <code>claude</code>.</li>
+                <li><strong>Промпт 1.</strong> <em>«сделай простую страницу-таймер на&nbsp;15&nbsp;минут. кнопка старт/стоп, цифры крупным шрифтом, центр экрана»</em>.</li>
+                <li>Откройте файл в&nbsp;браузере. Поправьте <strong>2</strong>: <em>«поменяй цвет цифр на&nbsp;тёплый оранжевый»</em>.</li>
+                <li>Поправьте <strong>3</strong>: <em>«добавь кнопку «сброс» рядом со&nbsp;стартом, тех&nbsp;же размеров»</em>.</li>
+                <li>Поправьте <strong>4</strong>: <em>«сохрани текущую версию как timer-classic.html. сделай ещё timer-noir.html&nbsp;&mdash; чёрный фон, неоновые цифры»</em>.</li>
+                <li>Поправьте <strong>5</strong>: <em>«в&nbsp;noir добавь тиканье каждую секунду через ‹audio› (синтезируй через web-audio, без&nbsp;скачивания)»</em>.</li>
+                <li>В&nbsp;конце сделайте промпт-«ревизию»: <em>«покажи в&nbsp;виде списка, что ты&nbsp;предположил за&nbsp;меня, чего я&nbsp;не&nbsp;указал»</em>.</li>
+            </ol>
+            <ol lang="en">
+                <li>Inside <code>claude-course</code> make a new folder <code>iter</code>, launch <code>claude</code> there.</li>
+                <li><strong>Prompt 1.</strong> <em>“make a simple 15-minute timer page. start/stop button, large digits, centred”</em>.</li>
+                <li>Open the file in the browser. Fix <strong>2</strong>: <em>“change the digit colour to warm orange”</em>.</li>
+                <li>Fix <strong>3</strong>: <em>“add a ‘reset’ button next to start, same size”</em>.</li>
+                <li>Fix <strong>4</strong>: <em>“save current as timer-classic.html. now make a timer-noir.html — black bg, neon digits”</em>.</li>
+                <li>Fix <strong>5</strong>: <em>“in noir add a tick every second via ‹audio› (synthesise via web-audio, no downloads)”</em>.</li>
+                <li>Finally, an audit prompt: <em>“list what you assumed for me that I did not specify”</em>.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>работать через короткие шаги</strong>, <strong>генерировать варианты</strong>, <strong>видеть собственные пробелы в&nbsp;промптах</strong> через ревизию-вопрос.</p>
+            <p lang="en">What we train: <strong>working in short steps</strong>, <strong>generating variants</strong>, <strong>seeing your own gaps</strong> via the audit question.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Калькулятор и&nbsp;игра</span><span lang="en">A calculator and a game</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Эти два проекта&nbsp;&mdash; «база» курса. На&nbsp;них учимся писать промпты, итерировать, генерировать варианты. К&nbsp;концу у&nbsp;вас два отдельных артефакта.</p>
+        <p class="reading" lang="en">These two projects are the “base” of the course. We use them to learn prompts, iteration, variants. At the end you have two separate artefacts.</p>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Калькулятор сложного процента</span><span lang="en">Compound interest calculator</span></h3>
+            <p class="goal" lang="ru">Цель: одностраничник в&nbsp;браузере. Ввод&nbsp;&mdash; сумма, ставка, срок. Вывод&nbsp;&mdash; итог по&nbsp;годам в&nbsp;таблице и&nbsp;графиком.</p>
+            <p class="goal" lang="en">Goal: a one-pager in the browser. Inputs — principal, rate, term. Outputs — yearly totals as a table and a chart.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>compound</code> в&nbsp;<code>claude-course</code>, запустите <code>claude</code>.</li>
+                <li>Начальный промпт (используем все четыре слоя&nbsp;&mdash; цель, ограничения, формат, стиль):
+                    <pre class="shell">&gt; сделай калькулятор сложного процента, одностраничник index.html.
+&gt; ввод: сумма (число), ставка %/год, срок в годах.
+&gt; вывод: итоговая сумма + таблица «год | вклад на конец года»
+&gt; + график рост капитала (можно chart.js через CDN).
+&gt; стиль — минималистичный, тёплая бумажная палитра,
+&gt; засечковый шрифт, центр страницы.
+&gt; одним файлом, открывается двойным кликом.</pre>
+                </li>
+                <li>Откройте <code>index.html</code> двойным кликом. Прогоните 1000&nbsp;₽, 10%, 10&nbsp;лет&nbsp;&mdash; должно быть около 2594.</li>
+                <li>Уточняйте по&nbsp;ходу:
+                    <ul>
+                        <li><em>«сделай ввод тремя полями в&nbsp;одну строку, не&nbsp;столбиком»</em>;</li>
+                        <li><em>«добавь поле «частота начислений» с&nbsp;опциями: годовая, квартальная, месячная»</em>;</li>
+                        <li><em>«в&nbsp;таблицу добавь столбец «прирост за&nbsp;год»»</em>;</li>
+                        <li><em>«добавь кнопку «сбросить»»</em>.</li>
+                    </ul>
+                </li>
+                <li>Когда нравится&nbsp;&mdash; попросите три варианта: <em>«сохрани как compound-classic.html. сделай ещё compound-dark.html (тёмная тема) и&nbsp;compound-print.html (как страница финансовой газеты, чёрно-белый)»</em>.</li>
+                <li>Финальный аудит: <em>«перечисли в&nbsp;виде списка, что ты&nbsp;принял за&nbsp;меня&nbsp;&mdash; цвета, шрифты, валюту, формулу»</em>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Make a folder <code>compound</code> inside <code>claude-course</code>, launch <code>claude</code>.</li>
+                <li>Starting prompt (use all four layers — goal, constraints, format, style):
+                    <pre class="shell">&gt; make a compound interest calculator, single-page index.html.
+&gt; inputs: principal (number), rate %/year, years.
+&gt; outputs: total + table "year | balance at year end"
+&gt; + a chart of capital growth (chart.js via CDN is fine).
+&gt; style — minimalist, warm paper palette,
+&gt; serif type, centred on the page.
+&gt; one file, opens with a double-click.</pre>
+                </li>
+                <li>Open <code>index.html</code> with a double-click. Try 1000, 10%, 10y — should be near 2594.</li>
+                <li>Refine as you go:
+                    <ul>
+                        <li><em>“put the three inputs in one row, not stacked”</em>;</li>
+                        <li><em>“add a ‘compounding frequency’ field with annual / quarterly / monthly”</em>;</li>
+                        <li><em>“add a ‘yearly gain’ column to the table”</em>;</li>
+                        <li><em>“add a reset button”</em>.</li>
+                    </ul>
+                </li>
+                <li>When you like it — ask for variants: <em>“save as compound-classic.html. now make compound-dark.html (dark theme) and compound-print.html (a financial newspaper page, black and white)”</em>.</li>
+                <li>Final audit: <em>“list what you assumed for me — colours, fonts, currency, formula”</em>.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>четырёх-слойный промпт на&nbsp;нетривиальной задаче;</li>
+                <li>итеративные уточнения вокруг одной страницы;</li>
+                <li>генерацию нескольких стилевых вариантов;</li>
+                <li>аудит-вопрос «что ты&nbsp;принял за&nbsp;меня».</li>
+            </ul>
+            <ul lang="en">
+                <li>a four-layer prompt on a non-trivial task;</li>
+                <li>iterative refinements around one page;</li>
+                <li>generating multiple style variants;</li>
+                <li>the audit question “what did you assume for me.”</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Игра «угадай число»</span><span lang="en">“Guess the number” game</span></h3>
+            <p class="goal" lang="ru">Цель: браузерная игра. Компьютер загадывает число от&nbsp;1 до&nbsp;100, у&nbsp;вас 7&nbsp;попыток, после каждой&nbsp;&mdash; «больше&nbsp;/ меньше». Рекорды сохраняются в&nbsp;файл рядом.</p>
+            <p class="goal" lang="en">Goal: a browser game. The computer picks 1 to 100, you have 7 guesses, “higher / lower” after each. Highscores saved to a file next to the page.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Папка <code>guess</code>, <code>claude</code> в&nbsp;ней.</li>
+                <li>Начальный промпт:
+                    <pre class="shell">&gt; сделай игру «угадай число» в браузере. одна html-страница.
+&gt; компьютер загадывает целое число от 1 до 100.
+&gt; у меня 7 попыток. ввожу число, нажимаю «угадать»,
+&gt; компьютер отвечает «больше» / «меньше» / «угадал».
+&gt; в конце игры — статистика (попыток, время) и кнопка «ещё раз».
+&gt; рекорды (имя + попыток + время) сохраняй в localStorage.
+&gt; стиль — крупная типографика, центр экрана, тёплая палитра.</pre>
+                </li>
+                <li>Поиграйте раз пять. Заметьте, что Claude мог что-то «не&nbsp;то» сделать&nbsp;&mdash; например, не&nbsp;показывать сколько попыток осталось.</li>
+                <li>Уточняйте:
+                    <ul>
+                        <li><em>«добавь крупный счётчик «осталось N&nbsp;попыток» сверху»</em>;</li>
+                        <li><em>«при проигрыше показывай загаданное число»</em>;</li>
+                        <li><em>«сделай таблицу рекордов прокручиваемой, не&nbsp;шире контента»</em>;</li>
+                        <li><em>«добавь три уровня сложности: 1–50 / 1–100 / 1–500»</em>.</li>
+                    </ul>
+                </li>
+                <li>Сохраните как <code>guess-v1.html</code>. Сделайте «вариант для&nbsp;детей»:
+                    <pre class="shell">&gt; сделай guess-kids.html: тот же геймплей, но
+&gt; крупные эмодзи вместо «больше / меньше» (👆 / 👇),
+&gt; озвучка победы через web-audio (без файлов),
+&gt; диапазон 1–20, 5 попыток.</pre>
+                </li>
+                <li>Аудит: <em>«перечисли, что ты&nbsp;добавил без&nbsp;явной просьбы&nbsp;&mdash; например, шрифты, иконки, тексты»</em>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Folder <code>guess</code>, <code>claude</code> there.</li>
+                <li>Starting prompt:
+                    <pre class="shell">&gt; make a "guess the number" browser game. one html page.
+&gt; computer picks an integer 1 to 100.
+&gt; I have 7 attempts. I enter a number, press "guess",
+&gt; computer replies "higher" / "lower" / "got it".
+&gt; at the end — stats (attempts, time) and "play again".
+&gt; save highscores (name + attempts + time) to localStorage.
+&gt; style — bold typography, centred, warm palette.</pre>
+                </li>
+                <li>Play five rounds. Notice what Claude did wrong — e.g., not showing how many attempts are left.</li>
+                <li>Refine:
+                    <ul>
+                        <li><em>“add a large ‘N attempts left’ counter at the top”</em>;</li>
+                        <li><em>“on loss, reveal the secret number”</em>;</li>
+                        <li><em>“make the highscores table scrollable, no wider than the content”</em>;</li>
+                        <li><em>“add three difficulty levels: 1–50 / 1–100 / 1–500”</em>.</li>
+                    </ul>
+                </li>
+                <li>Save as <code>guess-v1.html</code>. Make a “kids version”:
+                    <pre class="shell">&gt; make guess-kids.html: same gameplay but
+&gt; large emoji instead of "higher / lower" (👆 / 👇),
+&gt; victory sound via web-audio (no files),
+&gt; range 1–20, 5 attempts.</pre>
+                </li>
+                <li>Audit: <em>“list what you added without me asking — fonts, icons, text”</em>.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>задача с&nbsp;состоянием (счётчик, рекорды, режимы);</li>
+                <li>превратить базовую версию в&nbsp;«детскую» одной просьбой;</li>
+                <li>аудит «что Claude добавил по&nbsp;своей инициативе».</li>
+            </ul>
+            <ul lang="en">
+                <li>a task with state (counter, highscores, modes);</li>
+                <li>turning a base version into a “kids version” with one ask;</li>
+                <li>auditing “what Claude added on its own.”</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши данные</span><span lang="en">Same moves, your data</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Эти задачи&nbsp;&mdash; вариации проектов&nbsp;A и&nbsp;B. Структура та&nbsp;же&nbsp;&mdash; четырёх-слойный промпт, 4–6 итераций, 2–3 варианта стиля, аудит. Когда что-то идёт не&nbsp;так&nbsp;&mdash; вернитесь к&nbsp;инструкциям выше.</p>
+        <p class="reading" lang="en">These are variations of projects A and B. Same structure — four-layer prompt, 4–6 iterations, 2–3 style variants, an audit. If anything goes wrong — return to the guided instructions above.</p>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Калькулятор накопления на&nbsp;цель</span><span lang="en">“Save toward a goal” calculator</span></h3>
+            <p class="goal" lang="ru">Цель: одностраничник, который отвечает на&nbsp;вопрос «сколько копить в&nbsp;месяц, чтобы накопить N&nbsp;к&nbsp;дате T при ставке X%». Те&nbsp;же четыре слоя, что в&nbsp;проекте&nbsp;A.</p>
+            <p class="goal" lang="en">Goal: a one-pager that answers “how much to save monthly to reach N by date T at X% rate.” Same four layers as project A.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Структура та&nbsp;же, что у&nbsp;проекта&nbsp;A&nbsp;&mdash; меняется формула и&nbsp;имена полей.</li>
+                <li>Поля ввода: цель ₽, дата цели (или «через X лет»), текущая сумма, ставка %/год.</li>
+                <li>Вывод: «нужно откладывать N&nbsp;₽/мес» + таблица по&nbsp;месяцам + график.</li>
+                <li>Сделайте 2–3 варианта стиля, как мы&nbsp;делали с&nbsp;compound.</li>
+            </ul>
+            <ul lang="en">
+                <li>Same structure as project A — only the formula and field names change.</li>
+                <li>Inputs: goal amount, goal date (or “in X years”), current savings, rate %/year.</li>
+                <li>Outputs: “save N/month” + monthly table + chart.</li>
+                <li>Make 2–3 style variants, as we did with compound.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть три файла-версии: <code>save-classic.html</code>, <code>save-dark.html</code>, <code>save-print.html</code>;</li>
+                        <li>правильно считает: при цели 1&nbsp;000&nbsp;000, ставке 8% и&nbsp;сроке 10&nbsp;лет нужно откладывать примерно 5–6&nbsp;тысяч в&nbsp;месяц (формула аннуитета);</li>
+                        <li>есть кнопка «сбросить» и&nbsp;понятная подпись валюты;</li>
+                        <li>на&nbsp;узком окне (телефон) ввод и&nbsp;таблица не&nbsp;ломаются;</li>
+                        <li>вы&nbsp;провели хотя&nbsp;бы один аудит-промпт «что ты&nbsp;принял за&nbsp;меня» и&nbsp;поправили хотя&nbsp;бы одно из&nbsp;предположений.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>three files: <code>save-classic.html</code>, <code>save-dark.html</code>, <code>save-print.html</code>;</li>
+                        <li>maths is right: goal 1,000,000 at 8% over 10 years should require ≈ 5–6 thousand per month (annuity formula);</li>
+                        <li>a “reset” button and a clear currency label are present;</li>
+                        <li>on a narrow window (phone) inputs and table do not break;</li>
+                        <li>you ran at least one audit prompt “what did you assume for me” and fixed at least one assumption.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Сравни три моих файла save-*.html. Какой из&nbsp;них покажет лучший результат финансовому консультанту? Где формула считается одинаково? Найди расхождения, если есть»</em>. Это вторая часть аудита&nbsp;&mdash; <em>сверка цифр</em>, не&nbsp;только дизайна.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Compare my three save-*.html files. Which would show best to a financial advisor? Is the formula identical across all three? Find discrepancies if any.”</em> This is the second half of the audit — <em>checking the numbers</em>, not only the design.
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Игра «камень-ножницы-бумага»</span><span lang="en">“Rock-paper-scissors” game</span></h3>
+            <p class="goal" lang="ru">Цель: браузерная игра против компьютера, серия из&nbsp;5&nbsp;раундов, счёт сохраняется в&nbsp;localStorage. Та&nbsp;же структура, что у&nbsp;«угадай число».</p>
+            <p class="goal" lang="en">Goal: a browser game against the computer, best-of-5, score saved to localStorage. Same structure as “guess the number.”</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Три кнопки выбора (камень / ножницы / бумага)&nbsp;&mdash; крупными иконками или эмодзи.</li>
+                <li>В&nbsp;конце раунда показывайте, что выбрал компьютер.</li>
+                <li>Счёт «вы&nbsp;X : Y компьютер» сверху страницы.</li>
+                <li>После 5&nbsp;раундов&nbsp;&mdash; «победа&nbsp;/ ничья&nbsp;/ поражение» крупно, кнопка «ещё».</li>
+                <li>Сделайте «детскую» версию с&nbsp;анимацией кулака на&nbsp;«1, 2, 3».</li>
+            </ul>
+            <ul lang="en">
+                <li>Three choice buttons (rock / paper / scissors) — large icons or emoji.</li>
+                <li>After each round, show the computer’s pick.</li>
+                <li>“You X : Y CPU” score at the top.</li>
+                <li>After 5 rounds — large “you win / draw / you lose,” “again” button.</li>
+                <li>Make a “kids” variant with a fist animation on “1, 2, 3.”</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>две версии: <code>rps-v1.html</code> (классика) и&nbsp;<code>rps-kids.html</code> (детская с&nbsp;анимацией);</li>
+                        <li>счёт сохраняется между перезагрузками браузера;</li>
+                        <li>выбор компьютера действительно случайный (сыграйте 10&nbsp;раз и&nbsp;убедитесь, что не&nbsp;всегда «бумага»);</li>
+                        <li>после 5&nbsp;раундов есть финальный экран и&nbsp;возможность сыграть ещё;</li>
+                        <li>на&nbsp;телефоне кнопки крупные, удобно жать пальцем.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>two versions: <code>rps-v1.html</code> (classic) and <code>rps-kids.html</code> (kids with animation);</li>
+                        <li>score persists across browser reloads;</li>
+                        <li>computer pick is actually random (play 10 rounds, confirm not always “paper”);</li>
+                        <li>after 5 rounds a final screen with “play again”;</li>
+                        <li>on a phone the buttons are large and finger-friendly.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Сыграй сам в&nbsp;rps-v1.html, открыв его в&nbsp;браузере через playwright. Сделай 20&nbsp;ходов «камень». Распределение ответов компьютера должно быть примерно равномерным&nbsp;&mdash; проверь и&nbsp;скажи, нет&nbsp;ли перекоса»</em>.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Play rps-v1.html yourself in the browser via playwright. Make 20 ‘rock’ moves. The computer’s pick distribution should be roughly uniform — check and report any skew.”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Этап&nbsp;01 расширяет понятия из&nbsp;этапа&nbsp;00 и&nbsp;добавляет несколько новых. В&nbsp;тексте они подчёркнуты пунктиром&nbsp;&mdash; наведите/коснитесь, и&nbsp;всплывёт справка.</p>
+        <p class="reading" lang="en">Etape 01 builds on etape 00 and adds a few new terms. They are underlined with dots in the text — hover or tap to see the tooltip.</p>
+
+        <dl class="glossary">
+            <dt><span lang="ru">Промпт</span><span lang="en">Prompt</span></dt>
+            <dd>
+                <span lang="ru"><em>(расширено)</em> Формулировка задачи. Хороший промпт состоит из&nbsp;четырёх слоёв: <strong>цель</strong>, <strong>ограничения</strong>, <strong>формат</strong>, <strong>пример&nbsp;/ стиль</strong>. На&nbsp;простые задачи&nbsp;&mdash; короткий промпт, на&nbsp;сложные&nbsp;&mdash; все четыре слоя.</span>
+                <span lang="en"><em>(extended)</em> The wording of a task. A good prompt has four layers: <strong>goal</strong>, <strong>constraints</strong>, <strong>format</strong>, <strong>example / style</strong>. Short prompt for simple tasks, all four for complex ones.</span>
+            </dd>
+
+            <dt><span lang="ru">Контекст</span><span lang="en">Context</span></dt>
+            <dd>
+                <span lang="ru">Вся информация, которую Claude учитывает в&nbsp;текущем диалоге: ваши промпты, прикреплённые файлы, прошлые ответы. Чем длиннее контекст&nbsp;&mdash; тем больше Claude знает, тем дороже стоит каждый ответ. На&nbsp;этапе 04 разбираем, как им&nbsp;управлять.</span>
+                <span lang="en">All information Claude considers in the current dialogue: your prompts, attached files, past replies. Longer context — more knowledge, higher cost per reply. Etape 04 covers how to manage it.</span>
+            </dd>
+
+            <dt><span lang="ru">Итерация</span><span lang="en">Iteration</span></dt>
+            <dd>
+                <span lang="ru"><em>(повтор)</em> Повторный заход по&nbsp;той&nbsp;же задаче с&nbsp;поправкой. Главный навык курса&nbsp;&mdash; не&nbsp;писать «идеальный» промпт сразу, а&nbsp;поправлять короткими шагами.</span>
+                <span lang="en"><em>(recap)</em> Going through the same task again with a correction. The main course skill — don’t write a “perfect” prompt, refine in short steps.</span>
+            </dd>
+
+            <dt><span lang="ru">Откат</span><span lang="en">Rollback</span></dt>
+            <dd>
+                <span lang="ru">Команда вернуть Claude или файл к&nbsp;предыдущему состоянию. Способы: <code>Esc</code> (во&nbsp;время выполнения), <em>«верни как было»</em>, <em>«забудь предыдущее»</em>, <em>«удали этот файл»</em>.</span>
+                <span lang="en">A command to return Claude or a file to a previous state. Forms: <code>Esc</code> during execution, <em>“revert,”</em> <em>“forget the previous,”</em> <em>“delete this file.”</em></span>
+            </dd>
+
+            <dt><span lang="ru">Варианты</span><span lang="en">Variants</span></dt>
+            <dd>
+                <span lang="ru">Несколько разных версий одной задачи, сгенерированных одним запросом. <em>«сохрани как v1, теперь сделай v2 в&nbsp;другом стиле»</em>. Полезно, когда не&nbsp;уверены, какой подход хотите.</span>
+                <span lang="en">Several different versions of one task, generated in one request. <em>“save as v1, now make a v2 in another style.”</em> Useful when you do not know which approach you want.</span>
+            </dd>
+
+            <dt><span lang="ru">Сессия</span><span lang="en">Session</span></dt>
+            <dd>
+                <span lang="ru">Один диалог с&nbsp;Claude от&nbsp;запуска до&nbsp;выхода. Сессия не&nbsp;пропадает при закрытии терминала&nbsp;&mdash; продолжите через <code>claude --continue</code> или выберите из&nbsp;списка через <code>claude --resume</code>.</span>
+                <span lang="en">One dialogue with Claude from launch to exit. A session does not vanish when you close the terminal — resume via <code>claude --continue</code> or pick from a list via <code>claude --resume</code>.</span>
+            </dd>
+
+            <dt><span lang="ru">Аудит-промпт</span><span lang="en">Audit prompt</span></dt>
+            <dd>
+                <span lang="ru">Финальный вопрос диалога: <em>«перечисли, что ты&nbsp;принял за&nbsp;меня&nbsp;&mdash; цвета, формулу, валюту, шрифты»</em>. Помогает увидеть «слепые пятна» вашего промпта и&nbsp;сделать их&nbsp;явными в&nbsp;следующий раз.</span>
+                <span lang="en">A final question in a dialogue: <em>“list what you assumed for me — colours, formula, currency, fonts.”</em> Helps surface blind spots in your prompt and make them explicit next time.</span>
+            </dd>
+
+            <dt><span lang="ru">CDN</span><span lang="en">CDN</span></dt>
+            <dd>
+                <span lang="ru">Сервер, с&nbsp;которого браузер скачивает готовую библиотеку (например, <code>chart.js</code>) при открытии страницы. В&nbsp;промпте «через CDN» означает: не&nbsp;качай и&nbsp;не&nbsp;ставь&nbsp;&mdash; вставь ссылку, и&nbsp;всё.</span>
+                <span lang="en">A server the browser downloads a ready-made library from (e.g. <code>chart.js</code>) when opening the page. “Via CDN” in a prompt means: do not download / install — just include a URL.</span>
+            </dd>
+
+            <dt><span lang="ru">localStorage</span><span lang="en">localStorage</span></dt>
+            <dd>
+                <span lang="ru">«Память» браузера для одной страницы&nbsp;&mdash; данные сохраняются между перезагрузками. Используем для&nbsp;рекордов, сохранённых тем, состояния игр.</span>
+                <span lang="en">A browser’s “memory” for one page — data persists across reloads. Used for highscores, saved themes, game state.</span>
+            </dd>
+
+            <dt><span lang="ru">brainstorming</span><span lang="en">brainstorming</span></dt>
+            <dd>
+                <span lang="ru">Skill, который <em>учит</em> Claude задавать уточняющие вопросы перед началом задачи. Полезен, когда вы&nbsp;только начинаете и&nbsp;не&nbsp;всегда сами знаете, чего хотите. Установлен опционально в&nbsp;§&nbsp;0.</span>
+                <span lang="en">A skill that teaches Claude to ask clarifying questions before starting a task. Useful when you don’t fully know what you want yet. Optionally installed in § 0.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Постарайтесь сначала ответить мысленно или вслух&nbsp;&mdash; только потом раскрывайте ответ. После сравнения отметьте: <em>знал</em> или <em>не знал</em>. По&nbsp;итогам подскажу, что повторить.</p>
+        <p class="reading" lang="en">Answer mentally or out loud first — only then reveal. After comparing, mark <em>knew</em> or <em>did not know</em>. From the totals I will tell you what to revisit.</p>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Из&nbsp;каких четырёх слоёв состоит хороший промпт?</span><span lang="en">What are the four layers of a good prompt?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Цель</strong> (что должно получиться) · <strong>ограничения</strong> (чего не&nbsp;делать&nbsp;/ какими средствами) · <strong>формат</strong> (в&nbsp;каком виде получить результат) · <strong>пример&nbsp;/ стиль</strong> (на&nbsp;что похоже).</p>
+                        <p lang="en"><strong>Goal</strong> (what should appear) · <strong>constraints</strong> (what not to do / which tools) · <strong>format</strong> (how the result should look) · <strong>example / style</strong> (what it should resemble).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Что лучше: написать «идеальный» десяти-строчный промпт сразу или начать с&nbsp;короткого и&nbsp;поправлять? Почему?</span><span lang="en">Better: write a “perfect” ten-line prompt up front, or start short and refine? Why?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Лучше короткий + итерации. Claude быстрый: 5–6 поправок по&nbsp;30&nbsp;секунд работают точнее и&nbsp;быстрее, чем 10&nbsp;минут шлифовки одного промпта. Кроме того, вы&nbsp;увидите, что Claude предположил&nbsp;&mdash; это сразу подсветит ваши собственные пробелы.</p>
+                        <p lang="en">Short + iterations. Claude is fast: 5–6 thirty-second tweaks beat ten minutes polishing one prompt. Plus you see what Claude assumed — that immediately surfaces your own blind spots.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Чем отличается «откат» через <code>Esc</code> от&nbsp;«верни файл как был»?</span><span lang="en">How does <code>Esc</code> rollback differ from “revert the file”?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>Esc</code>&nbsp;&mdash; останавливает <em>текущее</em> действие во&nbsp;время выполнения, ничего не&nbsp;трогает. <em>«верни файл как был»</em>&nbsp;&mdash; откатывает <em>уже сделанные</em> изменения через git/backup. Первое&nbsp;&mdash; «не&nbsp;делай вот это», второе&nbsp;&mdash; «отмени то, что сделал».</p>
+                        <p lang="en"><code>Esc</code> stops the <em>current</em> action mid-execution, touching nothing. <em>“revert the file”</em> rolls back <em>already-made</em> changes via git/backup. First is “don’t do this,” second is “undo what you did.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем просить Claude сгенерировать <em>несколько вариантов</em> одной страницы? Когда это особенно полезно?</span><span lang="en">Why ask Claude to generate <em>several variants</em> of one page? When is it especially useful?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Когда вы&nbsp;не&nbsp;уверены, какой стиль или подход хотите. Сравнить три открытых вкладки в&nbsp;браузере проще, чем описывать стиль словами. Также полезно показать варианты заказчику или другу&nbsp;&mdash; и&nbsp;сразу увидеть, какие подходы Claude вообще считает уместными.</p>
+                        <p lang="en">When you do not know which style/approach you want. Comparing three open tabs in the browser is easier than describing styles in words. Also handy when showing options to a client/friend — and to see at a glance what approaches Claude even considers fitting.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое «аудит-промпт» и&nbsp;зачем он&nbsp;нужен?</span><span lang="en">What is an “audit prompt” and what is it for?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Финальный вопрос: <em>«перечисли, что ты&nbsp;принял за&nbsp;меня&nbsp;&mdash; цвета, формулу, валюту, шрифты»</em>. Подсвечивает «слепые пятна» промпта&nbsp;&mdash; места, где Claude сделал выбор за&nbsp;вас. В&nbsp;следующий раз сможете указать эти параметры явно или сознательно отдать на&nbsp;его выбор.</p>
+                        <p lang="en">A final question: <em>“list what you assumed for me — colours, formula, currency, fonts.”</em> Surfaces blind spots — the choices Claude made for you. Next time you can either set those explicitly or knowingly delegate them.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Как продолжить вчерашнюю сессию Claude Code в&nbsp;той&nbsp;же папке, не&nbsp;объясняя контекст заново?</span><span lang="en">How do you resume yesterday’s Claude Code session in the same folder without re-explaining context?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>claude --continue</code>&nbsp;&mdash; продолжит последнюю сессию в&nbsp;текущей папке. <code>claude --resume</code>&nbsp;&mdash; покажет список недавних сессий, можно выбрать любую.</p>
+                        <p lang="en"><code>claude --continue</code> resumes the latest session in the current folder. <code>claude --resume</code> lists recent sessions and lets you pick any.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Промпт <em>«сделай страницу красивой»</em>&nbsp;&mdash; почему это плохо? Как переписать?</span><span lang="en">The prompt <em>“make the page beautiful”</em> — why is it bad? How to rewrite?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">«Красиво»&nbsp;&mdash; абстрактно, у&nbsp;каждого своё определение. Claude выберет «средне-AI-усреднённый» вариант, который вряд&nbsp;ли совпадёт с&nbsp;вашим. Лучше: дать <em>узнаваемое сравнение</em> (стиль японской газеты, скандинавское кафе, brutalism, Bauhaus) и&nbsp;конкретные параметры (шрифт, палитра, ширина, отступы).</p>
+                        <p lang="en">“Beautiful” is abstract — everyone defines it differently. Claude will pick a “mid-AI default” that probably won’t match yours. Better: give a <em>recognisable comparison</em> (Japanese newspaper, Scandinavian cafe, brutalism, Bauhaus) and concrete parameters (typeface, palette, width, spacing).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Отметьте уверенно освоенное. Сомневаетесь&nbsp;&mdash; вернитесь к&nbsp;соответствующей теме. Этап готов закрыть, когда все галочки стоят.</p>
+        <p class="reading" lang="en">Tick what you have nailed. Unsure — return to the relevant topic. Ready to close when all ticks are up.</p>
+
+        <ul class="checklist">
+            <li data-key="e1-anatomy">
+                <span lang="ru">Знаю четыре слоя промпта: цель, ограничения, формат, пример.</span>
+                <span lang="en">I know the four prompt layers: goal, constraints, format, example.</span>
+            </li>
+            <li data-key="e1-iterate">
+                <span lang="ru">Уверенно работаю короткими итерациями: «почти, но...», «нет, не&nbsp;так», «теперь добавь».</span>
+                <span lang="en">I work in short iterations: “almost, but…”, “no, not like that”, “now add.”</span>
+            </li>
+            <li data-key="e1-rollback">
+                <span lang="ru">Знаю три способа отката: <code>Esc</code>, «верни как было», «забудь предыдущее».</span>
+                <span lang="en">I know three rollback paths: <code>Esc</code>, “revert,” “forget the previous.”</span>
+            </li>
+            <li data-key="e1-variants">
+                <span lang="ru">Прошу несколько стилевых вариантов одной задачи и&nbsp;сравниваю их.</span>
+                <span lang="en">I request several style variants of one task and compare them.</span>
+            </li>
+            <li data-key="e1-audit">
+                <span lang="ru">Делаю аудит-промпт «что ты&nbsp;принял за&nbsp;меня» и&nbsp;поправляю предположения.</span>
+                <span lang="en">I run the audit prompt “what did you assume for me” and correct assumptions.</span>
+            </li>
+            <li data-key="e1-resume">
+                <span lang="ru">Знаю, как возобновить сессию через <code>claude --continue</code> и&nbsp;<code>claude --resume</code>.</span>
+                <span lang="en">I know how to resume sessions via <code>claude --continue</code> and <code>claude --resume</code>.</span>
+            </li>
+            <li data-key="e1-delivery">
+                <span lang="ru">Сделал четыре проекта: калькулятор сложного процента, игру «угадай число», калькулятор накопления на&nbsp;цель, «камень-ножницы-бумага». Все работают двойным кликом.</span>
+                <span lang="en">I built four projects: compound interest, “guess the number,” save-toward-goal, rock-paper-scissors. All open with a double-click.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-01" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-00.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">00 · Первый запуск</span><span lang="en">00 · First Launch</span></span>
+            </a>
+            <a class="next" href="etap-02.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">02 · Контекст и&nbsp;память Claude Code</span><span lang="en">02 · Project Context &amp; Memory</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Промпт-инжиниринг&nbsp;&mdash; это не&nbsp;навык писать длинные тексты. Это навык быть точным и&nbsp;вовремя поправлять».</p>
+            <p class="signature" lang="en">“Prompt engineering is not the skill of writing long texts. It is the skill of being precise and correcting in time.”</p>
+            <p lang="ru">Этап&nbsp;01 пройден&nbsp;&mdash; вы&nbsp;умеете формулировать задачу, итерировать и&nbsp;откатываться. Дальше&nbsp;&mdash; учим Claude помнить ваш проект между сессиями.</p>
+            <p lang="en">Etape 01 done — you can phrase a task, iterate and roll back. Next — we teach Claude to remember your project between sessions.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-00.html"><span lang="ru">← Этап&nbsp;00</span><span lang="en">← Etape 00</span></a></li>
+                <li><a href="etap-02.html"><span lang="ru">→ Этап&nbsp;02</span><span lang="en">→ Etape 02</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

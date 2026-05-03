@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 00 · Первый запуск — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 00 курса по Claude Code: установка, первый диалог, режимы разрешений, базовые операции с файлами.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">12</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="00">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 00</span><span lang="en">Etape 00</span></span> &nbsp;·&nbsp; <span lang="ru">Первый запуск</span><span lang="en">First launch</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Здравствуй, <em>Claude</em>.<br>Здесь начинается всё.</span>
+            <span lang="en">Hello, <em>Claude</em>.<br>This is where it all begins.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            На&nbsp;этом этапе мы&nbsp;ставим Claude Code на&nbsp;ваш компьютер, открываем первый <dfn class="term" tabindex="0" data-def="ваша переписка с Claude Code в терминале — то, что вы пишете и что Claude отвечает.">диалог</dfn>, разбираемся с&nbsp;режимами разрешений и&nbsp;учимся создавать, читать и&nbsp;изменять файлы&nbsp;&mdash; <em>не&nbsp;печатая ни&nbsp;строчки кода</em>.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            On this etape we install Claude Code on your machine, open the first <dfn class="term" tabindex="0" data-def="your conversation with Claude Code in the terminal — what you type and what Claude replies.">dialogue</dfn>, learn the permission modes, and create, read and edit files&nbsp;&mdash; <em>without typing a line of code</em>.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">1–2 дня · 2–4&nbsp;ч/день</span><span lang="en">1–2 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">установка · первый диалог · режимы разрешений</span><span lang="en">install · first dialogue · permission modes</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">перестать бояться</span><span lang="en">stop being afraid</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd>
+                    <span lang="ru"><dfn class="term" tabindex="0" data-def="готовая работа, на которую можно показать пальцем: HTML-страница, файл, ссылка. Каждый этап оставляет вам новый артефакт.">две веб-странички</dfn>, открывающиеся двойным кликом</span>
+                    <span lang="en"><dfn class="term" tabindex="0" data-def="a finished work you can point at: an HTML page, a file, a link. Every etape leaves you with a new one.">two web pages</dfn>, openable with a double-click</span>
+                </dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что мы пройдём по&nbsp;шагам</span><span lang="en">What we will walk through</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Что такое Claude Code и&nbsp;чем отличается от&nbsp;ChatGPT</span><span lang="en">What Claude Code is and how it differs from ChatGPT</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong>ChatGPT</strong>&nbsp;&mdash; это диалог в&nbsp;браузере. Вы&nbsp;ему пишете, он&nbsp;вам отвечает текстом. Файлы он&nbsp;трогать не&nbsp;умеет.</p>
+                    <p><strong>Claude Code</strong>&nbsp;&mdash; это <em>тот&nbsp;же Claude, но&nbsp;живущий в&nbsp;вашем терминале и&nbsp;имеющий доступ к&nbsp;вашим файлам</em>. Он&nbsp;может прочитать ваш файл, изменить, создать новый, запустить программу, открыть страницу, скачать данные из&nbsp;интернета. Если коротко: «программист-стажёр у&nbsp;вас на&nbsp;компьютере».</p>
+                    <p>Поэтому курс называется именно курсом по&nbsp;Claude Code, а&nbsp;не&nbsp;«по&nbsp;промптам в&nbsp;чате»: мы&nbsp;будем создавать <em>работающие продукты</em>, а&nbsp;не&nbsp;только обсуждать их.</p>
+                    <div class="note">Метафора, которую полезно держать в&nbsp;голове весь курс: вы&nbsp;&mdash; <em>тимлид</em>. Claude&nbsp;&mdash; <em>стажёр</em>. Стажёр умный, быстрый и&nbsp;никогда не&nbsp;устаёт. Но&nbsp;ему нужны: чёткое&nbsp;ТЗ, контекст и&nbsp;ваше «да&nbsp;/ нет» на&nbsp;каждом шаге.</div>
+                </div>
+                <div lang="en">
+                    <p><strong>ChatGPT</strong> is a dialogue in a browser. You type, it replies in text. It cannot touch files.</p>
+                    <p><strong>Claude Code</strong> is <em>the same Claude, but living in your terminal with access to your files</em>. It can read your file, edit it, create a new one, run a program, open a page, download data from the web. In short: “a programmer-intern on your computer.”</p>
+                    <p>That is why the course is named after Claude Code, not “prompting in chat”: we build <em>working products</em>, not just talk about them.</p>
+                    <div class="note">A metaphor worth holding in your head all course: you are the <em>tech lead</em>. Claude is the <em>intern</em>. A smart, fast, tireless one. But it needs a clear brief, context, and your “yes / no” at each step.</div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Установка: что и&nbsp;куда поставить</span><span lang="en">Installation: what to install where</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Понадобятся три вещи:</p>
+                    <ol>
+                        <li><strong>Node.js</strong>&nbsp;&mdash; среда, в&nbsp;которой запускается сам Claude&nbsp;Code. Скачивается с&nbsp;<a href="https://nodejs.org">nodejs.org</a>, версия&nbsp;LTS.</li>
+                        <li><strong>Claude Code</strong>&nbsp;&mdash; устанавливается одной командой через <dfn class="term" tabindex="0" data-def="программа, которая устанавливает другие программы. Появляется автоматически вместе с Node.js.">npm</dfn> (она появилась вместе с&nbsp;Node.js):</li>
+                    </ol>
+                    <pre class="shell"><span class="cmt"># откроем <dfn class="term" tabindex="0" data-def="окно, в которое вы печатаете команды компьютеру. Не путать с веб-чатом.">терминал</dfn> и установим Claude Code</span>
+<span class="prompt">$</span> npm install -g @anthropic-ai/claude-code</pre>
+                    <ol start="3">
+                        <li><strong><dfn class="term" tabindex="0" data-def="бесплатный редактор файлов от Microsoft, удобно показывает структуру кода, который написал Claude. Не обязателен, но проще именно с ним.">VS&nbsp;Code</dfn></strong> или любой удобный редактор&nbsp;&mdash; чтобы видеть, что Claude делает с&nbsp;файлами. Скачивается с&nbsp;<a href="https://code.visualstudio.com">code.visualstudio.com</a>.</li>
+                    </ol>
+                    <p>После установки впервые запускаем Claude Code и&nbsp;входим в&nbsp;аккаунт Anthropic:</p>
+                    <pre class="shell"><span class="prompt">$</span> claude
+<span class="cmt"># откроется браузер для входа</span></pre>
+                    <div class="note">На&nbsp;Windows используйте <strong>PowerShell</strong> или установленный <strong>Git Bash</strong>. На&nbsp;macOS&nbsp;/&nbsp;Linux подойдёт стандартный Terminal.</div>
+                </div>
+                <div lang="en">
+                    <p>You need three things:</p>
+                    <ol>
+                        <li><strong>Node.js</strong> — the runtime Claude Code launches in. Download from <a href="https://nodejs.org">nodejs.org</a>, the LTS version.</li>
+                        <li><strong>Claude Code</strong> — installed with one command via <dfn class="term" tabindex="0" data-def="a program that installs other programs. Comes automatically with Node.js.">npm</dfn> (which arrives with Node.js):</li>
+                    </ol>
+                    <pre class="shell"><span class="cmt"># open the <dfn class="term" tabindex="0" data-def="the window where you type commands to your computer. Not the same as a web chat.">terminal</dfn> and install Claude Code</span>
+<span class="prompt">$</span> npm install -g @anthropic-ai/claude-code</pre>
+                    <ol start="3">
+                        <li><strong><dfn class="term" tabindex="0" data-def="a free file editor by Microsoft, useful to see the code Claude wrote. Not required, but life is simpler with it.">VS&nbsp;Code</dfn></strong> or any editor of your choice — to see what Claude does to your files. Get it at <a href="https://code.visualstudio.com">code.visualstudio.com</a>.</li>
+                    </ol>
+                    <p>After installation, run Claude Code for the first time and sign in to your Anthropic account:</p>
+                    <pre class="shell"><span class="prompt">$</span> claude
+<span class="cmt"># a browser will open to sign in</span></pre>
+                    <div class="note">On Windows use <strong>PowerShell</strong> or installed <strong>Git Bash</strong>. On macOS / Linux the system Terminal works fine.</div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Терминал и&nbsp;рабочая папка</span><span lang="en">Terminal and working directory</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong>Терминал</strong>&nbsp;&mdash; это окно, в&nbsp;которое вы&nbsp;печатаете команды. Оно всегда находится в&nbsp;какой-то <em>папке</em>&nbsp;&mdash; именно с&nbsp;ней работает Claude Code.</p>
+                    <p>Минимум команд, которые нужно запомнить:</p>
+                    <pre class="shell"><span class="cmt"># где я нахожусь</span>
+<span class="prompt">$</span> pwd
+
+<span class="cmt"># перейти в папку</span>
+<span class="prompt">$</span> cd Documents
+
+<span class="cmt"># создать новую папку</span>
+<span class="prompt">$</span> mkdir claude-course
+
+<span class="cmt"># посмотреть содержимое текущей папки</span>
+<span class="prompt">$</span> ls</pre>
+                    <p>Запомните одно правило: <strong>Claude Code видит и&nbsp;трогает только ту&nbsp;<dfn class="term" tabindex="0" data-def="папка, внутри которой запущен Claude Code. Он не выходит наружу — это безопасная «песочница».">папку</dfn>, в&nbsp;которой вы&nbsp;его запустили</strong>. Это безопасно: он&nbsp;не&nbsp;может случайно зайти в&nbsp;ваш «Рабочий стол» или «Документы», если вы&nbsp;запустили его в&nbsp;<code>~/claude-course</code>.</p>
+                </div>
+                <div lang="en">
+                    <p><strong>The terminal</strong> is a window where you type commands. It always sits in some <em>folder</em> — and that is the folder Claude Code works on.</p>
+                    <p>The minimum set of commands to remember:</p>
+                    <pre class="shell"><span class="cmt"># where am I</span>
+<span class="prompt">$</span> pwd
+
+<span class="cmt"># move to a folder</span>
+<span class="prompt">$</span> cd Documents
+
+<span class="cmt"># create a new folder</span>
+<span class="prompt">$</span> mkdir claude-course
+
+<span class="cmt"># list contents of current folder</span>
+<span class="prompt">$</span> ls</pre>
+                    <p>Remember one rule: <strong>Claude Code sees and touches only the <dfn class="term" tabindex="0" data-def="the folder Claude Code was launched inside. It cannot go outside — a safe sandbox.">folder</dfn> you launched it in</strong>. Safe by design: it cannot reach your “Desktop” or “Documents” if you started it in <code>~/claude-course</code>.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Первый диалог: создать, прочитать, изменить, удалить</span><span lang="en">First dialogue: create, read, edit, delete</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Создаём папку, заходим в&nbsp;неё, запускаем Claude Code:</p>
+                    <pre class="shell"><span class="prompt">$</span> mkdir ~/Desktop/claude-course
+<span class="prompt">$</span> cd ~/Desktop/claude-course
+<span class="prompt">$</span> claude</pre>
+                    <p>Дальше&nbsp;&mdash; обычный диалог. Печатаем по-русски:</p>
+                    <pre class="shell"><span class="cmt"># <dfn class="term" tabindex="0" data-def="формулировка задачи, которую вы отправляете Claude. Этап 01 целиком про навык их писать.">промпт</dfn> 1</span>
+&gt; создай файл privet.txt с текстом «Привет, мир»
+
+<span class="cmt"># промпт 2</span>
+&gt; прочитай privet.txt и покажи содержимое
+
+<span class="cmt"># промпт 3</span>
+&gt; замени в privet.txt «Привет» на «Здравствуй»
+
+<span class="cmt"># промпт 4</span>
+&gt; удали privet.txt</pre>
+                    <p>В&nbsp;каждом случае Claude покажет, <em>что именно собирается сделать</em>, и&nbsp;спросит подтверждения (если&nbsp;только вы&nbsp;не&nbsp;разрешили действовать без&nbsp;спроса&nbsp;&mdash; об&nbsp;этом следующая тема).</p>
+                </div>
+                <div lang="en">
+                    <p>Make a folder, enter it, launch Claude Code:</p>
+                    <pre class="shell"><span class="prompt">$</span> mkdir ~/Desktop/claude-course
+<span class="prompt">$</span> cd ~/Desktop/claude-course
+<span class="prompt">$</span> claude</pre>
+                    <p>From here on it is a normal dialogue. Type in plain language:</p>
+                    <pre class="shell"><span class="cmt"># <dfn class="term" tabindex="0" data-def="the wording of a task you send to Claude. Etape 01 is entirely about writing them well.">prompt</dfn> 1</span>
+&gt; create a file hello.txt with the text "Hello, world"
+
+<span class="cmt"># prompt 2</span>
+&gt; read hello.txt and show me the contents
+
+<span class="cmt"># prompt 3</span>
+&gt; replace "Hello" with "Hey" in hello.txt
+
+<span class="cmt"># prompt 4</span>
+&gt; delete hello.txt</pre>
+                    <p>Each time Claude shows you <em>what exactly it plans to do</em> and asks for confirmation (unless you allowed it to act without asking — see the next topic).</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Режимы разрешений: что Claude делает сам, а&nbsp;что&nbsp;&mdash; со&nbsp;спросом</span><span lang="en">Permission modes: what Claude does on its own and what it asks about</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;Claude Code есть три режима, переключаются через <code>Shift + Tab</code>:</p>
+                    <ol>
+                        <li><strong>default</strong>&nbsp;&mdash; режим по&nbsp;умолчанию. Claude спрашивает разрешение почти на&nbsp;всё «небезопасное»: запись в&nbsp;файл, удаление, запуск команды.</li>
+                        <li><strong>auto-accept</strong>&nbsp;&mdash; «можно&nbsp;всё». Claude действует без&nbsp;вопросов. Удобно, когда задача рутинная и&nbsp;вы&nbsp;уверены.</li>
+                        <li><strong>plan&nbsp;mode</strong>&nbsp;&mdash; Claude только <em>планирует</em>, ничего не&nbsp;трогает. Вы&nbsp;видите план, утверждаете, и&nbsp;только потом он&nbsp;его выполняет. Незаменимо для крупных задач&nbsp;&mdash; подробно разберём в&nbsp;этапе&nbsp;04.</li>
+                    </ol>
+                    <p>На&nbsp;этом этапе оставайтесь в&nbsp;<strong>default</strong>. Привыкните видеть, что именно Claude собирается сделать&nbsp;&mdash; это полезный навык, который пригодится во&nbsp;всём курсе.</p>
+                </div>
+                <div lang="en">
+                    <p>Claude Code has three modes, toggled by <code>Shift + Tab</code>:</p>
+                    <ol>
+                        <li><strong>default</strong> — Claude asks for permission for almost anything “unsafe”: writing to a file, deleting, running a command.</li>
+                        <li><strong>auto-accept</strong> — “go ahead.” Claude acts without asking. Useful when the task is routine and you are confident.</li>
+                        <li><strong>plan&nbsp;mode</strong> — Claude only <em>plans</em>, touching nothing. You see the plan, approve it, and only then it runs. Indispensable for big tasks — covered in detail in etape 04.</li>
+                    </ol>
+                    <p>For this etape, stay in <strong>default</strong>. Get used to seeing what Claude intends to do — a habit that pays back across the whole course.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Безопасность: чего Claude никогда не&nbsp;сделает</span><span lang="en">Safety: what Claude will never do</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Несколько важных вещей, чтобы спать спокойно:</p>
+                    <ul>
+                        <li>Claude Code <strong>не&nbsp;выходит из&nbsp;своей рабочей папки</strong>. Если вы&nbsp;запустили его в&nbsp;<code>~/Desktop/claude-course</code>, он&nbsp;не&nbsp;увидит файлы из&nbsp;<code>~/Documents</code>.</li>
+                        <li>Деструктивные действия (<code>rm&nbsp;-rf</code>, форс-удаление, <code>git&nbsp;reset --hard</code>) всегда требуют подтверждения, даже в&nbsp;<code>auto-accept</code>.</li>
+                        <li>В&nbsp;интернет он&nbsp;ходит только тогда, когда вы&nbsp;явно об&nbsp;этом просите (или есть подключённый&nbsp;MCP&nbsp;&mdash; этап&nbsp;03).</li>
+                        <li>Учётные данные, ключи, пароли&nbsp;&mdash; только если вы&nbsp;ему сами их&nbsp;дадите. Никаких «утечек» из&nbsp;вашего компьютера наружу.</li>
+                    </ul>
+                    <p>Если когда-нибудь Claude собирается сделать что-то, что вам не&nbsp;нравится&nbsp;&mdash; просто отвечайте «нет», или нажимайте&nbsp;<code>Esc</code>. Это всегда работает.</p>
+                </div>
+                <div lang="en">
+                    <p>A few things to let you sleep easy:</p>
+                    <ul>
+                        <li>Claude Code <strong>does not leave its working directory</strong>. Started in <code>~/Desktop/claude-course</code>, it cannot see <code>~/Documents</code>.</li>
+                        <li>Destructive actions (<code>rm -rf</code>, force-delete, <code>git reset --hard</code>) always need confirmation, even in <code>auto-accept</code>.</li>
+                        <li>It reaches the internet only when you ask, explicitly (or via a connected MCP — etape 03).</li>
+                        <li>Credentials, keys, passwords — only if you hand them in. No silent leaks out of your machine.</li>
+                    </ul>
+                    <p>If Claude ever plans something you do not like — just say “no” or press <code>Esc</code>. That always works.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Десятиминутный прогон по&nbsp;терминалу</span><span lang="en">A ten-minute terminal warm-up</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Прежде чем браться за&nbsp;проекты, сделайте небольшую разминку прямо сейчас. Это занимает 5–10&nbsp;минут и&nbsp;ставит на&nbsp;место всё, о&nbsp;чём вы&nbsp;только что прочитали.</p>
+        <p class="reading" lang="en">Before tackling the projects, take a brief warm-up right now. It takes 5–10 minutes and locks in everything you just read.</p>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон №&nbsp;1 · Создаём, читаем, переименовываем, удаляем</span><span lang="en">Run №&nbsp;1 · Create, read, rename, delete</span></h4>
+            <ol lang="ru">
+                <li>Откройте терминал. Создайте папку <code>claude-course</code> на&nbsp;рабочем столе.</li>
+                <li>Перейдите в&nbsp;неё (<code>cd</code>) и&nbsp;запустите <code>claude</code>.</li>
+                <li>В&nbsp;диалоге попросите: <em>«создай файл note.txt с&nbsp;тремя моими целями на&nbsp;курс»</em>.</li>
+                <li>Откройте файл в&nbsp;VS&nbsp;Code или Блокноте&nbsp;&mdash; убедитесь, что он&nbsp;там.</li>
+                <li>Попросите Claude: <em>«добавь в&nbsp;конец файла четвёртую цель»</em>.</li>
+                <li>Попросите: <em>«переименуй note.txt в&nbsp;goals.md»</em>.</li>
+                <li>Попросите: <em>«удали этот файл»</em>. Подтвердите.</li>
+            </ol>
+            <ol lang="en">
+                <li>Open the terminal. Create a folder <code>claude-course</code> on your Desktop.</li>
+                <li>Enter it (<code>cd</code>) and launch <code>claude</code>.</li>
+                <li>In the dialogue ask: <em>“create a file note.txt with three of my course goals.”</em></li>
+                <li>Open the file in VS Code or Notepad — confirm it is there.</li>
+                <li>Ask Claude: <em>“append a fourth goal to the file.”</em></li>
+                <li>Ask: <em>“rename note.txt to goals.md.”</em></li>
+                <li>Ask: <em>“delete this file.”</em> Confirm.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>обращаться к&nbsp;файлам по&nbsp;имени</strong>, видеть подтверждения, не&nbsp;бояться удалять.</p>
+            <p lang="en">What we are training: <strong>addressing files by name</strong>, seeing confirmations, not fearing deletion.</p>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон №&nbsp;2 · Переключение режимов</span><span lang="en">Run №&nbsp;2 · Switching modes</span></h4>
+            <ol lang="ru">
+                <li>Запустите <code>claude</code> заново.</li>
+                <li>Попросите: <em>«создай 5&nbsp;файлов с&nbsp;именами day-1.md … day-5.md, в&nbsp;каждом по&nbsp;одной строке&nbsp;&mdash; день недели»</em>.</li>
+                <li>Подтвердите каждое действие&nbsp;&mdash; почувствуйте, насколько утомительно.</li>
+                <li>Нажмите <code>Shift+Tab</code>, перейдите в&nbsp;<strong>auto-accept</strong>.</li>
+                <li>Попросите: <em>«удали все файлы day-*.md»</em>. Заметьте, что подтверждения теперь не&nbsp;нужны.</li>
+                <li>Снова <code>Shift+Tab</code>&nbsp;&mdash; перейдите в&nbsp;<strong>plan&nbsp;mode</strong>.</li>
+                <li>Попросите: <em>«создай структуру папок для&nbsp;нового сайта о&nbsp;кофе»</em>. Посмотрите, как Claude рисует план, ничего не&nbsp;делая.</li>
+                <li>Откажитесь от&nbsp;плана. Вернитесь в&nbsp;<strong>default</strong>.</li>
+            </ol>
+            <ol lang="en">
+                <li>Launch <code>claude</code> again.</li>
+                <li>Ask: <em>“create 5 files named day-1.md … day-5.md, each containing one line — a day of the week.”</em></li>
+                <li>Confirm each action — feel how tedious it is.</li>
+                <li>Press <code>Shift+Tab</code>, enter <strong>auto-accept</strong>.</li>
+                <li>Ask: <em>“delete all day-*.md files.”</em> Notice — no confirmations needed.</li>
+                <li><code>Shift+Tab</code> again — enter <strong>plan mode</strong>.</li>
+                <li>Ask: <em>“design the folder structure for a new coffee website.”</em> Watch Claude draw the plan, touching nothing.</li>
+                <li>Reject the plan. Return to <strong>default</strong>.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>выбирать режим под задачу</strong>. Это пригодится буквально на&nbsp;каждом следующем этапе.</p>
+            <p lang="en">What we are training: <strong>picking the mode that fits the task</strong>. Useful on literally every following etape.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Два первых <dfn class="term" tabindex="0" data-def="готовая работа курса, на которую можно показать пальцем — HTML-страница, скрипт, файл, ссылка.">артефакта</dfn></span><span lang="en">Your first two <dfn class="term" tabindex="0" data-def="a finished work to point at — an HTML page, a script, a file, a link.">artefacts</dfn></span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Каждый проект делается через диалог с&nbsp;Claude. Я&nbsp;даю «отправную» формулировку и&nbsp;несколько уточняющих промптов&nbsp;&mdash; пробуйте сначала свои, потом сверьтесь с&nbsp;моими.</p>
+        <p class="reading" lang="en">Each project is built through dialogue with Claude. I give a starting brief and a few follow-up prompts — try yours first, then compare with mine.</p>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Карточка обо&nbsp;мне</span><span lang="en">Card about me</span></h3>
+            <p class="goal" lang="ru">Цель: одна <dfn class="term" tabindex="0" data-def="HTML — язык, на котором написаны все веб-страницы. В курсе вы его не пишете сами — это делает Claude.">HTML</dfn>-страница с&nbsp;фотографией, именем, тремя фактами и&nbsp;ссылками. Открывается двойным кликом, выглядит как сделана дизайнером.</p>
+            <p class="goal" lang="en">Goal: one <dfn class="term" tabindex="0" data-def="HTML — the language all web pages are written in. You do not write it yourself in this course — Claude does.">HTML</dfn> page with a photo, your name, three facts, and links. Opens with a double-click, looks designed.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>about</code> внутри <code>claude-course</code>.</li>
+                <li>Запустите Claude Code в&nbsp;ней.</li>
+                <li>Начальный промпт:
+                    <pre class="shell">&gt; собери одностраничную html-карточку обо мне.
+&gt; имя: Имя Фамилия. три факта: 1) ..., 2) ..., 3) ...
+&gt; одна большая фотография слева, текст справа.
+&gt; стиль — минималистичный, как у Apple. шрифт — современный засечковый.
+&gt; сделай так, чтобы страница хорошо смотрелась и на телефоне.</pre>
+                </li>
+                <li>Откройте получившийся <code>index.html</code> двойным кликом. Если что-то не&nbsp;нравится&nbsp;&mdash; уточняйте: <em>«сделай шрифт крупнее»</em>, <em>«поменяй фон на&nbsp;тёплый кремовый»</em>, <em>«добавь декоративную линию между фактами»</em>.</li>
+                <li>Когда в&nbsp;первой версии нравится&nbsp;&mdash; попросите три варианта стиля:
+                    <pre class="shell">&gt; сохрани текущую версию как about-classic.html.
+&gt; теперь сделай ещё две: about-retro.html (стиль 70-х, оранжевый-горчичный)
+&gt; и about-neon.html (тёмный фон, неоновые акценты).</pre>
+                </li>
+                <li>Сравните три варианта в&nbsp;браузере. Сохраните любимый как <code>index.html</code>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create a folder <code>about</code> inside <code>claude-course</code>.</li>
+                <li>Launch Claude Code there.</li>
+                <li>Starting prompt:
+                    <pre class="shell">&gt; build a one-page html card about me.
+&gt; name: First Last. three facts: 1) ..., 2) ..., 3) ...
+&gt; one large photo on the left, text on the right.
+&gt; style — minimalist, Apple-like. typeface — a modern serif.
+&gt; make sure it looks good on mobile too.</pre>
+                </li>
+                <li>Open the resulting <code>index.html</code> with a double-click. If something is off — refine: <em>“make the type larger,”</em> <em>“change the background to a warm cream,”</em> <em>“add a decorative rule between facts.”</em></li>
+                <li>Once you like the first take — ask for three style variants:
+                    <pre class="shell">&gt; save the current as about-classic.html.
+&gt; now make two more: about-retro.html (70s, mustard/orange)
+&gt; and about-neon.html (dark background, neon accents).</pre>
+                </li>
+                <li>Compare in the browser. Save your favourite as <code>index.html</code>.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>создание файлов через Claude Code;</li>
+                <li><dfn class="term" tabindex="0" data-def="повторный заход по той же задаче с поправками. «Сделай → не так → теперь добавь» — это итерации.">итерационное</dfn> уточнение&nbsp;&mdash; «не&nbsp;так, поменяй вот&nbsp;это»;</li>
+                <li>генерацию вариантов одной задачи в&nbsp;разных стилях.</li>
+            </ul>
+            <ul lang="en">
+                <li>creating files via Claude Code;</li>
+                <li><dfn class="term" tabindex="0" data-def="going through the same task again with corrections. “Do it → not like that → now add” — these are iterations.">iterative</dfn> refinement — “no, change this”;</li>
+                <li>generating variants of one task in different styles.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Книжная полка</span><span lang="en">Bookshelf</span></h3>
+            <p class="goal" lang="ru">Цель: лендинг с&nbsp;пятью любимыми книгами&nbsp;&mdash; обложка, название, автор, одна фраза «почему читать». Картинки Claude найдёт сам.</p>
+            <p class="goal" lang="en">Goal: a landing page with five favourite books — cover, title, author, one hook-line. Claude finds the images.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>shelf</code>, запустите там <code>claude</code>.</li>
+                <li>Начальный промпт:
+                    <pre class="shell">&gt; сделай одностраничный сайт «моя книжная полка».
+&gt; пять книг (любые, на твой вкус, классика и нон-фикшн).
+&gt; для каждой: обложка (найди публичную картинку через web search),
+&gt; название, автор, одна фраза-зацепка от меня.
+&gt; вверху страницы — заголовок «полка» крупными засечками,
+&gt; всё расставь в виде стилизованной деревянной полки или сетки.</pre>
+                </li>
+                <li>Если Claude начнёт работать без&nbsp;поиска картинок&nbsp;&mdash; поправьте: <em>«нет, найди реальные обложки через интернет»</em>.</li>
+                <li>Откройте сайт. Скорее всего, понадобится поправить мелочи: <em>«увеличь обложки в&nbsp;1.5&nbsp;раза»</em>, <em>«добавь <dfn class="term" tabindex="0" data-def="реакция элемента при наведении мыши: подсветка, плавное увеличение, смена цвета.">hover-эффект</dfn>&nbsp;&mdash; книга чуть приподнимается»</em>, <em>«сделай тёмную тему»</em>.</li>
+                <li>Финальный штрих: <em>«добавь <dfn class="term" tabindex="0" data-def="нижняя часть страницы: контакты, копирайт, навигация. От английского «footer».">футер</dfn> с&nbsp;именем автора полки и&nbsp;датой обновления»</em>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create a folder <code>shelf</code>, launch <code>claude</code> there.</li>
+                <li>Starting prompt:
+                    <pre class="shell">&gt; make a one-page site called "my bookshelf."
+&gt; five books (any, your taste, classics and non-fiction).
+&gt; for each: cover (find a public image via web search),
+&gt; title, author, one hook-line from me.
+&gt; top of the page — a heading "shelf" in large serifs,
+&gt; arrange everything as a stylised wooden shelf or grid.</pre>
+                </li>
+                <li>If Claude starts without searching images — correct: <em>“no, find real covers via the web.”</em></li>
+                <li>Open the site. You will probably need to tune: <em>“make the covers 1.5× larger,”</em> <em>“add a <dfn class="term" tabindex="0" data-def="how an element reacts to mouse hover: highlight, gentle scale, colour change.">hover effect</dfn> — books lift slightly,”</em> <em>“add a dark theme.”</em></li>
+                <li>Final touch: <em>“add a <dfn class="term" tabindex="0" data-def="the bottom of the page: contacts, copyright, links.">footer</dfn> with the shelf-keeper’s name and the update date.”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>задачи с&nbsp;несколькими элементами (5 одинаковых блоков);</li>
+                <li>попросить Claude добавить мелкие интерактивные эффекты;</li>
+                <li>поправить, когда первая версия пошла не&nbsp;туда.</li>
+            </ul>
+            <ul lang="en">
+                <li>tasks with several elements (5 similar blocks);</li>
+                <li>asking Claude to add small interactive effects;</li>
+                <li>correcting when the first attempt missed the mark.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши темы</span><span lang="en">Same moves, your themes</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Эти задачи&nbsp;&mdash; <em>вариации</em> только что разобранных проектов. Никаких новых концепций. Если что-то идёт не&nbsp;так&nbsp;&mdash; вернитесь к&nbsp;инструкциям&nbsp;A&nbsp;и&nbsp;B и&nbsp;посмотрите, как там было сформулировано.</p>
+        <p class="reading" lang="en">These are <em>variations</em> of the projects we just walked through. No new concepts. If something goes wrong — return to projects A and B and check the wording there.</p>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Карточка про любимый фильм</span><span lang="en">Card about your favourite film</span></h3>
+            <p class="goal" lang="ru">Цель: одностраничник про один фильм. Постер, название, год, режиссёр, одна-две фразы «за&nbsp;что я&nbsp;его люблю». Минимум&nbsp;3 разных стиля под одной темой.</p>
+            <p class="goal" lang="en">Goal: a one-pager about one film. Poster, title, year, director, one-two lines on “why I love it.” At least 3 different styles on one theme.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Структура та&nbsp;же, что в&nbsp;«Карточке обо&nbsp;мне»&nbsp;&mdash; меняется только содержимое.</li>
+                <li>Постер пусть Claude найдёт через интернет, как мы&nbsp;делали с&nbsp;обложками книг.</li>
+                <li>Поэкспериментируйте с&nbsp;типографикой: <em>«стиль киноафиши 60-х»</em>, <em>«нуар»</em>, <em>«фестивальный плакат»</em>.</li>
+            </ul>
+            <ul lang="en">
+                <li>Same structure as “Card about me” — only the content changes.</li>
+                <li>Let Claude find the poster via the web, as we did for book covers.</li>
+                <li>Play with type: <em>“60s movie-poster style,”</em> <em>“film noir,”</em> <em>“festival poster.”</em></li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>у&nbsp;вас три отдельных HTML-файла (например <code>film-classic.html</code>, <code>film-noir.html</code>, <code>film-festival.html</code>);</li>
+                        <li>каждый открывается двойным кликом и&nbsp;показывает один и&nbsp;тот&nbsp;же фильм в&nbsp;своей стилистике;</li>
+                        <li>на&nbsp;всех трёх есть постер, название, год, режиссёр и&nbsp;ваша личная фраза;</li>
+                        <li>на&nbsp;узком окне (сожмите браузер до&nbsp;ширины телефона) текст не&nbsp;вылезает за&nbsp;края, постер не&nbsp;растягивается уродливо;</li>
+                        <li>вы&nbsp;можете коротко рассказать, какой стиль вам ближе всех и&nbsp;почему.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>you have three separate HTML files (e.g. <code>film-classic.html</code>, <code>film-noir.html</code>, <code>film-festival.html</code>);</li>
+                        <li>each opens with a double-click and shows the same film in its own style;</li>
+                        <li>all three carry the poster, title, year, director and your personal line;</li>
+                        <li>on a narrow window (squeeze the browser down to phone width) text does not overflow, the poster does not stretch ugly;</li>
+                        <li>you can briefly say which style is closest to you and why.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        Откройте Claude Code в&nbsp;папке проекта и&nbsp;скажите: <em>«посмотри три моих файла film-*.html. Оцени их&nbsp;как редактор: что у&nbsp;каждого получилось, что&nbsp;&mdash; нет, какой выглядит самым цельным?»</em>. Это и&nbsp;есть ваше «контрольное мнение со&nbsp;стороны»&nbsp;&mdash; в&nbsp;курсе мы&nbsp;будем пользоваться этим приёмом постоянно.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        Open Claude Code in the project folder and say: <em>“look at my three film-*.html files. Review them like an editor: what works in each, what does not, which feels most cohesive?”</em>. That is your “outside opinion” — a habit we will use throughout the course.
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Полка коллекции (на&nbsp;ваш вкус)</span><span lang="en">A shelf of your collection (your taste)</span></h3>
+            <p class="goal" lang="ru">Цель: <dfn class="term" tabindex="0" data-def="одностраничный сайт, посвящённый одной теме. От английского «landing» — страница, на которую вы «приземлились».">лендинг</dfn> про вашу коллекцию&nbsp;&mdash; рецепты, любимые места города, настольные игры, кофейни, что угодно. Минимум 5&nbsp;карточек, каждая с&nbsp;иллюстрацией.</p>
+            <p class="goal" lang="en">Goal: a <dfn class="term" tabindex="0" data-def="a one-page site about one topic. From “landing” — the page you arrive at.">landing page</dfn> about your collection — recipes, favourite city spots, board games, coffee shops, whatever. At least 5 cards, each with an illustration.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Структура та&nbsp;же, что в&nbsp;«Книжной полке».</li>
+                <li>Если коллекция «без&nbsp;обложек» (например, рецепты)&nbsp;&mdash; пусть Claude использует <em>иконки</em> или <em>иллюстрации в&nbsp;одном стиле</em>.</li>
+                <li>Хорошо: добавить наверху небольшой блок «об&nbsp;этой коллекции» в&nbsp;курсиве, как редакторскую заметку.</li>
+                <li>Ещё лучше: попросить тёмную и&nbsp;светлую темы и&nbsp;кнопку переключения.</li>
+            </ul>
+            <ul lang="en">
+                <li>Same structure as “Bookshelf.”</li>
+                <li>If your collection has no “covers” (recipes, places) — have Claude use <em>icons</em> or <em>illustrations in one style</em>.</li>
+                <li>Nice: add a short editorial intro in italics at the top.</li>
+                <li>Even nicer: request a light/dark theme with a toggle.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>на&nbsp;странице минимум&nbsp;5 карточек одной коллекции;</li>
+                        <li>у&nbsp;каждой&nbsp;&mdash; иллюстрация (фото, обложка или иконка из&nbsp;одного семейства), название и&nbsp;1–2 строки описания;</li>
+                        <li>сверху есть редакторское вступление в&nbsp;курсиве: <em>«об&nbsp;этой коллекции»</em>;</li>
+                        <li>есть переключатель темы (тёмная&nbsp;/&nbsp;светлая) и&nbsp;он&nbsp;работает;</li>
+                        <li>на&nbsp;узком окне (телефон) карточки выстраиваются в&nbsp;одну колонку и&nbsp;не&nbsp;ломаются.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>at least 5 cards of one collection;</li>
+                        <li>each — an illustration (photo, cover, or one-family icon), title, 1–2 lines of description;</li>
+                        <li>an editorial intro in italics at the top: <em>“about this collection”</em>;</li>
+                        <li>a working light/dark toggle;</li>
+                        <li>on a narrow window (phone) cards stack to one column and do not break.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Открой index.html в&nbsp;браузере (через web&nbsp;tool или playwright, если умеешь) и&nbsp;дай мне отзыв с&nbsp;точки зрения первого посетителя: за&nbsp;10&nbsp;секунд понятно, о&nbsp;чём эта коллекция и&nbsp;зачем она? что мешает?»</em>. Если Claude не&nbsp;умеет открыть страницу&nbsp;&mdash; ничего страшного, просто попросите оценить код.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Open index.html in the browser (via a web tool or Playwright, if you can) and give me feedback as a first-time visitor: in 10 seconds, is it clear what this collection is and why? What gets in the way?”</em>. If Claude cannot open the page — no problem, just ask it to review the code.
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Новые слова, которые встретились</span><span lang="en">New words that came up</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">В&nbsp;тексте этапа эти слова подчёркнуты пунктиром&nbsp;&mdash; наведите или коснитесь, и&nbsp;всплывёт короткая справка. Здесь&nbsp;&mdash; полный словарь для закрепления. В&nbsp;каждом следующем этапе будет такой&nbsp;же.</p>
+        <p class="reading" lang="en">Inside the text these words are underlined with dots — hover or tap to see a short tooltip. Here is the full glossary for reinforcement. Every next etape has one like this.</p>
+
+        <dl class="glossary">
+            <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+            <dd>
+                <span lang="ru">В&nbsp;этом курсе так называется каждая ваша готовая работа, которой можно <em>показать пальцем</em>: HTML-страница, скрипт, набор файлов, ссылка в&nbsp;интернете. После каждого этапа у&nbsp;вас новый артефакт.</span>
+                <span lang="en">In this course — any finished work of yours you can <em>point at</em>: an HTML page, a script, a folder, a public URL. Every etape leaves you with a new one.</span>
+            </dd>
+
+            <dt><span lang="ru">Диалог</span><span lang="en">Dialogue</span></dt>
+            <dd>
+                <span lang="ru">Ваша переписка с&nbsp;Claude Code в&nbsp;терминале. То, что вы&nbsp;печатаете после <code>&gt;</code>, и&nbsp;что Claude отвечает. Один диалог обычно соответствует одной задаче.</span>
+                <span lang="en">Your conversation with Claude Code in the terminal — what you type after <code>&gt;</code> and what Claude replies. One dialogue usually equals one task.</span>
+            </dd>
+
+            <dt><span lang="ru">Промпт</span><span lang="en">Prompt</span></dt>
+            <dd>
+                <span lang="ru">Формулировка задачи, которую вы&nbsp;отправляете Claude. Хороший промпт содержит цель, ограничения, формат, иногда пример. Этап&nbsp;01 целиком посвящён навыку писать промпты.</span>
+                <span lang="en">The wording of a task you send Claude. A good prompt has a goal, constraints, a format, sometimes an example. Etape 01 is dedicated to writing them.</span>
+            </dd>
+
+            <dt><span lang="ru">Итерация</span><span lang="en">Iteration</span></dt>
+            <dd>
+                <span lang="ru">Повторный заход по&nbsp;той&nbsp;же задаче с&nbsp;поправками. <em>«Сделай»&nbsp;→ «не&nbsp;так, измени»&nbsp;→ «теперь добавь»&nbsp;→ «верни как было»</em>&nbsp;&mdash; это четыре итерации одной задачи.</span>
+                <span lang="en">Going through the same task again with corrections. <em>“Do it” → “not like that, change” → “now add” → “undo”</em> — four iterations of one task.</span>
+            </dd>
+
+            <dt><span lang="ru">Лендинг</span><span lang="en">Landing page</span></dt>
+            <dd>
+                <span lang="ru">Одностраничный сайт, посвящённый одной теме&nbsp;&mdash; продукту, событию, человеку, коллекции. От&nbsp;английского <em>landing</em>: страница, на&nbsp;которую вы&nbsp;«приземлились» и&nbsp;сразу понимаете, о&nbsp;чём она.</span>
+                <span lang="en">A one-page site about one topic — a product, an event, a person, a collection. From <em>landing</em>: the page you “arrive on” and immediately get what it is about.</span>
+            </dd>
+
+            <dt><span lang="ru">Футер</span><span lang="en">Footer</span></dt>
+            <dd>
+                <span lang="ru">Нижняя часть страницы с&nbsp;контактами, копирайтом, ссылками. От&nbsp;английского <em>footer</em>&nbsp;&mdash; нижний колонтитул.</span>
+                <span lang="en">The bottom of a page with contacts, copyright, links.</span>
+            </dd>
+
+            <dt><span lang="ru">HTML</span><span lang="en">HTML</span></dt>
+            <dd>
+                <span lang="ru">Язык, на&nbsp;котором написаны все веб-страницы. В&nbsp;курсе вы&nbsp;его сами не&nbsp;пишете&nbsp;&mdash; это делает Claude. Вам достаточно знать: один файл <code>.html</code>&nbsp;=&nbsp;одна веб-страница, открывается в&nbsp;любом браузере.</span>
+                <span lang="en">The language all web pages are written in. You do not write it yourself in this course — Claude does. Enough to know: one <code>.html</code> file = one web page, opens in any browser.</span>
+            </dd>
+
+            <dt><span lang="ru">VS&nbsp;Code</span><span lang="en">VS&nbsp;Code</span></dt>
+            <dd>
+                <span lang="ru">Бесплатный редактор файлов от&nbsp;Microsoft. Открывает любой текстовый файл, удобно показывает структуру кода, сделанного Claude. Не&nbsp;обязателен&nbsp;&mdash; подойдёт даже Блокнот&nbsp;&mdash; но&nbsp;дальше будет проще именно с&nbsp;ним.</span>
+                <span lang="en">A free file editor by Microsoft. Opens any text file, shows the structure of code Claude wrote. Not required (Notepad will do), but life is simpler with it.</span>
+            </dd>
+
+            <dt><span lang="ru">Hover-эффект</span><span lang="en">Hover effect</span></dt>
+            <dd>
+                <span lang="ru">Реакция элемента на&nbsp;наведение мыши: подсветка, плавное увеличение, смена цвета. От&nbsp;английского <em>hover</em>&nbsp;&mdash; «парить», «нависать».</span>
+                <span lang="en">An element’s reaction to mouse-hover: highlight, gentle scale, colour change. From <em>hover</em>.</span>
+            </dd>
+
+            <dt><span lang="ru">Терминал</span><span lang="en">Terminal</span></dt>
+            <dd>
+                <span lang="ru">Окно, в&nbsp;которое вы&nbsp;печатаете команды напрямую компьютеру. Не&nbsp;путайте с&nbsp;веб-чатом или редактором файлов: в&nbsp;терминале вы&nbsp;разговариваете с&nbsp;операционной системой и&nbsp;с&nbsp;Claude Code.</span>
+                <span lang="en">A window where you type commands to your computer. Not the same as a web chat or a file editor: in the terminal you talk to the OS and to Claude Code.</span>
+            </dd>
+
+            <dt><span lang="ru">Рабочая папка</span><span lang="en">Working directory</span></dt>
+            <dd>
+                <span lang="ru">Папка, внутри которой запущен Claude&nbsp;Code. Он&nbsp;видит и&nbsp;трогает только её&nbsp;содержимое&nbsp;&mdash; не&nbsp;может «выйти» наружу. Это безопасная «песочница» для диалога.</span>
+                <span lang="en">The folder Claude Code was launched inside. It sees and touches only its contents — cannot reach outside. A safe sandbox for the dialogue.</span>
+            </dd>
+
+            <dt><span lang="ru">npm</span><span lang="en">npm</span></dt>
+            <dd>
+                <span lang="ru">Программа, которая ставит другие программы. Через неё устанавливается сам Claude Code: <code>npm&nbsp;install&nbsp;-g&nbsp;@anthropic-ai/claude-code</code>. Появляется автоматически вместе с&nbsp;Node.js.</span>
+                <span lang="en">A program that installs other programs. That is how you get Claude Code itself: <code>npm install -g @anthropic-ai/claude-code</code>. Comes automatically with Node.js.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Постарайтесь сначала ответить мысленно или вслух&nbsp;&mdash; и&nbsp;только потом раскрыть «правильный ответ». После того как сверились, отметьте: <em>знал</em> или <em>не знал</em>. По&nbsp;итогам я&nbsp;подскажу, что повторить, чтобы дальше идти уверенно.</p>
+        <p class="reading" lang="en">Try answering mentally or out loud first — only then reveal the “right answer.” After comparing, mark it: <em>knew</em> or <em>did not know</em>. From the totals I will tell you what to revisit before moving on.</p>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Чем Claude Code принципиально отличается от&nbsp;ChatGPT в&nbsp;браузере?</span>
+                        <span lang="en">What is the core difference between Claude Code and ChatGPT in a browser?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Claude Code живёт в&nbsp;вашем терминале и&nbsp;имеет доступ к&nbsp;файлам на&nbsp;компьютере. Он&nbsp;может прочитать ваш файл, изменить, создать новый, запустить команду. ChatGPT этого не&nbsp;может&nbsp;&mdash; он&nbsp;только обменивается текстом в&nbsp;окне браузера.</p>
+                        <p lang="en">Claude Code lives in your terminal and has access to files on your machine. It can read your file, edit it, create a new one, run a command. ChatGPT cannot — it just exchanges text in a browser window.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Какая команда показывает, в&nbsp;какой папке вы&nbsp;сейчас находитесь?</span>
+                        <span lang="en">Which command shows the folder you are currently in?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>pwd</code>&nbsp;&mdash; от&nbsp;английского <em>print working directory</em>, «напечатай рабочую папку».</p>
+                        <p lang="en"><code>pwd</code> — for <em>print working directory</em>.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Какой клавишей переключаются режимы разрешений в&nbsp;Claude Code, и&nbsp;какие это режимы?</span>
+                        <span lang="en">Which key cycles the permission modes in Claude Code, and what are they?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>Shift + Tab</code>. Циклически: <strong>default</strong> (со&nbsp;спросом) → <strong>auto-accept</strong> (без&nbsp;спроса) → <strong>plan&nbsp;mode</strong> (только план) → снова default.</p>
+                        <p lang="en"><code>Shift + Tab</code>. Cycles through <strong>default</strong> (asks first), <strong>auto-accept</strong> (no asking), <strong>plan mode</strong> (plan only), and back.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Когда полезен plan&nbsp;mode?</span>
+                        <span lang="en">When is plan mode useful?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Когда задача крупная, и&nbsp;вы&nbsp;не&nbsp;уверены, что Claude всё правильно понял. В&nbsp;plan&nbsp;mode он&nbsp;сначала рисует план, ничего не&nbsp;трогая. Вы&nbsp;утверждаете план&nbsp;&mdash; и&nbsp;только тогда он&nbsp;его выполняет. Подробно разберём в&nbsp;этапе&nbsp;04.</p>
+                        <p lang="en">When the task is large and you are not sure Claude got it right. In plan mode it draws a plan first, touching nothing. You approve the plan — and only then it runs. Covered in detail in etape 04.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Если запустить Claude Code в&nbsp;папке <code>~/claude-course</code>, сможет&nbsp;ли он&nbsp;прочитать файл из&nbsp;<code>~/Documents</code>?</span>
+                        <span lang="en">If you launch Claude Code in <code>~/claude-course</code>, can it read a file from <code>~/Documents</code>?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Нет. Claude Code видит только текущую рабочую папку и&nbsp;её&nbsp;содержимое&nbsp;&mdash; не&nbsp;выходит наружу. Это базовая мера безопасности.</p>
+                        <p lang="en">No. Claude Code sees only its current working directory and its contents — it does not reach outside. A baseline safety measure.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Что в&nbsp;этом этапе называлось словом «артефакт»?</span>
+                        <span lang="en">What does the word “artefact” mean in this etape?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Готовая ваша работа, которой можно «показать пальцем». В&nbsp;этапе&nbsp;00 это&nbsp;&mdash; четыре HTML-страницы: карточка обо&nbsp;мне, книжная полка, карточка фильма, ваша коллекция.</p>
+                        <p lang="en">A finished piece of your own work you can point at. In etape 00 — four HTML pages: a card about you, a bookshelf, a film card, your collection.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Почему мы&nbsp;поправляем Claude итерациями, а&nbsp;не&nbsp;пытаемся написать «идеальный» промпт сразу?</span>
+                        <span lang="en">Why correct Claude in iterations rather than try to write the “perfect” prompt at once?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Первая версия почти никогда не&nbsp;совпадает с&nbsp;тем, что вы&nbsp;хотели,&nbsp;&mdash; даже у&nbsp;профессионалов. Claude быстрый, и&nbsp;пять-шесть итераций по&nbsp;тридцать секунд работают лучше, чем десять минут шлифовки одного «идеального» промпта.</p>
+                        <p lang="en">The first version almost never matches what you wanted — even for pros. Claude is fast, and five-six iterations of thirty seconds beat ten minutes polishing a single “perfect” prompt.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Отметьте галочками, что освоено уверенно. Если на&nbsp;одном из&nbsp;пунктов сомневаетесь&nbsp;&mdash; вернитесь к&nbsp;соответствующей теме или практике. Этап готов к&nbsp;закрытию, когда все галочки стоят.</p>
+        <p class="reading" lang="en">Tick what you have nailed. If unsure on a point — return to the relevant topic or practice. The etape is ready to close when all ticks are up.</p>
+
+        <ul class="checklist">
+            <li data-key="e0-install">
+                <span lang="ru">Установил Node.js, Claude Code и&nbsp;VS&nbsp;Code; вошёл в&nbsp;аккаунт Anthropic.</span>
+                <span lang="en">Installed Node.js, Claude Code and VS Code; signed in to my Anthropic account.</span>
+            </li>
+            <li data-key="e0-terminal">
+                <span lang="ru">Свободно перемещаюсь по&nbsp;папкам в&nbsp;терминале (<code>pwd</code>, <code>cd</code>, <code>mkdir</code>, <code>ls</code>).</span>
+                <span lang="en">I move around folders in the terminal freely (<code>pwd</code>, <code>cd</code>, <code>mkdir</code>, <code>ls</code>).</span>
+            </li>
+            <li data-key="e0-launch">
+                <span lang="ru">Знаю, как запустить Claude Code в&nbsp;любой папке и&nbsp;что значит «текущая рабочая папка».</span>
+                <span lang="en">I know how to launch Claude Code in any folder and what “current working directory” means.</span>
+            </li>
+            <li data-key="e0-files">
+                <span lang="ru">Создаю, читаю, изменяю, переименовываю и&nbsp;удаляю файлы через диалог.</span>
+                <span lang="en">I create, read, edit, rename and delete files through dialogue.</span>
+            </li>
+            <li data-key="e0-modes">
+                <span lang="ru">Переключаюсь между режимами <code>default</code>, <code>auto-accept</code>, <code>plan&nbsp;mode</code> и&nbsp;понимаю, когда какой нужен.</span>
+                <span lang="en">I switch between <code>default</code>, <code>auto-accept</code>, <code>plan mode</code> and know when each fits.</span>
+            </li>
+            <li data-key="e0-iterate">
+                <span lang="ru">Уверенно поправляю результат: «не&nbsp;так, измени&nbsp;X», «сохрани и&nbsp;сделай ещё вариант».</span>
+                <span lang="en">I correct results confidently: “no, change X,” “save and make another variant.”</span>
+            </li>
+            <li data-key="e0-delivery">
+                <span lang="ru">Сделал четыре странички (карточка обо&nbsp;мне, полка книг, карточка фильма, своя коллекция). Все открываются двойным кликом.</span>
+                <span lang="en">I built four pages (card about me, bookshelf, film card, my collection). All open with a double-click.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-00" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev disabled" href="#" aria-disabled="true">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">Это первый этап</span><span lang="en">This is the first etape</span></span>
+            </a>
+            <a class="next" href="etap-01.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">01 · Промпт-инжиниринг для Claude Code</span><span lang="en">01 · Prompt Engineering for Claude Code</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Сначала мы&nbsp;учим инструмент. Потом&nbsp;&mdash; делаем им&nbsp;что-то полезное».</p>
+            <p class="signature" lang="en">“First we learn the tool. Then — we make something useful with it.”</p>
+            <p lang="ru">Этап&nbsp;00 пройден&nbsp;&mdash; основная задача снята: Claude Code установлен, базовые операции освоены, страх перед терминалом ушёл. Дальше&nbsp;&mdash; учимся ставить ему задачи так, чтобы первая версия была близка к&nbsp;нужной.</p>
+            <p lang="en">Etape 00 is behind you — the core task is solved: Claude Code is installed, basic moves are in hand, fear of the terminal is gone. Next — we learn to phrase tasks so the first attempt is close to what you wanted.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-01.html"><span lang="ru">→ Этап&nbsp;01</span><span lang="en">→ Etape 01</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

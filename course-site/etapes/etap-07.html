@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 07 · Subagents и команды агентов — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 07 курса по Claude Code: subagents, типы агентов, параллельный запуск, foreground vs background, worktree-isolation, multi-agent teams. Due Diligence на акцию через 4 параллельных subagents.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="07">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 07</span><span lang="en">Etape 07</span></span> &nbsp;·&nbsp; <span lang="ru">Subagents и&nbsp;команды агентов</span><span lang="en">Subagents &amp; agent teams</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Главный Claude нанимает <em>отдел стажёров</em>.</span>
+            <span lang="en">Main Claude hires a <em>team of interns</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            До&nbsp;этого Claude был один. Сегодня учим его <em>нанимать команду стажёров</em>: <dfn class="term" tabindex="0" data-def="отдельный «стажёр» — изолированный агент со своим контекстом и брифом. Главный Claude его нанимает на одну задачу, тот возвращает результат. Не видит вашей переписки.">subagents</dfn>, которые работают параллельно, каждый в&nbsp;своём изолированном контексте. Делаем due diligence на&nbsp;акцию через четыре параллельных аналитика и&nbsp;собираем code review-команду из&nbsp;трёх специалистов.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Until now Claude worked alone. Today we teach it to <em>hire a team of interns</em>: <dfn class="term" tabindex="0" data-def="a separate “intern” — an isolated agent with its own context and brief. Main Claude hires it for one task and gets back a result. It does not see your dialogue.">subagents</dfn> running in parallel, each in its own isolated context. We run due diligence on a stock through four parallel analysts and assemble a code review team of three specialists.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">8–10 дней · 2–4&nbsp;ч/день</span><span lang="en">8–10 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">subagents · параллелизм · brief · worktree-isolation · multi-agent teams</span><span lang="en">subagents · parallelism · brief · worktree-isolation · multi-agent teams</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">задачи на&nbsp;«4&nbsp;человека» решаются за&nbsp;один запуск</span><span lang="en">“4-person” tasks ship in one go</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">инвестиционный мемо по&nbsp;акции и&nbsp;тройной code review проекта&nbsp;06</span><span lang="en">an investment memo on a stock and a triple code review of the etape-06 project</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что устанавливаем перед началом</span><span lang="en">What to install before you start</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Subagents встроены в&nbsp;Claude Code, ставить их&nbsp;не&nbsp;нужно. Но&nbsp;два skill из&nbsp;набора <code>superpowers</code> делают работу с&nbsp;ними дисциплинированной. Если вы&nbsp;ставили <code>superpowers</code> в&nbsp;этапах 04 или&nbsp;05&nbsp;&mdash; всё уже на&nbsp;месте.</p>
+        <p class="reading" lang="en">Subagents are built into Claude Code — nothing to install. But two <code>superpowers</code> skills add discipline. If you installed <code>superpowers</code> on etapes 04 or 05 — you’re set.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3><span lang="ru">Из этапов 00–06</span><span lang="en">From etapes 00–06</span></h3>
+            <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Claude Code, MCP <code>@playwright/mcp</code>, <code>@upstash/context7-mcp</code>, skill <code>frontend-design</code>;</li>
+                <li>проект <code>portfolio-journal</code> или личный инвест-кабинет (используем как «реальные данные»);</li>
+                <li>git и&nbsp;GitHub из&nbsp;этапа&nbsp;05&nbsp;&mdash; для&nbsp;worktree-isolation.</li>
+            </ul>
+            <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Claude Code, MCP <code>@playwright/mcp</code>, <code>@upstash/context7-mcp</code>, skill <code>frontend-design</code>;</li>
+                <li>the <code>portfolio-journal</code> project or your investment office (used as “real data”);</li>
+                <li>git and GitHub from etape 05 — for worktree isolation.</li>
+            </ul>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3><code>superpowers:dispatching-parallel-agents</code></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill, который учит Claude правильно <em>отправлять</em> несколько subagents параллельно: формулировать чёткие brief, ждать всех, обрабатывать ошибки одного, не&nbsp;валя весь конвейер.<br>
+            <strong>Зачем сейчас:</strong> для&nbsp;Due Diligence нужно запустить четырёх аналитиков одновременно. Без&nbsp;skill Claude может запустить их&nbsp;по&nbsp;очереди&nbsp;&mdash; и&nbsp;время ответа вырастет в&nbsp;четыре раза.<br>
+            <strong>Проверить:</strong> <code>/skills</code>&nbsp;&mdash; skill в&nbsp;списке.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude to <em>dispatch</em> several subagents in parallel: write clear briefs, wait for all, handle a single failure without breaking the pipeline.<br>
+            <strong>Why now:</strong> Due Diligence needs four analysts at once. Without the skill Claude may run them sequentially — quadrupling the wait.<br>
+            <strong>Check:</strong> <code>/skills</code> — skill in the list.</p>
+            <pre class="shell"><span class="cmt"># <span lang="ru">внутри claude (slash-команда, не shell). Пакет тот&nbsp;же, что в&nbsp;этапе&nbsp;04</span><span lang="en">inside claude (slash command, not shell). Same package as on etape 04</span></span>
+/plugin install superpowers@claude-plugins-official</pre>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3><code>superpowers:subagent-driven-development</code></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill про&nbsp;<em>стиль</em> работы с&nbsp;subagents: когда делегировать, какой brief давать, как читать результат, как избегать «уплываний».<br>
+            <strong>Зачем сейчас:</strong> второй проект&nbsp;&mdash; code review-команда&nbsp;&mdash; работает гораздо лучше с&nbsp;этим skill.<br>
+            <strong>Где взять:</strong> входит в&nbsp;тот&nbsp;же пакет <code>superpowers</code>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill about the <em>style</em> of working with subagents: when to delegate, what brief to write, how to read the result, how to avoid drift.<br>
+            <strong>Why now:</strong> the second project — the code review team — works much better with it.<br>
+            <strong>Where:</strong> part of the same <code>superpowers</code> package.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3><code>superpowers:using-git-worktrees</code></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill для&nbsp;дисциплины worktrees из&nbsp;этапа&nbsp;05.<br>
+            <strong>Зачем сейчас:</strong> «грязные» subagents (которые вносят изменения в&nbsp;файлы) лучше изолировать в&nbsp;worktree, чтобы они не&nbsp;мешали вашей основной работе. Особенно когда запускаются 3–4 параллельно.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the worktree-discipline skill from etape 05.<br>
+            <strong>Why now:</strong> “messy” subagents (those that edit files) are best isolated in worktrees so they don’t interfere with your main work. Especially with 3–4 in parallel.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Как нанимать стажёров</span><span lang="en">How to hire interns</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Что такое subagent: «стажёр на&nbsp;одну задачу»</span><span lang="en">What a subagent is: an “intern for one task”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Subagent&nbsp;&mdash; это <em>отдельный экземпляр Claude</em>, которого вы&nbsp;запускаете на&nbsp;одну подзадачу. У&nbsp;него:</p>
+                    <ul>
+                        <li><strong>Свой контекст.</strong> Он&nbsp;<em>не&nbsp;видит</em> вашей переписки с&nbsp;главным Claude. Получает только тот brief, который вы&nbsp;ему дали.</li>
+                        <li><strong>Свой набор инструментов.</strong> Можно дать ему доступ к&nbsp;файлам, можно ограничить только web-search&nbsp;&mdash; зависит от&nbsp;типа.</li>
+                        <li><strong>Один результат.</strong> Он&nbsp;возвращает <em>одно сообщение</em> с&nbsp;итогом своей работы. Не&nbsp;ведёт диалог&nbsp;&mdash; делает задачу и&nbsp;уходит.</li>
+                    </ul>
+                    <p>Метафора, которую полезно держать в&nbsp;голове весь этап: вы&nbsp;нанимаете <em>стажёра</em> для&nbsp;одной задачи. Стажёр умный, но&nbsp;не&nbsp;знает, чем занят остальной офис. Вы&nbsp;даёте ему <strong>brief</strong>: «вот данные, вот задача, вот формат ответа», ждёте, получаете отчёт.</p>
+                    <p>Главные плюсы:</p>
+                    <ul>
+                        <li><strong>Параллелизм.</strong> Можно запустить 3–4 стажёра одновременно. Что вручную заняло&nbsp;бы 4&nbsp;часа, делается за&nbsp;один.</li>
+                        <li><strong>Изоляция контекста.</strong> Вы&nbsp;экономите свой основной контекст: «грязная» работа делается в&nbsp;контексте стажёра, вам приходит только итог.</li>
+                        <li><strong>Специализация.</strong> Можно нанять «code-reviewer» с&nbsp;его настроенным промптом и&nbsp;поведением, не&nbsp;объясняя каждый раз, что вы&nbsp;хотите от&nbsp;ревью.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>A subagent is a <em>separate Claude instance</em> you launch for one sub-task. It has:</p>
+                    <ul>
+                        <li><strong>Its own context.</strong> It does <em>not see</em> your dialogue with main Claude. It gets only the brief you give it.</li>
+                        <li><strong>Its own tool set.</strong> You can grant file access, or restrict to web search — depending on type.</li>
+                        <li><strong>One result.</strong> It returns <em>one message</em> with its outcome. No back-and-forth — does the task and leaves.</li>
+                    </ul>
+                    <p>The metaphor for the whole etape: you hire an <em>intern</em> for one task. They’re smart, but unaware of the rest of the office. You give them a <strong>brief</strong>: “here is the data, here is the task, here is the output format,” you wait, you get a report.</p>
+                    <p>The main wins:</p>
+                    <ul>
+                        <li><strong>Parallelism.</strong> Run 3–4 interns at once. What would take 4 hours by hand finishes in 1.</li>
+                        <li><strong>Context isolation.</strong> You spare your main context: the “messy” work happens inside the intern’s, only the outcome reaches you.</li>
+                        <li><strong>Specialisation.</strong> Hire a “code-reviewer” with its tuned prompt and behaviour, no need to re-explain what you want every time.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Типы subagents в&nbsp;Claude Code</span><span lang="en">Subagent types in Claude Code</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Claude Code приносит несколько готовых типов. Названия могут отличаться по&nbsp;вашей конфигурации, но&nbsp;логика общая:</p>
+                    <ul>
+                        <li><strong>general-purpose</strong>&nbsp;&mdash; универсальный стажёр без&nbsp;специализации. Можно дать любую задачу.</li>
+                        <li><strong>Explore / code-explorer</strong>&nbsp;&mdash; «следователь по&nbsp;коду»: пройди по&nbsp;файлам, найди где определена функция X, что в&nbsp;этом проекте необычного. Только чтение, без&nbsp;правок.</li>
+                        <li><strong>code-reviewer</strong>&nbsp;&mdash; ревью кода: ищет баги, проблемы безопасности, отклонения от&nbsp;конвенций.</li>
+                        <li><strong>code-architect</strong>&nbsp;&mdash; архитектура: проектирует решение, прежде чем писать код.</li>
+                        <li><strong>code-simplifier</strong>&nbsp;&mdash; упрощает код: чище, короче, читаемее.</li>
+                        <li><strong>plan-agent</strong>&nbsp;&mdash; «планировщик»: разбивает крупную задачу на&nbsp;шаги.</li>
+                        <li>и&nbsp;другие, которые могут появиться от&nbsp;установленных плагинов.</li>
+                    </ul>
+                    <p>Вызов&nbsp;&mdash; через инструмент <code>Task</code> (главный Claude использует его сам, вы&nbsp;просто говорите):</p>
+                    <pre class="shell">&gt; используй subagent code-reviewer на @backend/auth.py.
+&gt; задача: найди риски безопасности и предложи исправления.
+&gt; формат: список из 3-5 пунктов, по убыванию серьёзности.</pre>
+                    <p>Список доступных&nbsp;&mdash; через <code>/agents</code> (или эквивалент в&nbsp;вашей конфигурации).</p>
+                </div>
+                <div lang="en">
+                    <p>Claude Code ships a few ready types. Names may differ in your setup, the logic is the same:</p>
+                    <ul>
+                        <li><strong>general-purpose</strong> — a generalist intern. Any task.</li>
+                        <li><strong>Explore / code-explorer</strong> — a “code investigator”: walk files, find where X is defined, note unusual things. Read only, no edits.</li>
+                        <li><strong>code-reviewer</strong> — code review: bugs, security, convention drift.</li>
+                        <li><strong>code-architect</strong> — architecture: design first, code later.</li>
+                        <li><strong>code-simplifier</strong> — simplifies code: cleaner, shorter, more readable.</li>
+                        <li><strong>plan-agent</strong> — planner: splits a big task into steps.</li>
+                        <li>others may appear from installed plugins.</li>
+                    </ul>
+                    <p>Invocation goes through the <code>Task</code> tool (main Claude uses it, you just say):</p>
+                    <pre class="shell">&gt; run subagent code-reviewer on @backend/auth.py.
+&gt; task: find security risks and propose fixes.
+&gt; format: 3-5 bullets, descending severity.</pre>
+                    <p>List the available ones via <code>/agents</code> (or equivalent in your setup).</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="ТЗ для одной подзадачи: цель, входы, что НЕ делать, формат ответа, объём (1 страница / 3 пункта). Чем чётче brief — тем полезнее результат subagent.">Brief</dfn>: как нанять стажёра правильно</span><span lang="en"><dfn class="term" tabindex="0" data-def="a brief for one sub-task: goal, inputs, what NOT to do, output format, length (1 page / 3 bullets). The clearer the brief — the more useful the subagent’s result.">Brief</dfn>: hiring an intern correctly</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Brief&nbsp;&mdash; это технический «вход» для&nbsp;subagent. От&nbsp;его качества напрямую зависит, насколько полезен будет результат. Хороший brief содержит:</p>
+                    <ol>
+                        <li><strong>Цель в&nbsp;одной фразе.</strong> «Найди три риска безопасности в&nbsp;auth.py».</li>
+                        <li><strong>Входы.</strong> Какие файлы читать, какие данные использовать. Лучше через <code>@</code>-ссылки.</li>
+                        <li><strong>Чего НЕ&nbsp;делать.</strong> «Не&nbsp;трогай файлы, только читай». «Не&nbsp;используй сторонние сервисы». «Не&nbsp;давай советов по&nbsp;UX, только по&nbsp;безопасности».</li>
+                        <li><strong>Формат ответа.</strong> «Список из&nbsp;3–5 пунктов в&nbsp;Markdown». «JSON со&nbsp;структурой&nbsp;X».</li>
+                        <li><strong>Объём.</strong> «Одна страница максимум». «По&nbsp;5–7 строк на&nbsp;каждый риск».</li>
+                    </ol>
+                    <p>Пример хорошего brief для&nbsp;инвест-аналитика:</p>
+                    <pre class="shell">&gt; запусти subagent general-purpose со следующим brief:
+&gt;
+&gt; РОЛЬ: фундаментальный аналитик акций.
+&gt; ЦЕЛЬ: оцени фундаменталы AAPL за последний квартал.
+&gt; ВХОДЫ: можешь использовать WebSearch и WebFetch для
+&gt;   сайта investor.apple.com и финансовых лент.
+&gt; НЕ ДЕЛАЙ: не давай прогнозов. не используй технический анализ.
+&gt;   не пиши «по моему мнению» — только факты.
+&gt; ФОРМАТ: markdown-блок с разделами:
+&gt;   - выручка (yoy +/-);
+&gt;   - чистая прибыль (yoy +/-);
+&gt;   - P/E vs средний по сектору;
+&gt;   - три ключевых факта из последнего квартала.
+&gt; ОБЪЁМ: одна страница максимум.</pre>
+                    <p>Принцип <strong>«fail fast в&nbsp;brief»</strong>: лучше потратить 30&nbsp;секунд на&nbsp;точный brief, чем 5&nbsp;минут на&nbsp;разбор результата, в&nbsp;котором стажёр сделал «не&nbsp;то».</p>
+                </div>
+                <div lang="en">
+                    <p>A brief is the technical “input” for the subagent. The result’s usefulness scales directly with brief quality. A good brief has:</p>
+                    <ol>
+                        <li><strong>Goal in one sentence.</strong> “Find three security risks in auth.py.”</li>
+                        <li><strong>Inputs.</strong> Which files to read, which data to use. Use <code>@</code>-mentions where you can.</li>
+                        <li><strong>What NOT to do.</strong> “Read only, don’t edit.” “No third-party services.” “Don’t give UX advice — security only.”</li>
+                        <li><strong>Output format.</strong> “3–5 markdown bullets.” “JSON of shape X.”</li>
+                        <li><strong>Length.</strong> “One page max.” “5–7 lines per risk.”</li>
+                    </ol>
+                    <p>An example brief for an investing analyst:</p>
+                    <pre class="shell">&gt; spawn a general-purpose subagent with this brief:
+&gt;
+&gt; ROLE: fundamental stock analyst.
+&gt; GOAL: assess AAPL fundamentals for the last quarter.
+&gt; INPUTS: you can use WebSearch and WebFetch for
+&gt;   investor.apple.com and financial feeds.
+&gt; DO NOT: don't forecast. no technical analysis.
+&gt;   no "in my opinion" — facts only.
+&gt; FORMAT: a markdown block with sections:
+&gt;   - revenue (yoy +/-);
+&gt;   - net income (yoy +/-);
+&gt;   - P/E vs sector average;
+&gt;   - three key facts from the latest quarter.
+&gt; LENGTH: one page max.</pre>
+                    <p>The <strong>“fail fast in the brief”</strong> rule: better spend 30 seconds on a precise brief than 5 minutes parsing a result where the intern did “the wrong thing.”</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Параллельный запуск: несколько стажёров одновременно</span><span lang="en">Parallel dispatch: several interns at once</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Главный плюс subagents&nbsp;&mdash; параллелизм. Если задачи независимы (один анализирует фундаменталы, второй&nbsp;&mdash; график, третий&nbsp;&mdash; новости), запускаем их&nbsp;<em>одновременно</em>.</p>
+                    <p>В&nbsp;Claude Code для&nbsp;этого&nbsp;&mdash; параметр <code>run_in_background: true</code>. Один промпт&nbsp;&mdash; четыре стажёра в&nbsp;работе:</p>
+                    <pre class="shell">&gt; для AAPL запусти ПАРАЛЛЕЛЬНО (run_in_background) четырёх subagents:
+&gt;
+&gt; 1) ФУНДАМЕНТАЛЬНЫЙ — выручка, прибыль, P/E (brief 1).
+&gt; 2) ТЕХНИЧЕСКИЙ — тренд, индикаторы, поддержки (brief 2).
+&gt; 3) НОВОСТНОЙ — sentiment по 30 свежим заголовкам (brief 3).
+&gt; 4) МАКРО — отрасль и экономический фон (brief 4).
+&gt;
+&gt; ЖДИ всех. КАЖДЫЙ возвращает свой markdown-блок.
+&gt; ПОТОМ собери в один файл memo-aapl.md с разделами по каждому.</pre>
+                    <p>Что произойдёт:</p>
+                    <ul>
+                        <li>Главный Claude отправит четыре <code>Task</code>-вызова, каждый с&nbsp;<code>run_in_background: true</code>;</li>
+                        <li>Они работают параллельно (~2–4 минуты вместо ~10–15);</li>
+                        <li>Главный Claude дожидается всех, читает результаты;</li>
+                        <li>Сшивает в&nbsp;единый отчёт.</li>
+                    </ul>
+                    <p>Когда параллелизм <em>не&nbsp;нужен</em>: если результат одного стажёра&nbsp;&mdash; вход для&nbsp;другого. Тогда последовательно (foreground): дождались первого, передали второму.</p>
+                </div>
+                <div lang="en">
+                    <p>The main subagents win is parallelism. When tasks are independent (one for fundamentals, another for the chart, a third for news), run them <em>simultaneously</em>.</p>
+                    <p>In Claude Code use the <code>run_in_background: true</code> parameter. One prompt — four interns working:</p>
+                    <pre class="shell">&gt; for AAPL launch IN PARALLEL (run_in_background) four subagents:
+&gt;
+&gt; 1) FUNDAMENTAL — revenue, profit, P/E (brief 1).
+&gt; 2) TECHNICAL — trend, indicators, supports (brief 2).
+&gt; 3) NEWS — sentiment over 30 fresh headlines (brief 3).
+&gt; 4) MACRO — sector and macro backdrop (brief 4).
+&gt;
+&gt; WAIT for all. EACH returns its own markdown block.
+&gt; THEN stitch into one memo-aapl.md with sections per analyst.</pre>
+                    <p>What happens:</p>
+                    <ul>
+                        <li>Main Claude fires four <code>Task</code> calls, each with <code>run_in_background: true</code>;</li>
+                        <li>They run in parallel (~2–4 minutes instead of ~10–15);</li>
+                        <li>Main Claude waits for all, reads the results;</li>
+                        <li>Stitches into a single report.</li>
+                    </ul>
+                    <p>When parallelism <em>doesn’t</em> fit: when one intern’s output is another’s input. Then sequential (foreground): wait the first, hand to the second.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Foreground vs background: когда какое</span><span lang="en">Foreground vs background: which when</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong>Foreground</strong>&nbsp;&mdash; «жду стажёра, прежде чем продолжить». Главный Claude посылает задачу, останавливается, дожидается результата.</p>
+                    <ul>
+                        <li>Используется, когда результат подзадачи нужен <em>прямо сейчас</em> для&nbsp;следующего шага;</li>
+                        <li>Удобно для&nbsp;«одного стажёра на&nbsp;разовую задачу»;</li>
+                        <li>Плюс: проще читать&nbsp;&mdash; результат сразу в&nbsp;диалоге.</li>
+                    </ul>
+                    <p><strong>Background</strong>&nbsp;&mdash; «отправил задачу, продолжаю работать, заберу результат позже».</p>
+                    <ul>
+                        <li>Используется для&nbsp;<em>параллельных независимых задач</em> (как четыре аналитика);</li>
+                        <li>Удобно, когда задача длинная (например, анализ всех файлов проекта);</li>
+                        <li>Плюс: общее время работы сокращается в&nbsp;разы.</li>
+                    </ul>
+                    <p>Простое правило:</p>
+                    <ul>
+                        <li>Один стажёр + результат сейчас → foreground.</li>
+                        <li>3+ стажёра одновременно → background.</li>
+                        <li>Длинная задача (5+ минут), хочется параллельно делать что-то ещё → background, через какое-то время «проверь, готово&nbsp;ли».</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p><strong>Foreground</strong> — “wait for the intern before continuing.” Main Claude sends the task, pauses, waits for the result.</p>
+                    <ul>
+                        <li>For when the sub-result is needed <em>right now</em> for the next step;</li>
+                        <li>Good for “one intern on a one-off task”;</li>
+                        <li>Plus: easier to read — the result lands in the dialogue.</li>
+                    </ul>
+                    <p><strong>Background</strong> — “fired the task, kept working, will pick up the result later.”</p>
+                    <ul>
+                        <li>For <em>parallel independent tasks</em> (the four analysts);</li>
+                        <li>Good for long tasks (e.g., analysing the whole project);</li>
+                        <li>Plus: total wall-time drops several-fold.</li>
+                    </ul>
+                    <p>Simple rule:</p>
+                    <ul>
+                        <li>One intern + result needed now → foreground.</li>
+                        <li>3+ interns at once → background.</li>
+                        <li>Long task (5+ min), want to do something else in parallel → background, ask later “is it ready.”</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="запуск subagent в собственной git-worktree-копии репозитория. Subagent делает изменения в своей папке, не мешая основной. По завершении вы либо мержите его ветку, либо отбрасываете.">Worktree-isolation</dfn>: «грязные» стажёры в&nbsp;своей песочнице</span><span lang="en"><dfn class="term" tabindex="0" data-def="running a subagent inside its own git worktree copy of the repo. The subagent edits its own folder, no interference with the main one. When done you either merge its branch or drop it.">Worktree isolation</dfn>: “messy” interns in their own sandbox</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Если subagent <em>читает</em>&nbsp;&mdash; его можно запускать «как есть»: он&nbsp;ничего не&nbsp;ломает. Но&nbsp;если он&nbsp;<em>пишет</em> файлы (например, рефакторит код), вы&nbsp;не&nbsp;хотите, чтобы три параллельных стажёра одновременно правили один и&nbsp;тот&nbsp;же <code>app.py</code>.</p>
+                    <p>Решение&nbsp;&mdash; <strong>worktree-isolation</strong>: каждый «грязный» стажёр работает в&nbsp;собственной копии репозитория (worktree, см.&nbsp;этап&nbsp;05). После завершения вы&nbsp;смотрите на&nbsp;каждый результат отдельно, выбираете, что мержить, что отбрасывать.</p>
+                    <pre class="shell">&gt; для рефакторинга frontend/auth.tsx запусти параллельно:
+&gt; — code-simplifier в worktree feature/auth-simplify;
+&gt; — code-reviewer в worktree review/auth (только чтение, ему worktree не обязателен);
+&gt; — code-architect в worktree feature/auth-redesign.
+&gt;
+&gt; ЖДИ всех. покажи мне три предложенных версии,
+&gt; чтобы я выбрал, что мержить в main.</pre>
+                    <p>Skill <code>superpowers:using-git-worktrees</code> добавляет это автоматически: «грязные» subagents всегда получают свой worktree, чистые&nbsp;&mdash; нет.</p>
+                </div>
+                <div lang="en">
+                    <p>If a subagent <em>reads</em> — you can run it as is: it breaks nothing. But if it <em>writes</em> files (e.g. refactors code), you don’t want three parallel interns editing the same <code>app.py</code> at once.</p>
+                    <p>The fix is <strong>worktree isolation</strong>: every “messy” intern works in its own repo copy (worktree, see etape 05). When done you review each result separately and decide what to merge and what to drop.</p>
+                    <pre class="shell">&gt; for refactoring frontend/auth.tsx, dispatch in parallel:
+&gt; — code-simplifier in worktree feature/auth-simplify;
+&gt; — code-reviewer in worktree review/auth (read only, worktree not required);
+&gt; — code-architect in worktree feature/auth-redesign.
+&gt;
+&gt; WAIT for all. show me the three proposals
+&gt; so I pick what to merge into main.</pre>
+                    <p>The <code>superpowers:using-git-worktrees</code> skill makes this automatic: “messy” subagents always get a worktree, “clean” ones don’t.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Multi-agent teams: координация и&nbsp;передача результатов</span><span lang="en">Multi-agent teams: coordination and handoffs</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Простой шаблон&nbsp;&mdash; «один главный, четыре параллельных»&nbsp;&mdash; работает для&nbsp;independent задач. Но&nbsp;есть и&nbsp;более сложные сценарии:</p>
+                    <ol>
+                        <li><strong>Конвейер.</strong> Агент&nbsp;A собирает данные → агент&nbsp;B анализирует → агент&nbsp;C пишет отчёт. Каждый&nbsp;&mdash; в&nbsp;foreground, выход одного передаётся как вход следующему.</li>
+                        <li><strong>Конкурс.</strong> Три агента решают одну задачу <em>разными способами</em>, главный выбирает лучший. Полезно, когда подход неочевиден.</li>
+                        <li><strong>Дискуссия.</strong> Агент&nbsp;A пишет план, агент&nbsp;B критикует, агент&nbsp;A переписывает с&nbsp;учётом критики. Полезно для&nbsp;сложных архитектурных решений.</li>
+                    </ol>
+                    <p>Главный принцип: <em>главный Claude&nbsp;&mdash; всегда один</em>. Он&nbsp;дирижёр оркестра, а&nbsp;subagents&nbsp;&mdash; музыканты. Стажёр стажёру не&nbsp;звонит&nbsp;&mdash; всё координирует главный.</p>
+                    <p>Когда задача требует именно «дирижёра», полезен skill <code>superpowers:dispatching-parallel-agents</code>: он&nbsp;учит главного Claude правильно строить такие схемы и&nbsp;собирать результаты.</p>
+                </div>
+                <div lang="en">
+                    <p>The simple pattern — “one main, four in parallel” — fits independent tasks. There are richer scenarios too:</p>
+                    <ol>
+                        <li><strong>Pipeline.</strong> Agent A collects data → agent B analyses → agent C writes the report. Each is foreground, the output of one feeds the next.</li>
+                        <li><strong>Contest.</strong> Three agents solve one task <em>different ways</em>, the main picks the best. Useful when the approach isn’t obvious.</li>
+                        <li><strong>Debate.</strong> Agent A drafts a plan, agent B critiques, agent A rewrites with critique in mind. Useful for hard architectural decisions.</li>
+                    </ol>
+                    <p>Core principle: <em>main Claude is always single</em>. It’s the conductor; subagents are musicians. Interns don’t call interns — the conductor coordinates.</p>
+                    <p>When the task wants a real conductor, the <code>superpowers:dispatching-parallel-agents</code> skill helps: it teaches main Claude to build such schemes and gather results.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Когда subagents <em>не</em> нужны</span><span lang="en">When subagents are <em>not</em> needed</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Subagents&nbsp;&mdash; не&nbsp;«серебряная пуля». Они платят накладные расходы (запуск контекста, передача brief), и&nbsp;иногда проще без&nbsp;них.</p>
+                    <p>Не&nbsp;используйте subagents:</p>
+                    <ul>
+                        <li>Для&nbsp;мелких правок, на&nbsp;которые главный Claude отвечает за&nbsp;30&nbsp;секунд.</li>
+                        <li>Когда задачи зависят друг от&nbsp;друга в&nbsp;нелинейном порядке (постоянная необходимость «в&nbsp;ответ на&nbsp;X сделать&nbsp;Y»&nbsp;&mdash; на&nbsp;это нужен диалог, а&nbsp;не&nbsp;одноразовый brief).</li>
+                        <li>Для&nbsp;интерактивных сценариев («давай попробуем», «нет, не&nbsp;так»). Subagent делает <em>один</em> ответ&nbsp;&mdash; вы&nbsp;можете запросить ещё, но&nbsp;это уже новый стажёр со&nbsp;своим контекстом.</li>
+                    </ul>
+                    <p>Используйте, когда:</p>
+                    <ul>
+                        <li>Задача независима и&nbsp;«крупная» (минут на&nbsp;5–15);</li>
+                        <li>Нужны 2+ независимых результата;</li>
+                        <li>Вы&nbsp;не&nbsp;хотите засорять основной контекст «грязной» работой (логи, поиск по&nbsp;коду, парсинг страниц);</li>
+                        <li>Есть специализированный тип, идеально подходящий (code-reviewer для&nbsp;ревью, и&nbsp;т.&nbsp;д.).</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>Subagents are not a silver bullet. They have overhead (context spin-up, brief handover), and sometimes simpler is better.</p>
+                    <p>Don’t use subagents:</p>
+                    <ul>
+                        <li>For small edits main Claude handles in 30 seconds.</li>
+                        <li>When tasks depend on each other in a non-linear way (constant “in response to X do Y” — needs dialogue, not a one-shot brief).</li>
+                        <li>For interactive flows (“let’s try,” “no, not like that”). A subagent gives <em>one</em> reply — you can ask again, but that’s a new intern with new context.</li>
+                    </ul>
+                    <p>Use when:</p>
+                    <ul>
+                        <li>The task is independent and “large” (5–15 minutes);</li>
+                        <li>You need 2+ independent results;</li>
+                        <li>You don’t want to junk up the main context with “messy” work (logs, code search, page parsing);</li>
+                        <li>A specialised type fits perfectly (code-reviewer for review, etc.).</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Один стажёр, потом два, потом четыре</span><span lang="en">One intern, then two, then four</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · смоук-тесты subagents</span><span lang="en">Run · subagent smoke tests</span></h4>
+            <ol lang="ru">
+                <li>Зайдите в&nbsp;ваш проект <code>portfolio-journal</code>. Запустите <code>claude</code>.</li>
+                <li><strong>Один subagent (foreground).</strong> Промпт:
+                    <pre class="shell">&gt; запусти subagent code-explorer на @data/operations.csv.
+&gt; brief: опиши, какие тикеры в файле, сколько уникальных,
+&gt; какой период покрывает, какие колонки — в формате 4-5 строк.
+&gt; ЖДИ результата.</pre>
+                </li>
+                <li>Когда вернётся&nbsp;&mdash; обратите внимание: вы&nbsp;видите <em>его</em> ответ, но&nbsp;не&nbsp;его «мысли». Это нормально.</li>
+                <li><strong>Два параллельных (background).</strong> Промпт:
+                    <pre class="shell">&gt; ПАРАЛЛЕЛЬНО (run_in_background) запусти двух subagents:
+&gt;
+&gt; 1) general-purpose:
+&gt;    brief: оцени ликвидность моего портфеля
+&gt;    (доля каждого тикера в общем капитале).
+&gt;    источник: @data/operations.csv.
+&gt;    формат: markdown-таблица.
+&gt;
+&gt; 2) general-purpose:
+&gt;    brief: посчитай реализованный P&amp;L по FIFO,
+&gt;    верни топ-5 удачных и неудачных сделок.
+&gt;    источник: @data/operations.csv.
+&gt;    формат: markdown.
+&gt;
+&gt; ЖДИ ОБОИХ. собери в один файл analysis.md.</pre>
+                </li>
+                <li>Заметьте: время ожидания одно (≈ время самого медленного), а&nbsp;не&nbsp;сумма двух. Это и&nbsp;есть выгода параллелизма.</li>
+                <li><strong>Четыре параллельных (background).</strong> Подготовка к&nbsp;первому проекту:
+                    <pre class="shell">&gt; для тикера AAPL ПАРАЛЛЕЛЬНО запусти четыре general-purpose subagents:
+&gt;
+&gt; 1) ФУНДАМЕНТАЛЬНЫЙ — выручка / прибыль / P/E (через WebFetch);
+&gt; 2) ТЕХНИЧЕСКИЙ — текущий тренд, поддержки;
+&gt; 3) НОВОСТНОЙ — sentiment 20 свежих заголовков;
+&gt; 4) МАКРО — отрасль и общий фон рынка.
+&gt;
+&gt; всем — формат markdown, 1 страница, БЕЗ прогнозов и советов.
+&gt; ЖДИ ВСЕХ. покажи мне их сырые ответы по очереди,
+&gt; не сшивая в отчёт — просто по одному.</pre>
+                </li>
+                <li>Прочитайте каждый ответ отдельно. Заметьте: каждый стажёр <em>не&nbsp;знает</em>, что есть остальные. У&nbsp;каждого свой brief, свой контекст.</li>
+                <li>Финальная команда: <em>«теперь сшей четыре блока в&nbsp;один memo-aapl.md, в&nbsp;конце добавь свой собственный summary в&nbsp;три предложения как «дирижёр оркестра»»</em>. Эту работу делает главный Claude, не&nbsp;subagent.</li>
+            </ol>
+            <ol lang="en">
+                <li>Enter your <code>portfolio-journal</code> project. Launch <code>claude</code>.</li>
+                <li><strong>One subagent (foreground).</strong> Prompt:
+                    <pre class="shell">&gt; run a code-explorer subagent on @data/operations.csv.
+&gt; brief: describe which tickers are in the file, how many unique,
+&gt; what period it covers, which columns — in 4-5 lines.
+&gt; WAIT for the result.</pre>
+                </li>
+                <li>When it returns — notice: you see <em>its</em> reply, not its “thoughts.” That’s normal.</li>
+                <li><strong>Two in parallel (background).</strong> Prompt:
+                    <pre class="shell">&gt; IN PARALLEL (run_in_background) launch two subagents:
+&gt;
+&gt; 1) general-purpose:
+&gt;    brief: assess my portfolio liquidity
+&gt;    (share of each ticker in total capital).
+&gt;    source: @data/operations.csv.
+&gt;    format: markdown table.
+&gt;
+&gt; 2) general-purpose:
+&gt;    brief: compute realised P&amp;L under FIFO,
+&gt;    return top-5 winning and losing trades.
+&gt;    source: @data/operations.csv.
+&gt;    format: markdown.
+&gt;
+&gt; WAIT for BOTH. stitch into one analysis.md.</pre>
+                </li>
+                <li>Notice: total wait equals the slowest, not the sum. That’s the parallelism win.</li>
+                <li><strong>Four in parallel (background).</strong> Prep for the first project:
+                    <pre class="shell">&gt; for ticker AAPL launch four general-purpose subagents IN PARALLEL:
+&gt;
+&gt; 1) FUNDAMENTAL — revenue / profit / P/E (via WebFetch);
+&gt; 2) TECHNICAL — current trend, supports;
+&gt; 3) NEWS — sentiment of 20 fresh headlines;
+&gt; 4) MACRO — sector and macro backdrop.
+&gt;
+&gt; all — markdown, one page, NO forecasts or advice.
+&gt; WAIT for ALL. show me each raw reply one by one,
+&gt; no stitching yet — just sequentially.</pre>
+                </li>
+                <li>Read each reply separately. Notice: each intern does <em>not know</em> the others exist. Each has its own brief and context.</li>
+                <li>Final command: <em>“now stitch the four blocks into one memo-aapl.md, append your own three-sentence summary as the ‘conductor’.”</em> That stitching is the main Claude’s job, not a subagent.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>лестницу 1→2→4 параллельных стажёров</strong>, чтение их&nbsp;независимых ответов и&nbsp;роль главного как дирижёра.</p>
+            <p lang="en">What we train: <strong>the 1→2→4 parallel-intern ladder</strong>, reading their independent replies, and main Claude as conductor.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Команды на&nbsp;настоящих задачах</span><span lang="en">Teams on real tasks</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Due Diligence на&nbsp;акцию через четырёх параллельных аналитиков</span><span lang="en">Due Diligence on a stock through four parallel analysts</span></h3>
+            <p class="goal" lang="ru">Цель: для&nbsp;одной акции (возьмём&nbsp;NVDA как пример) собрать инвестиционный мемо: фундаментальный анализ + технический + новостной + макро. Каждый делает отдельный subagent параллельно. Главный собирает в&nbsp;единый отчёт <code>memo-nvda.md</code> с&nbsp;вердиктом «buy / hold / avoid».</p>
+            <p class="goal" lang="en">Goal: for one stock (we’ll use NVDA) build an investment memo: fundamentals + technicals + news + macro. Each runs as its own parallel subagent. Main stitches into a single <code>memo-nvda.md</code> with a “buy / hold / avoid” verdict.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>dd-nvda</code>, запустите <code>claude</code>. Подготовьте <code>CLAUDE.md</code>: «инвестиционные мемо&nbsp;&mdash; нейтральный тон, факты, без&nbsp;«я&nbsp;считаю», итоговый вердикт обоснован».</li>
+                <li>Войдите в&nbsp;Plan Mode и&nbsp;попросите Claude составить spec для&nbsp;четырёх briefs. Убедитесь, что у&nbsp;каждого&nbsp;есть:
+                    <ul>
+                        <li>Роль (фундаментальный / технический / новостной / макро);</li>
+                        <li>Цель и&nbsp;три-четыре конкретных вопроса, на&nbsp;которые он&nbsp;должен ответить;</li>
+                        <li>Источники данных (какие WebFetch разрешены);</li>
+                        <li>Формат ответа (markdown, разделы);</li>
+                        <li>Объём (одна страница).</li>
+                    </ul>
+                </li>
+                <li>Утвердите brief'ы. Дайте команду:
+                    <pre class="shell">&gt; план одобрен. ПАРАЛЛЕЛЬНО запусти четыре subagents с этими brief.
+&gt; используй skill superpowers:dispatching-parallel-agents
+&gt; для правильной организации.</pre>
+                </li>
+                <li>Дождитесь возврата всех. Прочитайте каждый ответ отдельно. Если кто-то «уплыл» (например, новостной начал давать прогнозы&nbsp;&mdash; запрещено в&nbsp;brief)&nbsp;&mdash; перезапустите его с&nbsp;уточнённым brief.</li>
+                <li>Финальная сшивка:
+                    <pre class="shell">&gt; собери memo-nvda.md со структурой:
+&gt;   ## Резюме (3 предложения, написанные тобой)
+&gt;   ## Фундаментальные показатели (от subagent 1)
+&gt;   ## Технический анализ (от subagent 2)
+&gt;   ## Новостной фон (от subagent 3)
+&gt;   ## Макроконтекст (от subagent 4)
+&gt;   ## Вердикт: Buy / Hold / Avoid
+&gt;     - 3 аргумента «за»;
+&gt;     - 3 аргумента «против»;
+&gt;     - финальное решение и три ключевых риска.</pre>
+                </li>
+                <li>Откройте memo. Прочитайте как редактор: что убедительно, что нет.</li>
+                <li>Финальный аудит&nbsp;&mdash; «red team»:
+                    <pre class="shell">&gt; запусти ещё одного subagent — «red-team аналитик».
+&gt; brief: пройдись по memo-nvda.md, найди 3 слабых места в моём
+&gt; вердикте. с какими аргументами я бы прозвучал убедительнее
+&gt; для скептика-инвестора?
+&gt; формат: 3 пункта по 4-5 строк.</pre>
+                </li>
+                <li>Добавьте раздел «Critique» в&nbsp;memo, чтобы зафиксировать слабые места&nbsp;&mdash; и&nbsp;при следующем DD не&nbsp;повторять.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create <code>dd-nvda</code>, launch <code>claude</code>. Prep <code>CLAUDE.md</code>: “investment memos — neutral tone, facts, no ‘I think,’ verdict must be argued.”</li>
+                <li>Enter Plan Mode and have Claude draft a spec for the four briefs. Each must have:
+                    <ul>
+                        <li>Role (fundamental / technical / news / macro);</li>
+                        <li>Goal and three-four concrete questions to answer;</li>
+                        <li>Allowed data sources (which WebFetch);</li>
+                        <li>Reply format (markdown, sections);</li>
+                        <li>Length (one page).</li>
+                    </ul>
+                </li>
+                <li>Approve briefs. Order:
+                    <pre class="shell">&gt; plan approved. IN PARALLEL launch four subagents with these briefs.
+&gt; use the superpowers:dispatching-parallel-agents skill
+&gt; to coordinate properly.</pre>
+                </li>
+                <li>Wait for all. Read each separately. If anyone “drifted” (e.g., the news analyst started forecasting — forbidden in the brief) — re-run with a tighter brief.</li>
+                <li>Final stitch:
+                    <pre class="shell">&gt; build memo-nvda.md with the structure:
+&gt;   ## Summary (3 sentences you write)
+&gt;   ## Fundamentals (from subagent 1)
+&gt;   ## Technicals (from subagent 2)
+&gt;   ## News (from subagent 3)
+&gt;   ## Macro (from subagent 4)
+&gt;   ## Verdict: Buy / Hold / Avoid
+&gt;     - 3 arguments for;
+&gt;     - 3 arguments against;
+&gt;     - the final call and three key risks.</pre>
+                </li>
+                <li>Open the memo. Read as an editor: what convinces, what doesn’t.</li>
+                <li>Final audit — “red team”:
+                    <pre class="shell">&gt; launch one more subagent — "red-team analyst."
+&gt; brief: walk memo-nvda.md, find 3 weaknesses in my verdict.
+&gt; what arguments would make me sound more convincing
+&gt; to a sceptical investor?
+&gt; format: 3 bullets, 4-5 lines each.</pre>
+                </li>
+                <li>Add a “Critique” section to the memo so the weaknesses are recorded — and not repeated next DD.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>писать четыре чёткие brief за&nbsp;один план;</li>
+                <li>запускать четырёх параллельных subagents и&nbsp;ждать всех;</li>
+                <li>собирать их&nbsp;ответы в&nbsp;связный документ как «дирижёр»;</li>
+                <li>добавлять «red team»&nbsp;&mdash; пятого subagent для&nbsp;критики собственного результата.</li>
+            </ul>
+            <ul lang="en">
+                <li>writing four sharp briefs in one plan;</li>
+                <li>dispatching four parallel subagents and waiting for all;</li>
+                <li>stitching their replies into a coherent document as a “conductor”;</li>
+                <li>adding a “red team” — a fifth subagent to critique your own output.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Code Review-команда на&nbsp;ваш проект из&nbsp;этапа&nbsp;06</span><span lang="en">A code-review team on your etape-06 project</span></h3>
+            <p class="goal" lang="ru">Цель: запустить три параллельных специалистов&nbsp;&mdash; <code>code-reviewer</code>, <code>security-reviewer</code> и&nbsp;<code>code-simplifier</code>&nbsp;&mdash; на&nbsp;backend инвест-кабинета. Получить три независимых отчёта и&nbsp;объединить в&nbsp;план улучшений.</p>
+            <p class="goal" lang="en">Goal: run three parallel specialists — <code>code-reviewer</code>, <code>security-reviewer</code> and <code>code-simplifier</code> — on the investment-office backend. Get three independent reports and merge into an improvement plan.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Зайдите в&nbsp;корень <code>my-investing</code> (или вашего инвест-кабинета). Запустите <code>claude</code>.</li>
+                <li>Промпт на&nbsp;старт:
+                    <pre class="shell">&gt; ПАРАЛЛЕЛЬНО запусти трёх subagents на @backend/:
+&gt;
+&gt; 1) code-reviewer (или general-purpose с ролью code-reviewer):
+&gt;    brief: ревью качества кода. найди 5 главных проблем
+&gt;    (баги, мёртвый код, нарушения конвенций, неточности).
+&gt;    формат: markdown, по убыванию серьёзности.
+&gt;
+&gt; 2) general-purpose с ролью security-reviewer:
+&gt;    brief: ревью безопасности. SQL-инъекции, утечки секретов,
+&gt;    проблемы с авторизацией, CORS, raw passwords в логах.
+&gt;    формат: markdown, по серьёзности (critical / high / medium / low).
+&gt;
+&gt; 3) code-simplifier (или general-purpose с ролью simplifier):
+&gt;    brief: укажи 5 мест, где код можно упростить
+&gt;    (выделить функцию, убрать дубликат, использовать стандартную библиотеку).
+&gt;    формат: до/после, краткое объяснение.
+&gt;
+&gt; ЖДИ всех. покажи отчёты по одному.</pre>
+                </li>
+                <li>Прочитайте все три. Заметьте: совпадения часто означают «настоящие» проблемы, расхождения&nbsp;&mdash; разные точки зрения.</li>
+                <li>Промпт-сшивка:
+                    <pre class="shell">&gt; собери review.md:
+&gt;   ## Критическое (всё, что critical+high security, и баги code-reviewer)
+&gt;   ## Желательное (medium, конвенции, упрощения)
+&gt;   ## К обсуждению (где мнения расходятся)
+&gt; для каждого пункта добавь файл и строку, где видна проблема.</pre>
+                </li>
+                <li>Создайте план улучшений:
+                    <pre class="shell">&gt; составь improvement-plan.md в формате spec:
+&gt;   - три фазы по убыванию срочности;
+&gt;   - в каждой фазе — список задач с критериями готовности;
+&gt;   - примерное время на каждую фазу.</pre>
+                </li>
+                <li>В&nbsp;Plan Mode запросите план реализации первой фазы. Через TodoWrite пройдите её&nbsp;по&nbsp;шагам (этап&nbsp;04).</li>
+                <li>После реализации&nbsp;&mdash; повторный прогон трёх subagents:
+                    <pre class="shell">&gt; запусти тех же троих ещё раз. сравни с предыдущими отчётами.
+&gt; что закрыто? что осталось? что появилось нового?</pre>
+                </li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Enter the root of <code>my-investing</code> (or your investment office). Launch <code>claude</code>.</li>
+                <li>Kickoff prompt:
+                    <pre class="shell">&gt; IN PARALLEL launch three subagents on @backend/:
+&gt;
+&gt; 1) code-reviewer (or general-purpose with reviewer role):
+&gt;    brief: code-quality review. find 5 main issues
+&gt;    (bugs, dead code, conventions, sloppiness).
+&gt;    format: markdown, descending severity.
+&gt;
+&gt; 2) general-purpose with security-reviewer role:
+&gt;    brief: security review. SQL injection, secret leaks,
+&gt;    auth issues, CORS, raw passwords in logs.
+&gt;    format: markdown, severity (critical / high / medium / low).
+&gt;
+&gt; 3) code-simplifier (or general-purpose with simplifier role):
+&gt;    brief: 5 spots to simplify
+&gt;    (extract a function, drop a duplicate, use stdlib).
+&gt;    format: before/after, brief explanation.
+&gt;
+&gt; WAIT for all. show reports one by one.</pre>
+                </li>
+                <li>Read all three. Notice: overlaps often mean “real” problems, divergences — different lenses.</li>
+                <li>Stitch prompt:
+                    <pre class="shell">&gt; build review.md:
+&gt;   ## Critical (everything critical+high security, plus reviewer bugs)
+&gt;   ## Recommended (medium, conventions, simplifications)
+&gt;   ## To discuss (where opinions diverge)
+&gt; for each item include the file and the line that shows the issue.</pre>
+                </li>
+                <li>Improvement plan:
+                    <pre class="shell">&gt; draft improvement-plan.md as a spec:
+&gt;   - three phases by descending urgency;
+&gt;   - per phase — task list with acceptance criteria;
+&gt;   - rough time per phase.</pre>
+                </li>
+                <li>In Plan Mode request the implementation plan for phase 1. Walk it via TodoWrite (etape 04).</li>
+                <li>After implementation — re-run the three subagents:
+                    <pre class="shell">&gt; run the same three again. compare to previous reports.
+&gt; what's closed? what remains? what's new?</pre>
+                </li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>«независимые точки зрения» как метод&nbsp;&mdash; три отчёта вместо одного;</li>
+                <li>сводить разные мнения в&nbsp;план: что критично, что желательно, что к&nbsp;обсуждению;</li>
+                <li>цикл «ревью&nbsp;→ план&nbsp;→ реализация&nbsp;→ ревью» как стандартная дисциплина улучшения проекта.</li>
+            </ul>
+            <ul lang="en">
+                <li>“independent perspectives” as a method — three reports instead of one;</li>
+                <li>merging differing opinions into a plan: critical, recommended, debate;</li>
+                <li>the “review → plan → implement → review” loop as the standard improvement discipline.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши команды</span><span lang="en">Same moves, your teams</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Due Diligence на&nbsp;вашу акцию</span><span lang="en">Due Diligence on a stock you own</span></h3>
+            <p class="goal" lang="ru">Цель: повторить структуру проекта&nbsp;A для&nbsp;любой акции из&nbsp;вашего собственного портфеля. Те&nbsp;же четыре аналитика, те&nbsp;же brief'ы (но&nbsp;вы&nbsp;их&nbsp;пишете без&nbsp;подсказок), та&nbsp;же сшивка, тот&nbsp;же red-team.</p>
+            <p class="goal" lang="en">Goal: repeat project A’s structure for any stock from your own portfolio. Same four analysts, same briefs (this time you write them yourself), same stitch, same red-team.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Если у&nbsp;вас нет «своего» портфеля&nbsp;&mdash; возьмите тикер из&nbsp;вашего демо-CSV (этапы 02–03).</li>
+                <li>Не&nbsp;копируйте brief'ы из&nbsp;проекта&nbsp;A. Напишите свои&nbsp;&mdash; так увидите, что Claude в&nbsp;них уточнит, а&nbsp;что нет.</li>
+                <li>В&nbsp;<code>CLAUDE.md</code> опишите вашу инвестиционную «философию»: горизонт, риск-аппетит, что считаете «зелёным флагом», что «красным». Это меняет тональность отчёта.</li>
+                <li>В&nbsp;конце добавьте раздел «связь с&nbsp;портфелем»&nbsp;&mdash; как эта акция вписывается в&nbsp;вашу текущую аллокацию (используйте данные из&nbsp;<code>portfolio-journal/data/operations.csv</code>).</li>
+            </ul>
+            <ul lang="en">
+                <li>If you don’t have a “real” portfolio — take a ticker from the demo CSV (etapes 02–03).</li>
+                <li>Don’t copy briefs from project A. Write your own — you’ll see what Claude refines and what it doesn’t.</li>
+                <li>In <code>CLAUDE.md</code> describe your investing “philosophy”: horizon, risk appetite, what counts as a green flag and a red flag. That changes the tone.</li>
+                <li>Add a “portfolio fit” section — how this stock fits your current allocation (use <code>portfolio-journal/data/operations.csv</code>).</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>в&nbsp;корне есть <code>memo-&lt;ticker&gt;.md</code> с&nbsp;шестью разделами (резюме, фундаменталы, технический, новости, макро, вердикт);</li>
+                        <li>brief'ы четырёх аналитиков сохранены в&nbsp;<code>briefs/</code> (хорошо для&nbsp;будущих DD&nbsp;&mdash; повторное использование);</li>
+                        <li>четыре subagents запускались <em>параллельно</em>, не&nbsp;последовательно (заметно по&nbsp;времени&nbsp;&mdash; общее время ≈ времени самого медленного);</li>
+                        <li>есть раздел «portfolio fit» с&nbsp;конкретными ссылками на&nbsp;ваш портфель;</li>
+                        <li>есть раздел «red team critique» с&nbsp;тремя слабыми местами вашего вердикта;</li>
+                        <li>в&nbsp;вердикте присутствуют 3&nbsp;«за», 3&nbsp;«против», 3&nbsp;ключевых риска и&nbsp;финальное «buy / hold / avoid».</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a <code>memo-&lt;ticker&gt;.md</code> at the root with six sections (summary, fundamentals, technical, news, macro, verdict);</li>
+                        <li>four analyst briefs saved to <code>briefs/</code> (good for future DD reuse);</li>
+                        <li>four subagents ran in <em>parallel</em>, not sequentially (visible from time — total ≈ slowest);</li>
+                        <li>a “portfolio fit” section with concrete pointers to your portfolio;</li>
+                        <li>a “red team critique” section with three weaknesses of your verdict;</li>
+                        <li>the verdict has 3 “for,” 3 “against,” 3 key risks and a final “buy / hold / avoid.”</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Запусти ещё одного subagent с&nbsp;ролью «инвест-консультант 30-летнего стажа». Brief: прочитай мой memo, оцени&nbsp;&mdash; убедил&nbsp;бы он&nbsp;тебя, если&nbsp;бы я&nbsp;принёс это на&nbsp;заседание инвест-комитета? Что бы&nbsp;ты&nbsp;спросил автора?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Spawn one more subagent with the role ‘30-year investment advisor.’ Brief: read my memo. Would it convince you if I brought it to an investment-committee meeting? What would you ask the author?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">«AI-хакатон»&nbsp;&mdash; команда для&nbsp;идеи продукта</span><span lang="en">“AI hackathon” — a team for a product idea</span></h3>
+            <p class="goal" lang="ru">Цель: вариация структуры «один главный + параллельные специалисты», но&nbsp;другие роли. Дайте Claude идею продукта одной строкой&nbsp;&mdash; три subagents проходят роли «продакт», «дизайнер», «разработчик», к&nbsp;концу диалога у&nbsp;вас рабочий MVP по&nbsp;ссылке.</p>
+            <p class="goal" lang="en">Goal: same “one main + parallel specialists” structure, different roles. Give Claude a product idea in one line — three subagents take “product,” “designer,” “developer” roles; by dialog end you have a working MVP at a URL.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Идея продукта&nbsp;&mdash; <em>интересная</em>: «приложение для&nbsp;учёта подаренных книг», «сервис, считающий, сколько кофе я&nbsp;выпил за&nbsp;год», «трекер привычек с&nbsp;еженедельным письмом-резюме».</li>
+                <li>Три параллельных subagents:
+                    <ul>
+                        <li><strong>Продакт-менеджер</strong>: 3 user stories, ключевые метрики, 1 главная и&nbsp;3 второстепенных функции;</li>
+                        <li><strong>Дизайнер</strong>: использует skill <code>frontend-design</code>, рисует 3 варианта главного экрана как HTML-моки;</li>
+                        <li><strong>Разработчик</strong>: пишет минимальный прототип (один HTML или микро-FastAPI).</li>
+                    </ul>
+                </li>
+                <li>Главный Claude собирает: выбирает один из&nbsp;трёх дизайнерских вариантов, склеивает с&nbsp;прототипом, деплоит на&nbsp;Vercel или GitHub Pages.</li>
+                <li>В&nbsp;конце&nbsp;&mdash; короткий <code>retro.md</code> в&nbsp;стиле «что у&nbsp;команды получилось, что&nbsp;&mdash; нет».</li>
+            </ul>
+            <ul lang="en">
+                <li>Pick an <em>interesting</em> idea: “app for tracking books I gifted,” “service that counts how much coffee I had this year,” “habit tracker with a weekly email digest.”</li>
+                <li>Three parallel subagents:
+                    <ul>
+                        <li><strong>Product manager</strong>: 3 user stories, key metrics, 1 core and 3 secondary features;</li>
+                        <li><strong>Designer</strong>: use the <code>frontend-design</code> skill, sketch 3 home-screen variants as HTML mockups;</li>
+                        <li><strong>Developer</strong>: write a minimal prototype (one HTML or a micro-FastAPI).</li>
+                    </ul>
+                </li>
+                <li>Main Claude assembles: picks one of three designer variants, glues with the prototype, ships to Vercel or GitHub Pages.</li>
+                <li>End with a short <code>retro.md</code> — “what worked, what didn’t.”</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть рабочая ссылка на&nbsp;MVP (Vercel или GitHub Pages);</li>
+                        <li>в&nbsp;репо сохранены три «дизайнерские» версии (например, <code>mock-1.html</code>, <code>mock-2.html</code>, <code>mock-3.html</code>);</li>
+                        <li>отдельным файлом <code>product-spec.md</code>&nbsp;&mdash; результат «продакт-менеджера»;</li>
+                        <li>retro.md содержит хотя&nbsp;бы 3&nbsp;инсайта про&nbsp;то, что вышло хорошо и&nbsp;3&nbsp;про&nbsp;то, что нет;</li>
+                        <li>три subagents запускались параллельно (видно по&nbsp;логу диалога);</li>
+                        <li>при показе MVP постороннему&nbsp;&mdash; за&nbsp;30 секунд понятно, о&nbsp;чём он.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a working MVP URL (Vercel or GitHub Pages);</li>
+                        <li>three “designer” versions saved in the repo (e.g. <code>mock-1.html</code>, <code>mock-2.html</code>, <code>mock-3.html</code>);</li>
+                        <li>a separate <code>product-spec.md</code> — output from the “product manager”;</li>
+                        <li>retro.md has at least 3 “what worked” and 3 “what didn’t” insights;</li>
+                        <li>three subagents ran in parallel (visible in the dialogue log);</li>
+                        <li>when shown to a stranger — 30 seconds suffice to grasp what it is.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Запусти subagent с&nbsp;ролью «инвестор фонда»: прочитай product-spec и&nbsp;посмотри MVP. Стал&nbsp;бы ты&nbsp;вкладываться в&nbsp;этот продукт? Какие три вопроса задал бы&nbsp;команде, чтобы решить?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Spawn a subagent with the role ‘fund investor’: read product-spec and look at the MVP. Would you invest? What three questions would you ask the team to decide?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>Subagent</dt>
+            <dd>
+                <span lang="ru">Отдельный «стажёр»&nbsp;&mdash; изолированный экземпляр Claude со&nbsp;своим контекстом, набором инструментов и&nbsp;одной задачей. Возвращает один итоговый ответ. Не&nbsp;видит вашей переписки с&nbsp;главным&nbsp;Claude.</span>
+                <span lang="en">A separate “intern” — an isolated Claude instance with its own context, toolset and one task. Returns one final reply. Does not see your dialogue with main Claude.</span>
+            </dd>
+
+            <dt>Brief</dt>
+            <dd>
+                <span lang="ru">«ТЗ» для&nbsp;subagent: цель в&nbsp;одной фразе, входы (через <code>@</code>-ссылки), что НЕ&nbsp;делать, формат ответа, объём. Чем чётче brief, тем полезнее результат.</span>
+                <span lang="en">A “brief” for a subagent: goal in one sentence, inputs (via <code>@</code>), what NOT to do, output format, length. The clearer the brief, the better the result.</span>
+            </dd>
+
+            <dt>Task tool</dt>
+            <dd>
+                <span lang="ru">Инструмент Claude Code, через который главный Claude запускает subagent. Параметры: тип агента, brief, foreground/background. Вы&nbsp;вызов не&nbsp;пишете руками&nbsp;&mdash; пишете на&nbsp;человеческом языке.</span>
+                <span lang="en">A Claude Code tool main Claude uses to launch a subagent. Parameters: agent type, brief, foreground/background. You don’t code the call — you describe it in plain language.</span>
+            </dd>
+
+            <dt><span lang="ru">Foreground</span><span lang="en">Foreground</span></dt>
+            <dd>
+                <span lang="ru">Запуск subagent «жду до&nbsp;ответа». Главный Claude останавливается, дожидается результата, продолжает. Для&nbsp;одной разовой задачи.</span>
+                <span lang="en">Launching a subagent “wait for the reply.” Main Claude pauses, waits, continues. For a single one-shot task.</span>
+            </dd>
+
+            <dt><span lang="ru">Background</span><span lang="en">Background</span></dt>
+            <dd>
+                <span lang="ru">Запуск subagent «работай в&nbsp;фоне». Главный Claude отправляет задачу и&nbsp;может запускать другие. Для&nbsp;параллельных независимых задач&nbsp;&mdash; общее время сокращается в&nbsp;разы.</span>
+                <span lang="en">Launching a subagent “work in the background.” Main Claude fires and can launch others. For parallel independent tasks — wall-time drops several-fold.</span>
+            </dd>
+
+            <dt><span lang="ru">Параллелизм</span><span lang="en">Parallelism</span></dt>
+            <dd>
+                <span lang="ru">Запуск нескольких subagents одновременно. Главное преимущество&nbsp;&mdash; общее время равно времени самого медленного, а&nbsp;не&nbsp;сумме всех. Подходит, когда задачи независимы.</span>
+                <span lang="en">Launching several subagents at once. Main win — total time equals the slowest, not the sum. Fits independent tasks.</span>
+            </dd>
+
+            <dt><span lang="ru">Worktree-isolation</span><span lang="en">Worktree isolation</span></dt>
+            <dd>
+                <span lang="ru">Запуск subagent в&nbsp;собственной git-worktree-копии репозитория (этап&nbsp;05). Используется для&nbsp;«грязных» агентов, которые правят файлы. Параллельные правки не&nbsp;конфликтуют.</span>
+                <span lang="en">Running a subagent inside its own git-worktree copy (etape 05). Used for “messy” agents that edit files. Parallel edits do not collide.</span>
+            </dd>
+
+            <dt>Multi-agent team</dt>
+            <dd>
+                <span lang="ru">Несколько subagents под&nbsp;управлением одного главного Claude. Шаблоны: параллельная команда (4 аналитика), конвейер (A→B→C), конкурс (три решения, выбираем лучшее), дискуссия (черновик&nbsp;→ критика&nbsp;→ переработка).</span>
+                <span lang="en">Several subagents under one main Claude. Templates: parallel team (4 analysts), pipeline (A→B→C), contest (three solutions, pick the best), debate (draft → critique → rewrite).</span>
+            </dd>
+
+            <dt><span lang="ru">Дирижёр</span><span lang="en">Conductor</span></dt>
+            <dd>
+                <span lang="ru">Метафора для&nbsp;главного Claude в&nbsp;multi-agent сценарии. Subagents&nbsp;&mdash; музыканты; они не&nbsp;общаются друг с&nbsp;другом напрямую. Координирует только дирижёр: даёт brief каждому, собирает результаты, склеивает в&nbsp;общую партитуру.</span>
+                <span lang="en">Metaphor for main Claude in multi-agent scenarios. Subagents are musicians; they don’t talk to each other. The conductor coordinates: hands a brief to each, collects results, weaves into one score.</span>
+            </dd>
+
+            <dt><span lang="ru">Red team</span><span lang="en">Red team</span></dt>
+            <dd>
+                <span lang="ru">Дополнительный subagent, которого вы&nbsp;запускаете в&nbsp;конце с&nbsp;брифом «найди слабости в&nbsp;этом результате». Полезно для&nbsp;Due Diligence, ревью архитектуры, любых решений с&nbsp;высокой ценой ошибки.</span>
+                <span lang="en">An extra subagent launched at the end with a brief “find weaknesses in this result.” Useful for Due Diligence, architecture reviews, any high-stakes decisions.</span>
+            </dd>
+
+            <dt><span lang="ru">Blast radius</span><span lang="en">Blast radius</span></dt>
+            <dd>
+                <span lang="ru">«Радиус взрыва»&nbsp;&mdash; что максимум может пойти не&nbsp;так, если subagent ошибётся. Для&nbsp;чтения&nbsp;&mdash; небольшой. Для&nbsp;правок в&nbsp;файлы&nbsp;&mdash; больше, поэтому worktree-isolation. Для&nbsp;деплоев&nbsp;&mdash; огромный, лучше не&nbsp;давать subagents.</span>
+                <span lang="en">“Blast radius” — the worst thing that can happen if a subagent fails. Small for read-only tasks. Larger for file edits, hence worktree isolation. Huge for deploys — best not to give subagents that.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Чем subagent отличается от&nbsp;«просто другой задачи в&nbsp;том&nbsp;же диалоге»?</span><span lang="en">How is a subagent different from “just another task in the same dialogue”?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Subagent&nbsp;&mdash; <em>отдельный экземпляр</em> Claude со&nbsp;своим контекстом. Не&nbsp;видит вашей переписки. Получает только brief, делает одну задачу, возвращает один ответ. «Просто другая задача»&nbsp;&mdash; всё в&nbsp;том&nbsp;же контексте, всё видит. Subagent&nbsp;&mdash; чистая «коробка», изолированная от&nbsp;шума.</p>
+                        <p lang="en">A subagent is a <em>separate instance</em> of Claude with its own context. Doesn’t see your dialogue. Gets only the brief, does one task, returns one reply. “Just another task” shares the context, sees everything. A subagent is a clean “box,” isolated from noise.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Что обязательно должно быть в&nbsp;хорошем brief?</span><span lang="en">What must a good brief include?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Пять пунктов: <strong>цель в&nbsp;одной фразе</strong>; <strong>входы</strong> (какие файлы/данные читать, через <code>@</code>); <strong>что НЕ&nbsp;делать</strong> (явные ограничения); <strong>формат ответа</strong> (markdown / JSON / список); <strong>объём</strong> (одна страница / 5 пунктов). Без&nbsp;каждого&nbsp;&mdash; стажёр сделает «не&nbsp;то».</p>
+                        <p lang="en">Five items: <strong>goal in one sentence</strong>; <strong>inputs</strong> (which files/data, via <code>@</code>); <strong>what NOT to do</strong> (explicit limits); <strong>output format</strong> (markdown / JSON / list); <strong>length</strong> (one page / 5 bullets). Skip any — the intern does “the wrong thing.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Когда foreground, когда background?</span><span lang="en">When foreground, when background?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Foreground</strong>: один стажёр, результат нужен сейчас для&nbsp;следующего шага. Главный Claude ждёт. <strong>Background</strong>: 3+ независимых стажёра, или одна длинная задача, рядом с&nbsp;которой можно делать ещё что-то. Главный отправляет всех и&nbsp;ждёт всех вместе&nbsp;&mdash; общее время равно времени самого медленного.</p>
+                        <p lang="en"><strong>Foreground</strong>: one intern, result needed now for the next step. Main Claude waits. <strong>Background</strong>: 3+ independent interns, or one long task while you can do something else. Main fires all and waits for them together — total time equals the slowest.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем worktree-isolation, и&nbsp;для&nbsp;каких subagents она&nbsp;<em>не</em> нужна?</span><span lang="en">Why worktree isolation, and for which subagents is it <em>not</em> needed?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Нужна для&nbsp;«грязных» субагентов, которые <em>пишут</em> в&nbsp;файлы (рефакторинг, генерация кода). Если их&nbsp;запускать без&nbsp;isolation, два параллельных могут конфликтовать&nbsp;&mdash; один перезатрёт правки другого. <em>Не&nbsp;нужна</em> для&nbsp;«чистых»&nbsp;&mdash; которые только читают (code-reviewer, аналитики, новостные агенты).</p>
+                        <p lang="en">Needed for “messy” subagents that <em>write</em> to files (refactor, code-gen). Without isolation, two in parallel may collide — one overwrites the other. <em>Not needed</em> for “clean” ones that only read (code-reviewer, analysts, news agents).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Кто координирует команду subagents?</span><span lang="en">Who coordinates a team of subagents?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Главный Claude. Он&nbsp;«дирижёр»: даёт brief каждому, ждёт ответы, собирает в&nbsp;общий результат. Subagents <em>не&nbsp;общаются</em> друг с&nbsp;другом напрямую&nbsp;&mdash; они «музыканты», каждый смотрит только в&nbsp;свои ноты. Это упрощает координацию: один источник истины.</p>
+                        <p lang="en">Main Claude. It’s the “conductor”: hands a brief to each, waits, stitches into one result. Subagents <em>don’t talk</em> to each other directly — they’re “musicians,” each reads only its score. Simpler coordination: one source of truth.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое «red team» и&nbsp;зачем он&nbsp;на&nbsp;Due Diligence?</span><span lang="en">What is a “red team” and why on a Due Diligence?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Дополнительный subagent в&nbsp;конце процесса с&nbsp;brief'ом «найди слабости в&nbsp;этом результате». Помогает заметить «слепые пятна»: где аргументация хрупкая, какие риски недооценили, что бы&nbsp;спросил скептик. На&nbsp;DD особенно ценно, потому что цена ошибочного вердикта&nbsp;&mdash; реальные деньги.</p>
+                        <p lang="en">An extra subagent at the end with a “find weaknesses” brief. Helps notice blind spots: where the argument is fragile, which risks were under-weighted, what a sceptic would ask. Especially valuable on a DD, where the cost of a bad verdict is real money.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Когда subagents <em>не</em> нужны?</span><span lang="en">When are subagents <em>not</em> needed?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Для&nbsp;мелких правок, которые главный Claude делает за&nbsp;30&nbsp;секунд. Для&nbsp;интерактивных сценариев («давай попробуем», «нет, не&nbsp;так»)&nbsp;&mdash; subagent даёт <em>один</em> ответ, диалога не&nbsp;ведёт. Для&nbsp;задач с&nbsp;нелинейными зависимостями&nbsp;&mdash; на&nbsp;них нужна гибкость, а&nbsp;subagent работает по&nbsp;брифу. Накладные расходы запуска не&nbsp;окупаются.</p>
+                        <p lang="en">For tiny edits main Claude handles in 30 seconds. For interactive flows (“let’s try,” “no, not like that”) — a subagent gives <em>one</em> reply, no dialogue. For tasks with non-linear dependencies — they need flexibility, a subagent works to a brief. The startup overhead doesn’t pay off.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e7-concept">
+                <span lang="ru">Понимаю, что такое subagent: изолированный «стажёр» со&nbsp;своим контекстом.</span>
+                <span lang="en">I understand a subagent: an isolated “intern” with its own context.</span>
+            </li>
+            <li data-key="e7-types">
+                <span lang="ru">Знаю основные типы (general-purpose, code-reviewer, code-explorer, и&nbsp;другие).</span>
+                <span lang="en">I know the main types (general-purpose, code-reviewer, code-explorer, others).</span>
+            </li>
+            <li data-key="e7-brief">
+                <span lang="ru">Пишу brief из&nbsp;5 пунктов (цель, входы, что НЕ&nbsp;делать, формат, объём).</span>
+                <span lang="en">I write a 5-item brief (goal, inputs, NOT-list, format, length).</span>
+            </li>
+            <li data-key="e7-parallel">
+                <span lang="ru">Запускаю 3+ subagents параллельно через background и&nbsp;собираю результаты.</span>
+                <span lang="en">I run 3+ subagents in parallel via background and gather results.</span>
+            </li>
+            <li data-key="e7-worktree">
+                <span lang="ru">Использую worktree-isolation для&nbsp;«грязных» агентов, которые правят файлы.</span>
+                <span lang="en">I use worktree isolation for “messy” agents that edit files.</span>
+            </li>
+            <li data-key="e7-conductor">
+                <span lang="ru">Понимаю роль главного Claude как «дирижёра» и&nbsp;собираю отчёты в&nbsp;единый документ.</span>
+                <span lang="en">I get main Claude’s “conductor” role and stitch reports into one document.</span>
+            </li>
+            <li data-key="e7-delivery">
+                <span lang="ru">Сделал четыре проекта: DD на&nbsp;NVDA, code-review команда, DD на&nbsp;свою акцию, AI-хакатон.</span>
+                <span lang="en">Built four projects: DD on NVDA, code-review team, DD on your stock, AI hackathon.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-07" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-06.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">06 · Полные веб-приложения</span><span lang="en">06 · Full Web Applications</span></span>
+            </a>
+            <a class="next" href="etap-08a.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">08a · Кастомизация Claude Code</span><span lang="en">08a · Customising Claude Code</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Один Claude думает быстро. Четыре параллельных&nbsp;&mdash; в&nbsp;четыре раза быстрее. Главное&nbsp;&mdash; чтобы каждому был чёткий brief».</p>
+            <p class="signature" lang="en">“One Claude thinks fast. Four in parallel — four times faster. The trick is a clear brief for each.”</p>
+            <p lang="ru">Этап&nbsp;07 пройден&nbsp;&mdash; вы&nbsp;умеете нанимать команду стажёров. Дальше превращаем Claude Code в&nbsp;<em>ваш личный</em>&nbsp;&mdash; через свои skills, slash-команды и&nbsp;hooks.</p>
+            <p lang="en">Etape 07 done — you can hire a team of interns. Next we make Claude Code <em>yours</em> — via custom skills, slash commands and hooks.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-06.html"><span lang="ru">← Этап&nbsp;06</span><span lang="en">← Etape 06</span></a></li>
+                <li><a href="etap-08a.html"><span lang="ru">→ Этап&nbsp;08a</span><span lang="en">→ Etape 08a</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 05 · Handoff в Claude Code — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 05: упаковка дизайна в handoff bundle и передача в Claude Code на имплементацию. Цикл «бриф → дизайн → код → деплой» закрывается двумя инструментами.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand"><span class="mark">§ D</span><a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a></div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="05">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 05</span><span lang="en">Etape 05</span></span> &nbsp;·&nbsp; <span lang="ru">Handoff в&nbsp;Claude Code</span><span lang="en">Handoff to Claude Code</span></p>
+        <h1 class="rise d2"><span lang="ru">Дизайн&nbsp;&mdash; в&nbsp;браузере.<br>Код&nbsp;&mdash; в&nbsp;терминале.<br><em>Между ними&nbsp;&mdash; одна кнопка</em>.</span><span lang="en">Design in the browser.<br>Code in the terminal.<br><em>One button between them.</em></span></h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Это центральный этап тьюториала: тут <em>замыкается</em> цикл основного курса. Прототип, собранный в&nbsp;Claude Design, упаковывается в&nbsp;<dfn class="term" tabindex="0" data-def="пакет, который Claude Design экспортирует для разработки: HTML/CSS-структура, design tokens как CSS-переменные, ассеты (SVG, PNG), типографические правила, навигационный граф. Принимается Claude Code как первичный input для имплементации.">handoff bundle</dfn>&nbsp;и уходит напрямую в&nbsp;Claude&nbsp;Code на&nbsp;имплементацию. Вы&nbsp;дальше работаете уже в&nbsp;знакомой среде CLI: правки логики, бэкенд, деплой. Цикл «бриф → дизайн → код → публичный URL» закрывается двумя инструментами без&nbsp;ручной интеграции.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            The central etape of the tutorial. The main-course loop <em>closes</em> here. A prototype assembled in Claude Design is packed into a <dfn class="term" tabindex="0" data-def="the export package: HTML/CSS structure, design tokens as CSS variables, assets (SVG, PNG), typography rules, navigation graph. Claude Code takes it as primary input for implementation.">handoff bundle</dfn> and ships straight to Claude Code for implementation. From there you work in your familiar CLI: logic, backend, deploy. The &ldquo;brief → design → code → public URL&rdquo; loop closes across two tools with no manual glue.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div><dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt><dd><span lang="ru">4–5 дней · 1–2&nbsp;ч/день</span><span lang="en">4–5 days · 1–2&nbsp;hrs/day</span></dd></div>
+            <div><dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt><dd><span lang="ru">handoff bundle · что переходит, что&nbsp;нет · принимающая сторона · полный цикл</span><span lang="en">handoff bundle · what carries over · receiving side · full loop</span></dd></div>
+            <div><dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt><dd><span lang="ru">прототип становится живым сайтом за&nbsp;один вечер</span><span lang="en">prototype becomes a live site in one evening</span></dd></div>
+            <div><dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt><dd><span lang="ru">прототип из&nbsp;этапа&nbsp;04, теперь живой веб-сайт с&nbsp;публичным URL</span><span lang="en">the etape-04 prototype, now a live site at a public URL</span></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span><h2><span lang="ru">Что мы&nbsp;пройдём</span><span lang="en">What we will walk through</span></h2></div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Что такое handoff bundle и&nbsp;что внутри</span><span lang="en">What a handoff bundle is and what it contains</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Handoff bundle&nbsp;&mdash; это структурированный экспорт из&nbsp;Claude Design, заточенный под чтение Claude Code. В&nbsp;отличие от&nbsp;обычного «Export → HTML», bundle содержит не&nbsp;только разметку, но&nbsp;и:</p>
+                    <ul>
+                        <li><strong>HTML-структура каждого экрана</strong>&nbsp;&mdash; семантическая, с&nbsp;именами классов как у&nbsp;компонентов, не&nbsp;«div div div».</li>
+                        <li><strong>CSS с&nbsp;design tokens</strong> в&nbsp;<code>:root</code> и&nbsp;<code>body.dark</code> (если у&nbsp;вас тёмная тема). Прямо как в&nbsp;этом тьюториале.</li>
+                        <li><strong>Ассеты</strong>: SVG-иконки, PNG-изображения, шрифты (если кастомные) в&nbsp;папке <code>assets/</code>.</li>
+                        <li><strong>Типографические правила</strong>: font-stack, type-scale, font-features.</li>
+                        <li><strong>Навигационный граф</strong> (если был прототип): JSON или README с&nbsp;описанием переходов&nbsp;&mdash; что куда ведёт.</li>
+                        <li><strong>Состояния</strong>: empty, loading, error, success&nbsp;&mdash; как варианты разметки или CSS-классы.</li>
+                        <li><strong>README.md</strong>&nbsp;&mdash; текстовое описание для разработчика: «вот что&nbsp;это, вот компонентная карта, вот граф навигации».</li>
+                    </ul>
+                    <p>Это формат, заточенный под Claude Code как «принимающую сторону». Когда вы&nbsp;откроете bundle в&nbsp;Claude Code и&nbsp;скажете «реализуй», он&nbsp;увидит README и&nbsp;поймёт контекст.</p>
+                    <p>Альтернативный экспорт «Export → folder» даёт ту&nbsp;же папку, но&nbsp;без&nbsp;README и&nbsp;без&nbsp;ориентированного-под-Claude формата. Для ручной работы с&nbsp;Figma/Webflow&nbsp;&mdash; нормально, для Claude Code&nbsp;&mdash; берите именно <em>handoff bundle</em>.</p>
+                </div>
+                <div lang="en">
+                    <p>A handoff bundle is a structured export from Claude Design, optimised for Claude Code consumption. Unlike a vanilla &ldquo;Export → HTML,&rdquo; the bundle contains:</p>
+                    <ul>
+                        <li><strong>HTML structure per screen</strong>&nbsp;&mdash; semantic, component-named classes, not &ldquo;div div div.&rdquo;</li>
+                        <li><strong>CSS with design tokens</strong> in <code>:root</code> and <code>body.dark</code> (if you have a dark theme). Just like this tutorial.</li>
+                        <li><strong>Assets</strong>: SVG icons, PNG images, fonts (if custom) in <code>assets/</code>.</li>
+                        <li><strong>Typography rules</strong>: font-stack, type-scale, font-features.</li>
+                        <li><strong>Navigation graph</strong> (if a prototype): JSON or README describing transitions.</li>
+                        <li><strong>States</strong>: empty, loading, error, success&nbsp;&mdash; as markup variants or CSS classes.</li>
+                        <li><strong>README.md</strong>&nbsp;&mdash; a developer-facing description: &ldquo;here is what it is, here is the component map, here is the navigation graph.&rdquo;</li>
+                    </ul>
+                    <p>A format optimised for Claude Code as the &ldquo;receiving end.&rdquo; Opening the bundle in Claude Code and saying &ldquo;implement&rdquo; means it sees the README and gets the context.</p>
+                    <p>The alternative &ldquo;Export → folder&rdquo; gives the same files without README and without the Claude-oriented format. Fine for hand-coding via Figma/Webflow; for Claude Code take the <em>handoff bundle</em> exactly.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Что переживает handoff, что&nbsp;&mdash; нет</span><span lang="en">What survives handoff, what does not</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Реалистичные ожидания экономят часы:</p>
+                    <p><strong>Переходит хорошо</strong>:</p>
+                    <ul>
+                        <li>Структура страницы (hero, секции, футер).</li>
+                        <li>Палитра, типографика, отступы (как design tokens в&nbsp;CSS).</li>
+                        <li>Простые компоненты: кнопки, карточки, формы.</li>
+                        <li>Адаптивные брейкпоинты (если вы&nbsp;делали и&nbsp;mobile, и&nbsp;desktop в&nbsp;Claude Design).</li>
+                        <li>Иконки в&nbsp;виде SVG.</li>
+                    </ul>
+                    <p><strong>Переходит частично</strong>:</p>
+                    <ul>
+                        <li>Сложные иллюстрации&nbsp;&mdash; SVG может оказаться громоздким, лучше переделать вручную или экспортировать в&nbsp;PNG для прототипа.</li>
+                        <li>Анимации и&nbsp;переходы&nbsp;&mdash; основные передаются как CSS-transitions, сложные motion-эффекты Claude Code обычно реализует «по&nbsp;памяти», не&nbsp;по&nbsp;bundle.</li>
+                        <li>3D-сцены (этап&nbsp;08)&nbsp;&mdash; передаются как описание, не&nbsp;как готовый код. Реализация ложится на&nbsp;Claude Code.</li>
+                    </ul>
+                    <p><strong>Не&nbsp;переходит</strong>:</p>
+                    <ul>
+                        <li>Бизнес-логика (вход, авторизация, валидации, расчёты)&nbsp;&mdash; это работа Claude Code с&nbsp;нуля.</li>
+                        <li>Бэкенд (база, API)&nbsp;&mdash; см&nbsp;этап&nbsp;06 основного курса.</li>
+                        <li>Production-ready performance optimisation&nbsp;&mdash; Claude Code дотачивает после имплементации.</li>
+                    </ul>
+                    <p>Главное правило: <strong>handoff передаёт &laquo;что&raquo;, не&nbsp;&laquo;как&raquo;</strong>. Claude Code решает &laquo;как&raquo; имплементировать&nbsp;&mdash; на&nbsp;React/Vanilla/Astro, с&nbsp;каким бэкендом, и&nbsp;т.д.</p>
+                </div>
+                <div lang="en">
+                    <p>Realistic expectations save hours:</p>
+                    <p><strong>Carries well</strong>:</p>
+                    <ul>
+                        <li>Page structure (hero, sections, footer).</li>
+                        <li>Palette, typography, spacing (as design tokens in CSS).</li>
+                        <li>Simple components: buttons, cards, forms.</li>
+                        <li>Responsive breakpoints (if you did mobile + desktop in Claude Design).</li>
+                        <li>Icons as SVG.</li>
+                    </ul>
+                    <p><strong>Carries partially</strong>:</p>
+                    <ul>
+                        <li>Complex illustrations&nbsp;&mdash; SVG may be bloated; better redo manually or export as PNG for the prototype.</li>
+                        <li>Animations and transitions&nbsp;&mdash; basics carry as CSS transitions; complex motion is usually rebuilt by Claude Code &ldquo;from memory.&rdquo;</li>
+                        <li>3D scenes (etape 08)&nbsp;&mdash; transferred as description, not ready code. Implementation falls on Claude Code.</li>
+                    </ul>
+                    <p><strong>Does not carry</strong>:</p>
+                    <ul>
+                        <li>Business logic (auth, validation, calculations)&nbsp;&mdash; Claude Code from scratch.</li>
+                        <li>Backend (DB, API)&nbsp;&mdash; see etape 06 of the main course.</li>
+                        <li>Production-ready performance&nbsp;&mdash; Claude Code dials in after implementation.</li>
+                    </ul>
+                    <p>Headline rule: <strong>handoff transfers &ldquo;what,&rdquo; not &ldquo;how.&rdquo;</strong> Claude Code decides &ldquo;how&rdquo; to implement&nbsp;&mdash; React/Vanilla/Astro, which backend, etc.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Принимающая сторона: первый промпт в&nbsp;Claude Code</span><span lang="en">The receiving end: first prompt in Claude Code</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Вы&nbsp;экспортировали handoff bundle. Это .zip или папка, скачанная локально. Теперь&nbsp;&mdash; знакомая среда CLI:</p>
+                    <pre class="shell"><span class="prompt">$</span> mkdir my-cafe-site && cd my-cafe-site
+<span class="prompt">$</span> unzip ~/Downloads/booking-prototype-handoff.zip -d ./
+<span class="prompt">$</span> claude</pre>
+                    <p>Первый промпт в&nbsp;Claude Code (с&nbsp;помощью <code>@</code>-references из&nbsp;этапа&nbsp;02 основного курса):</p>
+                    <pre class="shell">&gt; в этой папке handoff bundle из claude design.
+&gt; прочитай @README.md, посмотри @screens/ и @tokens/styles.css.
+&gt; реализуй прототип как статичный сайт на vanilla html/css.
+&gt; используй tokens как есть, без изменений.
+&gt; для всех 5 экранов сделай отдельные страницы с навигацией по графу.
+&gt; формы пока без бэкенда — только клиентская валидация.
+&gt; деплой через github pages.</pre>
+                    <p>Claude Code прочитает структуру, поймёт задачу, и&nbsp;начнёт реализацию&nbsp;&mdash; обычным way вы&nbsp;уже знаете по&nbsp;основному курсу. Может, например, в&nbsp;<em>plan&nbsp;mode</em> сначала набросать план файлов, потом начать писать.</p>
+                    <p>Что критично: <strong>не&nbsp;давайте Claude Code править tokens</strong>. Они&nbsp;&mdash; источник истины из&nbsp;дизайна. Если что-то нужно поправить в&nbsp;палитре&nbsp;&mdash; вернитесь в&nbsp;Claude Design, обновите brand-system, перегенерируйте bundle. Это сохраняет согласованность.</p>
+                </div>
+                <div lang="en">
+                    <p>You exported a handoff bundle. A .zip or folder downloaded locally. Now&nbsp;&mdash; familiar CLI:</p>
+                    <pre class="shell"><span class="prompt">$</span> mkdir my-cafe-site && cd my-cafe-site
+<span class="prompt">$</span> unzip ~/Downloads/booking-prototype-handoff.zip -d ./
+<span class="prompt">$</span> claude</pre>
+                    <p>First Claude Code prompt (using <code>@</code>-references from etape 02 of the main course):</p>
+                    <pre class="shell">&gt; this folder is a handoff bundle from claude design.
+&gt; read @README.md, look at @screens/ and @tokens/styles.css.
+&gt; implement the prototype as a static site, vanilla html/css.
+&gt; use tokens as-is, no changes.
+&gt; for all 5 screens make separate pages with graph-based navigation.
+&gt; forms client-side validation only, no backend yet.
+&gt; deploy to github pages.</pre>
+                    <p>Claude Code reads the structure, understands the task, starts implementing&nbsp;&mdash; the usual way you know from the main course. Might use <em>plan mode</em> first to outline files, then write.</p>
+                    <p>What&rsquo;s critical: <strong>do not let Claude Code edit tokens</strong>. They&rsquo;re the design source of truth. If a palette tweak is needed&nbsp;&mdash; back to Claude Design, update the brand system, regenerate the bundle. Keeps consistency.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Полный цикл: бриф → дизайн → код → деплой</span><span lang="en">Full loop: brief → design → code → deploy</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Этот этап&nbsp;&mdash; первый, где у&nbsp;вас в&nbsp;руках полный pipeline двух инструментов. Канонический путь нового продукта:</p>
+                    <ol>
+                        <li><strong>Бриф</strong>: .docx от&nbsp;клиента или ваш собственный (этап&nbsp;02).</li>
+                        <li><strong>Brand system</strong>: tokens из&nbsp;кода или Figma (этап&nbsp;03).</li>
+                        <li><strong>Прототип</strong>: интерактивный, тестируется на&nbsp;5 пользователях (этап&nbsp;04).</li>
+                        <li><strong>Handoff</strong>: bundle экспортируется и&nbsp;принимается Claude Code (этот этап).</li>
+                        <li><strong>Имплементация</strong>: код, бэкенд, тесты&nbsp;&mdash; Claude Code (этап&nbsp;06 основного курса).</li>
+                        <li><strong>Деплой</strong>: GitHub Pages, Vercel, или ваш хостинг&nbsp;&mdash; одной командой (этап&nbsp;05 основного курса).</li>
+                        <li><strong>Мониторинг</strong>: PostHog, аналитика, фоновые задачи&nbsp;&mdash; этап&nbsp;10 основного.</li>
+                    </ol>
+                    <p>Это и&nbsp;есть «команда стажёров» в&nbsp;действии. Вы&nbsp;&mdash; арт-директор + продакт-менеджер. Claude Design&nbsp;&mdash; дизайнер. Claude Code&nbsp;&mdash; разработчик. Pipeline закрывается за&nbsp;неделю-две вместо квартала.</p>
+                    <div class="note">Для капстоуна (последний этап тьюториала) вы&nbsp;будете проходить этот pipeline целиком на&nbsp;одном выбранном продукте: бренд → 5-экранный прототип → handoff → живой сайт → публичный&nbsp;URL.</div>
+                </div>
+                <div lang="en">
+                    <p>This etape is the first where you hold the full two-tool pipeline. The canonical path of a new product:</p>
+                    <ol>
+                        <li><strong>Brief</strong>: .docx from client or your own (etape 02).</li>
+                        <li><strong>Brand system</strong>: tokens from code or Figma (etape 03).</li>
+                        <li><strong>Prototype</strong>: interactive, tested on 5 users (etape 04).</li>
+                        <li><strong>Handoff</strong>: bundle exported and read by Claude Code (this etape).</li>
+                        <li><strong>Implementation</strong>: code, backend, tests&nbsp;&mdash; Claude Code (main course etape 06).</li>
+                        <li><strong>Deploy</strong>: GitHub Pages, Vercel, or your hosting&nbsp;&mdash; one command (main course etape 05).</li>
+                        <li><strong>Monitoring</strong>: PostHog, analytics, background tasks&nbsp;&mdash; main course etape 10.</li>
+                    </ol>
+                    <p>That is the &ldquo;intern team&rdquo; in action. You&nbsp;&mdash; art director + PM. Claude Design&nbsp;&mdash; designer. Claude Code&nbsp;&mdash; developer. Pipeline closes in 1–2 weeks instead of a quarter.</p>
+                    <div class="note">For the capstone (final etape of this tutorial) you will run this pipeline end-to-end on one chosen product: brand → 5-screen prototype → handoff → live site → public URL.</div>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head"><span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span><h2><span lang="ru">Bundle → live site за&nbsp;вечер</span><span lang="en">Bundle → live site in one evening</span></h2></div>
+        <div class="practice">
+            <h4><span lang="ru">Прогон · экспорт + имплементация + деплой</span><span lang="en">Run · export + implement + deploy</span></h4>
+            <ol lang="ru">
+                <li>Возьмите прототип из&nbsp;этапа&nbsp;04 (любой из&nbsp;guided projects). Откройте в&nbsp;Claude Design.</li>
+                <li>Сверху <em>Handoff to Claude Code</em>. Скачайте .zip с&nbsp;bundle.</li>
+                <li>Откройте README в&nbsp;ZIP&nbsp;&mdash; убедитесь, что описание понятное.</li>
+                <li>В&nbsp;терминале: <code>mkdir test-handoff && cd test-handoff && unzip ../bundle.zip && claude</code>.</li>
+                <li>Промпт: «реализуй как статичный сайт vanilla html/css, без&nbsp;бэкенда. деплой на&nbsp;GitHub Pages».</li>
+                <li>Дождитесь имплементации. Нажмите Enter / разрешите всё, что нужно.</li>
+                <li>Откройте получившийся URL в&nbsp;браузере. Должен выглядеть как ваш дизайн.</li>
+                <li>Если есть расхождения с&nbsp;прототипом&nbsp;&mdash; запишите. Это и&nbsp;есть «fidelity loss»&nbsp;&mdash; обсудим в&nbsp;следующем разделе.</li>
+            </ol>
+            <ol lang="en">
+                <li>Take the etape-04 prototype (any guided project). Open in Claude Design.</li>
+                <li>Top bar: <em>Handoff to Claude Code</em>. Download the bundle .zip.</li>
+                <li>Open the README in the zip&nbsp;&mdash; verify the description reads cleanly.</li>
+                <li>Terminal: <code>mkdir test-handoff && cd test-handoff && unzip ../bundle.zip && claude</code>.</li>
+                <li>Prompt: &ldquo;implement as a static site, vanilla html/css, no backend. Deploy to GitHub Pages.&rdquo;</li>
+                <li>Wait for implementation. Press Enter / approve as needed.</li>
+                <li>Open the resulting URL in the browser. Should look like your design.</li>
+                <li>If there are deviations from the prototype&nbsp;&mdash; note them. That is &ldquo;fidelity loss&rdquo;&nbsp;&mdash; topic next.</li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span><h2><span lang="ru">От&nbsp;прототипа к&nbsp;живому сайту</span><span lang="en">Prototype → live site</span></h2></div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;кофейня</span><span lang="en">Project A · guided · café track</span></span>
+            <h3><span lang="ru">Меню кофейни как живая страница</span><span lang="en">Café menu as a live page</span></h3>
+            <p class="goal" lang="ru">Цель: меню из&nbsp;этапа&nbsp;02 (.xlsx → A4 PDF) превратить в&nbsp;живую веб-страницу с&nbsp;публичным URL. Время&nbsp;&mdash; один вечер.</p>
+            <p class="goal" lang="en">Goal: turn the etape-02 menu (.xlsx → A4 PDF) into a live web page with a public URL. One evening.</p>
+            <ol class="steps" lang="ru">
+                <li>Откройте проект меню в&nbsp;Claude Design. <em>Handoff to Claude Code</em>.</li>
+                <li>В&nbsp;терминале распакуйте, запустите Claude Code в&nbsp;папке.</li>
+                <li>Промпт: <em>«реализуй меню как одну веб-страницу, vanilla html/css. структуру страницы возьми из&nbsp;@README, tokens из&nbsp;@tokens/styles.css. данные позиций&nbsp;&mdash; в&nbsp;data.json (положи рядом с&nbsp;index.html)»</em>.</li>
+                <li>Когда страница готова, попросите: <em>«добавь дарк-моду через body.dark, используя tokens, что есть в&nbsp;styles.css»</em>.</li>
+                <li>Деплой: <em>«опубликуй через GitHub Pages, верни мне публичный URL»</em>.</li>
+                <li>Откройте URL на&nbsp;телефоне. Прокрутите. Этого достаточно для теста.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Open the menu project in Claude Design. <em>Handoff to Claude Code</em>.</li>
+                <li>In the terminal: unzip, launch Claude Code in the folder.</li>
+                <li>Prompt: <em>&ldquo;implement the menu as one web page, vanilla html/css. structure from @README, tokens from @tokens/styles.css. items in data.json next to index.html.&rdquo;</em></li>
+                <li>When the page is done, ask: <em>&ldquo;add dark mode via body.dark, using tokens already in styles.css.&rdquo;</em></li>
+                <li>Deploy: <em>&ldquo;publish via GitHub Pages, return the public URL.&rdquo;</em></li>
+                <li>Open the URL on your phone. Scroll. Enough for a test.</li>
+            </ol>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;игра</span><span lang="en">Project B · guided · game track</span></span>
+            <h3><span lang="ru">UI игры как многостраничный прототип</span><span lang="en">Game UI as a multi-page prototype</span></h3>
+            <p class="goal" lang="ru">Цель: 5 экранов UI из&nbsp;этапа&nbsp;04 превратить в&nbsp;Astro/Vanilla-сайт с&nbsp;роутингом по&nbsp;графу. Анимации между экранами&nbsp;&mdash; базовые CSS-transitions.</p>
+            <p class="goal" lang="en">Goal: turn the etape-04 5-screen game UI into an Astro/Vanilla site with graph-based routing. Inter-screen animations&nbsp;&mdash; basic CSS transitions.</p>
+            <ol class="steps" lang="ru">
+                <li>Handoff из&nbsp;Claude Design. Распакуйте.</li>
+                <li>Запустите Claude Code. Промпт: <em>«реализуй как Astro-проект (или vanilla, на&nbsp;твой выбор). 5 экранов&nbsp;&mdash; 5 страниц или 5 view-states. навигацию по&nbsp;графу из&nbsp;@navigation.json. tokens используй как&nbsp;есть»</em>.</li>
+                <li>Уточните: <em>«добавь анимацию слайд-влево при переходе вперёд, слайд-вправо при back. через CSS view-transitions API, fallback&nbsp;&mdash; обычные transitions»</em>.</li>
+                <li>Деплой на&nbsp;Vercel.</li>
+                <li>Откройте на&nbsp;телефоне в&nbsp;альбомной ориентации. Покликайте&nbsp;&mdash; должно «играться» как настоящее меню.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Handoff from Claude Design. Unzip.</li>
+                <li>Run Claude Code. Prompt: <em>&ldquo;implement as an Astro project (or vanilla, your call). 5 screens = 5 pages or 5 view-states. Navigate per @navigation.json. Use tokens as-is.&rdquo;</em></li>
+                <li>Refine: <em>&ldquo;add slide-left transition for forward, slide-right for back. Via CSS view-transitions API; fallback&nbsp;&mdash; regular transitions.&rdquo;</em></li>
+                <li>Deploy to Vercel.</li>
+                <li>Open on phone in landscape. Click around&nbsp;&mdash; should &ldquo;play&rdquo; like a real menu.</li>
+            </ol>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head"><span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span><h2><span lang="ru">Свой полный цикл</span><span lang="en">Your full loop</span></h2></div>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек&nbsp;финансы</span><span lang="en">Project C · solo · finance track</span></span>
+            <h3><span lang="ru">Дашборд + бэкенд через Claude Code</span><span lang="en">Dashboard + backend via Claude Code</span></h3>
+            <p class="goal" lang="ru">Цель: дашборд из&nbsp;этапа&nbsp;02 (CSV → HTML) теперь с&nbsp;живыми данными. Handoff → Claude Code → подключение API брокера → деплой.</p>
+            <p class="goal" lang="en">Goal: turn the etape-02 dashboard (CSV → HTML) into a live one. Handoff → Claude Code → broker API → deploy.</p>
+            <ul lang="ru"><li>Бэкенд&nbsp;&mdash; работа Claude Code, не&nbsp;Claude Design. Дизайн только описывает «как должно выглядеть», логика отдельно.</li><li>Используйте паттерны из&nbsp;этапа&nbsp;06 основного курса: серверная функция, кеширование запросов API.</li></ul>
+            <ul lang="en"><li>The backend is Claude Code work, not Claude Design. Design only describes &ldquo;how it should look&rdquo;; logic is separate.</li><li>Use main-course etape 6 patterns: server function, API request caching.</li></ul>
+        </article>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек&nbsp;квартира</span><span lang="en">Project D · solo · apartment track</span></span>
+            <h3><span lang="ru">Сайт-презентация для клиента</span><span lang="en">Client-pitch site</span></h3>
+            <p class="goal" lang="ru">Цель: дизайн-проект квартиры (мудборд + 3D-тур + смета) превратить в&nbsp;приватный сайт с&nbsp;паролем для одного клиента. Handoff + Claude Code добавляют basic-auth и&nbsp;деплоят.</p>
+            <p class="goal" lang="en">Goal: turn an apartment design project (mood board + 3D tour + estimate) into a private password-gated site for one client. Handoff + Claude Code add basic auth and deploy.</p>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell"><div class="section-head"><span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span><h2><span lang="ru">Новые слова</span><span lang="en">New words</span></h2></div>
+        <dl class="glossary">
+            <dt><span lang="ru">Handoff bundle</span><span lang="en">Handoff bundle</span></dt>
+            <dd><span lang="ru">Структурированный экспорт из&nbsp;Claude Design для Claude Code: HTML, CSS с&nbsp;tokens, ассеты, навигационный граф, README. В&nbsp;отличие от&nbsp;«Export → folder», заточен под чтение Claude Code.</span><span lang="en">A structured export from Claude Design for Claude Code: HTML, CSS with tokens, assets, navigation graph, README. Unlike &ldquo;Export → folder,&rdquo; optimised for Claude Code reading.</span></dd>
+            <dt><span lang="ru">Fidelity loss</span><span lang="en">Fidelity loss</span></dt>
+            <dd><span lang="ru">Расхождение между прототипом и&nbsp;имплементацией. Естественно, потому что bundle передаёт «что», не&nbsp;«как». Полностью устранить нельзя; правильная стратегия&nbsp;&mdash; вернуться в&nbsp;Claude Design и&nbsp;поправить дизайн, а&nbsp;не&nbsp;дотачивать вручную в&nbsp;коде.</span><span lang="en">Drift between prototype and implementation. Natural, since the bundle transfers &ldquo;what,&rdquo; not &ldquo;how.&rdquo; Can&rsquo;t be eliminated; right strategy is to return to Claude Design and patch the design, not hand-tune the code.</span></dd>
+            <dt><span lang="ru">Tokens как источник истины</span><span lang="en">Tokens as source of truth</span></dt>
+            <dd><span lang="ru">Правило: правки tokens (палитра, шрифты, отступы) делаются ТОЛЬКО в&nbsp;Claude Design, не&nbsp;в&nbsp;Claude Code. Кодовая часть лишь читает tokens. Это сохраняет согласованность через регенерации bundle.</span><span lang="en">Rule: edits to tokens (palette, fonts, spacing) are made ONLY in Claude Design, not in Claude Code. The code only reads tokens. Keeps consistency through bundle regenerations.</span></dd>
+            <dt><span lang="ru">Полный цикл</span><span lang="en">Full loop</span></dt>
+            <dd><span lang="ru">«Бриф → дизайн → код → деплой → мониторинг», закрытый Claude Design + Claude Code. Делает работу одного человека эквивалентом небольшой студии.</span><span lang="en">&ldquo;Brief → design → code → deploy → monitor,&rdquo; closed by Claude Design + Claude Code. One person becomes the equivalent of a small studio.</span></dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell"><div class="section-head"><span class="num">§ VI · Quiz</span><h2><span lang="ru">Семь вопросов</span><span lang="en">Seven questions</span></h2></div>
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1"><div class="q"><p class="q-text"><span lang="ru">Что внутри handoff bundle?</span><span lang="en">What&rsquo;s inside a handoff bundle?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">HTML каждого экрана (семантический), CSS с&nbsp;design tokens, ассеты (SVG, PNG), типографические правила, навигационный граф (если был прототип), README с&nbsp;описанием для разработчика. Заточен под Claude Code как принимающую сторону.</p><p lang="en">HTML per screen (semantic), CSS with tokens, assets (SVG, PNG), typography rules, navigation graph (if a prototype), README for the developer. Optimised for Claude Code as the receiver.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q2"><div class="q"><p class="q-text"><span lang="ru">Чем handoff bundle отличается от&nbsp;«Export → folder»?</span><span lang="en">Bundle vs &ldquo;Export → folder&rdquo;?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Bundle добавляет README с&nbsp;контекстом для Claude и&nbsp;ориентирован на&nbsp;его чтение. Folder&nbsp;&mdash; голые файлы для ручной работы (Figma/Webflow). Для Claude Code всегда берите bundle.</p><p lang="en">Bundle adds a README with context for Claude and is optimised for its reading. Folder&nbsp;&mdash; bare files for hand work (Figma/Webflow). For Claude Code always pick bundle.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q3"><div class="q"><p class="q-text"><span lang="ru">Что переходит хорошо, а&nbsp;что&nbsp;&mdash; нет?</span><span lang="en">What carries well, what does not?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru"><strong>Хорошо:</strong> структура, palette/типографика как tokens, простые компоненты, breakpoints, SVG-иконки. <strong>Частично:</strong> сложные иллюстрации, motion, 3D. <strong>Не&nbsp;переходит:</strong> бизнес-логика, бэкенд, performance optimisation&nbsp;&mdash; это работа Claude Code с&nbsp;нуля.</p><p lang="en"><strong>Well:</strong> structure, palette/typography as tokens, simple components, breakpoints, SVG icons. <strong>Partial:</strong> complex illustrations, motion, 3D. <strong>Does not:</strong> business logic, backend, performance optimisation&nbsp;&mdash; Claude Code from scratch.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q4"><div class="q"><p class="q-text"><span lang="ru">Где править tokens, если палитра вышла не&nbsp;та?</span><span lang="en">Where to fix tokens if palette is off?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">В&nbsp;Claude Design&nbsp;&mdash; brand-system update → перегенерация bundle → новая имплементация. <em>Не</em> в&nbsp;коде. Tokens&nbsp;&mdash; источник истины из&nbsp;дизайна. Это сохраняет согласованность.</p><p lang="en">In Claude Design&nbsp;&mdash; update brand system → regen bundle → re-implement. <em>Not</em> in code. Tokens are the design source of truth. Keeps consistency.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q5"><div class="q"><p class="q-text"><span lang="ru">Что такое fidelity loss и&nbsp;как с&nbsp;ним обращаться?</span><span lang="en">Fidelity loss and how to handle?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Расхождение прототипа и&nbsp;имплементации. Естественно, потому что bundle передаёт «что», не&nbsp;«как». Полностью убрать нельзя&nbsp;&mdash; стратегия: вернуться в&nbsp;Claude Design и&nbsp;поправить дизайн, а&nbsp;не&nbsp;дотачивать в&nbsp;коде.</p><p lang="en">Drift between prototype and implementation. Natural, since the bundle transfers &ldquo;what,&rdquo; not &ldquo;how.&rdquo; Can&rsquo;t be eliminated&nbsp;&mdash; strategy: return to Claude Design, patch design, don&rsquo;t hand-tune code.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q6"><div class="q"><p class="q-text"><span lang="ru">Какие шаги полного цикла «бриф → деплой»?</span><span lang="en">What are the full-loop steps?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Бриф (этап&nbsp;02) → brand system (03) → прототип (04) → handoff (этот) → имплементация в&nbsp;Claude Code (этап&nbsp;06 основного курса) → деплой (этап&nbsp;05 основного) → мониторинг (этап&nbsp;10 основного). Pipeline закрывается двумя инструментами.</p><p lang="en">Brief (etape 2) → brand system (3) → prototype (4) → handoff (this) → implementation in Claude Code (main 6) → deploy (main 5) → monitoring (main 10). Closes across two tools.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q7"><div class="q"><p class="q-text"><span lang="ru">Какой первый промпт в&nbsp;Claude Code после распаковки bundle?</span><span lang="en">First Claude Code prompt after unzipping a bundle?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">«Прочитай @README.md, посмотри @screens/ и&nbsp;@tokens/styles.css. Реализуй как [технологический стек], используй tokens как&nbsp;есть, навигацию по&nbsp;графу. Деплой через [платформа]».</p><p lang="en">&ldquo;Read @README.md, look at @screens/ and @tokens/styles.css. Implement as [tech stack], use tokens as-is, navigation per graph. Deploy via [platform].&rdquo;</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+        </ol>
+        <div class="quiz-summary"><h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where next?</span></h4><div class="stats"><span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span><span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span><span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span></div><p class="advice"></p></div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell"><div class="section-head"><span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span><h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2></div>
+        <ul class="checklist">
+            <li data-key="d5-bundle"><span lang="ru">Экспортирую handoff bundle из&nbsp;Claude Design.</span><span lang="en">I export a handoff bundle from Claude Design.</span></li>
+            <li data-key="d5-readme"><span lang="ru">Читаю README перед имплементацией&nbsp;&mdash; проверяю, что bundle понятен Claude.</span><span lang="en">I read the README before implementation&nbsp;&mdash; verify the bundle reads cleanly.</span></li>
+            <li data-key="d5-tokens"><span lang="ru">Знаю: tokens правлю в&nbsp;Claude Design, не&nbsp;в&nbsp;коде.</span><span lang="en">I know: tokens edit in Claude Design, not in code.</span></li>
+            <li data-key="d5-fidelity"><span lang="ru">Понимаю fidelity loss&nbsp;&mdash; естественное расхождение, лечу через дизайн, а&nbsp;не&nbsp;ручную правку кода.</span><span lang="en">I get fidelity loss&nbsp;&mdash; natural drift, fixed via design, not hand-tuning code.</span></li>
+            <li data-key="d5-pipeline"><span lang="ru">Прохожу полный цикл «бриф → дизайн → код → деплой» на&nbsp;своих проектах.</span><span lang="en">I run the full &ldquo;brief → design → code → deploy&rdquo; loop on my projects.</span></li>
+            <li data-key="d5-deliverables"><span lang="ru">Сделал артефакты: меню кофейни как живой сайт + 5-экранный UI игры с&nbsp;роутингом, оба деплойнуты.</span><span lang="en">Etape artefacts: café menu as a live site + 5-screen game UI with routing, both deployed.</span></li>
+            <li data-key="d5-public-url"><span lang="ru">У&nbsp;меня есть публичный URL хотя&nbsp;бы для одного из&nbsp;проектов&nbsp;&mdash; и&nbsp;я&nbsp;его уже отправил живому человеку.</span><span lang="en">I have a public URL for at least one project&nbsp;&mdash; and I&rsquo;ve sent it to a real person.</span></li>
+        </ul>
+        <div class="complete-bar"><p lang="ru">Готовы закрыть этап?</p><p lang="en">Ready to close the etape?</p>
+            <button class="btn-complete" data-id="design-05" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="tight"><div class="shell"><div class="etap-nav">
+    <a class="prev" href="claude-design-04.html">
+        <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+        <span class="step-title"><span lang="ru">04 · Интерактивный прототип</span><span lang="en">04 · Interactive Prototype</span></span>
+    </a>
+    <a class="next disabled" href="#" aria-disabled="true">
+        <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+        <span class="step-title"><span lang="ru">06 · Питч-дек <em>(скоро)</em></span><span lang="en">06 · Pitch Deck <em>(soon)</em></span></span>
+    </a>
+</div></div></section>
+
+</main>
+
+<footer class="colophon"><div class="shell inner">
+    <div>
+        <p class="signature" lang="ru">«Мост между дизайном и&nbsp;кодом раньше был отдельной профессией. Теперь&nbsp;&mdash; одна кнопка».</p>
+        <p class="signature" lang="en">&ldquo;The bridge between design and code used to be a separate profession. Now&nbsp;&mdash; one button.&rdquo;</p>
+        <p lang="ru">Этап&nbsp;05 пройден. Цикл «бриф → дизайн → живой&nbsp;URL» закрыт. Дальше&nbsp;&mdash; <strong>питч-дек из&nbsp;.xlsx</strong>: метрики становятся 12-слайдовой презентацией для инвестора.</p>
+        <p lang="en">Etape 05 done. The &ldquo;brief → design → live URL&rdquo; loop is closed. Next&nbsp;&mdash; <strong>pitch deck from .xlsx</strong>: metrics become a 12-slide investor presentation.</p>
+    </div>
+    <div><h5><span lang="ru">Внутри этапа</span><span lang="en">Inside</span></h5><ul><li><a href="#topics">§&nbsp;I</a></li><li><a href="#projects">§&nbsp;III</a></li><li><a href="#glossary">§&nbsp;V</a></li><li><a href="#quiz">§&nbsp;VI</a></li><li><a href="#checklist">§&nbsp;VII</a></li></ul></div>
+    <div><h5><span lang="ru">Курс</span><span lang="en">Course</span></h5><ul>
+        <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Contents</span></a></li>
+        <li><a href="claude-design-04.html"><span lang="ru">← Этап&nbsp;04</span><span lang="en">← Etape 04</span></a></li>
+        <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+    </ul></div>
+</div></footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

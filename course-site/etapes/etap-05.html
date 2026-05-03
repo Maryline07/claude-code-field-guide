@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 05 · Git, GitHub и worktrees — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 05 курса по Claude Code: git как машина времени, публикация на GitHub Pages, worktrees для параллельных веток, защита секретов.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="05">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 05</span><span lang="en">Etape 05</span></span> &nbsp;·&nbsp; <span lang="ru">Git, GitHub и&nbsp;worktrees</span><span lang="en">Git, GitHub &amp; worktrees</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Из&nbsp;папки&nbsp;&mdash; в&nbsp;<em>интернет</em>.</span>
+            <span lang="en">From a folder to the <em>internet</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            До&nbsp;этого этапа ваши проекты жили только на&nbsp;вашем компьютере. Сегодня учим Claude публиковать их&nbsp;в&nbsp;интернет&nbsp;&mdash; через <dfn class="term" tabindex="0" data-def="система контроля версий, «машина времени» для проекта. Фиксирует каждое изменение, позволяет откатываться, делиться и работать в нескольких ветках одновременно.">git</dfn>, GitHub и&nbsp;<dfn class="term" tabindex="0" data-def="изолированная копия репозитория в отдельной папке. Используется для параллельной работы над несколькими ветками одновременно — без переключений и риска потерять изменения.">worktrees</dfn>. Дашборды из&nbsp;этапов 02–04 получат живые ссылки.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Until this etape your projects lived only on your machine. Today we teach Claude to ship them to the web&nbsp;&mdash; through <dfn class="term" tabindex="0" data-def="version control, a “time machine” for a project. Records every change, lets you roll back, share and work in several branches at once.">git</dfn>, GitHub and <dfn class="term" tabindex="0" data-def="an isolated copy of the repository in its own folder. Used for parallel work across branches — no checkouts, no risk of losing changes.">worktrees</dfn>. Dashboards from etapes 02–04 get live links.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">4–5 дней · 2–4&nbsp;ч/день</span><span lang="en">4–5 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">git · GitHub · GitHub Pages · worktrees · защита секретов</span><span lang="en">git · GitHub · GitHub Pages · worktrees · secret hygiene</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">ваши работы в&nbsp;интернете, открываются по&nbsp;ссылке</span><span lang="en">your work is on the web, openable by URL</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">опубликованный портфолио и&nbsp;дашборд бюджета по&nbsp;живой ссылке</span><span lang="en">a published portfolio and a budget dashboard with a live URL</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что устанавливаем перед началом</span><span lang="en">What to install before you start</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Аккаунт GitHub и&nbsp;программа git&nbsp;&mdash; обязательно. Один skill для&nbsp;дисциплины worktrees&nbsp;&mdash; рекомендуется. Claude всё делает за&nbsp;вас, но&nbsp;аккаунт и&nbsp;программа должны быть.</p>
+        <p class="reading" lang="en">A GitHub account and the git program — required. One skill for worktree discipline — recommended. Claude does the heavy lifting, but the account and the program must exist.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · программа</span><span lang="en">required · software</span></span>
+            <h3>git</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> программа для&nbsp;«контроля версий»&nbsp;&mdash; ведёт историю всех изменений в&nbsp;вашем проекте. Это та&nbsp;самая «машина времени», к&nbsp;которой обращается Claude, когда вы&nbsp;говорите «верни как было».<br>
+            <strong>Зачем сейчас:</strong> без&nbsp;git ничего на&nbsp;этом этапе не&nbsp;получится&nbsp;&mdash; и&nbsp;ваш проект не&nbsp;попадёт на&nbsp;GitHub.<br>
+            <strong>Где взять:</strong> <a href="https://git-scm.com/downloads">git-scm.com/downloads</a>. Установка стандартная, на&nbsp;всех вопросах оставляйте «по&nbsp;умолчанию».<br>
+            <strong>Проверить:</strong> в&nbsp;терминале <code>git --version</code> должно вывести номер версии.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a “version control” program — it keeps a history of all changes in your project. The actual “time machine” Claude reaches for when you say “revert.”<br>
+            <strong>Why now:</strong> nothing on this etape works without git — and your project will not reach GitHub.<br>
+            <strong>Where:</strong> <a href="https://git-scm.com/downloads">git-scm.com/downloads</a>. Default install, accept all defaults.<br>
+            <strong>Verify:</strong> <code>git --version</code> in the terminal should print a version.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · аккаунт</span><span lang="en">required · account</span></span>
+            <h3>GitHub</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> крупнейший в&nbsp;мире «склад» проектов на&nbsp;git. Вы&nbsp;храните свои работы там, делитесь по&nbsp;ссылкам, бесплатно публикуете статичные сайты через GitHub Pages.<br>
+            <strong>Зачем сейчас:</strong> чтобы ваш дашборд получил живой&nbsp;URL вида <code>https://&lt;username&gt;.github.io/&lt;project&gt;/</code>&nbsp;&mdash; и&nbsp;его можно было показать другу или работодателю.<br>
+            <strong>Где взять:</strong> <a href="https://github.com/signup">github.com/signup</a>. Регистрация бесплатная.<br>
+            <strong>Проверить:</strong> вы&nbsp;можете войти на&nbsp;github.com и&nbsp;увидеть свою страницу профиля.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the world’s largest “store” of git projects. You keep work there, share via links, host static sites for free through GitHub Pages.<br>
+            <strong>Why now:</strong> so your dashboard gets a live URL like <code>https://&lt;username&gt;.github.io/&lt;project&gt;/</code> — shareable with a friend or employer.<br>
+            <strong>Where:</strong> <a href="https://github.com/signup">github.com/signup</a>. Free.<br>
+            <strong>Verify:</strong> you can sign in at github.com and see your profile page.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · аутентификация</span><span lang="en">required · authentication</span></span>
+            <h3><span lang="ru">SSH-ключ или GitHub CLI (<code>gh</code>)</span><span lang="en">SSH key or GitHub CLI (<code>gh</code>)</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> способ для&nbsp;вашего компьютера «доказать GitHub-у», что это вы. Без&nbsp;этого нельзя пушить (загружать) проекты.<br>
+            <strong>Простой способ:</strong> поставьте GitHub&nbsp;CLI (<a href="https://cli.github.com">cli.github.com</a>) и&nbsp;один раз выполните <code>gh auth login</code>&nbsp;&mdash; он&nbsp;сам всё настроит.<br>
+            <strong>Альтернатива:</strong> сгенерировать SSH-ключ и&nbsp;добавить в&nbsp;GitHub. Если потеряете маршрут&nbsp;&mdash; попросите Claude: <em>«проведи меня через настройку SSH-ключа для&nbsp;GitHub»</em>.<br>
+            <strong>Проверить:</strong> <code>gh auth status</code> или <code>ssh -T git@github.com</code>&nbsp;&mdash; ответ должен подтвердить ваш логин.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> how your machine “proves to GitHub” it’s you. Without it you can’t push (upload) projects.<br>
+            <strong>Easy path:</strong> install GitHub CLI (<a href="https://cli.github.com">cli.github.com</a>) and run <code>gh auth login</code> once — it sets everything up.<br>
+            <strong>Alternative:</strong> generate an SSH key and add it to GitHub. Lost mid-way — ask Claude: <em>“walk me through GitHub SSH key setup.”</em><br>
+            <strong>Verify:</strong> <code>gh auth status</code> or <code>ssh -T git@github.com</code> — should confirm your login.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3><span lang="ru">Skill <code>superpowers:using-git-worktrees</code></span><span lang="en">Skill <code>superpowers:using-git-worktrees</code></span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill, который учит Claude правильно использовать git worktrees&nbsp;&mdash; «параллельные копии репозитория». Удобно, когда вы&nbsp;хотите работать над двумя ветками одновременно (например, доработка дашборда + эксперимент с&nbsp;тёмной темой) и&nbsp;не&nbsp;путаться в&nbsp;состояниях.<br>
+            <strong>Зачем сейчас:</strong> без&nbsp;skill можно, но&nbsp;skill экономит время на&nbsp;типовых ошибках.<br>
+            <strong>Проверить, не&nbsp;стоит&nbsp;ли:</strong> <code>/skills</code>&nbsp;&mdash; <code>superpowers:using-git-worktrees</code> в&nbsp;списке. Если ставили <code>superpowers</code> в&nbsp;этапе&nbsp;04&nbsp;&mdash; уже есть.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude proper use of git worktrees — “parallel repo copies.” Handy when you want to work on two branches at once (dashboard fix + dark-theme experiment) without state confusion.<br>
+            <strong>Why now:</strong> works without it, but the skill saves time on typical mistakes.<br>
+            <strong>Check first:</strong> <code>/skills</code> — <code>superpowers:using-git-worktrees</code> in the list. If you installed <code>superpowers</code> on etape 04 — already there.</p>
+            <pre class="shell"><span class="cmt"># <span lang="ru">внутри claude (slash-команда, не shell). Пакет тот&nbsp;же, что в&nbsp;этапе&nbsp;04</span><span lang="en">inside claude (slash command, not shell). Same package as on etape 04</span></span>
+/plugin install superpowers@claude-plugins-official</pre>
+        </div>
+
+        <div class="note" style="margin-top:1.5rem;">
+            <span lang="ru">Все базовые операции git&nbsp;&mdash; <code>init</code>, <code>commit</code>, <code>push</code>, <code>pull</code>, <code>branch</code>&nbsp;&mdash; Claude делает сам. Вам не&nbsp;нужно их&nbsp;запоминать. Но&nbsp;в&nbsp;§&nbsp;I мы&nbsp;разберём, <em>что они означают</em>, чтобы вы&nbsp;могли осмысленно сказать <em>«закоммить и&nbsp;запушь»</em>.</span>
+            <span lang="en">All basic git operations — <code>init</code>, <code>commit</code>, <code>push</code>, <code>pull</code>, <code>branch</code> — Claude runs itself. You need not memorise them. But § I covers <em>what they mean</em>, so you can meaningfully say <em>“commit and push.”</em></span>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что значит «отдать проект миру»</span><span lang="en">What “shipping a project to the world” means</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Git как «машина времени» для&nbsp;проекта</span><span lang="en">Git as a project’s “time machine”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Git&nbsp;&mdash; это программа, которая <em>фиксирует</em> состояние вашего проекта в&nbsp;любой момент. Каждое сохранение называется <dfn class="term" tabindex="0" data-def="одна «фотография» состояния проекта в момент сохранения. Имеет автора, дату и описание. Можно вернуться к любому коммиту в истории.">коммит</dfn>&nbsp;&mdash; это «фотография» состояния всех файлов.</p>
+                    <p>Что это даёт:</p>
+                    <ul>
+                        <li>Можете в&nbsp;любой момент <em>откатиться</em> к&nbsp;старой версии: «верни как было два дня назад».</li>
+                        <li>Видите <em>историю</em>: что и&nbsp;когда менялось, кем (если работали с&nbsp;кем-то).</li>
+                        <li>Можете <em>экспериментировать</em>: создаёте «параллельную линию» (ветку), пробуете что-то, и&nbsp;если не&nbsp;понравилось&nbsp;&mdash; просто отбрасываете.</li>
+                        <li>Можете <em>делиться</em>: загружаете на&nbsp;GitHub&nbsp;&mdash; и&nbsp;у&nbsp;всех есть полная история проекта.</li>
+                    </ul>
+                    <p>Аналогия: «Версии файлов» в&nbsp;macOS или «Журнал версий» в&nbsp;Google Docs&nbsp;&mdash; но&nbsp;для&nbsp;всего проекта целиком, и&nbsp;на&nbsp;стероидах.</p>
+                    <p>Минимум команд (которые Claude использует за&nbsp;вас):</p>
+                    <pre class="shell"><span class="cmt"># <span lang="ru">создать репозиторий в текущей папке</span><span lang="en">init a repo in the current folder</span></span>
+<span class="prompt">$</span> git init
+
+<span class="cmt"># <span lang="ru">сохранить состояние (коммит)</span><span lang="en">save state (commit)</span></span>
+<span class="prompt">$</span> git add .
+<span class="prompt">$</span> git commit -m "первый коммит"
+
+<span class="cmt"># <span lang="ru">отправить на GitHub</span><span lang="en">send to GitHub</span></span>
+<span class="prompt">$</span> git push</pre>
+                    <p>Запоминать их&nbsp;не&nbsp;надо. Достаточно понимать <em>смысл</em>: <strong>добавить</strong> в&nbsp;индекс → <strong>зафиксировать</strong> как коммит → <strong>отправить</strong> на&nbsp;удалённый.</p>
+                </div>
+                <div lang="en">
+                    <p>Git is a program that <em>records</em> your project’s state at any moment. Each save is called a <dfn class="term" tabindex="0" data-def="a single “snapshot” of the project at save time. Has an author, date and description. You can return to any commit in history.">commit</dfn> — a “photo” of all files.</p>
+                    <p>What that gives:</p>
+                    <ul>
+                        <li>Roll back at any time: “revert to two days ago.”</li>
+                        <li>See history: what changed when, by whom (if collaborating).</li>
+                        <li>Experiment: create a “parallel line” (branch), try things, drop if you dislike.</li>
+                        <li>Share: push to GitHub — everyone has the full history.</li>
+                    </ul>
+                    <p>Analogy: “Versions” in macOS or “Version history” in Google Docs — but for the whole project, on steroids.</p>
+                    <p>The minimum commands (Claude runs them for you):</p>
+                    <pre class="shell"><span class="cmt"># init a repo in the current folder</span>
+<span class="prompt">$</span> git init
+
+<span class="cmt"># save state (commit)</span>
+<span class="prompt">$</span> git add .
+<span class="prompt">$</span> git commit -m "first commit"
+
+<span class="cmt"># send to GitHub</span>
+<span class="prompt">$</span> git push</pre>
+                    <p>You don’t need to memorise them. Just understand the <em>meaning</em>: <strong>stage</strong> → <strong>commit</strong> as a snapshot → <strong>push</strong> to the remote.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Репозиторий, ветки и&nbsp;удалённый</span><span lang="en">Repository, branches and remote</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong><dfn class="term" tabindex="0" data-def="папка проекта, которая отслеживается git. Внутри есть скрытая папка .git с историей всех изменений.">Репозиторий</dfn></strong>&nbsp;&mdash; это папка, в&nbsp;которой git ведёт историю. Внутри есть скрытая папка <code>.git</code>&nbsp;&mdash; именно там лежат все коммиты.</p>
+                    <p><strong><dfn class="term" tabindex="0" data-def="параллельная линия истории проекта. Главная ветка обычно называется main. Можно создать любое число веток для экспериментов.">Ветка</dfn></strong>&nbsp;&mdash; это параллельная линия истории. Главная называется <code>main</code> (раньше&nbsp;&mdash; <code>master</code>). Когда хотите попробовать что-то рискованное&nbsp;&mdash; создаёте новую ветку (например, <code>experiment/dark-theme</code>), коммитите туда, и&nbsp;если получилось&nbsp;&mdash; <em>сливаете</em> (merge) обратно в&nbsp;main. Если не&nbsp;получилось&nbsp;&mdash; просто удаляете ветку.</p>
+                    <p><strong><dfn class="term" tabindex="0" data-def="копия вашего репозитория на стороннем сервере (обычно GitHub). Команда git push отправляет туда коммиты, git pull забирает изменения оттуда.">Удалённый</dfn> (remote)</strong>&nbsp;&mdash; это копия вашего репозитория где-то на&nbsp;сервере. Обычно&nbsp;&mdash; на&nbsp;GitHub. Команда <code>push</code> отправляет ваши коммиты туда, <code>pull</code>&nbsp;&mdash; забирает изменения оттуда.</p>
+                    <p>Типичный диалог:</p>
+                    <pre class="shell">&gt; создай в этой папке git-репозиторий, сделай первый коммит «init».
+&gt; создай ветку experiment/dark-theme.
+&gt; в ней сделай dark.html (тёмная версия моей страницы).
+&gt; покажи изменения.
+&gt; если выглядит нормально — слей в main и удали ветку.</pre>
+                </div>
+                <div lang="en">
+                    <p>A <strong><dfn class="term" tabindex="0" data-def="a project folder that git tracks. Contains a hidden .git folder with the history.">repository</dfn></strong> is a folder git keeps history for. Inside is a hidden <code>.git</code> folder — that’s where commits live.</p>
+                    <p>A <strong><dfn class="term" tabindex="0" data-def="a parallel line of history. The main branch is usually called main. You can create any number of branches for experiments.">branch</dfn></strong> is a parallel history line. The main one is <code>main</code> (used to be <code>master</code>). For something risky you make a new branch (e.g. <code>experiment/dark-theme</code>), commit there, and on success <em>merge</em> back to main. If it failed — drop the branch.</p>
+                    <p>A <strong><dfn class="term" tabindex="0" data-def="a copy of your repo on a third-party server (usually GitHub). git push sends commits there, git pull fetches changes back.">remote</dfn></strong> is a copy of your repo on a server. Usually GitHub. <code>push</code> uploads your commits, <code>pull</code> fetches changes from there.</p>
+                    <p>Typical dialogue:</p>
+                    <pre class="shell">&gt; init a git repo in this folder, first commit "init".
+&gt; create branch experiment/dark-theme.
+&gt; in it add dark.html (a dark version of my page).
+&gt; show me the changes.
+&gt; if it looks fine — merge into main and delete the branch.</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">GitHub Pages: бесплатный хостинг для&nbsp;ваших страниц</span><span lang="en">GitHub Pages: free hosting for your pages</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><dfn class="term" tabindex="0" data-def="бесплатный хостинг от GitHub: загружаешь HTML-файлы в репозиторий, и они становятся доступны в интернете по адресу https://username.github.io/repo/.">GitHub Pages</dfn>&nbsp;&mdash; это «магия»: загружаете HTML/CSS/JS в&nbsp;репозиторий на&nbsp;GitHub, включаете одну галочку в&nbsp;настройках&nbsp;&mdash; и&nbsp;через минуту ваш сайт доступен по&nbsp;адресу <code>https://&lt;username&gt;.github.io/&lt;repo&gt;/</code>.</p>
+                    <p>Что подходит:</p>
+                    <ul>
+                        <li>статичные сайты без&nbsp;бэкенда (всё, что мы&nbsp;делали в&nbsp;этапах 00–04);</li>
+                        <li>портфолио, лендинги, дашборды на&nbsp;CSV-данных;</li>
+                        <li>демо ваших калькуляторов и&nbsp;игр.</li>
+                    </ul>
+                    <p>Что не&nbsp;подходит:</p>
+                    <ul>
+                        <li>сайты с&nbsp;серверной логикой (этап&nbsp;06 будет про&nbsp;них&nbsp;&mdash; через Vercel или Railway);</li>
+                        <li>проекты с&nbsp;секретами, которые требуют живой работы с&nbsp;API (вызовы к&nbsp;Alpha Vantage с&nbsp;ключом нельзя делать прямо в&nbsp;браузере).</li>
+                    </ul>
+                    <p>Полный диалог публикации:</p>
+                    <pre class="shell">&gt; создай на github новый публичный репозиторий "fi-forecast".
+&gt; запушь туда текущий проект.
+&gt; включи GitHub Pages с источником main / root.
+&gt; дай мне публичную ссылку и проверь через playwright,
+&gt; что страница открывается и не сломалась.</pre>
+                    <p>Через минуту&nbsp;&mdash; ссылка вида <code>https://yourname.github.io/fi-forecast/</code>, которую можно показать кому угодно.</p>
+                </div>
+                <div lang="en">
+                    <p><dfn class="term" tabindex="0" data-def="free GitHub hosting: upload HTML to a repo, flip one switch, and it’s live at https://username.github.io/repo/.">GitHub Pages</dfn> is the “magic”: upload HTML/CSS/JS to a GitHub repo, flip one toggle, and a minute later your site is live at <code>https://&lt;username&gt;.github.io/&lt;repo&gt;/</code>.</p>
+                    <p>Fits:</p>
+                    <ul>
+                        <li>static sites, no backend (everything from etapes 00–04);</li>
+                        <li>portfolios, landing pages, CSV-data dashboards;</li>
+                        <li>your calculator and game demos.</li>
+                    </ul>
+                    <p>Doesn’t fit:</p>
+                    <ul>
+                        <li>sites with server logic (etape 06 — Vercel or Railway);</li>
+                        <li>projects with secrets that need live API calls (Alpha Vantage requests with a key cannot run directly in the browser).</li>
+                    </ul>
+                    <p>Full publishing dialogue:</p>
+                    <pre class="shell">&gt; create a new public github repo "fi-forecast".
+&gt; push the current project there.
+&gt; enable GitHub Pages with source main / root.
+&gt; give me the public URL and verify via playwright
+&gt; that the page opens and isn't broken.</pre>
+                    <p>A minute later — a URL like <code>https://yourname.github.io/fi-forecast/</code>, shareable with anyone.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">README и&nbsp;<code>.gitignore</code>: «обложка» и&nbsp;«не&nbsp;показывать»</span><span lang="en">README and <code>.gitignore</code>: the “cover” and the “do not show”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong><dfn class="term" tabindex="0" data-def="главная «обложка» репозитория — markdown-файл README.md в корне. GitHub показывает его прямо на странице репо. Сюда пишут: что это, как запустить, демо-ссылка, скриншоты.">README.md</dfn></strong>&nbsp;&mdash; первое, что видит человек, открывший ваш репозиторий на&nbsp;GitHub. Без&nbsp;него странно, как лекция без&nbsp;названия.</p>
+                    <p>Минимум для&nbsp;хорошего README:</p>
+                    <ol>
+                        <li><strong>Заголовок и&nbsp;одна строка о&nbsp;чём проект.</strong></li>
+                        <li><strong>Демо-ссылка</strong>&nbsp;&mdash; на&nbsp;GitHub Pages или скриншот.</li>
+                        <li><strong>Что это умеет</strong>&nbsp;&mdash; 3–5 пунктов.</li>
+                        <li><strong>Как запустить локально</strong>&nbsp;&mdash; 2–3 команды.</li>
+                        <li><strong>Откуда данные / какие нужны секреты</strong>&nbsp;&mdash; если применимо.</li>
+                        <li><strong>Лицензия</strong>&nbsp;&mdash; MIT по&nbsp;умолчанию хорошо.</li>
+                    </ol>
+                    <p>Claude составит README за&nbsp;вас одной командой:</p>
+                    <pre class="shell">&gt; составь README.md для этого проекта.
+&gt; опиши: что делает, как запустить, демо-ссылка
+&gt; (https://...github.io/...), какие нужны секреты,
+&gt; лицензия MIT. сделай двуязычным: ru + en.</pre>
+                    <p><strong><dfn class="term" tabindex="0" data-def="файл .gitignore в корне проекта со списком того, что git должен игнорировать. Туда обязательно идут .env, секреты, кэши, временные файлы.">.gitignore</dfn></strong>&nbsp;&mdash; список «что git не&nbsp;должен видеть»: <code>.env</code>, <code>data/private/</code>, <code>node_modules/</code>, <code>.DS_Store</code>. Без&nbsp;него можно случайно опубликовать API-ключ в&nbsp;интернет&nbsp;&mdash; и&nbsp;через час кто-то будет тратить ваши деньги через ваш аккаунт.</p>
+                    <pre class="shell">&gt; составь .gitignore для этого проекта.
+&gt; обязательно: .env, data/personal/, *.log,
+&gt; макросные файлы macOS/Windows.
+&gt; добавь раздел "private" с моими личными исключениями.</pre>
+                </div>
+                <div lang="en">
+                    <p><strong><dfn class="term" tabindex="0" data-def="the repository’s “cover” — a README.md at the root. GitHub shows it on the repo page. Put: what it is, how to run, demo URL, screenshots.">README.md</dfn></strong> — the first thing anyone sees opening your repo. Without one it feels like a lecture without a title.</p>
+                    <p>Minimum for a good README:</p>
+                    <ol>
+                        <li><strong>Title and a one-liner.</strong></li>
+                        <li><strong>Demo link</strong> — to GitHub Pages or a screenshot.</li>
+                        <li><strong>What it does</strong> — 3–5 bullets.</li>
+                        <li><strong>How to run locally</strong> — 2–3 commands.</li>
+                        <li><strong>Data sources / required secrets</strong> — if any.</li>
+                        <li><strong>Licence</strong> — MIT is a good default.</li>
+                    </ol>
+                    <p>Claude drafts a README in one prompt:</p>
+                    <pre class="shell">&gt; draft README.md for this project.
+&gt; describe: what it does, how to run, demo URL
+&gt; (https://...github.io/...), required secrets,
+&gt; MIT licence. make it bilingual: ru + en.</pre>
+                    <p><strong><dfn class="term" tabindex="0" data-def="a .gitignore file at the project root listing what git should ignore. .env, secrets, caches, temp files belong there.">.gitignore</dfn></strong> — the list of “what git must not see”: <code>.env</code>, <code>data/private/</code>, <code>node_modules/</code>, <code>.DS_Store</code>. Without it you may accidentally publish an API key — and within an hour someone burns your money through your account.</p>
+                    <pre class="shell">&gt; draft .gitignore for this project.
+&gt; required: .env, data/personal/, *.log,
+&gt; macOS/Windows junk files.
+&gt; add a "private" section with my personal exclusions.</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Защита секретов: что нельзя коммитить</span><span lang="en">Secret hygiene: what never to commit</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Самая дорогая ошибка непрофессионала&nbsp;&mdash; случайно отправить API-ключ или пароль в&nbsp;публичный репозиторий. Боты сканируют GitHub каждые несколько минут&nbsp;&mdash; ключ найдут за&nbsp;часы.</p>
+                    <p><strong>Чего НЕ&nbsp;делать никогда:</strong></p>
+                    <ul>
+                        <li>не&nbsp;писать ключи прямо в&nbsp;HTML/JS-файлах;</li>
+                        <li>не&nbsp;коммитить <code>.env</code>;</li>
+                        <li>не&nbsp;класть пароли в&nbsp;<code>CLAUDE.md</code>;</li>
+                        <li>не&nbsp;коммитить дампы баз с&nbsp;личными данными;</li>
+                        <li>не&nbsp;копировать SSH-ключ в&nbsp;repo.</li>
+                    </ul>
+                    <p><strong>Как защититься:</strong></p>
+                    <ol>
+                        <li><code>.gitignore</code> с&nbsp;<code>.env</code>, <code>secrets/</code>, <code>data/private/</code>;</li>
+                        <li>в&nbsp;коде&nbsp;&mdash; всегда читаем секреты из&nbsp;окружения (<code>process.env.X</code>, <code>os.getenv("X")</code>);</li>
+                        <li>в&nbsp;README&nbsp;&mdash; пример <code>.env</code> без&nbsp;значений (<code>.env.example</code>);</li>
+                        <li>перед каждым коммитом&nbsp;&mdash; <em>«покажи git diff, проверь, не&nbsp;утекают&nbsp;ли секреты»</em>;</li>
+                        <li>регулярные сканы&nbsp;&mdash; через hooks (этап&nbsp;08a) или внешние сервисы (например, gitleaks).</li>
+                    </ol>
+                    <p>Дисциплина:</p>
+                    <pre class="shell">&gt; перед тем как пушить, прогон проверки:
+&gt; git diff --staged | grep -iE "key|secret|token|password"
+&gt; если что-то нашлось — откати и поправь, перед коммитом не пускай.</pre>
+                    <p>Если случайно опубликовали&nbsp;&mdash; не&nbsp;тяните: <em>отозвать</em> ключ через сервис, поменять пароль, и&nbsp;только потом думать про&nbsp;«как удалить из&nbsp;истории git» (это сложнее, чем кажется).</p>
+                </div>
+                <div lang="en">
+                    <p>The costliest amateur mistake — accidentally pushing an API key or password to a public repo. Bots scan GitHub every minute — they find keys in hours.</p>
+                    <p><strong>Never:</strong></p>
+                    <ul>
+                        <li>write keys directly in HTML/JS files;</li>
+                        <li>commit <code>.env</code>;</li>
+                        <li>store passwords in <code>CLAUDE.md</code>;</li>
+                        <li>commit DB dumps with personal data;</li>
+                        <li>copy your SSH key into the repo.</li>
+                    </ul>
+                    <p><strong>Defenses:</strong></p>
+                    <ol>
+                        <li><code>.gitignore</code> with <code>.env</code>, <code>secrets/</code>, <code>data/private/</code>;</li>
+                        <li>in code — always read secrets from environment (<code>process.env.X</code>, <code>os.getenv("X")</code>);</li>
+                        <li>in README — provide an empty <code>.env.example</code>;</li>
+                        <li>before every commit — <em>“show git diff, check that no secrets leak.”</em>;</li>
+                        <li>regular scans — via hooks (etape 08a) or external services (e.g. gitleaks).</li>
+                    </ol>
+                    <p>Discipline:</p>
+                    <pre class="shell">&gt; before pushing, run a check:
+&gt; git diff --staged | grep -iE "key|secret|token|password"
+&gt; if anything matches — revert and fix before commit.</pre>
+                    <p>If accidentally published — don’t delay: <em>revoke</em> the key, change the password, then think about “erase from git history” (harder than it looks).</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Worktrees: параллельные ветки без&nbsp;путаницы</span><span lang="en">Worktrees: parallel branches without confusion</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Обычная работа с&nbsp;ветками&nbsp;&mdash; «переключайся туда-сюда»: <code>git checkout main</code>, потом <code>git checkout experiment/dark-theme</code>. Состояние папки <em>меняется</em>: одни и&nbsp;те&nbsp;же файлы превращаются в&nbsp;разные версии.</p>
+                    <p><strong>Worktrees</strong>&nbsp;&mdash; альтернатива: каждая ветка живёт в&nbsp;<em>своей папке</em>. Не&nbsp;надо переключаться&nbsp;&mdash; вы&nbsp;просто открываете другую папку.</p>
+                    <p>Когда полезно:</p>
+                    <ul>
+                        <li>Хотите делать <em>две вещи параллельно</em>&nbsp;&mdash; например, исправить баг в&nbsp;main и&nbsp;дописать фичу в&nbsp;experiment;</li>
+                        <li>Запускаете <em>агента-стажёра</em> в&nbsp;другой ветке (этап&nbsp;07&nbsp;&mdash; subagents часто работают в&nbsp;worktree, чтобы не&nbsp;мешать вам);</li>
+                        <li>Не&nbsp;хотите случайно потерять незакоммиченные изменения при переключении.</li>
+                    </ul>
+                    <p>Команды (Claude делает за&nbsp;вас):</p>
+                    <pre class="shell"><span class="cmt"># создать worktree в папке-сестре</span>
+<span class="prompt">$</span> git worktree add ../my-project-dark experiment/dark-theme
+
+<span class="cmt"># список всех worktrees</span>
+<span class="prompt">$</span> git worktree list
+
+<span class="cmt"># удалить worktree, когда не нужен</span>
+<span class="prompt">$</span> git worktree remove ../my-project-dark</pre>
+                    <p>Skill <code>superpowers:using-git-worktrees</code> добавляет дисциплину&nbsp;&mdash; Claude правильно создаёт worktree и&nbsp;убирает за&nbsp;собой.</p>
+                </div>
+                <div lang="en">
+                    <p>Default branch work is “toggle in place”: <code>git checkout main</code>, then <code>git checkout experiment/dark-theme</code>. The folder’s state <em>shifts</em>: the same files become different versions.</p>
+                    <p><strong>Worktrees</strong> are an alternative: each branch lives in <em>its own folder</em>. No checkout dance — you just open another folder.</p>
+                    <p>Useful when:</p>
+                    <ul>
+                        <li>You want to do <em>two things in parallel</em> — fix a bug on main and add a feature on experiment;</li>
+                        <li>You run an <em>intern agent</em> on another branch (etape 07 — subagents often live in worktrees so as not to bother you);</li>
+                        <li>You don’t want to lose uncommitted changes on a checkout.</li>
+                    </ul>
+                    <p>Commands (Claude runs them):</p>
+                    <pre class="shell"><span class="cmt"># add a worktree as a sibling folder</span>
+<span class="prompt">$</span> git worktree add ../my-project-dark experiment/dark-theme
+
+<span class="cmt"># list worktrees</span>
+<span class="prompt">$</span> git worktree list
+
+<span class="cmt"># remove a worktree</span>
+<span class="prompt">$</span> git worktree remove ../my-project-dark</pre>
+                    <p>The <code>superpowers:using-git-worktrees</code> skill adds discipline — Claude creates worktrees properly and cleans them up.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="форк — ваша личная копия чужого репозитория на GitHub. Pull Request — предложение изменить чужой код: «вот мои изменения, рассмотрите и слейте, если согласны».">Форки</dfn> и&nbsp;<dfn class="term" tabindex="0" data-def="Pull Request — стандартный механизм GitHub: вы предлагаете владельцу другого репозитория принять ваши изменения. Он смотрит, обсуждает, принимает или отклоняет.">Pull Requests</dfn>&nbsp;&mdash; на&nbsp;будущее</span><span lang="en"><dfn class="term" tabindex="0" data-def="a fork is your personal copy of someone else’s GitHub repo. A Pull Request is a proposed change: “here are my edits, please review and merge if you agree.”">Forks</dfn> and <dfn class="term" tabindex="0" data-def="a Pull Request is GitHub’s standard mechanism: you propose to a repo owner to accept your changes. They review, discuss, accept or reject.">Pull Requests</dfn> — for later</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>На&nbsp;этом этапе мы&nbsp;работаем со&nbsp;своими репозиториями. Но&nbsp;стоит знать два понятия для&nbsp;будущего:</p>
+                    <ul>
+                        <li><strong>Форк</strong>&nbsp;&mdash; кнопка «Fork» на&nbsp;чужом репо. Вы&nbsp;получаете свою копию, в&nbsp;которой можете делать что угодно. Полезно, если хотите доработать чужую тему сайта или взять чей-то проект как основу.</li>
+                        <li><strong>Pull Request (PR)</strong>&nbsp;&mdash; способ <em>предложить</em> владельцу оригинального репозитория ваши изменения. Сделали форк, исправили опечатку в&nbsp;README, послали PR&nbsp;&mdash; владелец смотрит и&nbsp;либо принимает, либо отклоняет.</li>
+                    </ul>
+                    <p>Зачем это нужно сейчас знать: на&nbsp;капстоуне, возможно, будете публиковать собственный плагин для&nbsp;Claude Code. Когда другие пользователи захотят вам помочь&nbsp;&mdash; они сделают форк и&nbsp;PR. Через GitHub CLI это работает за&nbsp;30&nbsp;секунд.</p>
+                </div>
+                <div lang="en">
+                    <p>This etape works on your own repos. Still, two terms to know for later:</p>
+                    <ul>
+                        <li><strong>Fork</strong> — the “Fork” button on someone else’s repo. You get your own copy and can do anything in it. Useful when you want to adapt a theme or take a project as a base.</li>
+                        <li><strong>Pull Request (PR)</strong> — a way to <em>propose</em> changes to the original owner. You forked, fixed a README typo, sent a PR — the owner reviews and accepts or declines.</li>
+                    </ul>
+                    <p>Why know this now: at the capstone you may publish your own Claude Code plugin. When others want to help — they’ll fork and PR. Through the GitHub CLI it’s a 30-second flow.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Первый ваш репозиторий на&nbsp;GitHub</span><span lang="en">Your first repo on GitHub</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · из&nbsp;папки в&nbsp;интернет за&nbsp;15 минут</span><span lang="en">Run · from folder to web in 15 minutes</span></h4>
+            <ol lang="ru">
+                <li>Возьмите папку <code>fi-forecast</code> из&nbsp;этапа&nbsp;04. Запустите там <code>claude</code>.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; сделай git-репозиторий в этой папке (если ещё нет).
+&gt; составь .gitignore: .env, data/private/, *.log,
+&gt; .DS_Store, Thumbs.db, screenshots/.
+&gt; добавь все файлы, кроме игнорируемых, в первый коммит «init: fi-forecast».
+&gt; покажи git status и git log — должен быть один чистый коммит.</pre>
+                </li>
+                <li>Промпт:
+                    <pre class="shell">&gt; через gh создай новый ПУБЛИЧНЫЙ репозиторий fi-forecast
+&gt; и запушь туда текущую ветку main.
+&gt; включи GitHub Pages, источник: main / root.
+&gt; через playwright открой получившуюся ссылку
+&gt; (через 30-60 секунд после включения)
+&gt; и убедись, что страница загружается.
+&gt; верни мне URL.</pre>
+                </li>
+                <li>Откройте URL в&nbsp;своём браузере. Поделитесь ссылкой с&nbsp;другом&nbsp;&mdash; пусть откроет с&nbsp;телефона.</li>
+                <li>Промпт на&nbsp;README:
+                    <pre class="shell">&gt; составь README.md по моему проекту — двуязычный (ru + en).
+&gt; разделы: что это, демо-ссылка, как запустить локально,
+&gt; используемые технологии (без сборщиков, chart.js через CDN),
+&gt; параметры (входы формы), лицензия MIT.
+&gt; закоммить и запушь, чтобы README появился на странице репо.</pre>
+                </li>
+                <li>Через минуту откройте репо на&nbsp;github.com&nbsp;&mdash; должен появиться README с&nbsp;форматированием.</li>
+                <li>Тренировка отката: сделайте небольшое неудачное изменение в&nbsp;<code>spec.md</code>, закоммитьте. Потом скажите Claude:
+                    <pre class="shell">&gt; верни spec.md к состоянию предыдущего коммита (до моего «неудачного» изменения),
+&gt; покажи diff. если ОК — закоммить «revert: undo bad spec edit».</pre>
+                </li>
+                <li>Поэкспериментируйте с&nbsp;worktrees:
+                    <pre class="shell">&gt; через git worktree создай папку-сестру fi-forecast-dark
+&gt; на новой ветке experiment/dark-theme.
+&gt; открой её в проводнике — это та же история, но другая ветка.
+&gt; не переключаясь, сделай в ней dark-вариант страницы.
+&gt; закоммить туда. потом удали worktree, когда наиграешься.</pre>
+                </li>
+            </ol>
+            <ol lang="en">
+                <li>Take the <code>fi-forecast</code> folder from etape 04. Launch <code>claude</code>.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; init a git repo in this folder (if none).
+&gt; draft .gitignore: .env, data/private/, *.log,
+&gt; .DS_Store, Thumbs.db, screenshots/.
+&gt; stage everything not ignored, first commit "init: fi-forecast".
+&gt; show git status and git log — one clean commit expected.</pre>
+                </li>
+                <li>Prompt:
+                    <pre class="shell">&gt; via gh create a new PUBLIC repo fi-forecast
+&gt; and push the current main branch.
+&gt; enable GitHub Pages, source: main / root.
+&gt; via playwright open the resulting URL
+&gt; (30-60 seconds after enable)
+&gt; and confirm the page loads.
+&gt; give me the URL.</pre>
+                </li>
+                <li>Open the URL in your browser. Share with a friend — have them open on a phone.</li>
+                <li>README prompt:
+                    <pre class="shell">&gt; draft README.md for my project — bilingual (ru + en).
+&gt; sections: what it is, demo URL, how to run locally,
+&gt; tech (no bundlers, chart.js via CDN),
+&gt; inputs (form fields), MIT licence.
+&gt; commit and push so README shows on the repo page.</pre>
+                </li>
+                <li>A minute later open the repo on github.com — README should render.</li>
+                <li>Rollback drill: make a small bad edit in <code>spec.md</code>, commit. Then say:
+                    <pre class="shell">&gt; revert spec.md to the state of the previous commit (before my "bad" edit),
+&gt; show diff. if OK — commit "revert: undo bad spec edit".</pre>
+                </li>
+                <li>Worktrees:
+                    <pre class="shell">&gt; via git worktree add a sibling folder fi-forecast-dark
+&gt; on a new branch experiment/dark-theme.
+&gt; open it in the file manager — same history, different branch.
+&gt; without switching, build a dark variant of the page there.
+&gt; commit there. then remove the worktree when done.</pre>
+                </li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>полный цикл публикации&nbsp;&mdash; init → коммит → GitHub → Pages → README → откат → worktree</strong>. Дальше делаем большие проекты на&nbsp;этом фундаменте.</p>
+            <p lang="en">What we train: <strong>full publishing cycle — init → commit → GitHub → Pages → README → rollback → worktree</strong>. Big projects come next on this foundation.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Портфолио и&nbsp;дашборд&nbsp;&mdash; в&nbsp;интернет</span><span lang="en">Portfolio and dashboard — to the web</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">GitHub-портфолио со&nbsp;всеми вашими работами</span><span lang="en">GitHub portfolio of all your work</span></h3>
+            <p class="goal" lang="ru">Цель: один публичный репозиторий <code>portfolio</code> с&nbsp;index.html, который ведёт на&nbsp;ссылки ваших проектов с&nbsp;этапов 00–04. Вид&nbsp;&mdash; как авторская страница, не&nbsp;типовой шаблон.</p>
+            <p class="goal" lang="en">Goal: one public <code>portfolio</code> repo with an index.html linking your etape 00–04 projects. Look — an authored page, not a generic template.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Сначала опубликуйте на&nbsp;GitHub Pages каждый проект, который хотите показать (карточка обо&nbsp;мне, книжная полка, калькулятор процента, угадай число, дашборд портфеля, прогноз FI). Промпт по&nbsp;каждому&nbsp;&mdash; как в&nbsp;«Прогоне» выше.</li>
+                <li>Создайте папку <code>portfolio</code>, запустите <code>claude</code>.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; используя skill frontend-design, сделай index.html для моего портфолио.
+&gt; стиль — авторская editorial-страница, как старый журнал работ.
+&gt; структура:
+&gt;   — hero: имя, одна фраза «кто я и что делаю»;
+&gt;   — список 6–8 проектов: миниатюра, название, одна-две строки,
+&gt;     ссылка на live-демо (URL я тебе дам).
+&gt;   — футер с github и (опционально) линкедин.
+&gt; миниатюры — пусть claude сгенерирует svg или возьмёт скриншот
+&gt; через playwright (открой каждый проект, screenshot 800x600).</pre>
+                </li>
+                <li>Дайте Claude список ваших URL-ов (по&nbsp;одному на&nbsp;строке).</li>
+                <li>Откройте через локальный сервер. Уточняйте: <em>«сделай миниатюры аккуратнее, без&nbsp;обрезки»</em>, <em>«группируй проекты: финансы / игры / прочее»</em>.</li>
+                <li>Когда нравится&nbsp;&mdash; init / commit / push / Pages, как в&nbsp;прогоне.</li>
+                <li>Финал&nbsp;&mdash; через playwright проверьте на&nbsp;нескольких viewport-ах:
+                    <pre class="shell">&gt; через playwright открой моё портфолио (URL: ...)
+&gt; в трёх размерах: 1440x900, 768x1024, 390x844.
+&gt; для каждого — скриншот и вердикт «нет ли проблем».</pre>
+                </li>
+                <li>Опубликуйте URL у&nbsp;себя в&nbsp;соцсетях, в&nbsp;подписи к&nbsp;email, в&nbsp;CV. Это и&nbsp;есть ваш «AI-нативный портфолио».</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>First publish each project you want to show on GitHub Pages (about-me card, bookshelf, compound calculator, guess-the-number, portfolio dashboard, FI forecast). Per-project prompt — as in the “Run” above.</li>
+                <li>Make a <code>portfolio</code> folder, launch <code>claude</code>.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; using the frontend-design skill, make index.html for my portfolio.
+&gt; style — authored editorial page, like an old works journal.
+&gt; structure:
+&gt;   — hero: name, one sentence "who I am and what I make";
+&gt;   — 6–8 projects: thumbnail, title, one-two lines, live-demo URL;
+&gt;   — footer with github and (optionally) linkedin.
+&gt; thumbnails — let claude generate svg or capture a screenshot
+&gt; via playwright (open each project, screenshot 800x600).</pre>
+                </li>
+                <li>Give Claude your list of URLs (one per line).</li>
+                <li>Open through a local server. Refine: <em>“cleaner thumbnails, no clipping,”</em> <em>“group projects: finance / games / other.”</em></li>
+                <li>When you like it — init / commit / push / Pages, as in the Run.</li>
+                <li>Final — through Playwright check several viewports:
+                    <pre class="shell">&gt; via playwright open my portfolio (URL: ...)
+&gt; at three sizes: 1440x900, 768x1024, 390x844.
+&gt; for each — screenshot and verdict "any issues".</pre>
+                </li>
+                <li>Share the URL on social media, in your email signature, on your CV. This is your AI-native portfolio.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>публикацию каждого проекта на&nbsp;GitHub Pages по&nbsp;шаблону;</li>
+                <li>агрегацию ссылок в&nbsp;портфолио-страницу с&nbsp;«своим лицом»;</li>
+                <li>проверку результата через playwright на&nbsp;нескольких устройствах.</li>
+            </ul>
+            <ul lang="en">
+                <li>publishing each project to GitHub Pages by a pattern;</li>
+                <li>aggregating links into a personal-faced portfolio;</li>
+                <li>multi-viewport verification through Playwright.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Дашборд бюджета на&nbsp;демо-данных с&nbsp;двуязычным README</span><span lang="en">Budget dashboard on demo data with a bilingual README</span></h3>
+            <p class="goal" lang="ru">Цель: публикация дашборда из&nbsp;этапа&nbsp;02&nbsp;&mdash; но&nbsp;на&nbsp;<em>демо-данных</em> (без&nbsp;вашей реальной выписки) и&nbsp;с&nbsp;качественным README. Цель&nbsp;&mdash; иметь публичный «showcase», который можно показать.</p>
+            <p class="goal" lang="en">Goal: publish the etape-02 dashboard — but on <em>demo data</em> (no real statement) and with a quality README. Aim — a public showcase to share.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте новую папку <code>budget-dashboard-demo</code>. Скопируйте туда <code>dashboard.html</code> и&nbsp;<code>CLAUDE.md</code> из&nbsp;<code>portfolio-journal</code>. Реальные данные не&nbsp;копируйте.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; сгенерируй data/operations.csv с 80 реалистичными
+&gt; инвестиционными операциями за 18 месяцев.
+&gt; шесть тикеров, buy/sell/dividend смешаны. фейковые имена,
+&gt; никаких персональных данных, чтобы можно было публиковать.</pre>
+                </li>
+                <li>Откройте dashboard локально. Убедитесь, что работает на&nbsp;демо-данных.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; составь CLAUDE.md и .gitignore.
+&gt; в .gitignore обязательно: .env, data/personal/, screenshots/.
+&gt; составь README.md, двуязычный (ru + en) с разделами:
+&gt;   — заголовок и одна строка о проекте;
+&gt;   — демо-ссылка (заглушка, обновлю после деплоя);
+&gt;   — что показывает дашборд (3-4 пункта);
+&gt;   — формат входных данных (схема CSV);
+&gt;   — disclaimer: "данные — синтетические, для демо";
+&gt;   — лицензия MIT.</pre>
+                </li>
+                <li>git init / commit / push на&nbsp;GitHub как публичный, включите Pages.</li>
+                <li>Замените заглушку демо-ссылки в&nbsp;README на&nbsp;настоящую, ещё раз закоммить.</li>
+                <li>Финальная ревизия через playwright + аудит:
+                    <pre class="shell">&gt; через playwright открой опубликованный дашборд.
+&gt; пройди три checks:
+&gt; — все ли числа отображаются;
+&gt; — на телефоне (390x844) ничего не сломано;
+&gt; — README на github.com/(...) рендерится корректно (через WebFetch).
+&gt; покажи вердикт.</pre>
+                </li>
+                <li>Поделитесь URL с&nbsp;другом и&nbsp;послушайте обратную связь.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create <code>budget-dashboard-demo</code>. Copy <code>dashboard.html</code> and <code>CLAUDE.md</code> from <code>portfolio-journal</code>. Don’t copy real data.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; generate data/operations.csv with 80 realistic
+&gt; investing operations across 18 months.
+&gt; six tickers, buy/sell/dividend mixed. fake names,
+&gt; no personal data, safe to publish.</pre>
+                </li>
+                <li>Open the dashboard locally. Confirm it works on demo data.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; draft CLAUDE.md and .gitignore.
+&gt; .gitignore must include: .env, data/personal/, screenshots/.
+&gt; draft README.md, bilingual (ru + en) with sections:
+&gt;   — title and one-liner;
+&gt;   — demo URL (placeholder, I'll update after deploy);
+&gt;   — what the dashboard shows (3-4 bullets);
+&gt;   — input data format (CSV schema);
+&gt;   — disclaimer: "data is synthetic, for demo";
+&gt;   — MIT licence.</pre>
+                </li>
+                <li>git init / commit / push as a public repo, enable Pages.</li>
+                <li>Replace the demo-URL placeholder in README with the real one, commit again.</li>
+                <li>Final Playwright audit:
+                    <pre class="shell">&gt; via playwright open the published dashboard.
+&gt; run three checks:
+&gt; — do all numbers render;
+&gt; — on a phone (390x844) nothing is broken;
+&gt; — README at github.com/(...) renders correctly (via WebFetch).
+&gt; give a verdict.</pre>
+                </li>
+                <li>Share the URL with a friend and listen to feedback.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>«фейковые данные для&nbsp;публичного demo»&nbsp;&mdash; типовой подход, когда исходные данные приватные;</li>
+                <li>двуязычный README со&nbsp;всеми разделами, по&nbsp;которым другие поймут проект за&nbsp;30 секунд;</li>
+                <li>цикл «публикация → проверка → правка README» в&nbsp;нескольких коммитах.</li>
+            </ul>
+            <ul lang="en">
+                <li>“synthetic data for a public demo” — the standard pattern when sources are private;</li>
+                <li>a bilingual README that lets others grasp the project in 30 seconds;</li>
+                <li>the “publish → verify → edit README” cycle in several commits.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши проекты</span><span lang="en">Same moves, your projects</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Опубликовать любой свой проект из&nbsp;этапов 03–04</span><span lang="en">Publish any project of yours from etapes 03–04</span></h3>
+            <p class="goal" lang="ru">Цель: пройти полный цикл «папка → GitHub Pages → README → live URL» для&nbsp;любого вашего проекта (трекер котировок, прогноз сбережений, симулятор пенсии, дайджест новостей).</p>
+            <p class="goal" lang="en">Goal: walk the full cycle “folder → GitHub Pages → README → live URL” for any of your projects (quotes tracker, savings forecast, retirement simulator, news digest).</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Если в&nbsp;проекте есть API-ключи&nbsp;&mdash; используйте «демо-режим»: сгенерированные данные вместо живых API. Иначе ключ утечёт.</li>
+                <li>README обязателен, двуязычный, с&nbsp;демо-ссылкой и&nbsp;скриншотом.</li>
+                <li>Через playwright проверьте на&nbsp;трёх viewport-ах после деплоя.</li>
+                <li>В&nbsp;финале&nbsp;&mdash; пришлите ссылку другу, попросите 30-секундное мнение.</li>
+            </ul>
+            <ul lang="en">
+                <li>If the project has API keys — use a “demo mode”: generated data instead of live APIs. Otherwise the key leaks.</li>
+                <li>README required, bilingual, with demo URL and a screenshot.</li>
+                <li>Verify three viewports after deploy via Playwright.</li>
+                <li>Finally — send the link to a friend, ask for a 30-second opinion.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>проект опубликован публично, есть рабочая ссылка вида <code>https://&lt;you&gt;.github.io/&lt;name&gt;/</code>;</li>
+                        <li>в&nbsp;репо есть <code>README.md</code> (двуязычный) и&nbsp;<code>.gitignore</code>;</li>
+                        <li>в&nbsp;коммитах нет ни&nbsp;одного API-ключа, пароля или личной выписки (проверьте через <code>git log -p | grep -iE "key|secret"</code>);</li>
+                        <li>README на&nbsp;странице репо рендерится с&nbsp;демо-ссылкой и&nbsp;скриншотом;</li>
+                        <li>через playwright проверены 1440, 768, 390 viewport;</li>
+                        <li>друг открыл ссылку с&nbsp;телефона&nbsp;&mdash; работает.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>the project is public with a working URL <code>https://&lt;you&gt;.github.io/&lt;name&gt;/</code>;</li>
+                        <li>the repo has bilingual <code>README.md</code> and <code>.gitignore</code>;</li>
+                        <li>no API keys, passwords or personal statements in any commit (check <code>git log -p | grep -iE "key|secret"</code>);</li>
+                        <li>README renders on the repo page with the demo URL and a screenshot;</li>
+                        <li>Playwright verified at 1440, 768, 390 viewports;</li>
+                        <li>a friend opened the link on a phone — it works.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Прогуляйся по&nbsp;моему репо как HR-специалист, оценивающий портфолио кандидата. За&nbsp;что бы&nbsp;ты&nbsp;похвалил, что зацепил&nbsp;бы как «зелёный флаг»? Что выглядит «совсем сыро» и&nbsp;стоит подтянуть?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Walk through my repo as an HR specialist scoring a candidate’s portfolio. What would you praise as a ‘green flag’? What looks ‘still raw’ and worth polishing?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Публичный «портфель ссылок» на&nbsp;все ваши работы</span><span lang="en">A public “link portfolio” to everything you’ve made</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A, но&nbsp;<em>с&nbsp;другим жанром</em>&nbsp;&mdash; не&nbsp;«авторская editorial-страница», а&nbsp;<em>каталог ссылок</em>: компактный, плотный, под&nbsp;один скролл, как «links.dev»-страницы. Для&nbsp;тех, кто предпочитает не&nbsp;«дизайн ради дизайна», а&nbsp;«дайте список с&nbsp;живыми ссылками».</p>
+            <p class="goal" lang="en">Goal: variation of A in a <em>different genre</em> — not an “authored editorial page,” but a <em>link directory</em>: compact, dense, single-scroll, like a “links.dev” page. For those who prefer “a list with live links” over “design-for-design.”</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Структура та&nbsp;же, что в&nbsp;A&nbsp;&mdash; репо, Pages, README. Меняется только дизайн.</li>
+                <li>В&nbsp;промпте укажите: «таблица или плотная сетка ссылок, без&nbsp;иллюстраций, как linktree но&nbsp;с&nbsp;характером».</li>
+                <li>Сгруппируйте ссылки: «финансовые проекты», «игры», «учебные», «эксперименты».</li>
+                <li>Используйте worktree, если хотите параллельно держать оба варианта (editorial + directory) на&nbsp;разных ветках.</li>
+                <li>На&nbsp;капстоуне сможете решить, какой вариант&nbsp;&mdash; ваш «личный сайт».</li>
+            </ul>
+            <ul lang="en">
+                <li>Same structure as A — repo, Pages, README. Only the design differs.</li>
+                <li>In the prompt: “table or dense link grid, no illustrations, like Linktree but with character.”</li>
+                <li>Group links: “financial projects,” “games,” “learning,” “experiments.”</li>
+                <li>Use a worktree if you want to keep both (editorial + directory) on different branches in parallel.</li>
+                <li>At the capstone you’ll decide which one is your “personal site.”</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть отдельный репо <code>links</code> со&nbsp;своим README;</li>
+                        <li>страница помещается в&nbsp;один скролл на&nbsp;десктопе и&nbsp;3–4 скролла на&nbsp;телефоне;</li>
+                        <li>ссылки сгруппированы (минимум 3&nbsp;группы);</li>
+                        <li>дизайн узнаваем, не&nbsp;стандартный bootstrap-шаблон;</li>
+                        <li>через playwright проведена ревизия на&nbsp;трёх viewport;</li>
+                        <li>попробовали worktree: либо альтернативная ветка с&nbsp;другим стилем, либо просто проба.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a separate <code>links</code> repo with its own README;</li>
+                        <li>fits one scroll on desktop, 3–4 on phone;</li>
+                        <li>links grouped (at least 3 groups);</li>
+                        <li>the design is distinctive, not a stock bootstrap template;</li>
+                        <li>three-viewport Playwright audit done;</li>
+                        <li>tried a worktree: an alternate-style branch, or simply a try.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Сравни мои два варианта (editorial из&nbsp;проекта&nbsp;A и&nbsp;directory из&nbsp;проекта&nbsp;D). Для&nbsp;каких ситуаций каждый лучше? Если бы&nbsp;ты&nbsp;вёл блог по&nbsp;ИИ&nbsp;&mdash; который выбрал&nbsp;бы как «главную страницу»? Почему?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Compare my two versions (editorial from A and directory from D). Which fits which situation? If you ran an AI blog — which would you pick as the ‘home page’? Why?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>Git</dt>
+            <dd>
+                <span lang="ru">Программа контроля версий. «Машина времени» для&nbsp;проекта&nbsp;&mdash; фиксирует каждое изменение, позволяет откатываться, разделять историю на&nbsp;ветки и&nbsp;делиться.</span>
+                <span lang="en">A version-control program. A “time machine” for a project — records every change, allows rollback, branches and sharing.</span>
+            </dd>
+
+            <dt><span lang="ru">Репозиторий</span><span lang="en">Repository</span></dt>
+            <dd>
+                <span lang="ru">Папка проекта, которую отслеживает git. Внутри&nbsp;&mdash; скрытая <code>.git</code> с&nbsp;историей всех изменений.</span>
+                <span lang="en">A project folder tracked by git. Inside — a hidden <code>.git</code> with the change history.</span>
+            </dd>
+
+            <dt><span lang="ru">Коммит</span><span lang="en">Commit</span></dt>
+            <dd>
+                <span lang="ru">«Фотография» проекта в&nbsp;момент сохранения. Имеет автора, дату и&nbsp;описание. Можно вернуться к&nbsp;любому коммиту в&nbsp;истории.</span>
+                <span lang="en">A “snapshot” of the project at save time. Has an author, date and message. You can return to any commit in history.</span>
+            </dd>
+
+            <dt><span lang="ru">Ветка</span><span lang="en">Branch</span></dt>
+            <dd>
+                <span lang="ru">Параллельная линия истории. Главная&nbsp;&mdash; <code>main</code>. На&nbsp;экспериментальные ветки делают рискованные изменения, потом сливают в&nbsp;main или отбрасывают.</span>
+                <span lang="en">A parallel history line. The main one — <code>main</code>. Risky edits live on experiment branches, then merge or get dropped.</span>
+            </dd>
+
+            <dt><span lang="ru">Удалённый (remote)</span><span lang="en">Remote</span></dt>
+            <dd>
+                <span lang="ru">Копия вашего репозитория на&nbsp;стороннем сервере (обычно GitHub). <code>git push</code> отправляет туда коммиты, <code>git pull</code> забирает изменения оттуда.</span>
+                <span lang="en">A copy of your repo on a third-party server (usually GitHub). <code>git push</code> sends commits, <code>git pull</code> fetches changes.</span>
+            </dd>
+
+            <dt>GitHub Pages</dt>
+            <dd>
+                <span lang="ru">Бесплатный хостинг от&nbsp;GitHub: загрузил HTML/CSS/JS в&nbsp;репозиторий, включил галочку&nbsp;&mdash; и&nbsp;сайт доступен по&nbsp;адресу <code>https://&lt;username&gt;.github.io/&lt;repo&gt;/</code>.</span>
+                <span lang="en">Free GitHub hosting: upload HTML/CSS/JS, flip a switch — your site is live at <code>https://&lt;username&gt;.github.io/&lt;repo&gt;/</code>.</span>
+            </dd>
+
+            <dt>README.md</dt>
+            <dd>
+                <span lang="ru">Главная «обложка» репозитория. Markdown-файл в&nbsp;корне. GitHub показывает его на&nbsp;странице репо. Туда&nbsp;&mdash; что это, как запустить, демо-ссылка, скриншоты, лицензия.</span>
+                <span lang="en">A repo’s “cover.” A markdown file at the root. GitHub renders it on the repo page. Put: what it is, how to run, demo URL, screenshots, licence.</span>
+            </dd>
+
+            <dt>.gitignore</dt>
+            <dd>
+                <span lang="ru">Файл со&nbsp;списком того, что git должен игнорировать: <code>.env</code>, секреты, кэши, временные файлы, <code>node_modules/</code>. Без&nbsp;него легко случайно опубликовать API-ключ.</span>
+                <span lang="en">A file listing what git should ignore: <code>.env</code>, secrets, caches, temp files, <code>node_modules/</code>. Without it, you easily leak an API key.</span>
+            </dd>
+
+            <dt>Worktree</dt>
+            <dd>
+                <span lang="ru">Изолированная копия репозитория в&nbsp;отдельной папке&nbsp;&mdash; для&nbsp;параллельной работы над несколькими ветками одновременно. Создаётся через <code>git worktree add</code>, удаляется через <code>git worktree remove</code>.</span>
+                <span lang="en">An isolated repo copy in a separate folder — for parallel work across several branches at once. Created via <code>git worktree add</code>, removed via <code>git worktree remove</code>.</span>
+            </dd>
+
+            <dt><span lang="ru">Форк</span><span lang="en">Fork</span></dt>
+            <dd>
+                <span lang="ru">Ваша личная копия чужого репозитория на&nbsp;GitHub. Делается одной кнопкой. Вы&nbsp;можете в&nbsp;ней что угодно&nbsp;&mdash; оригинал не&nbsp;трогается.</span>
+                <span lang="en">Your personal copy of someone else’s GitHub repo. One-click. You can do anything in yours — the original is untouched.</span>
+            </dd>
+
+            <dt>Pull Request (PR)</dt>
+            <dd>
+                <span lang="ru">Способ предложить владельцу другого репозитория ваши изменения. Сделали форк, поправили, послали PR&nbsp;&mdash; владелец смотрит, принимает или отклоняет.</span>
+                <span lang="en">A way to propose changes to another repo’s owner. You forked, edited, opened a PR — the owner reviews and accepts or rejects.</span>
+            </dd>
+
+            <dt>gh (GitHub CLI)</dt>
+            <dd>
+                <span lang="ru">Командная утилита от&nbsp;GitHub: создавать репозитории, делать PR, смотреть issues&nbsp;&mdash; всё из&nbsp;терминала. Claude использует <code>gh</code> для&nbsp;большинства действий с&nbsp;GitHub.</span>
+                <span lang="en">A command-line tool by GitHub: create repos, open PRs, browse issues — all from the terminal. Claude uses <code>gh</code> for most GitHub actions.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Чем коммит отличается от&nbsp;«сохранить» в&nbsp;Word?</span><span lang="en">How is a commit different from “save” in Word?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">«Сохранить» в&nbsp;Word перезаписывает файл&nbsp;&mdash; старая версия теряется. Коммит&nbsp;&mdash; «фотография» проекта в&nbsp;момент сохранения, со&nbsp;всеми файлами, автором, датой и&nbsp;описанием. Все коммиты остаются в&nbsp;истории, можно вернуться к&nbsp;любому.</p>
+                        <p lang="en">“Save” in Word overwrites the file — the old version is gone. A commit — a “snapshot” of the project at save time, with all files, author, date and message. Every commit stays in history; you can return to any.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Что точно нельзя коммитить в&nbsp;публичный репозиторий?</span><span lang="en">What must never be committed to a public repo?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">API-ключи, пароли, токены, дампы баз с&nbsp;личными данными, личные финансовые выписки, SSH-ключи. Всё это идёт в&nbsp;<code>.env</code> и&nbsp;<code>.gitignore</code>. Боты сканируют GitHub каждые несколько минут&nbsp;&mdash; утёкший ключ найдут за&nbsp;часы.</p>
+                        <p lang="en">API keys, passwords, tokens, DB dumps with personal data, personal financial statements, SSH keys. All those go to <code>.env</code> and <code>.gitignore</code>. Bots scan GitHub every minute — a leaked key is found in hours.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое GitHub Pages и&nbsp;для&nbsp;каких проектов он&nbsp;подходит?</span><span lang="en">What is GitHub Pages and which projects does it fit?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Бесплатный хостинг для&nbsp;статичных сайтов. Подходит: HTML/CSS/JS без&nbsp;серверной логики, портфолио, дашборды на&nbsp;CSV, лендинги, демо. Не&nbsp;подходит: проекты с&nbsp;серверным кодом, проекты, которые должны делать API-вызовы с&nbsp;секретным ключом (для&nbsp;них&nbsp;&mdash; Vercel/Railway, этап&nbsp;06).</p>
+                        <p lang="en">Free hosting for static sites. Fits: HTML/CSS/JS without server logic, portfolios, CSV dashboards, landings, demos. Doesn’t fit: projects with server code, ones that need to call APIs with a secret key (for those — Vercel/Railway, etape 06).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем нужен worktree, если есть обычный <code>git checkout</code>?</span><span lang="en">Why a worktree if normal <code>git checkout</code> exists?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Чтобы работать над двумя ветками <em>одновременно</em>, не&nbsp;переключаясь. Каждый worktree&nbsp;&mdash; своя папка. Не&nbsp;нужно прятать незакоммиченные изменения, не&nbsp;нужно ждать, пока всё закоммитится. Особенно полезно для&nbsp;subagents (этап&nbsp;07): агент работает в&nbsp;своей папке, не&nbsp;мешая вам.</p>
+                        <p lang="en">To work on two branches <em>at the same time</em>, no checkout dance. Each worktree — its own folder. No stashing uncommitted changes, no waiting to commit. Especially useful for subagents (etape 07): an agent works in its own folder without bothering you.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Что обязательно должно быть в&nbsp;хорошем README?</span><span lang="en">What must a good README contain?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Шесть пунктов: <strong>заголовок и&nbsp;строка о&nbsp;чём проект</strong>; <strong>демо-ссылка или скриншот</strong>; <strong>что это умеет (3–5 пунктов)</strong>; <strong>как запустить локально</strong>; <strong>откуда данные / какие нужны секреты</strong>; <strong>лицензия</strong>. Через 30 секунд чтения постороннему должно быть понятно, чем проект полезен.</p>
+                        <p lang="en">Six items: <strong>title and a one-liner</strong>; <strong>demo URL or screenshot</strong>; <strong>what it does (3–5 bullets)</strong>; <strong>how to run locally</strong>; <strong>data source / required secrets</strong>; <strong>licence</strong>. In 30 seconds a stranger should grasp what the project is good for.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Что делать, если случайно опубликовали API-ключ в&nbsp;публичный репо?</span><span lang="en">What to do if you accidentally pushed an API key to a public repo?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Сразу&nbsp;&mdash; <strong>отозвать ключ</strong> через сервис, выпустивший его. Поменять пароль если ключ был связан. Только потом думать про «удалить из&nbsp;истории git» (это сложнее, чем кажется&nbsp;&mdash; даже после <code>git rebase</code> копии могут остаться у&nbsp;ботов, скачавших ключ за&nbsp;первые минуты).</p>
+                        <p lang="en">First — <strong>revoke the key</strong> at its issuing service. Change the related password. Only then think “remove from git history” (harder than it looks — even after <code>git rebase</code>, bots that grabbed the key in the first minutes have copies).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Какой минимум команд git нужно <em>понимать</em> (даже если их&nbsp;запускает Claude)?</span><span lang="en">Which minimal git commands should you <em>understand</em> (even if Claude runs them)?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>git init</code> (создать репо), <code>git add</code> (добавить в&nbsp;индекс), <code>git commit</code> (зафиксировать как коммит), <code>git push</code> (отправить на&nbsp;удалённый), <code>git pull</code> (забрать изменения), <code>git status</code> (что сейчас), <code>git log</code> (история), <code>git branch</code> (ветки), <code>git checkout</code> (переключиться).</p>
+                        <p lang="en"><code>git init</code> (create repo), <code>git add</code> (stage), <code>git commit</code> (record commit), <code>git push</code> (send to remote), <code>git pull</code> (fetch), <code>git status</code> (current state), <code>git log</code> (history), <code>git branch</code> (branches), <code>git checkout</code> (switch).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e5-git-installed">
+                <span lang="ru">Установлен git и&nbsp;есть аккаунт GitHub; <code>gh auth status</code> показывает мой логин.</span>
+                <span lang="en">git installed and a GitHub account; <code>gh auth status</code> shows my login.</span>
+            </li>
+            <li data-key="e5-git-concepts">
+                <span lang="ru">Понимаю: репозиторий, коммит, ветка, удалённый, push/pull, merge.</span>
+                <span lang="en">I understand: repository, commit, branch, remote, push/pull, merge.</span>
+            </li>
+            <li data-key="e5-pages">
+                <span lang="ru">Опубликовал хотя&nbsp;бы один проект на&nbsp;GitHub Pages с&nbsp;живой ссылкой.</span>
+                <span lang="en">I published at least one project to GitHub Pages with a live URL.</span>
+            </li>
+            <li data-key="e5-readme">
+                <span lang="ru">Пишу хороший README (двуязычный, с&nbsp;демо-ссылкой и&nbsp;6 разделами).</span>
+                <span lang="en">I write a good README (bilingual, demo link, six sections).</span>
+            </li>
+            <li data-key="e5-secrets">
+                <span lang="ru">Знаю, что НЕ&nbsp;идёт в&nbsp;git (<code>.env</code>, ключи, личные данные); защищаюсь через <code>.gitignore</code>.</span>
+                <span lang="en">I know what does NOT go to git (<code>.env</code>, keys, personal data); I defend with <code>.gitignore</code>.</span>
+            </li>
+            <li data-key="e5-worktree">
+                <span lang="ru">Попробовал worktree для&nbsp;параллельной работы над двумя ветками.</span>
+                <span lang="en">Tried worktree for parallel work on two branches.</span>
+            </li>
+            <li data-key="e5-delivery">
+                <span lang="ru">Сделал четыре проекта: GitHub-портфолио (editorial), демо-дашборд бюджета, опубликовал свой проект из&nbsp;этапов 03–04, портфель ссылок.</span>
+                <span lang="en">Built four projects: editorial GitHub portfolio, demo budget dashboard, published a project from etapes 03–04, link portfolio.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-05" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-04.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">04 · Plan Mode, спецификации</span><span lang="en">04 · Plan Mode, Specs</span></span>
+            </a>
+            <a class="next" href="etap-06.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">06 · Полноценные веб-приложения и&nbsp;деплой</span><span lang="en">06 · Full Web Applications &amp; Deployment</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Проект, который не&nbsp;опубликован&nbsp;&mdash; всё равно что не&nbsp;сделан. Опубликованный&nbsp;&mdash; работает на&nbsp;вас, даже когда вы&nbsp;спите».</p>
+            <p class="signature" lang="en">“A project not published is as good as not made. A published one works for you while you sleep.”</p>
+            <p lang="ru">Этап&nbsp;05 пройден&nbsp;&mdash; ваши работы получили живые ссылки. Дальше учим Claude собирать полные веб-приложения с&nbsp;серверами, базами и&nbsp;авторизацией.</p>
+            <p lang="en">Etape 05 done — your work has live URLs. Next we teach Claude to assemble full web applications with servers, databases and auth.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-04.html"><span lang="ru">← Этап&nbsp;04</span><span lang="en">← Etape 04</span></a></li>
+                <li><a href="etap-06.html"><span lang="ru">→ Этап&nbsp;06</span><span lang="en">→ Etape 06</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

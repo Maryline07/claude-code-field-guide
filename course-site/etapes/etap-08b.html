@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 08b · AI Tax Assistant USA — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 08b курса по Claude Code: капстоун-внутри-курса. Парсинг первички (W-2, 1099, 1098), расчёт AGI/deductions/credits, заполнение fillable PDF Form 1040, отчёт-сопровождение.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проект</span><span lang="en">project</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="08">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 08b · большой проект</span><span lang="en">Etape 08b · major project</span></span> &nbsp;·&nbsp; <span lang="ru">AI Tax Assistant USA</span><span lang="en">AI Tax Assistant USA</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Form&nbsp;1040 <em>под&nbsp;ключ</em>.</span>
+            <span lang="en">Form&nbsp;1040, <em>turnkey</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Капстоун-внутри-курса. Кладёте папку с&nbsp;первичными документами&nbsp;&mdash; W-2, 1099-INT, 1099-DIV, 1099-B, 1098, 5498. Получаете заполненный fillable&nbsp;PDF <em>Form&nbsp;1040</em>, отчёт-сопровождение и&nbsp;аудит-лог. На&nbsp;этом проекте сходятся все навыки курса: spec, subagents, Claude API, dirty data parsing.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            A capstone within the course. You drop in a folder of primary docs — W-2, 1099-INT, 1099-DIV, 1099-B, 1098, 5498. You get a filled fillable&nbsp;PDF <em>Form&nbsp;1040</em>, an audit memo and an audit log. Every course skill converges here: spec, subagents, Claude API, dirty-data parsing.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">10–14 дней · 2–4&nbsp;ч/день</span><span lang="en">10–14 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">парсинг PDF · многошаговая логика · fillable PDF · аудит</span><span lang="en">PDF parsing · multi-step logic · fillable PDF · audit</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">черновик 1040 за&nbsp;один промпт</span><span lang="en">a 1040 draft from one prompt</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">filled-1040.pdf + memo.md + audit.log&nbsp;+ web-обёртка</span><span lang="en">filled-1040.pdf + memo.md + audit.log + web wrapper</span></dd>
+            </div>
+        </dl>
+
+        <div class="note" style="margin-top:2rem;">
+            <strong lang="ru">⚠ Дисклеймер.</strong>
+            <strong lang="en">⚠ Disclaimer.</strong>
+            <span lang="ru">Этот проект&nbsp;&mdash; <em>учебный черновик</em> декларации, не&nbsp;замена сертифицированному налоговому консультанту (CPA). Не&nbsp;подавайте результат в&nbsp;IRS без&nbsp;живой проверки специалиста. Цель проекта&nbsp;&mdash; научиться собирать сложные пайплайны на&nbsp;Claude Code, а&nbsp;не&nbsp;экономить на&nbsp;бухгалтере.</span>
+            <span lang="en">This project is an <em>educational draft</em> of a return, not a substitute for a Certified Public Accountant (CPA). Do not file the result with the IRS without a professional review. The point is to learn to build complex pipelines on Claude Code, not to skip on tax help.</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что нужно для&nbsp;капстоуна</span><span lang="en">What you need for the capstone</span></h2>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · skill</span><span lang="en">required · skill</span></span>
+            <h3>pdf</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill от&nbsp;Anthropic для&nbsp;работы с&nbsp;PDF: чтение текста и&nbsp;таблиц, извлечение значений из&nbsp;форм, заполнение fillable PDF, OCR для&nbsp;сканов.<br>
+            <strong>Зачем сейчас:</strong> весь капстоун стоит на&nbsp;нём&nbsp;&mdash; парсим первичку и&nbsp;заполняем Form&nbsp;1040.<br>
+            <strong>Проверить:</strong> <code>/skills</code>&nbsp;&mdash; <code>pdf</code> в&nbsp;списке. Если ставили в&nbsp;этапе&nbsp;03 (или в&nbsp;самом начале сессии)&nbsp;&mdash; уже на&nbsp;месте.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> an Anthropic skill for PDFs: read text and tables, extract form values, fill fillable PDFs, OCR for scans.<br>
+            <strong>Why now:</strong> the whole capstone rides on it — parse primary docs and fill Form 1040.<br>
+            <strong>Check:</strong> <code>/skills</code> — <code>pdf</code> in the list. If installed on etape 03 (or earlier) — you’re set.</p>
+            <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest skill add anthropics/pdf --agent claude-code</pre>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · файлы</span><span lang="en">required · files</span></span>
+            <h3><span lang="ru">Form&nbsp;1040 — fillable PDF от&nbsp;IRS</span><span lang="en">Form&nbsp;1040 — fillable PDF from the IRS</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> официальная форма 1040 за&nbsp;текущий tax year, в&nbsp;виде fillable PDF (с&nbsp;именованными полями).<br>
+            <strong>Зачем сейчас:</strong> Claude через skill <code>pdf</code> прочитает структуру полей и&nbsp;заполнит их&nbsp;значениями.<br>
+            <strong>Где взять:</strong> <a href="https://www.irs.gov/forms-instructions">irs.gov/forms-instructions</a>&nbsp;&mdash; ищем «Form 1040» за&nbsp;нужный год, скачиваем fillable-вариант.<br>
+            <strong>Куда:</strong> <code>tax-assistant/forms/Form-1040.pdf</code>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the official 1040 for the current tax year, as a fillable PDF (named fields).<br>
+            <strong>Why now:</strong> via the <code>pdf</code> skill Claude reads the field map and fills it with computed values.<br>
+            <strong>Where:</strong> <a href="https://www.irs.gov/forms-instructions">irs.gov/forms-instructions</a> — look up “Form 1040” for the year, grab the fillable.<br>
+            <strong>Place:</strong> <code>tax-assistant/forms/Form-1040.pdf</code>.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · данные</span><span lang="en">required · data</span></span>
+            <h3><span lang="ru">Папка с&nbsp;первичкой (вашей или тестовой)</span><span lang="en">A folder of primary docs (yours or test)</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> ваши <em>или</em> сгенерированные тестовые W-2, 1099-INT, 1099-DIV, 1099-B, 1098 и&nbsp;т.&nbsp;п.<br>
+            <strong>Зачем:</strong> на&nbsp;них Claude собирает декларацию.<br>
+            <strong>Как сделать тестовые:</strong> попросите Claude в&nbsp;первой фазе&nbsp;&mdash; ниже в&nbsp;§&nbsp;III шаг 2.<br>
+            <strong>Структура папки:</strong></p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> your <em>or</em> generated test W-2, 1099-INT, 1099-DIV, 1099-B, 1098, etc.<br>
+            <strong>Why:</strong> Claude builds the return on them.<br>
+            <strong>How to generate test files:</strong> ask Claude in phase one — see § III step 2.<br>
+            <strong>Folder structure:</strong></p>
+            <pre class="shell">tax-assistant/
+├── forms/
+│   └── Form-1040.pdf            <span class="cmt"># <span lang="ru">пустая, fillable</span><span lang="en">empty, fillable</span></span>
+├── inputs/
+│   ├── W-2_Acme.pdf
+│   ├── 1099-INT_Bank.pdf
+│   ├── 1099-DIV_Broker.pdf
+│   ├── 1099-B_Broker.pdf
+│   └── 1098_Mortgage.pdf
+├── outputs/                     <span class="cmt"># <span lang="ru">сюда сохраняем результат</span><span lang="en">results land here</span></span>
+└── CLAUDE.md</pre>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3>claude-api + ANTHROPIC_API_KEY</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill из&nbsp;этапа&nbsp;06 + ваш API-ключ для&nbsp;AI-проверки.<br>
+            <strong>Зачем сейчас:</strong> для&nbsp;«red-team»-аудита: после черновика декларации запустим subagent, который через Claude API оценит риски и&nbsp;найдёт пропуски.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the etape-06 skill + your API key, for an AI sanity-check.<br>
+            <strong>Why now:</strong> for the “red team” audit — after the draft return we spawn a subagent that, through the Claude API, scores risks and surfaces missed items.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3>superpowers (writing-plans, executing-plans, verification-before-completion)</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;">Капстоун&nbsp;&mdash; задача из&nbsp;этапа&nbsp;04 (большая, многофазная). Все три skill значительно дисциплинируют процесс.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;">The capstone is an etape-04-class task (large, multi-phase). All three skills discipline the process significantly.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Минимум, который нужно понимать про&nbsp;1040</span><span lang="en">Minimum to understand about a 1040</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Это <em>не</em> учебник по&nbsp;налогам&nbsp;США. Здесь только то, что нужно, чтобы осмысленно говорить с&nbsp;Claude и&nbsp;понимать его шаги. Если вы&nbsp;уже знаете эти темы&nbsp;&mdash; пропускайте.</p>
+        <p class="reading" lang="en">This is <em>not</em> a US tax textbook. Just enough to talk to Claude meaningfully and follow its steps. Skip if you already know.</p>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Что такое Form&nbsp;1040 и&nbsp;как «течёт» декларация</span><span lang="en">What Form 1040 is and how a return “flows”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Form&nbsp;1040&nbsp;&mdash; основная индивидуальная налоговая декларация в&nbsp;США. Логика «сверху вниз»:</p>
+                    <ol>
+                        <li><dfn class="term" tabindex="0" data-def="Total Income — общий валовый доход за год до вычетов: зарплата, проценты, дивиденды, продажа активов и т.д.">Total income</dfn>: суммарно весь доход за&nbsp;год.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Adjustments — корректировки «над линией»: взносы на пенсию, проценты по студенческим займам и т.д. Уменьшают gross до AGI.">Adjustments</dfn> («над&nbsp;линией»): взносы на&nbsp;пенсию (IRA), проценты по&nbsp;студенческим займам и&nbsp;др.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Adjusted Gross Income — Total Income минус Adjustments. Ключевая величина — от неё считаются многие лимиты и пороги.">AGI</dfn>: <em>Adjusted Gross Income</em>. Total Income минус Adjustments.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Deductions — стандартный или постатейный вычет «ниже линии». Вычитается из AGI, чтобы получить Taxable Income.">Deductions</dfn>: <em>standard</em> (для&nbsp;большинства) или <em>itemized</em> (если суммы по&nbsp;статьям больше стандарта).</li>
+                        <li><dfn class="term" tabindex="0" data-def="Taxable Income — AGI минус Deductions. На него начисляется налог по tax brackets.">Taxable income</dfn>: AGI минус Deductions.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Tax — налог по прогрессивной шкале (tax brackets) от taxable income. Каждый «slab» облагается своей ставкой.">Tax</dfn>: считается по&nbsp;прогрессивной шкале (tax brackets).</li>
+                        <li><dfn class="term" tabindex="0" data-def="Credits — налоговые кредиты, прямо уменьшают tax. Бывают refundable (могут давать возврат) и non-refundable. Например, Child Tax Credit, EITC, Saver’s Credit.">Credits</dfn>: вычеты <em>из</em> налога (Child Tax Credit, EITC, Saver’s Credit).</li>
+                        <li><strong>Total Tax</strong>: финальная сумма.</li>
+                        <li><strong>Payments</strong>: что вы&nbsp;уже заплатили (withholding из&nbsp;W-2, estimated payments).</li>
+                        <li><strong>Refund</strong> или <strong>Amount Owed</strong>: разница между Total Tax и&nbsp;Payments.</li>
+                    </ol>
+                    <p>Каждый шаг&nbsp;&mdash; одна или несколько строк в&nbsp;Form&nbsp;1040. Наша задача&nbsp;&mdash; собрать значения из&nbsp;первички, провести через эту логику и&nbsp;вписать в&nbsp;нужные поля&nbsp;PDF.</p>
+                </div>
+                <div lang="en">
+                    <p>Form 1040 is the main US individual return. Top-to-bottom flow:</p>
+                    <ol>
+                        <li><dfn class="term" tabindex="0" data-def="Total Income — yearly gross income before deductions: wages, interest, dividends, asset sales, etc.">Total income</dfn>: all income for the year.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Adjustments — “above the line” corrections: retirement contributions, student-loan interest, etc. Reduce gross to AGI.">Adjustments</dfn> (“above the line”): IRA contributions, student-loan interest, others.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Adjusted Gross Income — Total Income minus Adjustments. The key number — many thresholds and limits depend on it.">AGI</dfn>: Adjusted Gross Income. Total Income minus Adjustments.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Deductions — standard or itemized “below the line.” Subtracted from AGI to reach Taxable Income.">Deductions</dfn>: <em>standard</em> (most filers) or <em>itemized</em> (if your itemised sum exceeds the standard).</li>
+                        <li><dfn class="term" tabindex="0" data-def="Taxable Income — AGI minus Deductions. Tax is computed against this via brackets.">Taxable income</dfn>: AGI minus Deductions.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Tax — progressive (tax brackets) on taxable income. Each slab taxed at its own rate.">Tax</dfn>: computed via progressive brackets.</li>
+                        <li><dfn class="term" tabindex="0" data-def="Credits — direct reductions to tax. Refundable (can yield a refund) and non-refundable. E.g., Child Tax Credit, EITC, Saver’s Credit.">Credits</dfn>: subtractions <em>from</em> tax (Child Tax Credit, EITC, Saver’s Credit).</li>
+                        <li><strong>Total Tax</strong>: the final figure.</li>
+                        <li><strong>Payments</strong>: what you already paid (W-2 withholding, estimated payments).</li>
+                        <li><strong>Refund</strong> or <strong>Amount Owed</strong>: difference between Total Tax and Payments.</li>
+                    </ol>
+                    <p>Each step is one or several lines on Form 1040. Our task — collect values from the primary docs, run them through this flow, write them into the right PDF fields.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Главные первичные документы</span><span lang="en">Main primary documents</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Что мы&nbsp;парсим:</p>
+                    <ul>
+                        <li><strong>W-2</strong>&nbsp;&mdash; от&nbsp;работодателя. Зарплата, withholding, contributions в&nbsp;401(k). Главные поля: 1 (wages), 2 (federal tax withheld), 3–6 (social security и&nbsp;medicare), 12 (codes для&nbsp;401k и&nbsp;т.&nbsp;п.).</li>
+                        <li><strong>1099-INT</strong>&nbsp;&mdash; проценты от&nbsp;банков. Box&nbsp;1 (interest income), box&nbsp;3 (US Treasury interest), box&nbsp;4 (federal tax withheld).</li>
+                        <li><strong>1099-DIV</strong>&nbsp;&mdash; дивиденды от&nbsp;брокеров. Box&nbsp;1a (ordinary dividends), 1b (qualified), 2a (capital gain distributions).</li>
+                        <li><strong>1099-B</strong>&nbsp;&mdash; продажи активов. Каждая сделка: дата покупки, дата продажи, basis, proceeds. На&nbsp;этом считается capital gains.</li>
+                        <li><strong>1098</strong>&nbsp;&mdash; проценты по&nbsp;ипотеке (для&nbsp;itemized deduction).</li>
+                        <li><strong>5498</strong>&nbsp;&mdash; взносы в&nbsp;IRA (для&nbsp;adjustments).</li>
+                        <li><strong>SSA-1099</strong>&nbsp;&mdash; social security benefits.</li>
+                        <li><strong>1095-A</strong>&nbsp;&mdash; маркетплейс медицинской страховки (если получали Premium Tax Credit).</li>
+                    </ul>
+                    <p>Skill <code>pdf</code> умеет извлекать значения из&nbsp;каждой формы. Если у&nbsp;скана плохое качество&nbsp;&mdash; сначала OCR (skill также умеет).</p>
+                </div>
+                <div lang="en">
+                    <p>What we parse:</p>
+                    <ul>
+                        <li><strong>W-2</strong> — from your employer. Wages, withholding, 401(k) contributions. Key fields: 1 (wages), 2 (federal tax withheld), 3–6 (social security and medicare), 12 (codes for 401k etc.).</li>
+                        <li><strong>1099-INT</strong> — interest from banks. Box 1 (interest income), box 3 (US Treasury interest), box 4 (federal tax withheld).</li>
+                        <li><strong>1099-DIV</strong> — dividends from brokers. Box 1a (ordinary), 1b (qualified), 2a (capital gain distributions).</li>
+                        <li><strong>1099-B</strong> — asset sales. Each trade: acquisition date, sale date, basis, proceeds. Drives capital gains.</li>
+                        <li><strong>1098</strong> — mortgage interest (for itemized deduction).</li>
+                        <li><strong>5498</strong> — IRA contributions (for adjustments).</li>
+                        <li><strong>SSA-1099</strong> — Social Security benefits.</li>
+                        <li><strong>1095-A</strong> — health-insurance marketplace (if you received the Premium Tax Credit).</li>
+                    </ul>
+                    <p>The <code>pdf</code> skill extracts values from each. Poor scan quality? OCR first (the skill does that too).</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Standard vs itemized deductions: которое выгоднее</span><span lang="en">Standard vs itemized: which to take</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Главная развилка декларации:</p>
+                    <ul>
+                        <li><strong>Standard deduction</strong>&nbsp;&mdash; фиксированная сумма, зависит от&nbsp;filing&nbsp;status (single, MFJ, MFS, HoH, QW). Каждый год меняется по&nbsp;инфляции.</li>
+                        <li><strong>Itemized deduction</strong>&nbsp;&mdash; сумма по&nbsp;статьям: проценты по&nbsp;ипотеке, charitable donations, налоги штата (SALT с&nbsp;cap $10k), медицина выше 7.5% AGI.</li>
+                    </ul>
+                    <p>Берём <em>больший из&nbsp;двух</em>. Большинство берёт standard&nbsp;&mdash; itemized оправдан, когда есть крупные mortgage payments или большие пожертвования.</p>
+                    <p>Логика для&nbsp;Claude: считаем обе суммы, сравниваем, выбираем большую, фиксируем выбор в&nbsp;<code>memo.md</code>:</p>
+                    <pre class="shell">## Deductions
+- Standard: $14,600 (Single 2024)
+- Itemized:
+  - Mortgage interest (1098): $9,200
+  - Charitable: $1,500
+  - SALT (capped): $10,000
+  - Total itemized: $20,700
+→ Выбран itemized ($20,700 &gt; $14,600).</pre>
+                </div>
+                <div lang="en">
+                    <p>The big fork:</p>
+                    <ul>
+                        <li><strong>Standard deduction</strong> — a fixed amount, depends on filing status (single, MFJ, MFS, HoH, QW). Inflation-adjusted yearly.</li>
+                        <li><strong>Itemized deduction</strong> — sum of items: mortgage interest, charitable donations, state taxes (SALT capped at $10k), medical expenses above 7.5% of AGI.</li>
+                    </ul>
+                    <p>Take the <em>larger of the two</em>. Most filers go standard — itemized pays off with big mortgage payments or large donations.</p>
+                    <p>Claude’s logic: compute both, compare, pick the larger, record the choice in <code>memo.md</code>:</p>
+                    <pre class="shell">## Deductions
+- Standard: $14,600 (Single 2024)
+- Itemized:
+  - Mortgage interest (1098): $9,200
+  - Charitable: $1,500
+  - SALT (capped): $10,000
+  - Total itemized: $20,700
+→ Chose itemized ($20,700 &gt; $14,600).</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Tax brackets и&nbsp;как их&nbsp;применять</span><span lang="en">Tax brackets and how to apply them</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Налог в&nbsp;США <em>прогрессивный</em>: разные «куски» дохода облагаются разными ставками.</p>
+                    <p>Пример (Single, 2024):</p>
+                    <ul>
+                        <li>0–11,600 → 10%</li>
+                        <li>11,600–47,150 → 12%</li>
+                        <li>47,150–100,525 → 22%</li>
+                        <li>100,525–191,950 → 24%</li>
+                        <li>и&nbsp;т.&nbsp;д.</li>
+                    </ul>
+                    <p>Если taxable income $80,000:</p>
+                    <pre class="shell">tax = 11,600 * 0.10            = 1,160
+    + (47,150 - 11,600) * 0.12 = 4,266
+    + (80,000 - 47,150) * 0.22 = 7,227
+total                          = 12,653</pre>
+                    <p>Claude через context7 подтянет актуальные tax brackets за&nbsp;нужный год (они меняются ежегодно). Сам расчёт&nbsp;&mdash; одна функция в&nbsp;Python, которую Claude напишет за&nbsp;30 секунд.</p>
+                    <p>Capital gains (от&nbsp;1099-B) считаются <em>отдельной шкалой</em>&nbsp;&mdash; long-term (актив держался больше года) льготнее обычного дохода. Учтите это в&nbsp;логике.</p>
+                </div>
+                <div lang="en">
+                    <p>US tax is <em>progressive</em>: different income “slabs” are taxed at different rates.</p>
+                    <p>Example (Single, 2024):</p>
+                    <ul>
+                        <li>0–11,600 → 10%</li>
+                        <li>11,600–47,150 → 12%</li>
+                        <li>47,150–100,525 → 22%</li>
+                        <li>100,525–191,950 → 24%</li>
+                        <li>and so on.</li>
+                    </ul>
+                    <p>If taxable income is $80,000:</p>
+                    <pre class="shell">tax = 11,600 * 0.10            = 1,160
+    + (47,150 - 11,600) * 0.12 = 4,266
+    + (80,000 - 47,150) * 0.22 = 7,227
+total                          = 12,653</pre>
+                    <p>Claude pulls current brackets via context7 for the right year (they change yearly). The math is one Python function Claude writes in 30 seconds.</p>
+                    <p>Capital gains (from 1099-B) use a <em>separate schedule</em> — long-term (held over a year) is taxed more favourably than ordinary. Bake that into the logic.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Fillable PDF: как Claude заполняет именованные поля</span><span lang="en">Fillable PDF: how Claude fills named fields</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Form&nbsp;1040 от&nbsp;IRS&nbsp;&mdash; «<dfn class="term" tabindex="0" data-def="PDF с интерактивными полями: текстовыми, чекбоксами, выпадающими списками. У каждого поля есть имя; можно программно заполнить.">fillable PDF</dfn>», у&nbsp;каждого поля есть имя (например, <code>f1_03</code> = Wages, salaries; <code>c1_01</code> = checkbox Single и&nbsp;т.&nbsp;п.).</p>
+                    <p>Skill <code>pdf</code> делает три вещи:</p>
+                    <ol>
+                        <li><strong>Анализирует структуру</strong>&nbsp;&mdash; <code>extract_form_field_info.py</code> возвращает список всех полей с&nbsp;именами и&nbsp;координатами.</li>
+                        <li><strong>Строит «карту»</strong>&nbsp;&mdash; mapping «человеческое имя» → «техническое имя поля». Эту карту Claude хранит в&nbsp;<code>field-map.json</code>, чтобы при следующих годах не&nbsp;строить заново.</li>
+                        <li><strong>Заполняет</strong>&nbsp;&mdash; <code>fill_pdf_form_with_annotations.py</code> подставляет значения и&nbsp;сохраняет.</li>
+                    </ol>
+                    <p>Workflow:</p>
+                    <pre class="shell">forms/Form-1040.pdf  (пустая)
+        ↓ extract_form_field_info.py
+field-map.json
+        ↓ + values из вашей логики
+filled-1040.pdf      (заполненная)</pre>
+                    <p>Skill также умеет добавлять «аннотации»&nbsp;&mdash; пометки рядом с&nbsp;каждым заполненным полем «откуда взято значение». Полезно для&nbsp;аудита: открываешь PDF и&nbsp;видишь «строка 1 = $52,400, источник: W-2 Acme box 1».</p>
+                </div>
+                <div lang="en">
+                    <p>The IRS Form 1040 is a “<dfn class="term" tabindex="0" data-def="A PDF with interactive fields: text, checkboxes, dropdowns. Each field has a name; you can fill them programmatically.">fillable PDF</dfn>” — every field has a name (e.g. <code>f1_03</code> = Wages, salaries; <code>c1_01</code> = Single checkbox).</p>
+                    <p>The <code>pdf</code> skill does three things:</p>
+                    <ol>
+                        <li><strong>Analyses structure</strong> — <code>extract_form_field_info.py</code> returns the list of fields with names and coordinates.</li>
+                        <li><strong>Builds a “map”</strong> — “human name” → “technical field name.” Claude stores it in <code>field-map.json</code> so future years don’t re-do the work.</li>
+                        <li><strong>Fills</strong> — <code>fill_pdf_form_with_annotations.py</code> writes values and saves.</li>
+                    </ol>
+                    <p>Workflow:</p>
+                    <pre class="shell">forms/Form-1040.pdf  (empty)
+        ↓ extract_form_field_info.py
+field-map.json
+        ↓ + values from your logic
+filled-1040.pdf      (filled)</pre>
+                    <p>The skill can also add “annotations” — notes next to each filled field saying “source.” Useful for audit: open the PDF and see “line 1 = $52,400, source: W-2 Acme box 1.”</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Что мы&nbsp;<em>НЕ</em> делаем (важные ограничения)</span><span lang="en">What we <em>do not</em> do (key limits)</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Этот проект сознательно не&nbsp;покрывает:</p>
+                    <ul>
+                        <li><strong>State taxes</strong>&nbsp;&mdash; декларации штатов (CA-540, NY-IT-201 и&nbsp;т.&nbsp;п.). Только федеральная.</li>
+                        <li><strong>Schedule C / Self-employment</strong>&nbsp;&mdash; своё дело, фриланс. Только W-2 employee + investment income.</li>
+                        <li><strong>Sale of primary residence</strong>&nbsp;&mdash; продажа дома (Form 8949 / Schedule D в&nbsp;сложном виде).</li>
+                        <li><strong>Foreign income</strong>&nbsp;&mdash; иностранный доход и&nbsp;FBAR.</li>
+                        <li><strong>Audit defence</strong>&nbsp;&mdash; ответы на&nbsp;запросы IRS. Это работа CPA.</li>
+                        <li><strong>Filing</strong>&nbsp;&mdash; <em>отправка</em> декларации. Мы&nbsp;делаем только черновик.</li>
+                    </ul>
+                    <p>Эти ограничения нужно явно зафиксировать в&nbsp;<code>CLAUDE.md</code> и&nbsp;в&nbsp;<code>memo.md</code>: в&nbsp;конце&nbsp;&mdash; раздел <em>«что не&nbsp;покрыто»</em>, чтобы&nbsp;CPA, к&nbsp;которому вы&nbsp;принесёте черновик, сразу видел границы.</p>
+                </div>
+                <div lang="en">
+                    <p>This project deliberately doesn’t cover:</p>
+                    <ul>
+                        <li><strong>State taxes</strong> — state returns (CA-540, NY-IT-201, etc.). Federal only.</li>
+                        <li><strong>Schedule C / Self-employment</strong> — own business, freelance. W-2 employees + investment income only.</li>
+                        <li><strong>Sale of primary residence</strong> — home sale (complex Form 8949 / Schedule D).</li>
+                        <li><strong>Foreign income</strong> — foreign income and FBAR.</li>
+                        <li><strong>Audit defence</strong> — replies to IRS notices. CPA territory.</li>
+                        <li><strong>Filing</strong> — actually <em>submitting</em> the return. We produce a draft only.</li>
+                    </ul>
+                    <p>These limits must be recorded in <code>CLAUDE.md</code> and in the final <code>memo.md</code> — in a closing <em>“out of scope”</em> section, so the CPA you hand the draft to sees the boundary at a glance.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Большой проект</span><span lang="en">Major project</span></span>
+            <h2><span lang="ru">AI Tax Assistant&nbsp;&mdash; в&nbsp;десяти фазах</span><span lang="en">AI Tax Assistant — in ten phases</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Это&nbsp;&mdash; единственный проект этапа, но&nbsp;большой и&nbsp;многофазный. Делаем строго через дисциплину этапа&nbsp;04: spec → Plan Mode → TodoWrite → verification, с&nbsp;<code>/compact</code> между фазами.</p>
+        <p class="reading" lang="en">A single but large multi-phase project. We work strictly under the etape-04 discipline: spec → Plan Mode → TodoWrite → verification, with <code>/compact</code> between phases.</p>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Большой проект · по&nbsp;инструкции</span><span lang="en">Major project · guided</span></span>
+            <h3><span lang="ru">AI Tax Assistant&nbsp;USA</span><span lang="en">AI Tax Assistant USA</span></h3>
+            <p class="goal" lang="ru">Цель: на&nbsp;входе&nbsp;&mdash; папка <code>inputs/</code> с&nbsp;первичкой и&nbsp;<code>forms/Form-1040.pdf</code>. На&nbsp;выходе&nbsp;&mdash; <code>outputs/filled-1040.pdf</code> (заполненная декларация), <code>outputs/memo.md</code> (отчёт-сопровождение для&nbsp;CPA), <code>outputs/audit.log</code> (полный лог решений).</p>
+            <p class="goal" lang="en">Goal: input — an <code>inputs/</code> folder of primary docs plus <code>forms/Form-1040.pdf</code>. Output — <code>outputs/filled-1040.pdf</code> (the return), <code>outputs/memo.md</code> (a memo for the CPA), <code>outputs/audit.log</code> (the full decision log).</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Десять фаз</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Ten phases</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Spec и&nbsp;CLAUDE.md.</strong> Войдите в&nbsp;Plan Mode. Через <code>superpowers:writing-plans</code> попросите Claude составить <code>spec.md</code>: цели, входы, выходы, фазы, критерии готовности, что вне scope. Зафиксируйте filing status, год декларации, ваш CLAUDE.md с&nbsp;дисклеймером.</li>
+                <li><strong>Тестовая первичка.</strong> Если у&nbsp;вас нет реальных документов:
+                    <pre class="shell">&gt; сгенерируй в inputs/ комплект тестовой первички для одного
+&gt; вымышленного человека (Single, 2024 год, доход ~$95k):
+&gt; — W-2 от Acme Corp
+&gt; — 1099-INT от Chase
+&gt; — 1099-DIV и 1099-B от Fidelity
+&gt; — 1098 от Wells Fargo (mortgage)
+&gt; — 5498 от Vanguard (IRA contribution)
+&gt;
+&gt; используй skill pdf для генерации настоящих PDF
+&gt; (а не markdown). числа должны быть консистентными.</pre>
+                </li>
+                <li><strong>Парсинг (parallel subagents).</strong> Каждый документ&nbsp;&mdash; отдельный subagent. Параллельный запуск:
+                    <pre class="shell">&gt; ПАРАЛЛЕЛЬНО запусти subagents (по одному на каждый файл в @inputs/),
+&gt; используя skill pdf. brief каждому:
+&gt;   ROLE: парсер документа &lt;тип&gt;.
+&gt;   GOAL: извлечь все ключевые поля.
+&gt;   OUTPUT: JSON со структурой { type, fields: { box: value, ... }, source_file }.
+&gt; собери результаты в data/parsed.json.</pre>
+                </li>
+                <li><strong>Расчёт&nbsp;&mdash; Total Income.</strong> На&nbsp;Python. Wages из&nbsp;W-2 + interest из&nbsp;1099-INT + dividends из&nbsp;1099-DIV + capital gains из&nbsp;1099-B (упрощённо: long-term по&nbsp;dates). Результат в&nbsp;<code>data/totals.json</code>.</li>
+                <li><strong>Adjustments → AGI.</strong> Из&nbsp;5498&nbsp;&mdash; IRA contributions (deductible vs nondeductible зависит от&nbsp;типа). Прочее&nbsp;&mdash; пока пропустить, отметить в&nbsp;memo.</li>
+                <li><strong>Standard vs Itemized.</strong> Считаем оба варианта. В&nbsp;itemized: 1098 (mortgage interest) + предположение про&nbsp;SALT (max $10k). Сравниваем, выбираем больший. Записываем выбор в&nbsp;<code>memo.md</code> с&nbsp;аргументацией.</li>
+                <li><strong>Tax brackets и&nbsp;Tax.</strong> Через context7 подтяните актуальные brackets за&nbsp;нужный год. Считаем по&nbsp;шкале. Capital gains&nbsp;&mdash; отдельной шкалой (long-term). Результат: total tax.</li>
+                <li><strong>Credits.</strong> Базовые: Saver’s Credit, Foreign Tax Credit (если есть). Сложные (Child Tax Credit и&nbsp;т.&nbsp;п.)&nbsp;&mdash; помечаем как «требуется проверка CPA», без&nbsp;автоматического начисления.</li>
+                <li><strong>Заполнение PDF.</strong> Через skill <code>pdf</code>:
+                    <pre class="shell">&gt; используя skill pdf:
+&gt; 1) extract_form_field_info на forms/Form-1040.pdf, сохрани field-map.json;
+&gt; 2) собери mapping «строка 1040» → «значение из data/totals.json + tax + credits»;
+&gt; 3) fill_pdf_form_with_annotations: создай outputs/filled-1040.pdf
+&gt;    с пометками-аннотациями «откуда взято».</pre>
+                </li>
+                <li><strong>Memo и&nbsp;аудит-лог.</strong> Сборка <code>outputs/memo.md</code> с&nbsp;разделами: Filing status, Total Income (по&nbsp;каждому источнику), Adjustments → AGI, Deductions choice, Tax computation, Credits, Refund/Owed, <strong>что вне scope</strong>, дисклеймер. Параллельно&nbsp;&mdash; <code>outputs/audit.log</code> с&nbsp;каждым численным решением «source → field → value».</li>
+                <li><strong>Verification & red-team.</strong>
+                    <pre class="shell">&gt; ПАРАЛЛЕЛЬНО:
+&gt; 1) verification subagent: проверь арифметику (сравни суммы),
+&gt;    что все строки 1040, требующие значений из первички, заполнены;
+&gt;    проверь что filing status соответствует CLAUDE.md.
+&gt; 2) red-team subagent: пройдись по memo.md как скептик-CPA.
+&gt;    найди 5 вопросов, которые ты бы задал автору декларации.
+&gt;
+&gt; ЖДИ обоих. собери результаты в outputs/review.md.
+&gt; если найдены проблемы — поправь до объявления «готово».</pre>
+                </li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Spec and CLAUDE.md.</strong> Enter Plan Mode. Via <code>superpowers:writing-plans</code> have Claude draft <code>spec.md</code>: goals, inputs, outputs, phases, acceptance, out of scope. Pin filing status, tax year, your CLAUDE.md with the disclaimer.</li>
+                <li><strong>Test primary docs.</strong> If you have no real ones:
+                    <pre class="shell">&gt; generate a test set of primary docs in inputs/ for one
+&gt; fictional person (Single, tax year 2024, income ~$95k):
+&gt; — W-2 from Acme Corp
+&gt; — 1099-INT from Chase
+&gt; — 1099-DIV and 1099-B from Fidelity
+&gt; — 1098 from Wells Fargo (mortgage)
+&gt; — 5498 from Vanguard (IRA contribution)
+&gt;
+&gt; use the pdf skill to generate real PDFs
+&gt; (not markdown). numbers must be consistent.</pre>
+                </li>
+                <li><strong>Parsing (parallel subagents).</strong> One subagent per document. Parallel dispatch:
+                    <pre class="shell">&gt; IN PARALLEL launch subagents (one per file in @inputs/),
+&gt; using the pdf skill. brief each:
+&gt;   ROLE: parser of document &lt;type&gt;.
+&gt;   GOAL: extract all key fields.
+&gt;   OUTPUT: JSON of shape { type, fields: { box: value, ... }, source_file }.
+&gt; gather results into data/parsed.json.</pre>
+                </li>
+                <li><strong>Compute — Total Income.</strong> In Python. Wages from W-2 + interest from 1099-INT + dividends from 1099-DIV + capital gains from 1099-B (simplified: long-term by dates). Save to <code>data/totals.json</code>.</li>
+                <li><strong>Adjustments → AGI.</strong> From 5498 — IRA contributions (deductible vs not depends on the type). Skip the rest, note in memo.</li>
+                <li><strong>Standard vs Itemized.</strong> Compute both. Itemized: 1098 (mortgage interest) + a SALT assumption (max $10k). Compare, pick the larger. Record the choice in <code>memo.md</code> with reasoning.</li>
+                <li><strong>Tax brackets and Tax.</strong> Via context7 pull current brackets for the year. Apply the schedule. Capital gains — separate (long-term). Result: total tax.</li>
+                <li><strong>Credits.</strong> Basic: Saver’s Credit, Foreign Tax Credit (if any). Complex (Child Tax Credit etc.) — mark as “needs CPA review,” no auto-entry.</li>
+                <li><strong>Fill the PDF.</strong> Via <code>pdf</code> skill:
+                    <pre class="shell">&gt; using the pdf skill:
+&gt; 1) extract_form_field_info on forms/Form-1040.pdf, save field-map.json;
+&gt; 2) build a mapping "1040 line" → "value from data/totals.json + tax + credits";
+&gt; 3) fill_pdf_form_with_annotations: create outputs/filled-1040.pdf
+&gt;    with annotation tags "where taken from".</pre>
+                </li>
+                <li><strong>Memo and audit log.</strong> Assemble <code>outputs/memo.md</code> with sections: Filing status, Total Income (per source), Adjustments → AGI, Deductions choice, Tax computation, Credits, Refund/Owed, <strong>out of scope</strong>, disclaimer. In parallel — <code>outputs/audit.log</code> with every numerical decision “source → field → value.”</li>
+                <li><strong>Verification & red team.</strong>
+                    <pre class="shell">&gt; IN PARALLEL:
+&gt; 1) verification subagent: check arithmetic (totals match),
+&gt;    every 1040 line that needs a primary-doc value is filled;
+&gt;    filing status matches CLAUDE.md.
+&gt; 2) red-team subagent: walk memo.md as a sceptical CPA.
+&gt;    find 5 questions you'd ask the author.
+&gt;
+&gt; WAIT for both. gather into outputs/review.md.
+&gt; fix anything found before declaring "done".</pre>
+                </li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>сборку настоящего пайплайна на&nbsp;нетривиальных данных;</li>
+                <li>координацию параллельных subagents на&nbsp;разнотипных файлах;</li>
+                <li>работу с&nbsp;fillable PDF через skill <code>pdf</code> (extract, map, fill);</li>
+                <li>двойной аудит (verification + red-team) перед заявлением «готово»;</li>
+                <li>дисциплину «что вне scope»&nbsp;&mdash; явное проведение границ.</li>
+            </ul>
+            <ul lang="en">
+                <li>building a real pipeline on non-trivial data;</li>
+                <li>coordinating parallel subagents on heterogeneous files;</li>
+                <li>fillable PDF work via the <code>pdf</code> skill (extract, map, fill);</li>
+                <li>double audit (verification + red team) before saying “done”;</li>
+                <li>“out of scope” discipline — explicit boundaries.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Расширение · по&nbsp;инструкции</span><span lang="en">Extension · guided</span></span>
+            <h3><span lang="ru">Веб-обёртка над&nbsp;Tax Assistant</span><span lang="en">Web wrapper over the Tax Assistant</span></h3>
+            <p class="goal" lang="ru">Цель: простая web-страница, на&nbsp;которую загружаешь zip с&nbsp;первичкой&nbsp;&mdash; через минуту получаешь ссылку на&nbsp;<code>filled-1040.pdf</code>. Не&nbsp;для&nbsp;production, а&nbsp;для&nbsp;того, чтобы поделиться с&nbsp;другом-инвестором или CPA, который скажет «покажи, как ты&nbsp;это делаешь».</p>
+            <p class="goal" lang="en">Goal: a simple web page where you upload a zip of primary docs and a minute later get a link to <code>filled-1040.pdf</code>. Not production — just to show a friend or CPA who asks “show me how this works.”</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Возьмите архитектуру этапа&nbsp;06: FastAPI backend на&nbsp;Railway, простой frontend на&nbsp;Vercel.</li>
+                <li>Backend:
+                    <pre class="shell">&gt; добавь эндпоинт POST /api/tax/run.
+&gt; принимает multipart upload zip с первичкой.
+&gt; распаковывает в tmp/, прогоняет пайплайн из проекта A,
+&gt; возвращает { pdf_url, memo_url, audit_url }
+&gt; (файлы доступны 24 часа, потом удаляются).
+&gt; ВАЖНО: никаких персональных данных в логах.</pre>
+                </li>
+                <li>Frontend:
+                    <pre class="shell">&gt; страница /tax: дроп-зона для zip, прогресс-бар,
+&gt; список ссылок-результатов. стиль editorial / paper-and-ink,
+&gt; чтобы выглядело серьёзно. явный дисклеймер сверху.</pre>
+                </li>
+                <li>Авторизация (минимум):
+                    <pre class="shell">&gt; добавь простой parol-prompt (один общий пароль из .env)
+&gt; чтобы случайные люди не загружали свою первичку.
+&gt; этого достаточно для демо — не для public service.</pre>
+                </li>
+                <li>Verification через playwright: загрузка тестового zip, проверка всех трёх ссылок-результатов, открытие PDF, скриншот.</li>
+                <li>Дисклеймер на&nbsp;каждой странице:
+                    <pre class="shell">⚠ Учебный демо-инструмент. Не использовать для подачи в IRS.
+   Результат — черновик, требующий проверки CPA.</pre>
+                </li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Use the etape-06 architecture: FastAPI backend on Railway, simple frontend on Vercel.</li>
+                <li>Backend:
+                    <pre class="shell">&gt; add a POST /api/tax/run endpoint.
+&gt; accepts a multipart zip upload of primary docs.
+&gt; unzips into tmp/, runs the project A pipeline,
+&gt; returns { pdf_url, memo_url, audit_url }
+&gt; (files available for 24 hours, then deleted).
+&gt; IMPORTANT: no personal data in logs.</pre>
+                </li>
+                <li>Frontend:
+                    <pre class="shell">&gt; /tax page: zip drop-zone, progress bar,
+&gt; list of result links. editorial / paper-and-ink style,
+&gt; to look serious. explicit disclaimer at the top.</pre>
+                </li>
+                <li>Auth (minimal):
+                    <pre class="shell">&gt; add a simple password prompt (one shared password from .env)
+&gt; so random people don't upload their docs.
+&gt; enough for a demo, not a public service.</pre>
+                </li>
+                <li>Playwright verification: upload a test zip, check all three result links, open the PDF, screenshot.</li>
+                <li>Disclaimer on every page:
+                    <pre class="shell">⚠ Educational demo. Do not file with the IRS.
+   The output is a draft, must be reviewed by a CPA.</pre>
+                </li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>обёртку нетривиального CLI-пайплайна в&nbsp;web-сервис;</li>
+                <li>работу с&nbsp;upload файлов и&nbsp;временными артефактами;</li>
+                <li>«достаточную» защиту для&nbsp;demo&nbsp;&mdash; не&nbsp;production, но&nbsp;и&nbsp;не&nbsp;public.</li>
+            </ul>
+            <ul lang="en">
+                <li>wrapping a non-trivial CLI pipeline as a web service;</li>
+                <li>file uploads and temporary artefacts;</li>
+                <li>“good enough” protection for a demo — not production, not public.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Налоговая лексика на&nbsp;минимум</span><span lang="en">Minimal tax vocabulary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>Form 1040</dt>
+            <dd>
+                <span lang="ru">Главная индивидуальная налоговая декларация в&nbsp;США. Каждый год выходит обновлённая версия, fillable PDF доступен на&nbsp;irs.gov.</span>
+                <span lang="en">The main US individual return. A fresh version comes out every year, fillable PDFs available on irs.gov.</span>
+            </dd>
+
+            <dt>W-2</dt>
+            <dd>
+                <span lang="ru">Форма от&nbsp;работодателя, описывающая ваши wages и&nbsp;удержанные налоги. Главный источник зарплатного дохода.</span>
+                <span lang="en">A form from your employer describing wages and tax withheld. The main wage-income source.</span>
+            </dd>
+
+            <dt>1099 series</dt>
+            <dd>
+                <span lang="ru">Семейство форм для&nbsp;«не-зарплатных» доходов: 1099-INT (проценты), 1099-DIV (дивиденды), 1099-B (продажи), 1099-R (пенсии), 1099-MISC/NEC (контракторы).</span>
+                <span lang="en">A family of forms for non-wage income: 1099-INT (interest), 1099-DIV (dividends), 1099-B (sales), 1099-R (retirement), 1099-MISC/NEC (contractors).</span>
+            </dd>
+
+            <dt>1098</dt>
+            <dd>
+                <span lang="ru">Форма от&nbsp;ипотечного кредитора, описывающая уплаченные за&nbsp;год проценты по&nbsp;ипотеке. Используется для&nbsp;itemized deduction.</span>
+                <span lang="en">A form from your mortgage lender stating mortgage interest paid for the year. Feeds itemized deduction.</span>
+            </dd>
+
+            <dt>AGI</dt>
+            <dd>
+                <span lang="ru">Adjusted Gross Income&nbsp;&mdash; «скорректированный валовой доход». Total Income минус Adjustments. От&nbsp;AGI считаются многие лимиты и&nbsp;пороги.</span>
+                <span lang="en">Adjusted Gross Income. Total Income minus Adjustments. Many limits and thresholds key off AGI.</span>
+            </dd>
+
+            <dt><span lang="ru">Standard / Itemized deduction</span><span lang="en">Standard / Itemized deduction</span></dt>
+            <dd>
+                <span lang="ru">Два варианта вычета. Standard&nbsp;&mdash; фиксированная сумма (зависит от&nbsp;filing status). Itemized&nbsp;&mdash; постатейная (mortgage interest, donations, SALT). Берём бо́льший.</span>
+                <span lang="en">Two deduction options. Standard — a fixed amount (by filing status). Itemized — itemised (mortgage interest, donations, SALT). Take the larger.</span>
+            </dd>
+
+            <dt>SALT cap</dt>
+            <dd>
+                <span lang="ru">Ограничение на&nbsp;штатные и&nbsp;местные налоги (state and local taxes), которые можно вписать в&nbsp;itemized deduction. С&nbsp;2018 года&nbsp;&mdash; $10,000.</span>
+                <span lang="en">A cap on state and local taxes you can put into itemized deduction. Since 2018 — $10,000.</span>
+            </dd>
+
+            <dt>Tax brackets</dt>
+            <dd>
+                <span lang="ru">Прогрессивная шкала: разные «куски» дохода облагаются по&nbsp;разной ставке. Меняется ежегодно, зависит от&nbsp;filing status.</span>
+                <span lang="en">Progressive schedule: different income “slabs” taxed at different rates. Changes yearly, depends on filing status.</span>
+            </dd>
+
+            <dt>Credits</dt>
+            <dd>
+                <span lang="ru">Налоговые кредиты&nbsp;&mdash; прямо уменьшают сумму налога (а&nbsp;не&nbsp;доход). Refundable могут давать возврат, non-refundable&nbsp;&mdash; нет.</span>
+                <span lang="en">Tax credits — reduce tax directly (not income). Refundable can yield a refund, non-refundable cannot.</span>
+            </dd>
+
+            <dt>Filing status</dt>
+            <dd>
+                <span lang="ru">Single, Married Filing Jointly (MFJ), Married Filing Separately (MFS), Head of Household (HoH), Qualifying Widow(er) (QW). Влияет на&nbsp;standard deduction и&nbsp;tax brackets.</span>
+                <span lang="en">Single, Married Filing Jointly (MFJ), Married Filing Separately (MFS), Head of Household (HoH), Qualifying Widow(er) (QW). Drives standard deduction and brackets.</span>
+            </dd>
+
+            <dt>Fillable PDF</dt>
+            <dd>
+                <span lang="ru">PDF с&nbsp;интерактивными полями (текст, чекбоксы, выпадающие списки). Каждое поле имеет имя, заполняется программно.</span>
+                <span lang="en">A PDF with interactive fields (text, checkboxes, dropdowns). Each field has a name, fillable programmatically.</span>
+            </dd>
+
+            <dt>CPA</dt>
+            <dd>
+                <span lang="ru">Certified Public Accountant&nbsp;&mdash; сертифицированный налоговый бухгалтер. Этот учебный проект не&nbsp;заменяет CPA. Финальный draft подаётся к&nbsp;нему на&nbsp;проверку.</span>
+                <span lang="en">Certified Public Accountant. This learning project does not replace a CPA. The final draft goes to one for review.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Опишите «течение» декларации от&nbsp;Total Income до&nbsp;Refund одной строкой.</span><span lang="en">Describe the return “flow” from Total Income to Refund in one line.</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Total Income → minus Adjustments = AGI → minus Deductions = Taxable Income → apply Tax Brackets = Tax → minus Credits = Total Tax → minus Payments = Refund (или Amount Owed).</p>
+                        <p lang="en">Total Income → minus Adjustments = AGI → minus Deductions = Taxable Income → apply Tax Brackets = Tax → minus Credits = Total Tax → minus Payments = Refund (or Amount Owed).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Standard или itemized&nbsp;&mdash; что выбираем?</span><span lang="en">Standard or itemized — which do we pick?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Тот, который <em>больше</em>. Считаем оба варианта: standard (фикс по&nbsp;filing status) и&nbsp;itemized (mortgage interest + charitable + SALT capped + medical &gt;7.5% AGI). Выбираем больший. У&nbsp;большинства это standard, у&nbsp;ипотечников&nbsp;&mdash; часто itemized.</p>
+                        <p lang="en">The <em>larger</em>. Compute both: standard (fixed by filing status) and itemized (mortgage interest + charitable + SALT capped + medical &gt;7.5% AGI). Take the larger. Most filers go standard; mortgage-holders often itemize.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем в&nbsp;парсинге первички используем параллельные subagents?</span><span lang="en">Why use parallel subagents to parse primary docs?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Файлы независимы&nbsp;&mdash; каждый можно обрабатывать отдельно. Параллельный запуск экономит время в&nbsp;разы (общее время = времени самого медленного, не&nbsp;сумме). Каждый subagent имеет узкий brief «парсер документа&nbsp;X»&nbsp;&mdash; меньше шансов перепутать поля разных типов.</p>
+                        <p lang="en">Files are independent — each parsable separately. Parallel dispatch cuts time several-fold (total = slowest, not sum). Each subagent has a tight brief “parser of document X” — less chance to mix up fields between types.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое fillable PDF и&nbsp;почему мы&nbsp;берём именно его, а&nbsp;не&nbsp;«пишем PDF с&nbsp;нуля»?</span><span lang="en">What is a fillable PDF and why use one rather than “write a PDF from scratch”?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Fillable PDF&nbsp;&mdash; официальная форма IRS с&nbsp;именованными интерактивными полями. Заполняем именно её&nbsp;&mdash; по&nbsp;двум причинам: 1) она юридически верная (бухгалтер увидит привычный документ); 2) skill <code>pdf</code> умеет извлекать имена полей и&nbsp;вписывать значения программно. Писать PDF с&nbsp;нуля&nbsp;&mdash; в&nbsp;разы сложнее и&nbsp;даст другой формат.</p>
+                        <p lang="en">A fillable PDF is the official IRS form with named interactive fields. We fill that one because: 1) it’s legally correct (accountants see a familiar doc); 2) the <code>pdf</code> skill can extract field names and write values programmatically. Writing a PDF from scratch is far harder and yields a different format.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем в&nbsp;конце&nbsp;&mdash; verification и&nbsp;red-team subagents?</span><span lang="en">Why verification + red-team subagents at the end?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Verification&nbsp;&mdash; «арифметика сходится?»: суммы по&nbsp;источникам совпадают с&nbsp;Total Income, все нужные строки 1040 заполнены, filing status совпадает с&nbsp;CLAUDE.md. Red-team&nbsp;&mdash; «что бы&nbsp;спросил скептик-CPA?»: ищет слабости, пропущенные кейсы, неудобные вопросы. Без&nbsp;обоих можно «соврать про&nbsp;готовность».</p>
+                        <p lang="en">Verification — “does the math reconcile?”: totals match Total Income, every required 1040 line is filled, filing status matches CLAUDE.md. Red team — “what would a sceptical CPA ask?”: weaknesses, missed cases, awkward questions. Without both you risk “lying about being done.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Что мы&nbsp;осознанно <em>не</em> делаем и&nbsp;почему?</span><span lang="en">What do we consciously <em>not</em> do, and why?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">State taxes (декларации штатов), Schedule C (фриланс/бизнес), сложные капитальные операции (продажа дома), foreign income / FBAR, audit defence, и&nbsp;<em>сама подача в&nbsp;IRS</em>. Это сужение позволяет сосредоточиться на&nbsp;типичной декларации W-2 employee + investments&nbsp;&mdash; и&nbsp;не&nbsp;тонуть в&nbsp;спецслучаях. Границы явно прописаны в&nbsp;<code>memo.md</code>, чтобы CPA сразу видел scope.</p>
+                        <p lang="en">State taxes, Schedule C (freelance/business), complex capital operations (home sale), foreign income / FBAR, audit defence, and <em>actually filing with the IRS</em>. The narrowing keeps focus on the typical W-2 employee + investments return — no drowning in edge cases. Boundaries are explicit in <code>memo.md</code> so a CPA sees scope at a glance.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Что должно лежать в&nbsp;<code>audit.log</code>?</span><span lang="en">What goes into <code>audit.log</code>?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Каждое численное решение со&nbsp;связкой «source → field → value». Например: <code>W-2_Acme.pdf box 1 → 1040 line 1 → $52,400</code>. Это позволяет любому проверяющему за&nbsp;5 минут пройти от&nbsp;любой суммы в&nbsp;1040 до&nbsp;её&nbsp;первоисточника. Без&nbsp;такого лога CPA вместо проверки попросит вас «принести всё заново».</p>
+                        <p lang="en">Every numeric decision with a “source → field → value” trail. E.g.: <code>W-2_Acme.pdf box 1 → 1040 line 1 → $52,400</code>. Any reviewer can walk from any 1040 figure back to its source in 5 minutes. Without that log a CPA asks you to “bring it all over again.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e8b-spec">
+                <span lang="ru">Составил <code>spec.md</code> для&nbsp;многофазного пайплайна, включая раздел «out of scope».</span>
+                <span lang="en">I built a <code>spec.md</code> for a multi-phase pipeline, including an “out of scope” section.</span>
+            </li>
+            <li data-key="e8b-parse">
+                <span lang="ru">Распарсил минимум 5 типов первички через параллельные subagents и&nbsp;skill <code>pdf</code>.</span>
+                <span lang="en">I parsed at least 5 types of primary docs via parallel subagents and the <code>pdf</code> skill.</span>
+            </li>
+            <li data-key="e8b-logic">
+                <span lang="ru">Реализовал расчёт: Total Income → AGI → Deductions → Taxable Income → Tax → Credits → Refund.</span>
+                <span lang="en">I implemented the flow: Total Income → AGI → Deductions → Taxable Income → Tax → Credits → Refund.</span>
+            </li>
+            <li data-key="e8b-deduction">
+                <span lang="ru">Сравнил standard и&nbsp;itemized, выбрал больший, аргументировал в&nbsp;<code>memo.md</code>.</span>
+                <span lang="en">I compared standard and itemized, picked the larger, argued in <code>memo.md</code>.</span>
+            </li>
+            <li data-key="e8b-fill">
+                <span lang="ru">Заполнил fillable PDF Form&nbsp;1040 со&nbsp;всеми ключевыми полями и&nbsp;аннотациями-источниками.</span>
+                <span lang="en">I filled the Form 1040 fillable PDF with all key fields and source annotations.</span>
+            </li>
+            <li data-key="e8b-audit">
+                <span lang="ru">Прошёл двойной аудит (verification + red-team) и&nbsp;поправил всё, что нашли.</span>
+                <span lang="en">I ran the double audit (verification + red team) and fixed every finding.</span>
+            </li>
+            <li data-key="e8b-delivery">
+                <span lang="ru">Артефакты: <code>filled-1040.pdf</code>, <code>memo.md</code>, <code>audit.log</code>, web-обёртка с&nbsp;дисклеймером.</span>
+                <span lang="en">Artefacts: <code>filled-1040.pdf</code>, <code>memo.md</code>, <code>audit.log</code>, a web wrapper with a disclaimer.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Это самый большой проект курса&nbsp;&mdash; вы&nbsp;только что собрали полный пайплайн от&nbsp;первички до&nbsp;живой PDF-декларации.</p>
+            <p lang="en">Ready to close this etape? It’s the largest project in the course — you just built a full pipeline from primary docs to a live PDF return.</p>
+            <button class="btn-complete" data-id="etap-08b" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-08a.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">08a · Кастомизация</span><span lang="en">08a · Customisation</span></span>
+            </a>
+            <a class="next" href="etap-09.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">09 · MCP-серверы и&nbsp;плагины</span><span lang="en">09 · MCP Servers &amp; Plugins</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Один промпт &mdash; и&nbsp;вы&nbsp;собираете то, на&nbsp;что в&nbsp;офисе&nbsp;CPA уходит две недели работы. Это и&nbsp;есть граница, после которой Claude Code перестаёт быть «инструментом» и&nbsp;становится <em>профессией</em>».</p>
+            <p class="signature" lang="en">“One prompt — and you assemble what takes two weeks in a CPA office. This is the line where Claude Code stops being a ‘tool’ and becomes a <em>profession</em>.”</p>
+            <p lang="ru">Этап&nbsp;08b пройден. Дальше&nbsp;&mdash; превращаем наработки курса в&nbsp;собственный плагин для&nbsp;Claude Code.</p>
+            <p lang="en">Etape 08b done. Next — we turn course artefacts into our own Claude Code plugin.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проект</span><span lang="en">Project</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-08a.html"><span lang="ru">← Этап&nbsp;08a</span><span lang="en">← Etape 08a</span></a></li>
+                <li><a href="etap-09.html"><span lang="ru">→ Этап&nbsp;09</span><span lang="en">→ Etape 09</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

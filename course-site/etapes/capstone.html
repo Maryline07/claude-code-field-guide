@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>§ Финальный капстоун — Полевое руководство по Claude Code</title>
+<meta name="description" content="Финальный капстоун-проект курса. Четыре варианта продукта от идеи до публичной ссылки.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#rules"><span lang="ru">правила</span><span lang="en">rules</span></a>
+            <a href="#options"><span lang="ru">варианты</span><span lang="en">options</span></a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+            <a href="#after"><span lang="ru">после</span><span lang="en">after</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="§">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Финал</span><span lang="en">Finale</span></span> &nbsp;·&nbsp; <span lang="ru">Капстоун-проект</span><span lang="en">Capstone project</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Один большой продукт<br>от&nbsp;идеи до&nbsp;<em>публичной ссылки</em>.</span>
+            <span lang="en">One big product<br>from idea to a <em>public link</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            К&nbsp;этому моменту у&nbsp;вас есть весь арсенал курса: skills, slash-команды, hooks, MCP, плагины, subagents, cron-расписания, push-уведомления. Капстоун&nbsp;&mdash; собрать всё это в&nbsp;<em>единый продукт</em>, которым реально пользуются люди (вы&nbsp;сами или ваши близкие&nbsp;&mdash; неважно). Четыре варианта на&nbsp;выбор.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            By now you have the full course arsenal: skills, slash commands, hooks, MCP, plugins, subagents, cron schedules, push notifications. The capstone — gather it all into <em>one product</em> that real people use (yourself or your family — fine). Four options to pick from.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">3–4 недели · 2–4&nbsp;ч/день</span><span lang="en">3–4 weeks · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы делаете</span><span lang="en">What you do</span></dt>
+                <dd><span lang="ru">один продукт от&nbsp;ТЗ до&nbsp;деплоя</span><span lang="en">one product from spec to deployment</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">портфолио из&nbsp;«реального» продукта</span><span lang="en">a “real” product in your portfolio</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">публичный URL + GitHub-репо + Smithery-плагин (если применимо)</span><span lang="en">a public URL + GitHub repo + Smithery plugin (where applicable)</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<section id="rules">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Правила капстоуна</span><span lang="en">Capstone rules</span></span>
+            <h2><span lang="ru">Что общее у&nbsp;всех четырёх вариантов</span><span lang="en">What all four options share</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Какой&nbsp;бы вариант вы&nbsp;ни&nbsp;выбрали, есть требования, общие для&nbsp;всех. Они отличают капстоун от&nbsp;«ещё одного учебного проекта»&nbsp;&mdash; и&nbsp;превращают результат в&nbsp;продукт.</p>
+        <p class="reading" lang="en">Whichever option you pick, there are shared requirements. They separate the capstone from “yet another learning project” — and turn the result into a product.</p>
+
+        <ol class="checklist" style="counter-reset:none;">
+            <li data-key="rule-spec"><span lang="ru"><strong>Spec.md обязательный.</strong> До&nbsp;первой строки кода&nbsp;&mdash; написанный спек на&nbsp;~1 страницу: цель, целевой пользователь, входы, выходы, фазы, критерии готовности, что вне scope.</span><span lang="en"><strong>spec.md mandatory.</strong> Before the first line of code — a one-page spec: goal, target user, inputs, outputs, phases, acceptance, out of scope.</span></li>
+            <li data-key="rule-public"><span lang="ru"><strong>Публичный URL.</strong> Ваш продукт должен открываться по&nbsp;ссылке, доступной любому. Vercel/Railway/GitHub Pages&nbsp;&mdash; на&nbsp;ваш выбор, в&nbsp;зависимости от&nbsp;стека.</span><span lang="en"><strong>Public URL.</strong> Your product opens at a URL anyone can hit. Vercel/Railway/GitHub Pages — your call by stack.</span></li>
+            <li data-key="rule-readme"><span lang="ru"><strong>Двуязычный README.</strong> ru + en, с&nbsp;демо-ссылкой, скриншотами или asciinema, лицензией, дисклеймером.</span><span lang="en"><strong>Bilingual README.</strong> ru + en, with demo URL, screenshots or asciinema, licence, disclaimer.</span></li>
+            <li data-key="rule-arsenal"><span lang="ru"><strong>Минимум 6 техник курса.</strong> В&nbsp;продукте должны явно использоваться: spec → Plan Mode → CLAUDE.md, MCP или skill из&nbsp;этапа&nbsp;03, frontend-design (если есть UI), верификация через Playwright, авто-расписание (cron или schedule&nbsp;skill), push в&nbsp;Telegram.</span><span lang="en"><strong>At least 6 course techniques.</strong> The product must visibly use: spec → Plan Mode → CLAUDE.md, an MCP or skill from etape 03, frontend-design (if there’s UI), Playwright verification, auto-schedule (cron or the schedule skill), Telegram push.</span></li>
+            <li data-key="rule-secrets"><span lang="ru"><strong>Безопасность.</strong> Никаких секретов в&nbsp;коммитах, <code>.env</code> в&nbsp;<code>.gitignore</code>, env vars через интерфейсы Vercel/Railway. На&nbsp;каждом коммите&nbsp;&mdash; <code>git diff --staged | grep -iE "key|secret|token"</code> в&nbsp;hook'е.</span><span lang="en"><strong>Security.</strong> No secrets in commits, <code>.env</code> in <code>.gitignore</code>, env vars via Vercel/Railway UIs. On each commit — <code>git diff --staged | grep -iE "key|secret|token"</code> in a hook.</span></li>
+            <li data-key="rule-monitoring"><span lang="ru"><strong>Мониторинг.</strong> PostHog LLM Analytics включён. На&nbsp;дашборде вы&nbsp;видите токены, стоимость, ошибки в&nbsp;реальном времени.</span><span lang="en"><strong>Monitoring.</strong> PostHog LLM Analytics on. The dashboard shows tokens, cost, errors in real time.</span></li>
+            <li data-key="rule-friend"><span lang="ru"><strong>Реальный пользователь.</strong> Покажите продукт минимум одному человеку (другу, родственнику, коллеге), послушайте 30-секундный отзыв, зафиксируйте в&nbsp;<code>FEEDBACK.md</code>.</span><span lang="en"><strong>Real user.</strong> Show the product to at least one person (friend, family, colleague), capture a 30-second piece of feedback, save to <code>FEEDBACK.md</code>.</span></li>
+            <li data-key="rule-retro"><span lang="ru"><strong>Ретроспектива.</strong> В&nbsp;конце&nbsp;&mdash; короткий <code>retro.md</code>: 3 что получилось, 3 что нет, 3 что бы&nbsp;сделали по-другому в&nbsp;следующий раз.</span><span lang="en"><strong>Retrospective.</strong> At the end — a short <code>retro.md</code>: 3 wins, 3 misses, 3 things you would do differently next time.</span></li>
+        </ol>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="options">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Четыре варианта</span><span lang="en">Four options</span></span>
+            <h2><span lang="ru">Выберите тот, который вам интересен лично</span><span lang="en">Pick the one that matters to you personally</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Главное правило выбора: <strong>будете&nbsp;ли вы&nbsp;пользоваться этим сами после курса?</strong> Если да&nbsp;&mdash; берите. Если только «в&nbsp;портфолио»&nbsp;&mdash; будет вяло. Капстоун&nbsp;&mdash; единственный шанс <em>сделать ваш собственный инструмент</em>, к&nbsp;которому вы&nbsp;будете возвращаться годами.</p>
+        <p class="reading" lang="en">The main rule of choice: <strong>will you actually use it after the course?</strong> If yes — go. If just for “the portfolio” — it’ll feel flat. The capstone is your single shot to <em>build your own tool</em> you’ll return to for years.</p>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Вариант&nbsp;A · «Мой инвестиционный ИИ»</span><span lang="en">Option A · “My Investing AI”</span></span>
+            <h3><span lang="ru">Полный SaaS для&nbsp;себя и&nbsp;двух-трёх друзей</span><span lang="en">Full SaaS for yourself and two-three friends</span></h3>
+            <p class="goal" lang="ru">Идея: расширение этапа&nbsp;06 до&nbsp;настоящего продукта. Учёт портфеля + импорт CSV-выписок брокера + дашборд с&nbsp;живыми ценами + аналитика по&nbsp;сценариям + AI-консультант на&nbsp;Claude API + ежедневная Telegram-сводка + еженедельный due diligence по&nbsp;одному тикеру через subagents.</p>
+            <p class="goal" lang="en">Idea: scale up etape 06 into a real product. Portfolio tracking + broker-CSV import + live-price dashboard + scenario analytics + Claude-API advisor + daily Telegram digest + weekly DD on one ticker via subagents.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Кто пользователь</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Target user</h4>
+            <ul lang="ru">
+                <li>вы&nbsp;сами&nbsp;&mdash; ежедневно;</li>
+                <li>2–3&nbsp;близких, кому интересно&nbsp;&mdash; через ваш сервис под&nbsp;их&nbsp;аккаунтами;</li>
+                <li>не&nbsp;широкая публика&nbsp;&mdash; никаких маркетинговых лендингов и&nbsp;подписок.</li>
+            </ul>
+            <ul lang="en">
+                <li>yourself — daily;</li>
+                <li>2–3 close people who care — through your service with their accounts;</li>
+                <li>not the public — no marketing landings, no subscriptions.</li>
+            </ul>
+
+            <h4 lang="ru">Главные фичи</h4>
+            <h4 lang="en">Core features</h4>
+            <ul lang="ru">
+                <li>Регистрация по&nbsp;email + JWT (этап&nbsp;06).</li>
+                <li>Импорт CSV из&nbsp;3+ брокеров с&nbsp;универсальной нормализацией (этап&nbsp;02).</li>
+                <li>Дашборд с&nbsp;живыми ценами через ваш Daily Trader MCP (этап&nbsp;09).</li>
+                <li>Прогнозы в&nbsp;трёх сценариях (этап&nbsp;04).</li>
+                <li>AI-консультант с&nbsp;долговременной памятью (этап&nbsp;06 + этап&nbsp;11).</li>
+                <li>Ежедневная Telegram-сводка по&nbsp;cron (этап&nbsp;10).</li>
+                <li>Еженедельный DD: команда из&nbsp;4&nbsp;subagents (этап&nbsp;07).</li>
+                <li>Установленный плагин <code>@you/personal-office</code> (этап&nbsp;09)&nbsp;&mdash; поверх сервиса.</li>
+            </ul>
+            <ul lang="en">
+                <li>Email + JWT signup (etape 06).</li>
+                <li>CSV import from 3+ brokers with universal normalisation (etape 02).</li>
+                <li>Live-price dashboard via your Daily Trader MCP (etape 09).</li>
+                <li>Three-scenario forecasts (etape 04).</li>
+                <li>AI advisor with long-term memory (etapes 06 + 11).</li>
+                <li>Daily Telegram digest on cron (etape 10).</li>
+                <li>Weekly DD: a 4-subagent team (etape 07).</li>
+                <li>Your installed <code>@you/personal-office</code> plugin (etape 09) on top.</li>
+            </ul>
+
+            <h4 lang="ru">Стек</h4>
+            <h4 lang="en">Stack</h4>
+            <ul lang="ru">
+                <li>FastAPI + PostgreSQL на&nbsp;Railway.</li>
+                <li>Next.js на&nbsp;Vercel.</li>
+                <li>Claude API для&nbsp;AI-консультанта (Sonnet) и&nbsp;DD (Opus для&nbsp;вердикта, Haiku для&nbsp;парсинга твитов).</li>
+                <li>Daily Trader MCP&nbsp;&mdash; для&nbsp;цен.</li>
+                <li>Railway Cron для&nbsp;ежедневных и&nbsp;еженедельных задач.</li>
+                <li>PostHog для&nbsp;мониторинга.</li>
+            </ul>
+            <ul lang="en">
+                <li>FastAPI + PostgreSQL on Railway.</li>
+                <li>Next.js on Vercel.</li>
+                <li>Claude API for the advisor (Sonnet) and DD (Opus for verdict, Haiku for tweet parsing).</li>
+                <li>Daily Trader MCP for prices.</li>
+                <li>Railway Cron for daily and weekly tasks.</li>
+                <li>PostHog for monitoring.</li>
+            </ul>
+
+            <h4 lang="ru">Критерии готовности</h4>
+            <h4 lang="en">Acceptance criteria</h4>
+            <ul lang="ru">
+                <li>сервис открывается по&nbsp;публичному URL и&nbsp;вы&nbsp;даёте доступ другу;</li>
+                <li>друг регистрируется, импортирует свою выписку, видит свой дашборд;</li>
+                <li>его дашборд отделён от&nbsp;вашего&nbsp;&mdash; полная изоляция данных;</li>
+                <li>в&nbsp;течение 7&nbsp;дней Telegram-сводка приходит каждый день;</li>
+                <li>пятничный DD пришёл хотя&nbsp;бы один раз;</li>
+                <li>вы&nbsp;использовали продукт сами 5+ дней подряд&nbsp;&mdash; не&nbsp;«построил и&nbsp;забыл», а&nbsp;«стал частью утра»;</li>
+                <li>есть FEEDBACK.md с&nbsp;30-секундным отзывом друга и&nbsp;вашими ответами на&nbsp;него.</li>
+            </ul>
+            <ul lang="en">
+                <li>the service opens at a public URL, you grant access to a friend;</li>
+                <li>the friend signs up, imports their statement, sees their own dashboard;</li>
+                <li>their dashboard is isolated from yours — full data segregation;</li>
+                <li>over 7 days the Telegram digest lands daily;</li>
+                <li>the Friday DD landed at least once;</li>
+                <li>you used the product yourself for 5+ consecutive days — not “build and forget,” but “part of the morning”;</li>
+                <li>FEEDBACK.md captures a 30-second piece of feedback from a friend and your responses.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Вариант&nbsp;B · «Налоговая студия»</span><span lang="en">Option B · “Tax Studio”</span></span>
+            <h3><span lang="ru">08b → многопользовательский веб-сервис</span><span lang="en">08b → a multi-user web service</span></h3>
+            <p class="goal" lang="ru">Идея: масштабирование проекта&nbsp;08b. Был «один пайплайн на&nbsp;вашу декларацию»&nbsp;&mdash; станет веб-сервис, в&nbsp;который любой может загрузить ZIP с&nbsp;первичкой, очередь её&nbsp;обработает, и&nbsp;через 5–10 минут вернёт filled-1040.pdf и&nbsp;memo.md.</p>
+            <p class="goal" lang="en">Idea: scale up project 08b. Was “one pipeline for your return” — becomes a web service where anyone uploads a ZIP of primary docs, the queue processes it, and 5–10 minutes later returns filled-1040.pdf and memo.md.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Кто пользователь</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Target user</h4>
+            <ul lang="ru">
+                <li>люди, кто делает 1040 сами (US filers со&nbsp;стандартными доходами);</li>
+                <li>CPA, желающие ускорить «черновик» перед ревью;</li>
+                <li>не&nbsp;замена налогового бухгалтера&nbsp;&mdash; <em>помощник для&nbsp;первого черновика</em>.</li>
+            </ul>
+            <ul lang="en">
+                <li>people doing their own 1040 (US filers with vanilla incomes);</li>
+                <li>CPAs wanting a faster “draft” before review;</li>
+                <li>not a replacement for a CPA — a <em>first-draft assistant</em>.</li>
+            </ul>
+
+            <h4 lang="ru">Главные фичи</h4>
+            <h4 lang="en">Core features</h4>
+            <ul lang="ru">
+                <li>Регистрация + JWT (этап&nbsp;06).</li>
+                <li>Загрузка ZIP с&nbsp;первичкой; очередь Celery/RQ + worker на&nbsp;Railway.</li>
+                <li>Парсинг через параллельные subagents (этап&nbsp;07).</li>
+                <li>Расчёт через ваш скилл «налоговый аналитик»&nbsp;&mdash; адаптация скилла из&nbsp;этапа&nbsp;08a.</li>
+                <li>Заполнение fillable-1040 через skill <code>pdf</code> (этап&nbsp;08b).</li>
+                <li>Аккаунты для&nbsp;CPA: видят список «ваших клиентов» с&nbsp;их&nbsp;черновиками.</li>
+                <li>Аудит-лог с&nbsp;source → field → value для&nbsp;каждой строки 1040.</li>
+                <li>Дисклеймер на&nbsp;каждой странице.</li>
+            </ul>
+            <ul lang="en">
+                <li>Signup + JWT (etape 06).</li>
+                <li>ZIP upload of primary docs; Celery/RQ queue + worker on Railway.</li>
+                <li>Parsing via parallel subagents (etape 07).</li>
+                <li>Calculation through your “tax analyst” skill — adapted from etape 08a.</li>
+                <li>Filling fillable-1040 via the <code>pdf</code> skill (etape 08b).</li>
+                <li>CPA accounts: a list of “your clients” with drafts.</li>
+                <li>Audit log with source → field → value for every 1040 line.</li>
+                <li>Disclaimer on every page.</li>
+            </ul>
+
+            <h4 lang="ru">Критерии готовности</h4>
+            <h4 lang="en">Acceptance criteria</h4>
+            <ul lang="ru">
+                <li>5 разных тестовых ZIP-ов проходят полный пайплайн без&nbsp;вашего вмешательства;</li>
+                <li>результат для&nbsp;каждого&nbsp;&mdash; PDF + memo + audit.log за&nbsp;5–10 минут;</li>
+                <li>в&nbsp;логах нет персональных данных пользователей (анонимизация);</li>
+                <li>файлы пользователя удаляются автоматически через 24 часа;</li>
+                <li>тестовый CPA-аккаунт видит свои тестовые «клиенты»;</li>
+                <li>есть очевидный дисклеймер «не&nbsp;для&nbsp;подачи в&nbsp;IRS без&nbsp;CPA».</li>
+            </ul>
+            <ul lang="en">
+                <li>5 different test ZIPs pass the full pipeline without your intervention;</li>
+                <li>each result — PDF + memo + audit.log within 5–10 minutes;</li>
+                <li>logs carry no personal data (anonymisation);</li>
+                <li>user files auto-delete after 24 hours;</li>
+                <li>a test CPA account sees its test “clients”;</li>
+                <li>an obvious disclaimer “not for IRS filing without a CPA.”</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Вариант&nbsp;C · «Семейный финансовый портал»</span><span lang="en">Option C · “Family Finance Portal”</span></span>
+            <h3><span lang="ru">Бюджет, цели и&nbsp;расходы для&nbsp;всей семьи</span><span lang="en">Budget, goals and expenses for the whole family</span></h3>
+            <p class="goal" lang="ru">Идея: общий финансовый пульт для&nbsp;вашей семьи (вы&nbsp;+ партнёр, или вы&nbsp;+ родители). Совместный бюджет, цели накоплений, расписание оплат, Telegram-бот для&nbsp;быстрого ввода трат, расходы по&nbsp;категориям с&nbsp;автоматической классификацией через Claude.</p>
+            <p class="goal" lang="en">Idea: a shared financial cockpit for your family (you + partner, or you + parents). Shared budget, saving goals, payment schedule, a Telegram bot for fast expense entry, categorised expenses with Claude-driven auto-classification.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Кто пользователь</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Target user</h4>
+            <ul lang="ru">
+                <li>вы&nbsp;и&nbsp;ещё 1–3 члена семьи;</li>
+                <li>не&nbsp;для&nbsp;широкого использования&nbsp;&mdash; данные слишком чувствительные;</li>
+                <li>цель&nbsp;&mdash; «семейная финансовая грамотность» через инструмент.</li>
+            </ul>
+            <ul lang="en">
+                <li>you and 1–3 family members;</li>
+                <li>not for broad use — data is too sensitive;</li>
+                <li>goal — “family financial literacy” via a tool.</li>
+            </ul>
+
+            <h4 lang="ru">Главные фичи</h4>
+            <h4 lang="en">Core features</h4>
+            <ul lang="ru">
+                <li>Multi-user аккаунты с&nbsp;ролями (admin / member).</li>
+                <li>Telegram-бот: пишете «обед 800» — бот через Claude API классифицирует «еда вне&nbsp;дома» и&nbsp;записывает.</li>
+                <li>Совместный дашборд: где общие траты, где&nbsp;&mdash; индивидуальные.</li>
+                <li>Цели накоплений: «отпуск 200к к&nbsp;июлю», прогресс-бар, прогноз достижения (этап&nbsp;04).</li>
+                <li>Расписание счетов (электричество, ипотека) с&nbsp;cron-напоминалкой за&nbsp;3 дня (этап&nbsp;10).</li>
+                <li>Еженедельный Sunday-отчёт по&nbsp;всей семье через subagents (этап&nbsp;07).</li>
+                <li>Шифрование чувствительных полей (этап&nbsp;10).</li>
+            </ul>
+            <ul lang="en">
+                <li>Multi-user accounts with roles (admin / member).</li>
+                <li>Telegram bot: type “lunch 800” — Claude API classifies “eating out” and saves.</li>
+                <li>Shared dashboard: shared vs personal expenses.</li>
+                <li>Saving goals: “vacation 200k by July,” progress bar, ETA forecast (etape 04).</li>
+                <li>Bill schedule (utilities, mortgage) with a 3-day cron reminder (etape 10).</li>
+                <li>Sunday weekly family report via subagents (etape 07).</li>
+                <li>Encryption of sensitive fields (etape 10).</li>
+            </ul>
+
+            <h4 lang="ru">Критерии готовности</h4>
+            <h4 lang="en">Acceptance criteria</h4>
+            <ul lang="ru">
+                <li>в&nbsp;портал залогинились минимум 2 человека (вы&nbsp;и&nbsp;кто-то ещё);</li>
+                <li>оба пользуются Telegram-ботом для&nbsp;ввода трат;</li>
+                <li>Claude корректно классифицирует 9 из&nbsp;10 трат;</li>
+                <li>обе цели накоплений видны на&nbsp;дашборде, прогресс обновляется автоматически;</li>
+                <li>Sunday-отчёт пришёл за&nbsp;неделю наблюдений;</li>
+                <li>персональные финансовые данные зашифрованы в&nbsp;БД, есть <code>/forget</code>.</li>
+            </ul>
+            <ul lang="en">
+                <li>at least 2 people signed in (you + someone);</li>
+                <li>both use the Telegram bot for expenses;</li>
+                <li>Claude correctly classifies 9 out of 10 entries;</li>
+                <li>both saving goals show on the dashboard, progress auto-updates;</li>
+                <li>Sunday report landed for a week of observations;</li>
+                <li>sensitive financial data encrypted in the DB, with a <code>/forget</code> command.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Вариант&nbsp;D · «Совместный AI-фонд»</span><span lang="en">Option D · “Co-op AI Fund”</span></span>
+            <h3><span lang="ru">DAO для&nbsp;инвестиций без&nbsp;блокчейна</span><span lang="en">A DAO for investing — without blockchain</span></h3>
+            <p class="goal" lang="ru">Идея: групповой инвестиционный сервис для&nbsp;кружка из&nbsp;5–15 человек (друзей, коллег). Каждый предлагает идею через Telegram-бота, AI-команда из&nbsp;этапа&nbsp;07 делает due diligence, голосование, агрегированные позиции, ежемесячный отчёт. <em>Никаких реальных денег</em>&nbsp;&mdash; это игровой фонд для&nbsp;тренировки коллективного инвест-мышления.</p>
+            <p class="goal" lang="en">Idea: a group investing service for a circle of 5–15 (friends, colleagues). Each member proposes via a Telegram bot, the etape-07 AI team runs DD, voting, aggregated positions, a monthly report. <em>No real money</em> — a game fund to practise collective investment thinking.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Кто пользователь</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Target user</h4>
+            <ul lang="ru">
+                <li>кружок из&nbsp;5–15 человек, который хочет «играть в&nbsp;фонд»;</li>
+                <li>не&nbsp;реальный фонд&nbsp;&mdash; <em>учебный полигон</em>;</li>
+                <li>можно использовать как «инвестиционный книжный клуб»&nbsp;&mdash; обсуждение через AI-аналитику.</li>
+            </ul>
+            <ul lang="en">
+                <li>a circle of 5–15 wanting to “play fund”;</li>
+                <li>not a real fund — a <em>learning playground</em>;</li>
+                <li>doubles as an “investing book club” — debate via AI analytics.</li>
+            </ul>
+
+            <h4 lang="ru">Главные фичи</h4>
+            <h4 lang="en">Core features</h4>
+            <ul lang="ru">
+                <li>Multi-user сервис на&nbsp;Vercel + Railway.</li>
+                <li>Telegram-бот: <code>/propose AAPL because ...</code>&nbsp;&mdash; идея уходит в&nbsp;очередь.</li>
+                <li>AI-команда (4 subagents этапа&nbsp;07) автоматически делает DD по&nbsp;каждой идее, отчёт виден всем.</li>
+                <li>Голосование: каждый член ставит +1/0/-1 на&nbsp;идею; агрегация решает «принимаем&nbsp;/ нет».</li>
+                <li>Виртуальный портфель: фиксированные «фонд-баксы», распределяются по&nbsp;принятым идеям.</li>
+                <li>Ежемесячный отчёт: какие идеи сработали, какие&nbsp;&mdash; нет, кто из&nbsp;участников «лучший аналитик» по&nbsp;hit-rate.</li>
+                <li>Полный «red-team» в&nbsp;конце каждого DD (этап&nbsp;07).</li>
+            </ul>
+            <ul lang="en">
+                <li>A multi-user service on Vercel + Railway.</li>
+                <li>Telegram bot: <code>/propose AAPL because ...</code> — the idea enters the queue.</li>
+                <li>The AI team (4 etape-07 subagents) auto-DDs each idea, the report visible to all.</li>
+                <li>Voting: each member casts +1/0/-1; aggregation decides accept/reject.</li>
+                <li>Virtual portfolio: fixed “fund-bucks” allocated to accepted ideas.</li>
+                <li>Monthly report: which ideas worked, which didn’t, who is the “best analyst” by hit-rate.</li>
+                <li>Full “red team” at the end of each DD (etape 07).</li>
+            </ul>
+
+            <h4 lang="ru">Критерии готовности</h4>
+            <h4 lang="en">Acceptance criteria</h4>
+            <ul lang="ru">
+                <li>в&nbsp;сервисе зарегистрировано минимум 5 участников;</li>
+                <li>хотя&nbsp;бы 3 идеи прошли полный цикл «proposal → DD → vote → portfolio»;</li>
+                <li>пришёл первый ежемесячный отчёт;</li>
+                <li>«лучший аналитик» определён корректно (по&nbsp;hit-rate, а&nbsp;не&nbsp;по&nbsp;количеству);</li>
+                <li>есть очевидный дисклеймер «игровой фонд, никаких реальных денег»;</li>
+                <li>Friend feedback: 2 участника пишут одно предложение «почему мне нравится / не&nbsp;нравится» в&nbsp;<code>FEEDBACK.md</code>.</li>
+            </ul>
+            <ul lang="en">
+                <li>at least 5 members signed up;</li>
+                <li>at least 3 ideas went through the full cycle “proposal → DD → vote → portfolio”;</li>
+                <li>the first monthly report has landed;</li>
+                <li>“best analyst” is determined correctly (by hit-rate, not count);</li>
+                <li>obvious disclaimer: “game fund, no real money”;</li>
+                <li>Friend feedback: 2 members write a one-liner “what I like / don’t” into <code>FEEDBACK.md</code>.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Финальный чек-лист</span><span lang="en">Final checklist</span></span>
+            <h2><span lang="ru">Когда проект готов&nbsp;&mdash; пройдитесь по&nbsp;этому списку</span><span lang="en">When the project is ready — run through this list</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="cap-spec"><span lang="ru"><code>spec.md</code> в&nbsp;корне проекта&nbsp;&mdash; полный, с&nbsp;«out of scope».</span><span lang="en"><code>spec.md</code> at the project root — complete, with “out of scope.”</span></li>
+            <li data-key="cap-url"><span lang="ru">Публичный URL открывается у&nbsp;всех (тестировали с&nbsp;другого устройства).</span><span lang="en">The public URL opens for everyone (tested on another device).</span></li>
+            <li data-key="cap-readme"><span lang="ru">Двуязычный README с&nbsp;демо-скриншотом, лицензией, дисклеймером.</span><span lang="en">Bilingual README with a demo screenshot, licence, disclaimer.</span></li>
+            <li data-key="cap-arsenal"><span lang="ru">Использовано минимум 6 техник курса (видно из&nbsp;структуры репо).</span><span lang="en">At least 6 course techniques used (visible from repo structure).</span></li>
+            <li data-key="cap-secrets"><span lang="ru">В&nbsp;истории git нет ни&nbsp;одного секрета (проверили <code>git log -p | grep -iE "key|secret|token"</code>).</span><span lang="en">No secrets anywhere in git history (verified via <code>git log -p | grep -iE "key|secret|token"</code>).</span></li>
+            <li data-key="cap-monitoring"><span lang="ru">PostHog подключён, на&nbsp;дашборде видны токены и&nbsp;ошибки.</span><span lang="en">PostHog wired, the dashboard shows tokens and errors.</span></li>
+            <li data-key="cap-friend"><span lang="ru">Минимум один человек кроме вас открыл, попробовал, дал отзыв в&nbsp;<code>FEEDBACK.md</code>.</span><span lang="en">At least one person besides you opened it, tried it, left feedback in <code>FEEDBACK.md</code>.</span></li>
+            <li data-key="cap-retro"><span lang="ru">В&nbsp;<code>retro.md</code>: 3&nbsp;«получилось», 3&nbsp;«не&nbsp;получилось», 3&nbsp;«сделал&nbsp;бы по-другому».</span><span lang="en"><code>retro.md</code>: 3 wins, 3 misses, 3 “would do differently.”</span></li>
+            <li data-key="cap-self"><span lang="ru">Вы&nbsp;сами пользовались минимум 5 дней подряд&nbsp;&mdash; не&nbsp;«построил и&nbsp;забыл».</span><span lang="en">You used it yourself for 5+ consecutive days — not “build and forget.”</span></li>
+            <li data-key="cap-link"><span lang="ru">Ссылка на&nbsp;проект добавлена в&nbsp;ваш портфолио из&nbsp;этапа&nbsp;05.</span><span lang="en">A link to the project is added to your etape-05 portfolio.</span></li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть капстоун? Это последний шаг курса.</p>
+            <p lang="en">Ready to close the capstone? This is the last step of the course.</p>
+            <button class="btn-complete" data-id="capstone" type="button"><span lang="ru">Отметить капстоун завершённым</span><span lang="en">Mark capstone complete</span></button>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="after">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">После курса</span><span lang="en">After the course</span></span>
+            <h2><span lang="ru">Что вы&nbsp;умеете теперь, чего не&nbsp;умели до&nbsp;курса</span><span lang="en">What you can do now that you couldn’t before</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">К&nbsp;этому моменту, прочитав 12&nbsp;этапов и&nbsp;собрав один большой капстоун, вы&nbsp;прошли путь от&nbsp;«не&nbsp;знал, что такое терминал» до&nbsp;«опубликовал свой плагин на&nbsp;Smithery, у&nbsp;меня cron-расписание из&nbsp;четырёх задач, и&nbsp;я&nbsp;показываю свой инвест-портал друзьям». Это и&nbsp;есть «AI-нативный разработчик».</p>
+        <p class="reading" lang="en">By this point, after 12 etapes and one large capstone, you walked from “didn’t know what a terminal was” to “published my plugin on Smithery, I run a four-task cron schedule, I show my investing portal to friends.” That is the AI-native builder.</p>
+
+        <div class="row cols-2" style="margin-top:2rem;">
+            <div>
+                <h3 lang="ru" style="margin-bottom:0.8rem;">Сквозные навыки</h3>
+                <h3 lang="en" style="margin-bottom:0.8rem;">Cross-cutting skills</h3>
+                <ul lang="ru">
+                    <li><strong>Промпт-инжиниринг для&nbsp;агентов</strong>: формулировка → итерация → откат → варианты → аудит.</li>
+                    <li><strong>Дисциплина крупных задач</strong>: spec → Plan Mode → TodoWrite → verification → <code>/compact</code>.</li>
+                    <li><strong>Команды агентов</strong>: parallel subagents, brief, дирижёр, red team.</li>
+                    <li><strong>Расширение инструмента</strong>: свои skills, slash, hooks, MCP, плагины.</li>
+                    <li><strong>Полный цикл продукта</strong>: frontend + backend + БД + auth + деплой + мониторинг + автопилот.</li>
+                </ul>
+                <ul lang="en">
+                    <li><strong>Prompt engineering for agents</strong>: phrasing → iteration → rollback → variants → audit.</li>
+                    <li><strong>Big-task discipline</strong>: spec → Plan Mode → TodoWrite → verification → <code>/compact</code>.</li>
+                    <li><strong>Agent teams</strong>: parallel subagents, briefs, conductor, red team.</li>
+                    <li><strong>Tool extension</strong>: custom skills, slash, hooks, MCP, plugins.</li>
+                    <li><strong>Full product cycle</strong>: frontend + backend + DB + auth + deploy + monitoring + autopilot.</li>
+                </ul>
+            </div>
+            <aside>
+                <div class="aside-card">
+                    <span class="label"><span lang="ru">Дальше</span><span lang="en">Going on</span></span>
+                    <h3><span lang="ru">Что делать с&nbsp;капстоуном</span><span lang="en">What to do with the capstone</span></h3>
+                    <p lang="ru"><strong>Если вам нравится продукт</strong>&nbsp;&mdash; продолжайте им&nbsp;пользоваться. Возвращайтесь раз в&nbsp;месяц&nbsp;&mdash; добавлять одну фичу, чинить одну поломку. Это лучшая «вечная практика», какая бывает.</p>
+                    <p lang="en"><strong>If you like the product</strong> — keep using it. Come back once a month — add one feature, fix one bug. The best “forever practice” you can have.</p>
+                </div>
+                <div class="aside-card" style="margin-top:1.5rem;">
+                    <span class="label"><span lang="ru">Сообщество</span><span lang="en">Community</span></span>
+                    <h3><span lang="ru">Где общаться о&nbsp;Claude Code</span><span lang="en">Where to talk Claude Code</span></h3>
+                    <p lang="ru">Smithery community, Anthropic Discord, Reddit&nbsp;<code>r/ClaudeAI</code>. Покажите свои плагины&nbsp;&mdash; получите обратную связь.</p>
+                    <p lang="en">The Smithery community, Anthropic Discord, Reddit <code>r/ClaudeAI</code>. Show your plugins — collect feedback.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-11.html"><span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span><span class="step-title"><span lang="ru">11 · Claude Agent SDK</span><span lang="en">11 · Claude Agent SDK</span></span></a>
+            <a class="next" href="../index.html"><span class="step-label"><span lang="ru">К&nbsp;оглавлению →</span><span lang="en">Back to contents →</span></span><span class="step-title"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></span></a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Курс заканчивается там, где у&nbsp;вас на&nbsp;руках продукт, к&nbsp;которому вы&nbsp;возвращаетесь по&nbsp;собственной воле. Если этого&nbsp;нет&nbsp;&mdash; курс ещё не&nbsp;закончился, какие&nbsp;бы галочки вы&nbsp;ни&nbsp;поставили».</p>
+            <p class="signature" lang="en">“The course ends where you hold a product you return to of your own accord. Without that, the course isn’t over — no matter the ticks.”</p>
+            <p lang="ru">Поздравляю с&nbsp;завершением. Если хотите&nbsp;&mdash; пришлите ссылку на&nbsp;ваш капстоун автору курса, для&nbsp;витрины «Студенческие работы».</p>
+            <p lang="en">Congratulations on finishing. If you’d like — send the capstone link to the course author for the “Student Works” showcase.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри</span><span lang="en">Inside</span></h5>
+            <ul>
+                <li><a href="#rules">§&nbsp;I · <span lang="ru">Правила</span><span lang="en">Rules</span></a></li>
+                <li><a href="#options">§&nbsp;II · <span lang="ru">Варианты</span><span lang="en">Options</span></a></li>
+                <li><a href="#checklist">§&nbsp;III · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+                <li><a href="#after">§&nbsp;IV · <span lang="ru">После</span><span lang="en">After</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-00.html"><span lang="ru">↺ Этап&nbsp;00</span><span lang="en">↺ Etape 00</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 03 · Web, MCP и готовые Skills — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 03 курса по Claude Code: WebSearch, WebFetch, MCP-серверы (Playwright, Context7), готовые skills, открытые API, трекер котировок и дашборд с реальными ценами.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="03">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 03</span><span lang="en">Etape 03</span></span> &nbsp;·&nbsp; <span lang="ru">Web, MCP и&nbsp;готовые Skills</span><span lang="en">Web, MCP &amp; ready-made Skills</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Открываем Claude <em>в&nbsp;интернет</em>.</span>
+            <span lang="en">Plug Claude <em>into the internet</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            До&nbsp;этого момента Claude работал только с&nbsp;вашими файлами. Сегодня даём ему доступ к&nbsp;интернету, ставим первые <dfn class="term" tabindex="0" data-def="Model Context Protocol — стандарт «инструментов для AI». Через MCP Claude получает новые навыки: открывать браузер, читать свежие доки, работать с внешними сервисами.">MCP-серверы</dfn>, подключаем готовые skills из&nbsp;Smithery&nbsp;&mdash; и&nbsp;собираем дашборд по&nbsp;реальным ценам акций.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Until now Claude worked only on your files. Today we open the internet for it, install the first <dfn class="term" tabindex="0" data-def="Model Context Protocol — a standard for “AI tools.” MCP gives Claude new abilities: open the browser, read fresh docs, work with external services.">MCP servers</dfn>, plug in ready-made skills from Smithery&nbsp;&mdash; and assemble a dashboard on live stock prices.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">6–8 дней · 2–4&nbsp;ч/день</span><span lang="en">6–8 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">WebSearch · WebFetch · MCP · готовые skills · API</span><span lang="en">WebSearch · WebFetch · MCP · ready skills · APIs</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">Claude работает с&nbsp;живыми данными, не&nbsp;только с&nbsp;файлами</span><span lang="en">Claude works on live data, not just files</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">трекер котировок акций&nbsp;+ дашборд портфеля по&nbsp;реальным ценам</span><span lang="en">a stock-quotes tracker + a portfolio dashboard on live prices</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что устанавливаем перед началом</span><span lang="en">What to install before you start</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Здесь больше всего «инсталляций» из&nbsp;всего курса&nbsp;&mdash; зато после них Claude получает в&nbsp;руки полный набор инструментов. На&nbsp;следующих этапах ничего нового ставить почти не&nbsp;придётся.</p>
+        <p class="reading" lang="en">This etape has the most installations of the whole course — after them Claude has its full toolset. On further etapes you’ll barely install anything new.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · MCP</span><span lang="en">required · MCP</span></span>
+            <h3><span lang="ru">MCP <code>@playwright/mcp</code>&nbsp;&mdash; управление браузером</span><span lang="en">MCP <code>@playwright/mcp</code> — controlling the browser</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> <dfn class="term" tabindex="0" data-def="движок автоматизации браузера от Microsoft. Claude через MCP управляет настоящим Chrome — открывает страницы, кликает, делает скриншоты, проверяет ваш сайт.">Playwright</dfn>&nbsp;&mdash; движок автоматизации браузера от&nbsp;Microsoft. MCP-серверная обёртка даёт Claude инструменты: <em>открыть страницу, кликнуть, ввести текст, сделать скриншот, прочитать DOM</em>.<br>
+            <strong>Зачем сейчас:</strong> для&nbsp;проверки своего же&nbsp;сайта&nbsp;&mdash; Claude открывает ваш дашборд в&nbsp;Chrome и&nbsp;даёт обратную связь. Также для&nbsp;парсинга страниц, на&nbsp;которые нет открытого&nbsp;API.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> <dfn class="term" tabindex="0" data-def="a browser-automation engine by Microsoft. Through MCP Claude controls a real Chrome — opens pages, clicks, takes screenshots, audits your site.">Playwright</dfn> is a browser-automation engine by Microsoft. The MCP wrapper gives Claude tools: <em>open page, click, type, screenshot, read DOM</em>.<br>
+            <strong>Why now:</strong> to verify your own site — Claude opens your dashboard in Chrome and gives feedback. Also for parsing pages that have no open API.</p>
+            <pre class="shell"><span class="cmt"># <span lang="ru">установка через Smithery</span><span lang="en">install via Smithery</span></span>
+<span class="prompt">$</span> npx @smithery/cli@latest install @playwright/mcp --client claude</pre>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> <a href="https://smithery.ai/server/@playwright/mcp">smithery.ai/server/@playwright/mcp</a>.<br>
+            <strong>Проверка:</strong> в&nbsp;Claude напечатайте <code>/mcp</code>&nbsp;&mdash; <code>playwright</code> в&nbsp;списке. Попросите <em>«открой через playwright страницу example.com и&nbsp;дай заголовок»</em>&nbsp;&mdash; Claude должен ответить «Example Domain».</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> <a href="https://smithery.ai/server/@playwright/mcp">smithery.ai/server/@playwright/mcp</a>.<br>
+            <strong>Verify:</strong> in Claude type <code>/mcp</code> — <code>playwright</code> should be in the list. Ask <em>“through playwright open example.com and give me the title”</em> — should reply “Example Domain.”</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · MCP</span><span lang="en">required · MCP</span></span>
+            <h3><span lang="ru">MCP <code>context7</code>&nbsp;&mdash; свежая документация библиотек</span><span lang="en">MCP <code>context7</code> — fresh library docs</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> <dfn class="term" tabindex="0" data-def="MCP-сервер от Upstash, который даёт Claude доступ к актуальной документации библиотек и фреймворков. Решает проблему «обучен на старых версиях».">Context7</dfn>&nbsp;&mdash; сервер от&nbsp;Upstash, через который Claude получает <em>актуальную</em> документацию библиотек (chart.js, react, fastapi, всего&nbsp;&mdash; тысячи).<br>
+            <strong>Зачем сейчас:</strong> модель Claude обучена на&nbsp;данных «до&nbsp;какого-то месяца». За&nbsp;это время библиотеки изменились&nbsp;&mdash; чтобы Claude не&nbsp;писал код по&nbsp;устаревшим версиям, мы&nbsp;даём ему живые доки.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> <dfn class="term" tabindex="0" data-def="An Upstash MCP server that gives Claude access to current docs for libraries and frameworks. Solves “trained on old versions.”">Context7</dfn> by Upstash gives Claude <em>current</em> docs for libraries (chart.js, react, fastapi — thousands).<br>
+            <strong>Why now:</strong> Claude is trained up to a cut-off month. Libraries change since — so we feed it live docs to prevent stale code.</p>
+            <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest install @upstash/context7-mcp --client claude</pre>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> <a href="https://smithery.ai/server/@upstash/context7-mcp">smithery.ai/server/@upstash/context7-mcp</a>.<br>
+            <strong>Проверка:</strong> попросите <em>«через context7 покажи свежий пример&nbsp;chart.js с&nbsp;тёмной темой»</em>&nbsp;&mdash; Claude должен подтянуть документацию и&nbsp;дать рабочий код.</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> <a href="https://smithery.ai/server/@upstash/context7-mcp">smithery.ai/server/@upstash/context7-mcp</a>.<br>
+            <strong>Verify:</strong> ask <em>“through context7 show a fresh chart.js example with a dark theme”</em> — Claude should pull docs and give working code.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3><span lang="ru">Skill <code>excalidraw-diagram-generator</code>&nbsp;&mdash; диаграммы и&nbsp;схемы</span><span lang="en">Skill <code>excalidraw-diagram-generator</code> — diagrams and schemas</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill, который учит Claude генерировать <code>.excalidraw</code>-файлы&nbsp;&mdash; редактируемые «рукописные» диаграммы. Открываются в&nbsp;<a href="https://excalidraw.com">excalidraw.com</a>.<br>
+            <strong>Зачем сейчас:</strong> когда вы&nbsp;вернётесь к&nbsp;проекту через месяц, проще понять архитектуру по&nbsp;диаграмме, чем по&nbsp;коду. Claude нарисует, как у&nbsp;вас связаны API → CSV → дашборд.<br>
+            <strong>Проверить, нет&nbsp;ли уже:</strong> <code>/skills</code> в&nbsp;Claude.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude to generate <code>.excalidraw</code> files — editable “sketchy” diagrams. Open in <a href="https://excalidraw.com">excalidraw.com</a>.<br>
+            <strong>Why now:</strong> a month later it’s easier to grasp the architecture from a diagram than from code. Claude draws how your API → CSV → dashboard connect.<br>
+            <strong>Check first:</strong> <code>/skills</code> in Claude.</p>
+            <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest skill add github/excalidraw-diagram-generator --agent claude-code</pre>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> <a href="https://smithery.ai/skills/github/excalidraw-diagram-generator">smithery.ai/skills/github/excalidraw-diagram-generator</a>.</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> <a href="https://smithery.ai/skills/github/excalidraw-diagram-generator">smithery.ai/skills/github/excalidraw-diagram-generator</a>.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · API-ключ</span><span lang="en">required · API key</span></span>
+            <h3><span lang="ru">API ключ для&nbsp;котировок: Alpha Vantage</span><span lang="en">API key for stock quotes: Alpha Vantage</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> <dfn class="term" tabindex="0" data-def="Application Programming Interface — «программный интерфейс»: способ одной программы получить данные у другой. У большинства финансовых сервисов есть открытые API.">API</dfn>-сервис с&nbsp;историческими и&nbsp;текущими ценами акций, валют, крипты. Бесплатный тариф&nbsp;&mdash; до&nbsp;25 запросов/день.<br>
+            <strong>Зачем сейчас:</strong> чтобы дашборд из&nbsp;этапа&nbsp;02 показывал не&nbsp;«последнюю цену из&nbsp;CSV», а&nbsp;<em>реальную текущую</em>.<br>
+            <strong>Где взять:</strong> регистрация на&nbsp;<a href="https://www.alphavantage.co/support/#api-key">alphavantage.co/support/#api-key</a>&nbsp;&mdash; одна минута, сразу получаете <dfn class="term" tabindex="0" data-def="секретная строка-пропуск, которую вы вставляете в запрос к API. По ней сервис понимает, что это вы. Никогда не делитесь ключом и не коммитьте его в git.">API-ключ</dfn>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a service with historical and current prices for stocks, FX, crypto. Free tier — up to 25 requests/day.<br>
+            <strong>Why now:</strong> so the etape-02 dashboard shows not “last CSV price” but the <em>actual current</em> one.<br>
+            <strong>Where:</strong> register at <a href="https://www.alphavantage.co/support/#api-key">alphavantage.co/support/#api-key</a> — one minute, you get an <dfn class="term" tabindex="0" data-def="a secret pass-string you put into requests to the API. The service identifies you by it. Never share or commit to git.">API key</dfn>.</p>
+            <p lang="ru" style="margin:0.5rem 0 0;"><strong>Куда положить ключ:</strong> создайте файл <code>.env</code> в&nbsp;корне проекта (рядом с&nbsp;<code>CLAUDE.md</code>):</p>
+            <p lang="en" style="margin:0.5rem 0 0;"><strong>Where to keep it:</strong> create a <code>.env</code> file at the project root (next to <code>CLAUDE.md</code>):</p>
+            <pre class="shell">ALPHAVANTAGE_KEY=ваш-ключ-сюда</pre>
+            <p lang="ru" style="margin:0.4rem 0 0;"><strong>Никогда не&nbsp;коммитьте <code>.env</code></strong>: добавьте его в&nbsp;<code>.gitignore</code>. Подробно про защиту секретов&nbsp;&mdash; этап&nbsp;05.</p>
+            <p lang="en" style="margin:0.4rem 0 0;"><strong>Never commit <code>.env</code></strong>: add it to <code>.gitignore</code>. We cover secret hygiene in detail on etape 05.</p>
+        </div>
+
+        <div class="note" style="margin-top:1.5rem;">
+            <span lang="ru"><strong>WebSearch и&nbsp;WebFetch</strong> устанавливать не&nbsp;нужно&nbsp;&mdash; они уже встроены в&nbsp;Claude Code. Поговорим о&nbsp;них в&nbsp;§&nbsp;I.</span>
+            <span lang="en"><strong>WebSearch and WebFetch</strong> need no install — they’re built into Claude Code. We cover them in § I.</span>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что у&nbsp;Claude теперь в&nbsp;руках</span><span lang="en">What Claude now has in hand</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Что такое MCP. Почему через него&nbsp;&mdash; всё</span><span lang="en">What MCP is, and why everything goes through it</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong>MCP (Model Context Protocol)</strong>&nbsp;&mdash; это стандарт «инструментов для&nbsp;AI». Договорились: если кто-то делает сервис, который AI должен уметь использовать, он&nbsp;оформляет его как «MCP-сервер». Любой AI-клиент (включая Claude Code), поддерживающий MCP, мгновенно умеет с&nbsp;этим сервисом работать.</p>
+                    <p>Аналогия: USB. Раньше для&nbsp;каждой мышки нужен был свой драйвер. Сейчас мышка любой марки втыкается в&nbsp;любой компьютер&nbsp;&mdash; благодаря стандарту USB. MCP&nbsp;&mdash; это USB для&nbsp;AI-инструментов.</p>
+                    <p>Что появляется у&nbsp;Claude после установки MCP-сервера:</p>
+                    <ul>
+                        <li>новые «инструменты» (tools), которые он&nbsp;может использовать&nbsp;&mdash; от&nbsp;«открой страницу» до&nbsp;«запиши в&nbsp;PostHog»;</li>
+                        <li>новые «ресурсы» (resources)&nbsp;&mdash; ссылки на&nbsp;документы, дашборды, базы знаний;</li>
+                        <li>иногда&nbsp;&mdash; готовые промпты (prompts) для&nbsp;типовых задач сервиса.</li>
+                    </ul>
+                    <p>В&nbsp;этом этапе мы&nbsp;ставим два MCP: <code>playwright</code> (браузер) и&nbsp;<code>context7</code> (свежие доки). Этап&nbsp;09 будет про&nbsp;то, как написать собственный MCP&nbsp;&mdash; например, MCP «инвест-помощник» с&nbsp;инструментами <code>get_price</code>, <code>compute_signal</code>, <code>set_alert</code>.</p>
+                    <div class="note">
+                        Реестр MCP-серверов и&nbsp;skills&nbsp;&mdash; <a href="https://smithery.ai">smithery.ai</a>. Это «магазин AI-инструментов»: тысячи серверов от&nbsp;разных авторов, ставятся одной командой.
+                    </div>
+                </div>
+                <div lang="en">
+                    <p><strong>MCP (Model Context Protocol)</strong> is a standard for “AI tools.” The agreement: if you build a service AI should use, you wrap it as an “MCP server.” Any MCP-aware client (including Claude Code) instantly knows how to use it.</p>
+                    <p>An analogy: USB. Each mouse used to need its own driver. Now any mouse plugs into any computer — thanks to USB. MCP is the USB of AI tools.</p>
+                    <p>After installing an MCP server, Claude gains:</p>
+                    <ul>
+                        <li>new tools — from “open this page” to “write to PostHog”;</li>
+                        <li>new resources — links to documents, dashboards, knowledge bases;</li>
+                        <li>sometimes — pre-built prompts for the service’s typical tasks.</li>
+                    </ul>
+                    <p>This etape installs two MCPs: <code>playwright</code> (browser) and <code>context7</code> (fresh docs). Etape 09 covers building your own MCP — e.g., an “investing helper” MCP with <code>get_price</code>, <code>compute_signal</code>, <code>set_alert</code>.</p>
+                    <div class="note">
+                        The MCP and skills registry is <a href="https://smithery.ai">smithery.ai</a>. An “AI tools store”: thousands of servers from many authors, one-command install.
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="встроенный в Claude Code инструмент: «погугли это». Возвращает список ссылок и сниппетов.">WebSearch</dfn> и&nbsp;<dfn class="term" tabindex="0" data-def="встроенный инструмент: «прочитай эту страницу». Скачивает HTML, чистит, отдаёт текст Claude.">WebFetch</dfn>&nbsp;&mdash; встроенные «руки в&nbsp;интернет»</span><span lang="en"><dfn class="term" tabindex="0" data-def="a Claude Code built-in tool: “google this.” Returns links and snippets.">WebSearch</dfn> and <dfn class="term" tabindex="0" data-def="a built-in tool: “read this page.” Downloads HTML, cleans, hands text to Claude.">WebFetch</dfn> — built-in “hands into the internet”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Эти два инструмента у&nbsp;Claude Code <em>уже есть</em>&nbsp;&mdash; ставить ничего не&nbsp;нужно. Разница простая:</p>
+                    <ul>
+                        <li><strong>WebSearch</strong>: «погугли это». Запрос → список ссылок и&nbsp;коротких сниппетов.</li>
+                        <li><strong>WebFetch</strong>: «прочитай эту конкретную страницу». URL → текст с&nbsp;неё (HTML очищен).</li>
+                    </ul>
+                    <p>Типичный сценарий:</p>
+                    <pre class="shell">&gt; найди (WebSearch) последний квартальный отчёт Apple,
+&gt; потом открой (WebFetch) первую ссылку из investor.apple.com
+&gt; и выпиши три ключевых цифры в data/aapl-q.md.</pre>
+                    <p>Когда уместен WebSearch:</p>
+                    <ul>
+                        <li>не&nbsp;знаете точный URL;</li>
+                        <li>нужно несколько источников;</li>
+                        <li>задача исследовательская.</li>
+                    </ul>
+                    <p>Когда WebFetch:</p>
+                    <ul>
+                        <li>знаете URL и&nbsp;нужен именно он;</li>
+                        <li>задача&nbsp;&mdash; вытащить данные из&nbsp;конкретной страницы.</li>
+                    </ul>
+                    <div class="note">
+                        WebFetch не&nbsp;подходит для&nbsp;интерактивных страниц (с&nbsp;кучей JavaScript, login и&nbsp;т.&nbsp;д.). Для&nbsp;них&nbsp;&mdash; Playwright (см. ниже).
+                    </div>
+                </div>
+                <div lang="en">
+                    <p>These two are <em>already in</em> Claude Code — nothing to install. The split:</p>
+                    <ul>
+                        <li><strong>WebSearch</strong>: “google this.” Query → list of links and short snippets.</li>
+                        <li><strong>WebFetch</strong>: “read this exact page.” URL → cleaned text.</li>
+                    </ul>
+                    <p>Typical pattern:</p>
+                    <pre class="shell">&gt; find (WebSearch) Apple's latest quarterly report,
+&gt; then open (WebFetch) the first investor.apple.com link
+&gt; and pull three key numbers into data/aapl-q.md.</pre>
+                    <p>WebSearch fits when:</p>
+                    <ul>
+                        <li>you don’t know the URL;</li>
+                        <li>you need several sources;</li>
+                        <li>the task is exploratory.</li>
+                    </ul>
+                    <p>WebFetch fits when:</p>
+                    <ul>
+                        <li>you know the URL and want exactly it;</li>
+                        <li>the task is to extract data from a specific page.</li>
+                    </ul>
+                    <div class="note">
+                        WebFetch is not great for interactive pages (heavy JS, login). For those — Playwright (below).
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Playwright: Claude управляет настоящим браузером</span><span lang="en">Playwright: Claude controlling a real browser</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Playwright&nbsp;&mdash; это когда Claude открывает <em>настоящий</em> Chrome (через MCP), кликает кнопки, заполняет формы, делает скриншоты. То, чего не&nbsp;умеют WebSearch и&nbsp;WebFetch.</p>
+                    <p>Главные применения в&nbsp;курсе:</p>
+                    <ol>
+                        <li><strong>Проверка своего сайта.</strong> Сделали дашборд&nbsp;&mdash; Claude открывает его, делает скриншот, говорит «вот тут график обрезан, вот тут заголовок переносится плохо».</li>
+                        <li><strong>Парсинг сайтов без&nbsp;API.</strong> Например, «сходи на&nbsp;страницу акции на&nbsp;Yahoo Finance, выпиши P/E ratio». Если открытого&nbsp;API нет&nbsp;&mdash; парсим браузером.</li>
+                        <li><strong>Тестирование.</strong> «Зарегистрируйся на&nbsp;своём же&nbsp;сайте через тестовый email, проверь что приходит письмо, нажми ссылку из&nbsp;него, проверь что вошёл».</li>
+                    </ol>
+                    <pre class="shell">&gt; через playwright открой http://localhost:8000/dashboard.html
+&gt; в окне 1440x900, сделай скриншот, оцени:
+&gt; — нет ли элементов, налезающих друг на друга;
+&gt; — читаются ли числа в KPI-плитках;
+&gt; — все ли графики прорисовались.</pre>
+                </div>
+                <div lang="en">
+                    <p>Playwright is Claude opening a <em>real</em> Chrome (via MCP), clicking buttons, filling forms, taking screenshots. Things WebSearch / WebFetch cannot do.</p>
+                    <p>Main uses in this course:</p>
+                    <ol>
+                        <li><strong>Verifying your own site.</strong> Built a dashboard — Claude opens it, screenshots, says “the chart is clipped here, the title wraps badly there.”</li>
+                        <li><strong>Parsing sites without an API.</strong> E.g., “go to a stock’s page on Yahoo Finance, pull the P/E.” If no open API — scrape via the browser.</li>
+                        <li><strong>Testing.</strong> “Sign up on your own site with a test email, check the email arrives, click the link, confirm you’re in.”</li>
+                    </ol>
+                    <pre class="shell">&gt; through playwright open http://localhost:8000/dashboard.html
+&gt; at 1440x900, screenshot, judge:
+&gt; — anything overlapping?
+&gt; — numbers in KPI tiles readable?
+&gt; — all charts rendered?</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Context7: чтобы Claude не&nbsp;писал код по&nbsp;старым версиям</span><span lang="en">Context7: keeping Claude off stale library versions</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Внутри Claude&nbsp;&mdash; знания «до&nbsp;даты обучения» (cutoff). За&nbsp;это время многие библиотеки выпустили новые версии, поменяли&nbsp;API. Если Claude помнит «как было», его код может не&nbsp;запуститься.</p>
+                    <p><strong>Context7</strong> решает это так: даёт Claude доступ к&nbsp;<em>актуальной</em> документации тысяч библиотек в&nbsp;момент запроса. Claude сам читает свежий API и&nbsp;пишет под&nbsp;него.</p>
+                    <p>Когда вызывать вручную:</p>
+                    <ul>
+                        <li>задача завязана на&nbsp;конкретную библиотеку (chart.js, react, fastapi, prisma и&nbsp;т.&nbsp;д.);</li>
+                        <li>вы&nbsp;видите, что Claude использует устаревший синтаксис;</li>
+                        <li>вы&nbsp;на&nbsp;«фронтире» технологии&nbsp;&mdash; что-то новое.</li>
+                    </ul>
+                    <pre class="shell">&gt; через context7 подтяни доку chart.js v4
+&gt; и сделай тёмную тему графика,
+&gt; используя именно текущий API.</pre>
+                    <p>Когда не&nbsp;нужно: для&nbsp;общих задач (HTML, CSS, базовый JS, общая логика). Там Claude и&nbsp;так точен.</p>
+                </div>
+                <div lang="en">
+                    <p>Claude knows things up to its training cutoff. Since then libraries shipped new versions, changed APIs. If Claude remembers “how it was,” the code may not run.</p>
+                    <p><strong>Context7</strong> fixes this: it gives Claude live access to current docs of thousands of libraries at request time. Claude reads the fresh API and writes against it.</p>
+                    <p>Invoke explicitly when:</p>
+                    <ul>
+                        <li>the task hinges on a specific library (chart.js, react, fastapi, prisma…);</li>
+                        <li>you see Claude using stale syntax;</li>
+                        <li>you’re on the frontier — something new.</li>
+                    </ul>
+                    <pre class="shell">&gt; through context7 pull chart.js v4 docs
+&gt; and make a dark-theme chart
+&gt; using the current API.</pre>
+                    <p>Skip it for general tasks (HTML, CSS, basic JS, general logic) — Claude is precise there.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Открытые <dfn class="term" tabindex="0" data-def="Application Programming Interface — способ программам обмениваться данными. Финансовые сервисы (Yahoo, Alpha Vantage, Binance) дают открытые API для котировок.">API</dfn>: где брать живые финансовые данные</span><span lang="en">Open <dfn class="term" tabindex="0" data-def="Application Programming Interface — how programs exchange data. Financial services (Yahoo, Alpha Vantage, Binance) expose open APIs for prices.">APIs</dfn>: where to get live financial data</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>API&nbsp;&mdash; это «розетка», в&nbsp;которую программа втыкается, чтобы получить данные. У&nbsp;большинства финансовых сервисов есть открытые&nbsp;API. Несколько, которые мы&nbsp;используем в&nbsp;курсе:</p>
+                    <ul>
+                        <li><strong>Alpha Vantage</strong> (alphavantage.co)&nbsp;&mdash; акции, валюты, крипта. Бесплатно: 25&nbsp;запросов/день. Нужен API-ключ.</li>
+                        <li><strong>Yahoo Finance</strong> (через unofficial API или yfinance)&nbsp;&mdash; акции и&nbsp;ETF, без&nbsp;ключа.</li>
+                        <li><strong>CoinGecko</strong> (coingecko.com)&nbsp;&mdash; цены крипты, без&nbsp;ключа.</li>
+                        <li><strong>Frankfurter</strong> (frankfurter.app)&nbsp;&mdash; курсы валют от&nbsp;ЕЦБ, без&nbsp;ключа.</li>
+                    </ul>
+                    <p>Что важно знать про&nbsp;API:</p>
+                    <ul>
+                        <li><strong>Rate limit</strong>&nbsp;&mdash; ограничение «сколько запросов в&nbsp;минуту/день». Бесплатные тарифы обычно строгие.</li>
+                        <li><strong>API-ключ</strong>&nbsp;&mdash; секретный пропуск. <em>Никогда</em> не&nbsp;коммитить в&nbsp;git, не&nbsp;писать в&nbsp;HTML, не&nbsp;показывать в&nbsp;скриншотах. Хранить в&nbsp;<code>.env</code>.</li>
+                        <li><strong>Эндпоинт</strong>&nbsp;&mdash; конкретный URL внутри&nbsp;API: например, <code>/query?function=GLOBAL_QUOTE&symbol=AAPL</code>.</li>
+                        <li><strong>Формат ответа</strong>&nbsp;&mdash; обычно JSON.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>An API is a “socket” programs plug into to get data. Most financial services expose open APIs. A few we use in the course:</p>
+                    <ul>
+                        <li><strong>Alpha Vantage</strong> (alphavantage.co) — stocks, FX, crypto. Free: 25 req/day. Key required.</li>
+                        <li><strong>Yahoo Finance</strong> (via unofficial APIs / yfinance) — stocks and ETFs, no key.</li>
+                        <li><strong>CoinGecko</strong> (coingecko.com) — crypto prices, no key.</li>
+                        <li><strong>Frankfurter</strong> (frankfurter.app) — ECB FX rates, no key.</li>
+                    </ul>
+                    <p>What you should know:</p>
+                    <ul>
+                        <li><strong>Rate limit</strong> — “requests per minute/day.” Free tiers are typically strict.</li>
+                        <li><strong>API key</strong> — a secret pass. <em>Never</em> commit to git, write into HTML, or show in screenshots. Keep in <code>.env</code>.</li>
+                        <li><strong>Endpoint</strong> — a concrete URL inside the API: e.g. <code>/query?function=GLOBAL_QUOTE&symbol=AAPL</code>.</li>
+                        <li><strong>Response format</strong> — usually JSON.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Готовые skills, которые мы&nbsp;уже ставили</span><span lang="en">Ready-made skills we already installed</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;курсе уже стоят (или встретятся вскоре):</p>
+                    <ul>
+                        <li><code>frontend-design</code>&nbsp;&mdash; авторские UI без&nbsp;«AI-усреднённости».</li>
+                        <li><code>pdf</code>&nbsp;&mdash; парсинг и&nbsp;заполнение PDF (понадобится в&nbsp;этапе&nbsp;08b «AI Tax Assistant»).</li>
+                        <li><code>excalidraw-diagram-generator</code>&nbsp;&mdash; диаграммы.</li>
+                        <li><code>playground</code>&nbsp;&mdash; одностраничные интерактивные «исследователи» (понадобится позже).</li>
+                        <li><code>claude-api</code>&nbsp;&mdash; использование Claude как библиотеки внутри ваших скриптов (этап&nbsp;06 и&nbsp;этап&nbsp;11).</li>
+                        <li><code>superpowers:brainstorming</code> и&nbsp;другие из&nbsp;набора <code>superpowers</code>&nbsp;&mdash; брейншторм, debugging, TDD-привычки.</li>
+                    </ul>
+                    <p><strong>Skill vs MCP&nbsp;&mdash; в&nbsp;чём разница:</strong></p>
+                    <ul>
+                        <li><strong>Skill</strong>&nbsp;&mdash; это набор инструкций и&nbsp;шаблонов, которые Claude <em>читает и&nbsp;применяет</em>. Ничего не&nbsp;запускает на&nbsp;вашем компьютере. Просто меняет, <em>как</em> Claude думает и&nbsp;пишет.</li>
+                        <li><strong>MCP</strong>&nbsp;&mdash; это работающий сервер с&nbsp;инструментами (открыть браузер, прочитать&nbsp;БД, и&nbsp;т.&nbsp;д.). У&nbsp;Claude появляются <em>новые навыки</em>.</li>
+                    </ul>
+                    <p>Когда что использовать&nbsp;&mdash; обычно понятно из&nbsp;задачи: «как написать?»&nbsp;&mdash; skill; «что-то сделать с&nbsp;внешним миром»&nbsp;&mdash; MCP.</p>
+                </div>
+                <div lang="en">
+                    <p>Already installed (or coming soon) in this course:</p>
+                    <ul>
+                        <li><code>frontend-design</code> — distinctive UI, no AI-default look.</li>
+                        <li><code>pdf</code> — PDF parsing and filling (used on etape 08b “AI Tax Assistant”).</li>
+                        <li><code>excalidraw-diagram-generator</code> — diagrams.</li>
+                        <li><code>playground</code> — single-page interactive “explorers” (used later).</li>
+                        <li><code>claude-api</code> — Claude as a library inside your scripts (etape 06 and etape 11).</li>
+                        <li><code>superpowers:brainstorming</code> and other <code>superpowers</code> — brainstorm, debugging, TDD habits.</li>
+                    </ul>
+                    <p><strong>Skill vs MCP — the split:</strong></p>
+                    <ul>
+                        <li><strong>Skill</strong> — a set of instructions and templates Claude <em>reads and applies</em>. Runs nothing on your machine. Just changes <em>how</em> Claude thinks and writes.</li>
+                        <li><strong>MCP</strong> — a running server with tools (open browser, read DB, etc.). Claude gains <em>new abilities</em>.</li>
+                    </ul>
+                    <p>Which to pick is usually obvious from the task: “how should I write?” — skill; “do something with the outside world” — MCP.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Проверяем, что всё подключилось</span><span lang="en">Verify everything connected</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон №&nbsp;1 · Smoke test всех новых инструментов</span><span lang="en">Run №&nbsp;1 · Smoke test of every new tool</span></h4>
+            <ol lang="ru">
+                <li>Запустите Claude в&nbsp;любой папке. Напечатайте <code>/mcp</code>&nbsp;&mdash; должны увидеть <code>playwright</code> и&nbsp;<code>context7</code>.</li>
+                <li>Напечатайте <code>/skills</code>&nbsp;&mdash; должны увидеть <code>frontend-design</code>, <code>excalidraw-diagram-generator</code>, остальные.</li>
+                <li>Тест WebSearch: <em>«погугли, какая текущая ставка ФРС, верни одной цифрой и&nbsp;ссылкой»</em>.</li>
+                <li>Тест WebFetch: <em>«открой <a href="https://en.wikipedia.org/wiki/Apple_Inc.">en.wikipedia.org/wiki/Apple_Inc.</a> и&nbsp;дай первый абзац»</em>.</li>
+                <li>Тест Playwright: <em>«через playwright открой <a href="https://example.com">example.com</a>, сделай скриншот в&nbsp;окне 1024×768, опиши, что видно»</em>.</li>
+                <li>Тест Context7: <em>«через context7 подтяни последнюю доку chart.js, покажи минимальный пример bar-chart с&nbsp;двумя сериями»</em>.</li>
+                <li>Тест skill: <em>«через excalidraw нарисуй простую диаграмму: API → CSV → Dashboard. сохрани в&nbsp;test.excalidraw»</em>. Откройте файл на&nbsp;<a href="https://excalidraw.com">excalidraw.com</a>&nbsp;&mdash; должна быть диаграмма.</li>
+                <li>Если что-то не&nbsp;работает&nbsp;&mdash; вернитесь в&nbsp;§&nbsp;0 и&nbsp;проверьте этот пункт. Не&nbsp;идите дальше с&nbsp;поломанным инструментом.</li>
+            </ol>
+            <ol lang="en">
+                <li>Launch Claude in any folder. Type <code>/mcp</code> — you should see <code>playwright</code> and <code>context7</code>.</li>
+                <li>Type <code>/skills</code> — you should see <code>frontend-design</code>, <code>excalidraw-diagram-generator</code>, others.</li>
+                <li>WebSearch test: <em>“google the current Fed rate, give me one number and a link”</em>.</li>
+                <li>WebFetch test: <em>“open <a href="https://en.wikipedia.org/wiki/Apple_Inc.">en.wikipedia.org/wiki/Apple_Inc.</a> and give me the first paragraph”</em>.</li>
+                <li>Playwright test: <em>“through playwright open <a href="https://example.com">example.com</a>, screenshot at 1024×768, describe what you see”</em>.</li>
+                <li>Context7 test: <em>“through context7 pull the latest chart.js docs, show me a minimal two-series bar chart”</em>.</li>
+                <li>Skill test: <em>“through excalidraw draw a simple diagram: API → CSV → Dashboard. Save to test.excalidraw”</em>. Open the file on <a href="https://excalidraw.com">excalidraw.com</a> — diagram should be there.</li>
+                <li>Anything broken? Return to § 0 and fix that one item. Don’t move on with a broken tool.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>уметь проверить установку каждого инструмента отдельно</strong>. На&nbsp;следующих этапах мы&nbsp;будем полагаться на&nbsp;них постоянно.</p>
+            <p lang="en">What we train: <strong>verifying each tool independently</strong>. On further etapes we rely on them constantly.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Трекер котировок и&nbsp;дашборд по&nbsp;живым ценам</span><span lang="en">Quotes tracker and live-price dashboard</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Трекер котировок акций</span><span lang="en">Stock-quotes tracker</span></h3>
+            <p class="goal" lang="ru">Цель: Claude каждый день качает свежие цены пяти акций через Alpha Vantage, складывает в&nbsp;CSV (накопительно), и&nbsp;показывает страничку с&nbsp;графиком за&nbsp;последние&nbsp;30 дней. Если за&nbsp;сутки цена упала больше 1%, пишет уведомление в&nbsp;<code>alerts.md</code>.</p>
+            <p class="goal" lang="en">Goal: Claude pulls daily prices for five stocks via Alpha Vantage, appends to a CSV, and renders a 30-day chart page. If a daily drop exceeds 1%, it writes a note to <code>alerts.md</code>.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>quotes</code>, положите туда <code>.env</code> с&nbsp;<code>ALPHAVANTAGE_KEY=...</code>.</li>
+                <li>Запустите Claude. Сделайте <code>CLAUDE.md</code>:
+                    <pre class="shell">&gt; составь CLAUDE.md:
+&gt;   - стек: python-скрипт fetch.py + одна html-страница
+&gt;   - данные: data/prices.csv (date, ticker, close)
+&gt;   - тикеры: AAPL, MSFT, GOOGL, NVDA, VOO
+&gt;   - источник: alphavantage.co (ключ в .env)
+&gt;   - .env, .gitignore, data/ — не коммитить
+&gt;   - стиль страницы — editorial, тёплая палитра</pre>
+                </li>
+                <li>Просите написать <code>fetch.py</code>:
+                    <pre class="shell">&gt; через context7 подтяни актуальный пример
+&gt; обращения к Alpha Vantage GLOBAL_QUOTE.
+&gt; напиши fetch.py: для каждого тикера из CLAUDE.md
+&gt; запрашивает текущую цену, добавляет строку в data/prices.csv.
+&gt; ключ — из .env через python-dotenv.
+&gt; помни про rate limit 25/день: между запросами sleep 13 секунд,
+&gt; чтобы влезть в 5 тикеров.</pre>
+                </li>
+                <li>Запустите <code>python fetch.py</code> один раз. В&nbsp;<code>data/prices.csv</code> должны появиться 5&nbsp;строк за&nbsp;сегодня.</li>
+                <li>Сделайте страницу:
+                    <pre class="shell">&gt; используя skill frontend-design,
+&gt; сделай index.html на основе @data/prices.csv —
+&gt; график за последние 30 дней (chart.js v4 через context7),
+&gt; KPI-плитки сверху: текущая цена, изменение за день, изменение за неделю.
+&gt; стиль — как в финансовой газете (editorial / warm paper).</pre>
+                </li>
+                <li>Откройте через локальный сервер. Если за&nbsp;один день у&nbsp;вас одна точка на&nbsp;графике&nbsp;&mdash; нормально, через неделю появится тренд.</li>
+                <li>Добавьте алерты:
+                    <pre class="shell">&gt; обнови fetch.py: после записи новой цены сравнивай
+&gt; со вчерашней. если изменение меньше -1%, дописывай строку
+&gt; в alerts.md в формате:
+&gt;   - 2026-04-29 NVDA -1.4% (с 110.20 на 108.65)</pre>
+                </li>
+                <li>Финальный аудит: <em>«перечисли, что сломается, если Alpha Vantage заблокирует мой ключ или у&nbsp;меня кончится rate limit. Что увидит пользователь страницы?»</em></li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create <code>quotes</code>, drop in <code>.env</code> with <code>ALPHAVANTAGE_KEY=...</code>.</li>
+                <li>Launch Claude. Draft <code>CLAUDE.md</code>:
+                    <pre class="shell">&gt; draft CLAUDE.md:
+&gt;   - stack: python script fetch.py + one html page
+&gt;   - data: data/prices.csv (date, ticker, close)
+&gt;   - tickers: AAPL, MSFT, GOOGL, NVDA, VOO
+&gt;   - source: alphavantage.co (key in .env)
+&gt;   - .env, .gitignore, data/ — never committed
+&gt;   - page style — editorial, warm palette</pre>
+                </li>
+                <li>Ask for <code>fetch.py</code>:
+                    <pre class="shell">&gt; via context7 pull a current example of
+&gt; Alpha Vantage GLOBAL_QUOTE.
+&gt; write fetch.py: for each ticker from CLAUDE.md
+&gt; request current price, append a row to data/prices.csv.
+&gt; key — from .env via python-dotenv.
+&gt; respect rate limit 25/day: sleep 13s between requests
+&gt; to fit five tickers.</pre>
+                </li>
+                <li>Run <code>python fetch.py</code> once. <code>data/prices.csv</code> should get 5 rows for today.</li>
+                <li>Make the page:
+                    <pre class="shell">&gt; using the frontend-design skill,
+&gt; make index.html on @data/prices.csv —
+&gt; a 30-day chart (chart.js v4 via context7),
+&gt; KPI tiles on top: current price, daily change, weekly change.
+&gt; style — financial newspaper (editorial / warm paper).</pre>
+                </li>
+                <li>Open through a local server. One day = one dot on the chart, that’s normal — a week in, you have a trend.</li>
+                <li>Add alerts:
+                    <pre class="shell">&gt; update fetch.py: after writing a new price,
+&gt; compare to yesterday. if change < -1%, append to alerts.md:
+&gt;   - 2026-04-29 NVDA -1.4% (from 110.20 to 108.65)</pre>
+                </li>
+                <li>Final audit: <em>“what breaks if Alpha Vantage blocks my key or I exceed the rate limit? What does the page user see?”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>работу с&nbsp;настоящим API через секретный ключ;</li>
+                <li>защиту секретов через <code>.env</code> и&nbsp;<code>.gitignore</code>;</li>
+                <li>использование context7 для&nbsp;актуальной документации;</li>
+                <li>маленький скрипт для&nbsp;ежедневного запуска (на&nbsp;этапе&nbsp;10 поставим на&nbsp;cron).</li>
+            </ul>
+            <ul lang="en">
+                <li>working with a real API via a secret key;</li>
+                <li>secret hygiene through <code>.env</code> and <code>.gitignore</code>;</li>
+                <li>using context7 for up-to-date documentation;</li>
+                <li>a small script for daily runs (etape 10 puts it on cron).</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Дашборд портфеля по&nbsp;живым ценам</span><span lang="en">Portfolio dashboard on live prices</span></h3>
+            <p class="goal" lang="ru">Цель: расширение дашборда из&nbsp;этапа&nbsp;02. Берём <code>data/operations.csv</code> из&nbsp;<code>portfolio-journal</code> и&nbsp;добавляем подгрузку <em>текущих</em> цен через Alpha Vantage. P&amp;L и&nbsp;оценка теперь живые.</p>
+            <p class="goal" lang="en">Goal: extend the etape-02 dashboard. We take <code>data/operations.csv</code> from <code>portfolio-journal</code> and pull <em>current</em> prices via Alpha Vantage. P&amp;L and value are now live.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Зайдите в&nbsp;<code>portfolio-journal</code>, перенесите туда <code>.env</code> с&nbsp;<code>ALPHAVANTAGE_KEY</code>. Обновите <code>.gitignore</code>.</li>
+                <li>Обновите <code>CLAUDE.md</code>: добавьте раздел про&nbsp;ALPHAVANTAGE_KEY и&nbsp;что цены теперь подгружаются с&nbsp;API.</li>
+                <li>Просите Claude доработать <code>dashboard.html</code>:
+                    <pre class="shell">&gt; в dashboard.html замени «последняя цена из CSV»
+&gt; на загрузку текущей цены через Alpha Vantage.
+&gt; для каждого уникального тикера из @data/operations.csv —
+&gt; один запрос. результаты кэшируй в data/prices-cache.json
+&gt; со временем жизни 15 минут (чтобы не упереться в rate limit).
+&gt; в KPI-плитках добавь маркер «обновлено N минут назад».</pre>
+                </li>
+                <li>Откройте дашборд. P&amp;L теперь живой&nbsp;&mdash; меняется при каждой перезагрузке.</li>
+                <li>Уточняйте:
+                    <ul>
+                        <li><em>«подсвечивай нереализованный P&amp;L зелёным/красным&nbsp;&mdash; в&nbsp;зависимости от&nbsp;знака»</em>;</li>
+                        <li><em>«добавь блок «алерты»&nbsp;&mdash; читать из&nbsp;<code>../quotes/alerts.md</code>, показывать последние 5»</em>;</li>
+                        <li><em>«если ключ Alpha Vantage не&nbsp;задан, покажи мягкое предупреждение и&nbsp;используй последнюю цену из&nbsp;CSV»</em>.</li>
+                    </ul>
+                </li>
+                <li>Используйте <strong>Playwright</strong> для&nbsp;ревизии:
+                    <pre class="shell">&gt; через playwright открой http://localhost:8000/dashboard.html
+&gt; в окне 1440x900. сделай скриншот, расскажи:
+&gt; — все ли цены подгрузились,
+&gt; — нет ли элементов налезающих друг на друга,
+&gt; — читаются ли числа в KPI.</pre>
+                </li>
+                <li>Финальный аудит: <em>«какие три риска у&nbsp;этого подхода (живые цены через сторонний&nbsp;API)? как от&nbsp;них защититься?»</em></li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Enter <code>portfolio-journal</code>, copy <code>.env</code> with <code>ALPHAVANTAGE_KEY</code>. Update <code>.gitignore</code>.</li>
+                <li>Update <code>CLAUDE.md</code>: add a section about ALPHAVANTAGE_KEY and that prices come from the API now.</li>
+                <li>Ask Claude to upgrade <code>dashboard.html</code>:
+                    <pre class="shell">&gt; in dashboard.html replace "last price from CSV"
+&gt; with current price via Alpha Vantage.
+&gt; for each unique ticker in @data/operations.csv — one request.
+&gt; cache results in data/prices-cache.json for 15 minutes
+&gt; (to stay within the rate limit).
+&gt; in KPI tiles add an "updated N minutes ago" marker.</pre>
+                </li>
+                <li>Open the dashboard. P&amp;L is now live — changes on each reload.</li>
+                <li>Refine:
+                    <ul>
+                        <li><em>“colour unrealised P&amp;L green/red by sign”</em>;</li>
+                        <li><em>“add an ‘alerts’ block — read <code>../quotes/alerts.md</code>, show last 5”</em>;</li>
+                        <li><em>“if the Alpha Vantage key is unset, show a soft warning and fall back to last CSV price”</em>.</li>
+                    </ul>
+                </li>
+                <li>Use <strong>Playwright</strong> for the audit:
+                    <pre class="shell">&gt; through playwright open http://localhost:8000/dashboard.html
+&gt; at 1440x900. screenshot, tell me:
+&gt; — did all prices load,
+&gt; — anything overlapping,
+&gt; — are KPI numbers readable.</pre>
+                </li>
+                <li>Final audit: <em>“three risks of this approach (live prices through a third-party API)? How to mitigate them?”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>совмещение локальных данных (CSV) с&nbsp;живыми (API);</li>
+                <li>кэширование, чтобы не&nbsp;упереться в&nbsp;rate limit;</li>
+                <li>использование Playwright для&nbsp;собственного контроля качества;</li>
+                <li>graceful fallback&nbsp;&mdash; что показать, если внешний сервис недоступен.</li>
+            </ul>
+            <ul lang="en">
+                <li>combining local data (CSV) with live data (API);</li>
+                <li>caching to avoid hitting the rate limit;</li>
+                <li>using Playwright as your own QA;</li>
+                <li>graceful fallback — what to show when the external service is down.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, другие данные</span><span lang="en">Same moves, different data</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Те&nbsp;же приёмы, что в&nbsp;A и&nbsp;B&nbsp;&mdash; новые источники данных. CoinGecko и&nbsp;RSS не&nbsp;требуют API-ключа, поэтому проще, чем Alpha Vantage.</p>
+        <p class="reading" lang="en">Same moves as A and B — different data sources. CoinGecko and RSS need no API key, so they’re easier than Alpha Vantage.</p>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Трекер криптовалют</span><span lang="en">Cryptocurrency tracker</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; те&nbsp;же шаги (fetch + страница + alerts), но&nbsp;вместо акций криптовалюты через CoinGecko (бесплатно, без&nbsp;ключа).</p>
+            <p class="goal" lang="en">Goal: variation of project A — same steps (fetch + page + alerts), but crypto via CoinGecko (free, no key) instead of stocks.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Источник: <a href="https://api.coingecko.com">api.coingecko.com</a>, эндпоинт <code>/api/v3/simple/price</code>.</li>
+                <li>Список: BTC, ETH, SOL, BNB, ADA (или ваш).</li>
+                <li>Без&nbsp;API-ключа, но&nbsp;rate limit&nbsp;&mdash; около 30/мин.</li>
+                <li>Алерты делайте на&nbsp;колебание <strong>больше 5%</strong> за&nbsp;сутки (крипта волатильнее).</li>
+                <li>Дизайн&nbsp;&mdash; в&nbsp;противоположной стилистике от&nbsp;трекера акций (например, dark + neon, если акции были editorial).</li>
+            </ul>
+            <ul lang="en">
+                <li>Source: <a href="https://api.coingecko.com">api.coingecko.com</a>, endpoint <code>/api/v3/simple/price</code>.</li>
+                <li>List: BTC, ETH, SOL, BNB, ADA (or yours).</li>
+                <li>No API key, but rate limit ≈ 30/min.</li>
+                <li>Alert threshold — <strong>over 5%</strong> daily (crypto is more volatile).</li>
+                <li>Design — opposite to the stock tracker (e.g. dark + neon if stocks were editorial).</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть отдельная папка <code>crypto</code> со&nbsp;своим <code>CLAUDE.md</code> (без&nbsp;API-ключа);</li>
+                        <li>fetch скрипт работает запуском <code>python fetch.py</code>, добавляет данные в&nbsp;<code>data/prices.csv</code>;</li>
+                        <li>страница показывает 5&nbsp;криптовалют, графики 30&nbsp;дней, KPI;</li>
+                        <li>порог алерта&nbsp;&mdash; 5%, не&nbsp;1% (крипта волатильнее);</li>
+                        <li>дизайн отличается от&nbsp;стиля трекера акций;</li>
+                        <li>через playwright Claude сделал ревизию страницы.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a dedicated <code>crypto</code> folder with its own <code>CLAUDE.md</code> (no API key);</li>
+                        <li>the fetch script runs with <code>python fetch.py</code>, appends to <code>data/prices.csv</code>;</li>
+                        <li>the page shows 5 coins, 30-day charts, KPI tiles;</li>
+                        <li>alert threshold is 5%, not 1% (crypto is more volatile);</li>
+                        <li>design differs from the stocks tracker;</li>
+                        <li>Claude reviewed the page through Playwright.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Сравни мой трекер крипты с&nbsp;трекером акций. Где код одинаковый и&nbsp;можно вынести в&nbsp;общую функцию? Если бы&nbsp;ты&nbsp;писал «универсальный трекер цен»&nbsp;&mdash; на&nbsp;какие три источника он&nbsp;должен уметь работать сразу?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Compare my crypto tracker to the stocks one. Where is the code identical and worth extracting? If you were to write a ‘universal price tracker,’ which three sources should it support out of the box?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Дайджест финансовых новостей через RSS</span><span lang="en">Financial-news digest via RSS</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; вместо API цен берём <dfn class="term" tabindex="0" data-def="Really Simple Syndication — стандарт «ленты новостей» в формате XML. У большинства финансовых сайтов есть открытые RSS-фиды.">RSS</dfn>-ленты финансовых сайтов. Получаем сводный утренний дайджест.</p>
+            <p class="goal" lang="en">Goal: variation of A — instead of price APIs we read <dfn class="term" tabindex="0" data-def="Really Simple Syndication — the XML standard for news feeds. Most financial sites publish open RSS feeds.">RSS</dfn> feeds from financial sites. Produce a morning digest.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Источники: 3–4 ленты на&nbsp;ваш вкус. Например, <a href="https://www.ft.com/markets?format=rss">FT Markets</a>, <a href="https://www.reuters.com/markets/rss">Reuters Markets</a>, <a href="https://feeds.bloomberg.com/markets">Bloomberg Markets</a>.</li>
+                <li>Структура та&nbsp;же: <code>fetch.py</code> + страница + накопление в&nbsp;CSV/JSON.</li>
+                <li>Claude должен <em>саммаризировать</em> заголовки в&nbsp;три-пять ключевых тем дня (используйте обычный диалог Claude, без&nbsp;API).</li>
+                <li>На&nbsp;странице&nbsp;&mdash; «утренний дайджест» (топ-темы) и&nbsp;ниже сырые заголовки со&nbsp;ссылками на&nbsp;оригиналы.</li>
+                <li>Алерт-секция: если в&nbsp;заголовках упоминаются ваши тикеры (из&nbsp;<code>portfolio-journal/data/operations.csv</code>)&nbsp;&mdash; выделить их.</li>
+            </ul>
+            <ul lang="en">
+                <li>Sources: 3–4 feeds you choose. E.g., FT Markets, Reuters Markets, Bloomberg Markets.</li>
+                <li>Same structure: <code>fetch.py</code> + page + accumulate to CSV/JSON.</li>
+                <li>Claude should <em>summarise</em> headlines into three-five key themes of the day (regular Claude dialogue, no API).</li>
+                <li>On the page — “morning digest” (top themes) plus raw headlines linking to originals.</li>
+                <li>Alert section: highlight headlines mentioning your tickers from <code>portfolio-journal/data/operations.csv</code>.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть папка <code>news-digest</code> с&nbsp;<code>CLAUDE.md</code> и&nbsp;списком фидов;</li>
+                        <li>fetch скрипт скачивает заголовки из&nbsp;3+ лент и&nbsp;складывает в&nbsp;<code>data/news.csv</code>;</li>
+                        <li>страница показывает 3–5 «тем дня» (саммари) и&nbsp;ниже сырые заголовки со&nbsp;ссылками;</li>
+                        <li>работает выделение упоминаний ваших тикеров из&nbsp;<code>portfolio-journal</code>;</li>
+                        <li>через playwright проведена ревизия;</li>
+                        <li>в&nbsp;<code>CLAUDE.md</code> зафиксировано: где живут фиды и&nbsp;как добавить новый.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a <code>news-digest</code> folder with <code>CLAUDE.md</code> and a feeds list;</li>
+                        <li>the fetch script reads 3+ feeds and saves to <code>data/news.csv</code>;</li>
+                        <li>the page shows 3–5 “day themes” (summary) and raw headlines below with source links;</li>
+                        <li>portfolio-journal tickers get highlighted in headlines;</li>
+                        <li>Playwright audit done;</li>
+                        <li><code>CLAUDE.md</code> records where feeds live and how to add a new one.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Сделай мини-аудит&nbsp;UX через playwright: открой страницу, представь, что у&nbsp;меня 30&nbsp;секунд утром у&nbsp;кофе. За&nbsp;30&nbsp;секунд чтения я&nbsp;узнаю что-то полезное про мой портфель? Что мешает? Что вынес&nbsp;бы вверх?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Mini UX audit via Playwright: open the page and pretend I have 30 seconds at my morning coffee. In 30 seconds of reading, do I learn anything useful about my portfolio? What gets in the way? What would you move to the top?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>MCP</dt>
+            <dd>
+                <span lang="ru">Model Context Protocol&nbsp;&mdash; стандарт «инструментов для&nbsp;AI». Через&nbsp;MCP-сервер Claude получает новые навыки: открывать браузер, читать свежие доки, общаться с&nbsp;внешним сервисом. Аналогия&nbsp;&mdash; USB для&nbsp;AI.</span>
+                <span lang="en">Model Context Protocol — a standard for “AI tools.” Through MCP servers Claude gets new abilities: open the browser, read fresh docs, talk to an external service. Analogy — USB for AI.</span>
+            </dd>
+
+            <dt>Smithery</dt>
+            <dd>
+                <span lang="ru">Реестр MCP-серверов и&nbsp;skills. Тысячи готовых пакетов, ставятся одной командой <code>npx @smithery/cli@latest install/skill add ...</code>. Главное место «магазина AI-инструментов».</span>
+                <span lang="en">A registry of MCP servers and skills. Thousands of ready packages, one-command install via <code>npx @smithery/cli@latest install/skill add ...</code>. The main “AI tools store.”</span>
+            </dd>
+
+            <dt>WebSearch</dt>
+            <dd>
+                <span lang="ru">Встроенный инструмент Claude Code: «погугли это». Возвращает список ссылок и&nbsp;коротких сниппетов. Не&nbsp;требует установки.</span>
+                <span lang="en">A Claude Code built-in: “google this.” Returns links and snippets. No install needed.</span>
+            </dd>
+
+            <dt>WebFetch</dt>
+            <dd>
+                <span lang="ru">Встроенный инструмент: «прочитай эту страницу». На&nbsp;вход URL, на&nbsp;выход&nbsp;&mdash; очищенный текст. Не&nbsp;подходит для&nbsp;интерактивных страниц&nbsp;&mdash; для&nbsp;них Playwright.</span>
+                <span lang="en">A built-in: “read this page.” URL in, cleaned text out. Not great for interactive pages — Playwright handles those.</span>
+            </dd>
+
+            <dt>Playwright</dt>
+            <dd>
+                <span lang="ru">Движок автоматизации браузера от&nbsp;Microsoft. Через MCP даёт Claude инструменты: открыть страницу, кликнуть, ввести текст, сделать скриншот. Используется для&nbsp;ревизии своих сайтов и&nbsp;парсинга страниц без&nbsp;API.</span>
+                <span lang="en">Browser-automation engine by Microsoft. Through MCP it gives Claude tools: open, click, type, screenshot. Used to audit your own sites and scrape pages without an API.</span>
+            </dd>
+
+            <dt>Context7</dt>
+            <dd>
+                <span lang="ru">MCP-сервер от&nbsp;Upstash, дающий Claude доступ к&nbsp;<em>актуальной</em> документации тысяч библиотек. Решает проблему «обучен на&nbsp;старых версиях».</span>
+                <span lang="en">An Upstash MCP server giving Claude access to <em>current</em> docs for thousands of libraries. Solves “trained on old versions.”</span>
+            </dd>
+
+            <dt>API</dt>
+            <dd>
+                <span lang="ru">Application Programming Interface&nbsp;&mdash; «программный интерфейс»: способ одной программы получить данные у&nbsp;другой по&nbsp;строгим правилам. Финансовые сервисы (Yahoo, Alpha Vantage, CoinGecko) предоставляют открытые&nbsp;API для&nbsp;цен.</span>
+                <span lang="en">Application Programming Interface — how one program asks another for data by strict rules. Financial services (Yahoo, Alpha Vantage, CoinGecko) expose open APIs for prices.</span>
+            </dd>
+
+            <dt><span lang="ru">API-ключ</span><span lang="en">API key</span></dt>
+            <dd>
+                <span lang="ru">Секретная строка, которая идентифицирует вас перед&nbsp;API. <strong>Никогда не&nbsp;коммитьте в&nbsp;git, не&nbsp;пишите в&nbsp;HTML, не&nbsp;показывайте в&nbsp;скриншотах.</strong> Хранится в&nbsp;<code>.env</code>, который добавляется в&nbsp;<code>.gitignore</code>.</span>
+                <span lang="en">A secret string identifying you to the API. <strong>Never commit, never embed in HTML, never put in screenshots.</strong> Lives in <code>.env</code>, which is in <code>.gitignore</code>.</span>
+            </dd>
+
+            <dt>RSS</dt>
+            <dd>
+                <span lang="ru">Really Simple Syndication&nbsp;&mdash; стандарт «лент новостей» в&nbsp;формате XML. У&nbsp;большинства новостных сайтов есть открытые RSS-фиды&nbsp;&mdash; самый простой способ собирать заголовки автоматически.</span>
+                <span lang="en">Really Simple Syndication — the XML standard for news feeds. Most news sites publish open RSS feeds — the simplest way to harvest headlines automatically.</span>
+            </dd>
+
+            <dt>Rate limit</dt>
+            <dd>
+                <span lang="ru">Ограничение, сколько запросов в&nbsp;единицу времени можно сделать к&nbsp;API. Бесплатные тарифы обычно строгие. Решения: кэширование, паузы между запросами, графический&nbsp;fallback.</span>
+                <span lang="en">A cap on “requests per minute/day” to an API. Free tiers are typically strict. Mitigations: caching, sleeps between requests, graceful fallback.</span>
+            </dd>
+
+            <dt><span lang="ru">Эндпоинт</span><span lang="en">Endpoint</span></dt>
+            <dd>
+                <span lang="ru">Конкретный URL внутри&nbsp;API, отвечающий за&nbsp;одну функцию. Например, у&nbsp;Alpha Vantage есть эндпоинт <code>/query?function=GLOBAL_QUOTE&symbol=AAPL</code> для&nbsp;текущей цены акции.</span>
+                <span lang="en">A specific URL inside an API, owning one function. E.g., Alpha Vantage has <code>/query?function=GLOBAL_QUOTE&symbol=AAPL</code> for current stock price.</span>
+            </dd>
+
+            <dt>JSON</dt>
+            <dd>
+                <span lang="ru">JavaScript Object Notation&nbsp;&mdash; формат обмена данными между программами. Похож на&nbsp;«вложенные словари». Большинство API возвращают ответ именно в&nbsp;JSON.</span>
+                <span lang="en">JavaScript Object Notation — a data-exchange format between programs. Looks like “nested dictionaries.” Most APIs reply in JSON.</span>
+            </dd>
+
+            <dt><code>.env</code></dt>
+            <dd>
+                <span lang="ru">Текстовый файл с&nbsp;секретными переменными окружения (API-ключи, пароли). Лежит в&nbsp;корне проекта, обязательно в&nbsp;<code>.gitignore</code>. Программы читают его через библиотеки типа <code>python-dotenv</code>.</span>
+                <span lang="en">A text file with secret environment variables (API keys, passwords). Lives at project root, always in <code>.gitignore</code>. Programs read it through libraries like <code>python-dotenv</code>.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">В&nbsp;чём разница между skill и&nbsp;MCP?</span><span lang="en">What is the difference between a skill and an MCP?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Skill</strong>&nbsp;&mdash; набор инструкций и&nbsp;шаблонов, который Claude читает и&nbsp;применяет. Меняет, <em>как</em> он&nbsp;думает и&nbsp;пишет. Ничего не&nbsp;запускает на&nbsp;вашем компьютере. <strong>MCP</strong>&nbsp;&mdash; работающий сервер с&nbsp;инструментами (открыть браузер, прочитать БД). Даёт Claude <em>новые навыки</em>.</p>
+                        <p lang="en"><strong>Skill</strong> — instructions and templates Claude reads and applies. Changes <em>how</em> it thinks and writes. Runs nothing on your machine. <strong>MCP</strong> — a running server with tools (open browser, read DB). Gives Claude <em>new abilities</em>.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Когда лучше WebFetch, а&nbsp;когда Playwright?</span><span lang="en">When is WebFetch enough, when do you need Playwright?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>WebFetch</strong>&nbsp;&mdash; для&nbsp;статичных страниц с&nbsp;текстом (Wikipedia, документация, блоги). Быстрее и&nbsp;легче. <strong>Playwright</strong>&nbsp;&mdash; для&nbsp;интерактивных (с&nbsp;тяжёлым JavaScript, авторизацией, динамической подгрузкой). Также для&nbsp;ревизии своих собственных сайтов&nbsp;&mdash; со&nbsp;скриншотами и&nbsp;кликами.</p>
+                        <p lang="en"><strong>WebFetch</strong> — for static text pages (Wikipedia, docs, blogs). Faster, lighter. <strong>Playwright</strong> — for interactive pages (heavy JS, login, dynamic load). Also for auditing your own sites — screenshots and clicks.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем нужен Context7, если Claude и&nbsp;так знает большинство библиотек?</span><span lang="en">Why Context7, if Claude knows most libraries already?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Знания Claude обрываются на&nbsp;дате обучения. За&nbsp;это время многие библиотеки выпускают новые версии и&nbsp;меняют API. Context7 даёт Claude <em>актуальную</em> документацию в&nbsp;момент запроса&nbsp;&mdash; и&nbsp;он&nbsp;пишет под&nbsp;текущий API, а&nbsp;не&nbsp;под&nbsp;тот, что помнит.</p>
+                        <p lang="en">Claude’s knowledge cuts off at training. Libraries ship new versions and break APIs since. Context7 gives Claude <em>current</em> docs at request time — so it codes against the current API, not what it remembers.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Где хранить API-ключ Alpha Vantage и&nbsp;что нельзя делать с&nbsp;этим файлом?</span><span lang="en">Where do you keep an Alpha Vantage API key, and what must you never do with that file?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">В&nbsp;файле <code>.env</code> в&nbsp;корне проекта (например, <code>ALPHAVANTAGE_KEY=xxx</code>). <strong>Никогда</strong> не&nbsp;коммитить в&nbsp;git, не&nbsp;вшивать в&nbsp;HTML/JS, не&nbsp;показывать в&nbsp;скриншотах. Файл должен быть в&nbsp;<code>.gitignore</code>.</p>
+                        <p lang="en">In a <code>.env</code> file at the project root (e.g. <code>ALPHAVANTAGE_KEY=xxx</code>). <strong>Never</strong> commit to git, embed in HTML/JS, or show in screenshots. The file must be in <code>.gitignore</code>.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое rate limit и&nbsp;три способа в&nbsp;него не&nbsp;упереться?</span><span lang="en">What is a rate limit and three ways not to hit it?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Rate limit&nbsp;&mdash; ограничение, сколько запросов в&nbsp;минуту/день можно сделать к&nbsp;API. Способы: <strong>кэширование</strong> (запоминать ответы на&nbsp;N&nbsp;минут), <strong>паузы между запросами</strong> (sleep), <strong>graceful fallback</strong>&nbsp;&mdash; если ответа нет, показать что-то полезное (например, последнюю кэшированную цену с&nbsp;пометкой «устаревшая»).</p>
+                        <p lang="en">A rate limit caps requests per minute/day to an API. Ways: <strong>caching</strong> (remember replies for N minutes), <strong>sleeps between requests</strong>, <strong>graceful fallback</strong> — if no reply, show something useful (e.g. last cached price marked “stale”).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Какой командой проверить, какие MCP сейчас подключены к&nbsp;Claude Code?</span><span lang="en">Which command shows the MCPs currently connected to Claude Code?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>/mcp</code> внутри Claude Code (slash-команда). Аналогично <code>/skills</code>&nbsp;&mdash; для&nbsp;skills.</p>
+                        <p lang="en"><code>/mcp</code> inside Claude Code (slash command). Likewise <code>/skills</code> for skills.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем использовать Playwright для&nbsp;ревизии <em>своего</em> же&nbsp;сайта?</span><span lang="en">Why use Playwright to audit <em>your own</em> site?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Чтобы Claude посмотрел на&nbsp;сайт глазами пользователя&nbsp;&mdash; не&nbsp;по&nbsp;коду, а&nbsp;по&nbsp;скриншоту. Видит ли&nbsp;он&nbsp;все элементы, читаются ли&nbsp;числа, не&nbsp;налезают&nbsp;ли блоки друг на&nbsp;друга. Это вторая, независимая «пара глаз»&nbsp;&mdash; катастрофически полезно, потому что код может быть «правильным», но&nbsp;UX&nbsp;&mdash; плохим.</p>
+                        <p lang="en">So Claude sees the site as a user — not from code but from a screenshot. Are all elements visible, numbers readable, blocks overlapping? It’s a second, independent pair of eyes — invaluable because the code can be “correct” while UX is bad.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e3-mcp-installed">
+                <span lang="ru">Поставил MCP <code>@playwright/mcp</code> и&nbsp;<code>@upstash/context7-mcp</code>, проверил через <code>/mcp</code>.</span>
+                <span lang="en">Installed MCP <code>@playwright/mcp</code> and <code>@upstash/context7-mcp</code>, verified via <code>/mcp</code>.</span>
+            </li>
+            <li data-key="e3-skills-installed">
+                <span lang="ru">Подтвердил наличие skills: <code>frontend-design</code>, <code>excalidraw-diagram-generator</code> через <code>/skills</code>.</span>
+                <span lang="en">Confirmed skills: <code>frontend-design</code>, <code>excalidraw-diagram-generator</code> via <code>/skills</code>.</span>
+            </li>
+            <li data-key="e3-web-tools">
+                <span lang="ru">Знаю разницу WebSearch / WebFetch / Playwright и&nbsp;когда что уместно.</span>
+                <span lang="en">I know the WebSearch / WebFetch / Playwright split and when each fits.</span>
+            </li>
+            <li data-key="e3-api-key">
+                <span lang="ru">Получил Alpha Vantage API key, сохранил в&nbsp;<code>.env</code>, добавил <code>.env</code> в&nbsp;<code>.gitignore</code>.</span>
+                <span lang="en">Got an Alpha Vantage API key, stored in <code>.env</code>, added <code>.env</code> to <code>.gitignore</code>.</span>
+            </li>
+            <li data-key="e3-rate-limit">
+                <span lang="ru">Понимаю, что такое rate limit, и&nbsp;знаю три способа в&nbsp;него не&nbsp;упереться.</span>
+                <span lang="en">I understand rate limits and three ways to dodge them.</span>
+            </li>
+            <li data-key="e3-skill-vs-mcp">
+                <span lang="ru">Различаю skill и&nbsp;MCP: skill меняет «как Claude думает», MCP даёт ему новые навыки.</span>
+                <span lang="en">I tell a skill from an MCP: a skill changes “how Claude thinks,” an MCP grants new abilities.</span>
+            </li>
+            <li data-key="e3-delivery">
+                <span lang="ru">Сделал четыре проекта: трекер котировок, обновлённый дашборд по&nbsp;живым ценам, трекер крипты, дайджест новостей.</span>
+                <span lang="en">Built four projects: stock-quotes tracker, live-price dashboard, crypto tracker, news digest.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-03" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-02.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">02 · Контекст и&nbsp;память Claude Code</span><span lang="en">02 · Project Context &amp; Memory</span></span>
+            </a>
+            <a class="next" href="etap-04.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">04 · Plan Mode, спецификации, крупные задачи</span><span lang="en">04 · Plan Mode, Specs, Large Tasks</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Один MCP&nbsp;&mdash; и&nbsp;Claude умеет открыть браузер. Один skill&nbsp;&mdash; и&nbsp;он&nbsp;пишет в&nbsp;вашей стилистике. Сложность&nbsp;&mdash; в&nbsp;выборе, не&nbsp;в&nbsp;установке».</p>
+            <p class="signature" lang="en">“One MCP — and Claude opens a browser. One skill — and it writes in your style. The hard part is choosing, not installing.”</p>
+            <p lang="ru">Этап&nbsp;03 пройден&nbsp;&mdash; у&nbsp;Claude теперь есть руки в&nbsp;интернет. Дальше учим его думать перед действием на&nbsp;крупных задачах.</p>
+            <p lang="en">Etape 03 done — Claude now has hands in the internet. Next we teach it to think before acting on large tasks.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-02.html"><span lang="ru">← Этап&nbsp;02</span><span lang="en">← Etape 02</span></a></li>
+                <li><a href="etap-04.html"><span lang="ru">→ Этап&nbsp;04</span><span lang="en">→ Etape 04</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

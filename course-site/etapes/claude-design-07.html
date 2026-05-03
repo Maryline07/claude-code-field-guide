@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 07 · Маркетинговые ассеты — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 07: один бренд — десять форматов. Соцсети, OG, email-баннеры, Steam-страницы. Брендовая консистентность через Claude Design.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand"><span class="mark">§ D</span><a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a></div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="07">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 07</span><span lang="en">Etape 07</span></span> &nbsp;·&nbsp; <span lang="ru">Маркетинговые ассеты</span><span lang="en">Marketing Assets</span></p>
+        <h1 class="rise d2"><span lang="ru">Один бренд.<br><em>Десять форматов</em>.</span><span lang="en">One brand.<br><em>Ten formats</em>.</span></h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Запуск любого продукта&nbsp;&mdash; это не&nbsp;один лендинг, а&nbsp;<em>серия</em> взаимосвязанных ассетов: посты для X/LinkedIn, OG-image для лендинга, email-баннеры, Telegram-обложки, Steam-страница, тизеры в&nbsp;Reels. У&nbsp;каждого&nbsp;&mdash; своя спецификация, общий бренд, единый ритм публикаций. На&nbsp;этом этапе через workspace-inheritance делаем серию из&nbsp;10+ ассетов одного запуска за&nbsp;один сеанс.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Any product launch is not one landing but a <em>series</em> of interlinked assets: posts for X/LinkedIn, the landing OG image, email banners, Telegram covers, a Steam page, Reels teasers. Each has its own spec, all share one brand, one publishing cadence. This etape ships 10+ assets for one launch in a single session via workspace inheritance.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div><dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt><dd><span lang="ru">3–4 дня · 1–2&nbsp;ч/день</span><span lang="en">3–4 days · 1–2&nbsp;hrs/day</span></dd></div>
+            <div><dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt><dd><span lang="ru">спецификации платформ · бренд-серия · OG-image · email-баннеры · Steam-capsule</span><span lang="en">platform specs · brand series · OG · email banners · Steam capsule</span></dd></div>
+            <div><dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt><dd><span lang="ru">10+ ассетов в&nbsp;единой стилистике для одного запуска</span><span lang="en">10+ assets in one style for one launch</span></dd></div>
+            <div><dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt><dd><span lang="ru">launch-серия (X, LinkedIn, IG, OG, email, Steam) одного из&nbsp;четырёх треков</span><span lang="en">launch series (X, LinkedIn, IG, OG, email, Steam) on one of four tracks</span></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span><h2><span lang="ru">Что мы&nbsp;пройдём</span><span lang="en">What we will walk through</span></h2></div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Спецификации платформ: размеры, которые надо знать</span><span lang="en">Platform specs: sizes you must know</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Каждая платформа имеет фиксированные размеры. Если ваш ассет «не&nbsp;тот»&nbsp;&mdash; обрежется в&nbsp;неудачном месте, потеряет крупный текст, или вовсе откажется загружаться. Шпаргалка-минимум:</p>
+                    <ul>
+                        <li><strong>X (Twitter):</strong> пост 1600×900 (16:9), header 1500×500, профиль 400×400.</li>
+                        <li><strong>LinkedIn:</strong> пост 1200×627, header (личный) 1584×396, header (компания) 1128×191.</li>
+                        <li><strong>Instagram:</strong> feed 1080×1080 (1:1), portrait 1080×1350 (4:5), story 1080×1920, reel cover 1080×1920.</li>
+                        <li><strong>Facebook:</strong> пост 1200×630, header 820×312.</li>
+                        <li><strong>Telegram:</strong> аватар канала 512×512, обложка-логотип 1280×640, sticker 512×512 PNG.</li>
+                        <li><strong>OG-image для веба:</strong> 1200×630 (Facebook/LinkedIn-style), 1200×675 (Twitter-style cards). Безопасный вариант&nbsp;&mdash; 1200×630 покрывает обоих с&nbsp;небольшим обрезом.</li>
+                        <li><strong>Email banner:</strong> ширина 600px (стандарт большинства email-клиентов), высота 200–400.</li>
+                        <li><strong>Steam:</strong> capsule 920×430 (главная), header 1920×620, library 600×900.</li>
+                        <li><strong>YouTube:</strong> thumbnail 1280×720, header 2560×1440 (но безопасная зона 1546×423).</li>
+                    </ul>
+                    <p>В&nbsp;промпте указывайте формат всегда явно: <em>«пост для X, формат 1600×900»</em>. Без&nbsp;этого Claude может «угадать» неправильно.</p>
+                </div>
+                <div lang="en">
+                    <p>Every platform has fixed sizes. If your asset is &ldquo;wrong&rdquo;&nbsp;&mdash; it crops badly, loses large text, or refuses to upload. Minimum cheat-sheet:</p>
+                    <ul>
+                        <li><strong>X (Twitter):</strong> post 1600×900 (16:9), header 1500×500, profile 400×400.</li>
+                        <li><strong>LinkedIn:</strong> post 1200×627, personal header 1584×396, company header 1128×191.</li>
+                        <li><strong>Instagram:</strong> feed 1080×1080 (1:1), portrait 1080×1350 (4:5), story 1080×1920, reel cover 1080×1920.</li>
+                        <li><strong>Facebook:</strong> post 1200×630, header 820×312.</li>
+                        <li><strong>Telegram:</strong> channel avatar 512×512, header-logo 1280×640, sticker 512×512 PNG.</li>
+                        <li><strong>OG image for the web:</strong> 1200×630 (Facebook/LinkedIn), 1200×675 (Twitter cards). Safe choice&nbsp;&mdash; 1200×630, covers both with minor crop.</li>
+                        <li><strong>Email banner:</strong> 600px wide (standard for most clients), 200–400 tall.</li>
+                        <li><strong>Steam:</strong> capsule 920×430 (main), header 1920×620, library 600×900.</li>
+                        <li><strong>YouTube:</strong> thumbnail 1280×720, header 2560×1440 (safe zone 1546×423).</li>
+                    </ul>
+                    <p>Always declare format explicitly in the prompt: <em>&ldquo;post for X, 1600×900.&rdquo;</em> Otherwise Claude may &ldquo;guess&rdquo; wrong.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Один бренд → много форматов: workspace-серия</span><span lang="en">One brand, many formats: a workspace series</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;этапе&nbsp;03 вы&nbsp;настроили workspace с&nbsp;tokens бренда. Теперь это окупается: 10 ассетов разных форматов наследуют один и&nbsp;тот&nbsp;же визуальный язык автоматически.</p>
+                    <pre class="shell">&gt; в этом workspace «Aurora Pixel» собери launch-серию для steam-релиза «Tide of Stars»:
+&gt;
+&gt;   1. Steam capsule 920×430 — key art + название.
+&gt;   2. Steam header 1920×620 — широкий горизонтальный коллаж.
+&gt;   3. X (Twitter) пост 1600×900 — анонс с тизером trailer.
+&gt;   4. X (Twitter) header 1500×500 — для аккаунта студии.
+&gt;   5. LinkedIn пост 1200×627 — для индустриальной аудитории, более серьёзно.
+&gt;   6. Instagram пост 1080×1080 — для дизайнерского комьюнити.
+&gt;   7. Instagram story 1080×1920 — короткий тизер.
+&gt;   8. OG image 1200×630 — для лендинга tideofstars.com.
+&gt;   9. email banner 600×300 — для рассылки newsletters.
+&gt;   10. Telegram channel cover 1280×640 — для канала студии.
+&gt;
+&gt; для всех — единый бренд из workspace, key visual из этапа 04.
+&gt; адаптируй композицию под формат, но не меняй палитру и типографику.</pre>
+                    <p>Claude собирает 10 артефактов сразу. Можно проверить «семья ли»&nbsp;&mdash; увидеть все рядом на&nbsp;холсте. Если один выпадает&nbsp;&mdash; правьте инлайн-комментарием на&nbsp;нём.</p>
+                </div>
+                <div lang="en">
+                    <p>Etape 3 set up a workspace with brand tokens. That investment pays here: 10 assets in different formats inherit one visual language automatically.</p>
+                    <pre class="shell">&gt; in this "Aurora Pixel" workspace, assemble a launch series for the steam release of "Tide of Stars":
+&gt;
+&gt;   1. Steam capsule 920×430 — key art + title.
+&gt;   2. Steam header 1920×620 — wide horizontal collage.
+&gt;   3. X post 1600×900 — announcement with trailer tease.
+&gt;   4. X header 1500×500 — for the studio account.
+&gt;   5. LinkedIn post 1200×627 — industry audience, more serious.
+&gt;   6. Instagram post 1080×1080 — design community.
+&gt;   7. Instagram story 1080×1920 — short teaser.
+&gt;   8. OG image 1200×630 — for tideofstars.com landing.
+&gt;   9. email banner 600×300 — for newsletter.
+&gt;   10. Telegram channel cover 1280×640 — for studio channel.
+&gt;
+&gt; all — one brand from workspace, key visual from etape 04.
+&gt; adapt composition per format, but don&rsquo;t change palette or typography.</pre>
+                    <p>Claude assembles all 10 at once. You can check &ldquo;is it a family&rdquo;&nbsp;&mdash; see them side by side on the canvas. If one falls out&nbsp;&mdash; refine inline on it.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">OG-image: один маленький артефакт, который видно везде</span><span lang="en">OG image: one small artefact, visible everywhere</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Open Graph image&nbsp;&mdash; это превью, которое появляется, когда вы&nbsp;скидываете ссылку в&nbsp;мессенджер, X, LinkedIn, Slack. Один файл, но&nbsp;его видят больше людей, чем сам лендинг.</p>
+                    <p>Хорошая OG&nbsp;&mdash; это не&nbsp;скриншот сайта. Это <em>самостоятельный мини-плакат</em> с&nbsp;3-секундной читаемостью:</p>
+                    <ul>
+                        <li>Огромный заголовок продукта&nbsp;&mdash; читается с&nbsp;превью на&nbsp;телефоне.</li>
+                        <li>Один графический акцент (логотип, key art, иконка).</li>
+                        <li>Минимум текста&nbsp;&mdash; не&nbsp;больше 7 слов.</li>
+                        <li>Высокий контраст&nbsp;&mdash; OG читается на&nbsp;десятке разных фонов мессенджеров.</li>
+                    </ul>
+                    <pre class="shell">&gt; OG-image 1200×630 для лендинга tideofstars.com.
+&gt; стиль workspace, но более «заявление»:
+&gt;   слева — название игры огромным display-шрифтом.
+&gt;   справа — фрагмент key art из этапа 04.
+&gt;   внизу — одна строка «coming 2026» мелко.
+&gt;   фон — насыщенный закатный градиент.
+&gt;   текст должен читаться даже на превью 200×100.</pre>
+                    <p>Чтобы проверить&nbsp;&mdash; экспортируйте как PNG, отправьте сами себе ссылку с&nbsp;OG в&nbsp;Telegram (или Slack). Посмотрите на&nbsp;превью на&nbsp;телефоне. Узнаваемо за&nbsp;1 секунду?</p>
+                </div>
+                <div lang="en">
+                    <p>The Open Graph image is the preview that appears when you drop a link in a messenger, X, LinkedIn, Slack. One file, seen by more people than the landing itself.</p>
+                    <p>A good OG is not a site screenshot. It&rsquo;s a <em>standalone mini-poster</em> with 3-second readability:</p>
+                    <ul>
+                        <li>Huge product headline&nbsp;&mdash; readable in a phone preview.</li>
+                        <li>One graphic accent (logo, key art, icon).</li>
+                        <li>Minimal text&nbsp;&mdash; no more than 7 words.</li>
+                        <li>High contrast&nbsp;&mdash; OG reads on a dozen different messenger backgrounds.</li>
+                    </ul>
+                    <pre class="shell">&gt; OG image 1200×630 for tideofstars.com.
+&gt; workspace style, but more "statement":
+&gt;   left — game title in huge display.
+&gt;   right — key-art fragment from etape 04.
+&gt;   bottom — one line "coming 2026" small.
+&gt;   background — saturated sunset gradient.
+&gt;   text must read even at 200×100 preview.</pre>
+                    <p>To verify&nbsp;&mdash; export as PNG, send yourself a link with OG via Telegram (or Slack). Look at the preview on a phone. Recognisable in 1 second?</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Контент-серия: 5 постов, рассказывающих историю запуска</span><span lang="en">Content series: 5 posts telling a launch story</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Один пост-объявление почти всегда работает хуже, чем серия. Канон серии запуска (5 постов на&nbsp;неделю):</p>
+                    <ol>
+                        <li><strong>Тизер</strong> (T-7 дней). Загадка. Маленький фрагмент, без&nbsp;названия, без&nbsp;даты. <em>«Что-то готовится&hellip;»</em></li>
+                        <li><strong>Раскрытие</strong> (T-3 дня). Название, key visual, дата. <em>«Tide of Stars. 14 марта.»</em></li>
+                        <li><strong>За&nbsp;кадром</strong> (T-1 день). Снимок процесса, цитата команды, история. Гуманизация бренда.</li>
+                        <li><strong>Запуск</strong> (T+0). Ссылка на&nbsp;продукт, призыв к&nbsp;действию. <em>«Уже доступно. Скачать на&nbsp;Steam.»</em></li>
+                        <li><strong>Социальное доказательство</strong> (T+1 неделя). Цитаты пользователей, метрики (если хорошие). <em>«5,000 wishlist за&nbsp;48 часов. Спасибо&nbsp;вам.»</em></li>
+                    </ol>
+                    <p>Все 5 постов делаются одним промптом в&nbsp;Claude Design (одной серией) и&nbsp;экспортируются как набор. Согласованность визуального языка через workspace гарантирует, что серия читается «сериалом», а&nbsp;не&nbsp;разрозненными артефактами.</p>
+                    <p>Для каждого формата (X / IG / LinkedIn) повторяете 5 постов. Итого 15 ассетов из&nbsp;одного промпта.</p>
+                </div>
+                <div lang="en">
+                    <p>A single announcement post almost always works worse than a series. The canonical 5-post launch (one week):</p>
+                    <ol>
+                        <li><strong>Teaser</strong> (T-7 days). A riddle. Small fragment, no name, no date. <em>&ldquo;Something&rsquo;s coming&hellip;&rdquo;</em></li>
+                        <li><strong>Reveal</strong> (T-3 days). Name, key visual, date. <em>&ldquo;Tide of Stars. March 14.&rdquo;</em></li>
+                        <li><strong>Behind the scenes</strong> (T-1 day). Process shot, team quote, story. Brand humanisation.</li>
+                        <li><strong>Launch</strong> (T+0). Link, CTA. <em>&ldquo;Live now. Get it on Steam.&rdquo;</em></li>
+                        <li><strong>Social proof</strong> (T+1 week). User quotes, metrics (if good). <em>&ldquo;5,000 wishlist in 48 hours. Thanks.&rdquo;</em></li>
+                    </ol>
+                    <p>All 5 posts in one Claude Design prompt (one series) and exported as a set. Visual-language consistency via workspace guarantees the series reads as &ldquo;a series,&rdquo; not scattered artefacts.</p>
+                    <p>For each format (X / IG / LinkedIn) repeat the 5. 15 assets from one prompt.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head"><span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span><h2><span lang="ru">15 ассетов за&nbsp;один промпт</span><span lang="en">15 assets in one prompt</span></h2></div>
+        <div class="practice">
+            <h4><span lang="ru">Прогон · launch-серия для&nbsp;воображаемого продукта</span><span lang="en">Run · launch series for an imaginary product</span></h4>
+            <ol lang="ru">
+                <li>Workspace с&nbsp;брендом из&nbsp;этапа&nbsp;03 (или новый с&nbsp;tokens на&nbsp;ваш выбор).</li>
+                <li>Промпт: <em>«5 постов launch-серии (тизер/раскрытие/за&nbsp;кадром/запуск/proof) для воображаемого продукта&nbsp;X. адаптируй под 3 формата (X 1600×900, IG 1080×1080, LinkedIn 1200×627). всего 15 ассетов»</em>.</li>
+                <li>Дождитесь. Откройте все 15 рядом.</li>
+                <li>Проверьте: выглядят&nbsp;ли они «серией»? Узнаются&nbsp;ли как один бренд через 3 платформы и&nbsp;5 фаз?</li>
+                <li>Экспортируйте все 15 одной папкой (Export → folder).</li>
+            </ol>
+            <ol lang="en">
+                <li>Workspace with the etape-3 brand (or new tokens of your choice).</li>
+                <li>Prompt: <em>&ldquo;5 launch-series posts (teaser/reveal/BTS/launch/proof) for imaginary product X. Adapt to 3 formats (X 1600×900, IG 1080×1080, LinkedIn 1200×627). 15 assets total.&rdquo;</em></li>
+                <li>Wait. Open all 15 side by side.</li>
+                <li>Check: do they read as a &ldquo;series&rdquo;? Recognisable as one brand across 3 platforms and 5 phases?</li>
+                <li>Export all 15 as one folder (Export → folder).</li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span><h2><span lang="ru">Полные launch-серии</span><span lang="en">Full launch series</span></h2></div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;игра</span><span lang="en">Project A · guided · game track</span></span>
+            <h3><span lang="ru">Steam-релиз: 10 ассетов</span><span lang="en">Steam launch: 10 assets</span></h3>
+            <p class="goal" lang="ru">Цель: полный пакет ассетов для запуска инди-игры в&nbsp;Steam. Capsule, header, library art, OG, social-серия из&nbsp;5 постов в&nbsp;3 форматах = 10+ артефактов в&nbsp;workspace «Aurora Pixel».</p>
+            <p class="goal" lang="en">Goal: a full asset pack for an indie-game Steam launch. Capsule, header, library art, OG, 5-post social series in 3 formats = 10+ artefacts in &ldquo;Aurora Pixel&rdquo; workspace.</p>
+            <ol class="steps" lang="ru">
+                <li>Workspace «Aurora Pixel». Бренд + key art уже загружены.</li>
+                <li>Промпт-серия (как в&nbsp;разделе «один бренд → много форматов» выше).</li>
+                <li>Сверьтесь: все ли 10 «семейные»? Если один выпадает&nbsp;&mdash; правьте инлайн-комментарием.</li>
+                <li>Доп. промпт для социальной серии: <em>«добавь 5-постовую launch-серию для X (1600×900): teaser, reveal, BTS, launch, social-proof. для каждого: одна-две фразы по&nbsp;canon»</em>.</li>
+                <li>Экспорт: все ассеты как folder, сохраните Internal&nbsp;URL для будущего.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Workspace &ldquo;Aurora Pixel.&rdquo; Brand + key art already loaded.</li>
+                <li>Series prompt (see &ldquo;one brand, many formats&rdquo; above).</li>
+                <li>Verify: are all 10 &ldquo;family&rdquo;? If one falls out&nbsp;&mdash; refine inline.</li>
+                <li>Additional prompt for the social series: <em>&ldquo;add 5-post launch series for X (1600×900): teaser, reveal, BTS, launch, social proof. One-two lines per post per canon.&rdquo;</em></li>
+                <li>Export: all assets as folder; save the Internal URL.</li>
+            </ol>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;кофейня</span><span lang="en">Project B · guided · café track</span></span>
+            <h3><span lang="ru">Открытие кофейни: 7 ассетов</span><span lang="en">Café opening: 7 assets</span></h3>
+            <p class="goal" lang="ru">Цель: серия ассетов для открытия кофейни «Северный край». Афиша A3 + IG-пост-объявление + IG-story + Telegram-обложка + email-баннер для рассылки соседям + OG для лендинга + flyer для печати на&nbsp;кассе.</p>
+            <p class="goal" lang="en">Goal: an opening-series for café &ldquo;Northern Coast.&rdquo; A3 poster + IG announcement + IG story + Telegram cover + email banner for neighbours + OG for landing + counter flyer.</p>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell"><div class="section-head"><span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span><h2><span lang="ru">Свои серии</span><span lang="en">Your series</span></h2></div>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек&nbsp;квартира</span><span lang="en">Project C · solo · apartment track</span></span>
+            <h3><span lang="ru">Reveal-серия дизайн-проекта</span><span lang="en">Design project reveal series</span></h3>
+            <p class="goal" lang="ru">Цель: «до&nbsp;/ после» серия для законченного дизайн-проекта квартиры&nbsp;&mdash; для собственного портфолио. 5 постов на&nbsp;Behance/IG: концепт → 3D-тур → процесс → результат → детали.</p>
+            <p class="goal" lang="en">Goal: a &ldquo;before / after&rdquo; series for a finished apartment project&nbsp;&mdash; for your own portfolio. 5 posts for Behance/IG: concept → 3D tour → process → result → details.</p>
+        </article>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек&nbsp;финансы</span><span lang="en">Project D · solo · finance track</span></span>
+            <h3><span lang="ru">Telegram-канал инвест-апдейтов</span><span lang="en">Investment-updates Telegram channel</span></h3>
+            <p class="goal" lang="ru">Цель: визуальное оформление Telegram-канала с&nbsp;еженедельными обзорами портфеля. Аватар, обложка, шаблон поста (3 варианта&nbsp;&mdash; для апдейтов, новостей, аналитики).</p>
+            <p class="goal" lang="en">Goal: visual identity for a Telegram channel with weekly portfolio reviews. Avatar, cover, 3 post templates (updates, news, analytics).</p>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell"><div class="section-head"><span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span><h2><span lang="ru">Новые слова</span><span lang="en">New words</span></h2></div>
+        <dl class="glossary">
+            <dt><span lang="ru">OG-image</span><span lang="en">OG image</span></dt>
+            <dd><span lang="ru">Open Graph image&nbsp;&mdash; превью, появляющееся при пересылке ссылки в&nbsp;мессенджеры/соцсети. 1200×630 покрывает большинство платформ. Не&nbsp;скриншот сайта&nbsp;&mdash; самостоятельный мини-плакат с&nbsp;3-секундной читаемостью.</span><span lang="en">Open Graph image&nbsp;&mdash; the preview shown when a link is forwarded to messengers/social. 1200×630 covers most platforms. Not a screenshot&nbsp;&mdash; a standalone mini-poster with 3-second readability.</span></dd>
+            <dt><span lang="ru">Launch-серия</span><span lang="en">Launch series</span></dt>
+            <dd><span lang="ru">5-постовый канон для запуска: teaser (T-7), reveal (T-3), behind-the-scenes (T-1), launch (T+0), social-proof (T+1 неделя). Серия работает лучше одиночного объявления.</span><span lang="en">A 5-post launch canon: teaser (T-7), reveal (T-3), BTS (T-1), launch (T+0), social proof (T+1 week). A series outperforms a single announcement.</span></dd>
+            <dt><span lang="ru">Workspace-серия</span><span lang="en">Workspace series</span></dt>
+            <dd><span lang="ru">Группа ассетов разных форматов в&nbsp;одном workspace. Workspace inheritance гарантирует визуальную консистентность через единые tokens.</span><span lang="en">A group of assets in different formats inside one workspace. Workspace inheritance guarantees visual consistency via shared tokens.</span></dd>
+            <dt><span lang="ru">Спецификация платформы</span><span lang="en">Platform spec</span></dt>
+            <dd><span lang="ru">Точный размер и&nbsp;соотношение сторон для каждой платформы. Запоминать необязательно, но&nbsp;всегда указывайте в&nbsp;промпте явно. Без&nbsp;размера Claude угадывает «среднее».</span><span lang="en">Exact size and aspect per platform. No need to memorise, but always declare in the prompt. Without size Claude guesses an &ldquo;average.&rdquo;</span></dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell"><div class="section-head"><span class="num">§ VI · Quiz</span><h2><span lang="ru">Семь вопросов</span><span lang="en">Seven questions</span></h2></div>
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1"><div class="q"><p class="q-text"><span lang="ru">Какая «безопасная» спецификация OG-image?</span><span lang="en">Safe OG-image spec?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">1200×630&nbsp;&mdash; покрывает Facebook, LinkedIn и&nbsp;большинство мессенджеров с&nbsp;небольшим обрезом для Twitter cards (1200×675).</p><p lang="en">1200×630&nbsp;&mdash; covers Facebook, LinkedIn, most messengers with minor crop for Twitter cards (1200×675).</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q2"><div class="q"><p class="q-text"><span lang="ru">Из&nbsp;каких 5 постов состоит launch-серия?</span><span lang="en">5 posts of a launch series?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Teaser (T-7), reveal (T-3), behind-the-scenes (T-1), launch (T+0), social proof (T+1 week).</p><p lang="en">Teaser (T-7), reveal (T-3), BTS (T-1), launch (T+0), social proof (T+1 week).</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q3"><div class="q"><p class="q-text"><span lang="ru">Чем хорошая OG отличается от&nbsp;скриншота сайта?</span><span lang="en">Good OG vs site screenshot?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">OG&nbsp;&mdash; самостоятельный мини-плакат: огромный заголовок, один графический акцент, ≤7 слов, высокий контраст. Читается за&nbsp;3 секунды на&nbsp;превью телефона. Скриншот сайта в&nbsp;превью теряется.</p><p lang="en">OG is a standalone mini-poster: huge headline, one graphic accent, ≤7 words, high contrast. Reads in 3 sec on phone preview. A site screenshot disappears in preview.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q4"><div class="q"><p class="q-text"><span lang="ru">Размеры для X (Twitter): пост и&nbsp;header?</span><span lang="en">X sizes: post and header?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Пост 1600×900, header 1500×500.</p><p lang="en">Post 1600×900, header 1500×500.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q5"><div class="q"><p class="q-text"><span lang="ru">Как одним промптом сделать 15 ассетов?</span><span lang="en">15 assets in one prompt?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">В&nbsp;workspace с&nbsp;загруженным брендом просите серию: «5 постов canon × 3 формата (X/IG/LinkedIn)». Workspace inheritance гарантирует консистентность.</p><p lang="en">In a workspace with loaded brand, ask for the series: &ldquo;5 canon posts × 3 formats (X/IG/LinkedIn).&rdquo; Workspace inheritance ensures consistency.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q6"><div class="q"><p class="q-text"><span lang="ru">Какая стандартная ширина email-баннера?</span><span lang="en">Standard email banner width?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">600px&nbsp;&mdash; стандарт большинства email-клиентов. Высота произвольная (200–400 — типичный диапазон).</p><p lang="en">600px&nbsp;&mdash; the standard for most email clients. Height free (200–400 typical).</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q7"><div class="q"><p class="q-text"><span lang="ru">Как проверить, что OG читается?</span><span lang="en">How to verify OG reads well?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Экспорт PNG, отправить ссылку с&nbsp;OG в&nbsp;Telegram/Slack, посмотреть превью на&nbsp;телефоне. Если за&nbsp;1 секунду не&nbsp;узнаётся&nbsp;&mdash; нужны более крупный заголовок и&nbsp;больше контраста.</p><p lang="en">Export PNG, send a link with OG to Telegram/Slack, look at the phone preview. If not recognised in 1 second&nbsp;&mdash; bigger headline, more contrast.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+        </ol>
+        <div class="quiz-summary"><h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where next?</span></h4><div class="stats"><span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span><span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span><span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span></div><p class="advice"></p></div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell"><div class="section-head"><span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span><h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2></div>
+        <ul class="checklist">
+            <li data-key="d7-specs"><span lang="ru">Указываю формат явно для каждой платформы (не&nbsp;надеюсь на&nbsp;«угадает»).</span><span lang="en">I declare format explicitly per platform (don&rsquo;t hope for &ldquo;guessing&rdquo;).</span></li>
+            <li data-key="d7-series"><span lang="ru">Делаю одним промптом workspace-серию из&nbsp;10+ ассетов в&nbsp;единой стилистике.</span><span lang="en">I produce a 10+ asset workspace series in one prompt.</span></li>
+            <li data-key="d7-og"><span lang="ru">Делаю OG как самостоятельный мини-плакат, проверяю на&nbsp;превью телефона.</span><span lang="en">I treat OG as a standalone mini-poster, check on phone preview.</span></li>
+            <li data-key="d7-launch"><span lang="ru">Знаю канон launch-серии (teaser/reveal/BTS/launch/proof) и&nbsp;применяю.</span><span lang="en">I know the launch-series canon (teaser/reveal/BTS/launch/proof) and apply it.</span></li>
+            <li data-key="d7-multi-format"><span lang="ru">Адаптирую один пост под X / IG / LinkedIn без&nbsp;потери бренда.</span><span lang="en">I adapt one post across X / IG / LinkedIn without losing brand.</span></li>
+            <li data-key="d7-deliverables"><span lang="ru">Сделал артефакты: launch-серия одного из&nbsp;четырёх треков, экспортирована, готова к&nbsp;публикации.</span><span lang="en">Etape artefacts: a launch series on one track, exported, ready to publish.</span></li>
+        </ul>
+        <div class="complete-bar"><p lang="ru">Готовы закрыть этап?</p><p lang="en">Ready to close the etape?</p>
+            <button class="btn-complete" data-id="design-07" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="tight"><div class="shell"><div class="etap-nav">
+    <a class="prev" href="claude-design-06.html">
+        <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+        <span class="step-title"><span lang="ru">06 · Питч-дек</span><span lang="en">06 · Pitch Deck</span></span>
+    </a>
+    <a class="next disabled" href="#" aria-disabled="true">
+        <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+        <span class="step-title"><span lang="ru">08 · Code-powered прототипы <em>(скоро)</em></span><span lang="en">08 · Code-Powered Prototypes <em>(soon)</em></span></span>
+    </a>
+</div></div></section>
+
+</main>
+
+<footer class="colophon"><div class="shell inner">
+    <div>
+        <p class="signature" lang="ru">«Один пост&nbsp;&mdash; разовый шум. Серия&nbsp;&mdash; история, которую запомнят».</p>
+        <p class="signature" lang="en">&ldquo;One post is noise. A series is a story people remember.&rdquo;</p>
+        <p lang="ru">Этап&nbsp;07 пройден. Бренд работает на&nbsp;всех платформах. Дальше&nbsp;&mdash; <strong>code-powered прототипы</strong>: 3D-туры, шейдеры, анимации, голосовой&nbsp;UI.</p>
+        <p lang="en">Etape 07 done. Brand works across platforms. Next&nbsp;&mdash; <strong>code-powered prototypes</strong>: 3D tours, shaders, animation, voice UI.</p>
+    </div>
+    <div><h5><span lang="ru">Внутри этапа</span><span lang="en">Inside</span></h5><ul><li><a href="#topics">§&nbsp;I</a></li><li><a href="#projects">§&nbsp;III</a></li><li><a href="#glossary">§&nbsp;V</a></li><li><a href="#quiz">§&nbsp;VI</a></li><li><a href="#checklist">§&nbsp;VII</a></li></ul></div>
+    <div><h5><span lang="ru">Курс</span><span lang="en">Course</span></h5><ul>
+        <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Contents</span></a></li>
+        <li><a href="claude-design-06.html"><span lang="ru">← Этап&nbsp;06</span><span lang="en">← Etape 06</span></a></li>
+        <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+    </ul></div>
+</div></footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

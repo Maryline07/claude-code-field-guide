@@ -1,0 +1,1175 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 06 · Полноценные веб-приложения и деплой — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 06 курса по Claude Code: frontend + backend + БД + авторизация + деплой через Vercel/Railway. Личный инвестиционный кабинет и AI-консультант на Claude API.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="06">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 06</span><span lang="en">Etape 06</span></span> &nbsp;·&nbsp; <span lang="ru">Полноценные веб-приложения и&nbsp;деплой</span><span lang="en">Full web applications &amp; deployment</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Сайт, которым <em>пользуются</em>.</span>
+            <span lang="en">A site people <em>use</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            До&nbsp;этого мы&nbsp;строили <em>статические</em> сайты&nbsp;&mdash; красивые, но&nbsp;без&nbsp;«своих» данных у&nbsp;каждого пользователя. Сегодня учим Claude собирать <dfn class="term" tabindex="0" data-def="программа, которая постоянно работает на чужом компьютере и отвечает на запросы от ваших страниц. У сервера есть «память» в виде базы данных и логика, которая решает, что показать.">сервер</dfn>, <dfn class="term" tabindex="0" data-def="хранилище, в котором живут данные приложения: пользователи, их операции, настройки. Доступно только серверу, не браузеру.">базу данных</dfn>, регистрацию&nbsp;&mdash; и&nbsp;запускать всё это в&nbsp;интернет, чтобы реальные люди могли пользоваться.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            So far we built <em>static</em> sites — beautiful, but without per-user data. Today we teach Claude to assemble a <dfn class="term" tabindex="0" data-def="a program running on someone else’s machine that answers requests from your pages. The server has a “memory” (database) and logic that decides what to show.">server</dfn>, a <dfn class="term" tabindex="0" data-def="storage where app data lives: users, their operations, settings. Reachable from the server only, never the browser.">database</dfn>, sign-up — and ship it to the internet so real people can use it.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">8–10 дней · 2–4&nbsp;ч/день</span><span lang="en">8–10 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">frontend + backend + БД · авторизация · деплой · Claude&nbsp;API</span><span lang="en">frontend + backend + DB · auth · deploy · Claude API</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">сайт с&nbsp;живой ссылкой и&nbsp;регистрацией</span><span lang="en">a live URL with sign-up</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">личный инвест-кабинет и&nbsp;AI-консультант на&nbsp;Claude API в&nbsp;интернете</span><span lang="en">a personal investment office and an AI advisor on the Claude API, live</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что устанавливаем перед началом</span><span lang="en">What to install before you start</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Этап интенсивный по&nbsp;инструментам: нужны два аккаунта, ключ Anthropic API и&nbsp;один skill. Все шаги&nbsp;&mdash; одной командой и&nbsp;кликом, ничего сложного.</p>
+        <p class="reading" lang="en">Tool-heavy etape: two accounts, an Anthropic API key, one skill. Each step is one command or click — nothing tricky.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · аккаунт</span><span lang="en">required · account</span></span>
+            <h3>Vercel</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> платформа для&nbsp;<dfn class="term" tabindex="0" data-def="процесс «отправить ваше приложение на сервер в интернете». Один git push — и через 30 секунд новая версия живёт по публичной ссылке.">деплоя</dfn> frontend-приложений в&nbsp;один клик. Подключаете свой GitHub-репозиторий&nbsp;&mdash; Vercel сам обновляет сайт после каждого <code>git push</code>.<br>
+            <strong>Зачем сейчас:</strong> на&nbsp;нём публикуем frontend нашего инвест-кабинета (он&nbsp;сложнее статических HTML, поэтому GitHub Pages недостаточно).<br>
+            <strong>Где взять:</strong> <a href="https://vercel.com/signup">vercel.com/signup</a>. Войдите через свой GitHub-аккаунт&nbsp;&mdash; всё связывается автоматически. Бесплатный тариф щедрый: до&nbsp;100&nbsp;ГБ трафика в&nbsp;месяц.<br>
+            <strong>Проверить:</strong> можете войти на&nbsp;vercel.com и&nbsp;увидеть свой dashboard.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a one-click <dfn class="term" tabindex="0" data-def="the process of “sending your app to a server on the internet.” One git push — and 30 seconds later the new version lives at a public URL.">deployment</dfn> platform for frontend apps. Connect your GitHub repo — Vercel rebuilds on every <code>git push</code>.<br>
+            <strong>Why now:</strong> we ship our investment-office frontend on it (more involved than static HTML, GitHub Pages won’t do).<br>
+            <strong>Where:</strong> <a href="https://vercel.com/signup">vercel.com/signup</a>. Sign in with GitHub — everything links automatically. Free tier is generous: up to 100GB/month.<br>
+            <strong>Verify:</strong> you can sign in at vercel.com and see your dashboard.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · аккаунт</span><span lang="en">required · account</span></span>
+            <h3>Railway</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> платформа для&nbsp;деплоя <em>backend</em>-частей: серверов, баз данных, фоновых задач. То, что не&nbsp;умеет Vercel.<br>
+            <strong>Зачем сейчас:</strong> на&nbsp;нём запускаем сервер инвест-кабинета и&nbsp;PostgreSQL-базу&nbsp;&mdash; всё в&nbsp;одном месте.<br>
+            <strong>Где взять:</strong> <a href="https://railway.app">railway.app</a>. Регистрация через GitHub. Бесплатный тариф: $5 кредитов в&nbsp;месяц&nbsp;&mdash; для&nbsp;учебного проекта более чем достаточно.<br>
+            <strong>Проверить:</strong> dashboard открывается, в&nbsp;нём пусто.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a deployment platform for <em>backend</em> parts: servers, databases, background jobs. What Vercel can’t do.<br>
+            <strong>Why now:</strong> we run the investment-office server and a PostgreSQL database there — all in one place.<br>
+            <strong>Where:</strong> <a href="https://railway.app">railway.app</a>. Sign in with GitHub. Free tier: $5 credits/month — more than enough for a learning project.<br>
+            <strong>Verify:</strong> the dashboard opens, empty.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · API-ключ</span><span lang="en">required · API key</span></span>
+            <h3>Anthropic API key</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> ключ от&nbsp;<dfn class="term" tabindex="0" data-def="программный интерфейс к моделям Claude от Anthropic. Через него ваше приложение само вызывает Claude — для чата, анализа, генерации текста.">Claude API</dfn>&nbsp;&mdash; того&nbsp;же Claude, но&nbsp;вызываемого из&nbsp;программ, не&nbsp;только из&nbsp;Claude Code. Через него мы&nbsp;встраиваем AI прямо в&nbsp;наше приложение.<br>
+            <strong>Зачем сейчас:</strong> для&nbsp;второго проекта&nbsp;&mdash; AI-консультанта по&nbsp;финансам.<br>
+            <strong>Где взять:</strong> <a href="https://console.anthropic.com/settings/keys">console.anthropic.com/settings/keys</a>. Регистрация бесплатная, при создании ключа получите $5 кредитов на&nbsp;старт.<br>
+            <strong>Куда положить:</strong> в&nbsp;<code>.env</code> в&nbsp;корне проекта (<code>ANTHROPIC_API_KEY=sk-ant-...</code>) и&nbsp;<em>ОБЯЗАТЕЛЬНО</em> в&nbsp;<code>.gitignore</code>.<br>
+            <strong>На&nbsp;Vercel/Railway:</strong> ключ загружается через интерфейс «Environment Variables», а&nbsp;не&nbsp;через файл&nbsp;&mdash; разберём в&nbsp;§&nbsp;I.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a key for the <dfn class="term" tabindex="0" data-def="a programmatic interface to Anthropic’s Claude models. Through it your app calls Claude itself — for chat, analysis, generation.">Claude API</dfn> — the same Claude, but invoked from programs, not just Claude Code. We use it to embed AI right in our app.<br>
+            <strong>Why now:</strong> for the second project — an AI financial advisor.<br>
+            <strong>Where:</strong> <a href="https://console.anthropic.com/settings/keys">console.anthropic.com/settings/keys</a>. Free signup, $5 starter credits when you create a key.<br>
+            <strong>Where to keep:</strong> in <code>.env</code> at the project root (<code>ANTHROPIC_API_KEY=sk-ant-...</code>) and <em>MANDATORILY</em> in <code>.gitignore</code>.<br>
+            <strong>On Vercel/Railway:</strong> the key is loaded via the “Environment Variables” UI, not a file — covered in § I.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">встроено · skill</span><span lang="en">built-in · skill</span></span>
+            <h3><code>claude-api</code></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill от&nbsp;Anthropic, который учит Claude правильно интегрировать Claude API в&nbsp;ваши приложения&nbsp;&mdash; с&nbsp;prompt caching, выбором модели, обработкой ошибок.<br>
+            <strong>Зачем сейчас:</strong> чтобы AI-консультант работал с&nbsp;первого раза, а&nbsp;не&nbsp;разваливался на&nbsp;границах.<br>
+            <strong>Устанавливать не&nbsp;нужно:</strong> <code>claude-api</code>&nbsp;&mdash; <em>встроенный</em> skill, идёт вместе с&nbsp;самим Claude Code. Проверка: в&nbsp;<code>claude</code> напечатайте <code>/skills</code>, <code>claude-api</code> должен быть в&nbsp;списке.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> an Anthropic skill that teaches Claude to integrate the Claude API into your apps right — with prompt caching, model choice, error handling.<br>
+            <strong>Why now:</strong> so the AI advisor works first try, not falls apart at the edges.<br>
+            <strong>No install needed:</strong> <code>claude-api</code> is a <em>built-in</em> skill, shipped with Claude Code itself. To verify: in <code>claude</code> type <code>/skills</code>, <code>claude-api</code> should be in the list.</p>
+        </div>
+
+        <div class="note" style="margin-top:1rem;">
+            <span lang="ru"><strong>Откуда берутся skills.</strong> К&nbsp;этому моменту вы&nbsp;встретили три источника: (1) <em>встроенные</em>&nbsp;&mdash; уже внутри <code>claude</code> (как сегодняшний <code>claude-api</code>); (2) <em>Smithery</em>&nbsp;&mdash; внешний реестр, ставится через <code>npx @smithery/cli@latest skill add ...</code> (как <code>frontend-design</code> в&nbsp;этапе&nbsp;02); (3) <em>встроенный маркетплейс Claude Code</em> (<code>claude-plugins-official</code>)&nbsp;&mdash; ставится slash-командой <code>/plugin install ...@claude-plugins-official</code> (как <code>superpowers</code> с&nbsp;этапа&nbsp;01). Один skill может жить и&nbsp;в&nbsp;Smithery, и&nbsp;в&nbsp;маркетплейсе одновременно&nbsp;&mdash; это нормально.</span>
+            <span lang="en"><strong>Where skills come from.</strong> By now you’ve met three sources: (1) <em>built-in</em> — already inside <code>claude</code> (like today’s <code>claude-api</code>); (2) <em>Smithery</em> — an external registry, installed via <code>npx @smithery/cli@latest skill add ...</code> (like <code>frontend-design</code> on etape 02); (3) <em>Claude Code’s built-in marketplace</em> (<code>claude-plugins-official</code>) — installed with the slash command <code>/plugin install ...@claude-plugins-official</code> (like <code>superpowers</code> from etape 01). One skill can live in both Smithery and the marketplace at once — that’s normal.</span>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · IDE</span><span lang="en">recommended · IDE</span></span>
+            <h3><span lang="ru">Расширение Claude Code для&nbsp;VS&nbsp;Code</span><span lang="en">Claude Code extension for VS Code</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> официальное расширение, которое встраивает Claude Code прямо в&nbsp;VS&nbsp;Code. Видно изменения в&nbsp;файлах в&nbsp;реальном времени, можно общаться с&nbsp;Claude в&nbsp;боковой панели, не&nbsp;переключаясь в&nbsp;терминал.<br>
+            <strong>Зачем сейчас:</strong> в&nbsp;большом проекте удобно видеть код и&nbsp;диалог одновременно.<br>
+            <strong>Где взять:</strong> в&nbsp;VS&nbsp;Code: вкладка Extensions, поиск «Claude Code», установить.<br>
+            <strong>Проверить:</strong> в&nbsp;боковой панели появляется иконка Claude.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the official extension embedding Claude Code into VS Code. You see file changes in real time, chat with Claude in the side panel, no terminal switch.<br>
+            <strong>Why now:</strong> on a large project it’s nice to see code and dialogue side by side.<br>
+            <strong>Where:</strong> in VS Code: Extensions tab, search “Claude Code”, install.<br>
+            <strong>Verify:</strong> a Claude icon appears in the side panel.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Анатомия настоящего веб-приложения</span><span lang="en">Anatomy of a real web application</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Frontend, backend и&nbsp;БД&nbsp;&mdash; «зал, кухня и&nbsp;кладовая»</span><span lang="en">Frontend, backend and DB — “the dining room, the kitchen, the pantry”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Метафора, которую полезно держать в&nbsp;голове весь этап&nbsp;&mdash; ресторан:</p>
+                    <ul>
+                        <li><strong><dfn class="term" tabindex="0" data-def="часть приложения, которая работает в браузере пользователя. То, что человек видит и с чем взаимодействует: страницы, кнопки, формы.">Frontend</dfn> = зал.</strong> Что видит и&nbsp;щупает посетитель: меню, столики, оформление. В&nbsp;нашем случае&nbsp;&mdash; страницы, кнопки, формы, графики. Живёт в&nbsp;браузере пользователя.</li>
+                        <li><strong><dfn class="term" tabindex="0" data-def="часть приложения, которая работает на сервере. Принимает запросы от frontend, обращается к базе, возвращает данные. Видеть его пользователь не должен.">Backend</dfn> = кухня.</strong> Готовит блюда. Принимает заказы из&nbsp;зала, лезет на&nbsp;склад, отдаёт еду. В&nbsp;нашем случае&nbsp;&mdash; сервер, который принимает запросы со&nbsp;страниц, читает базу, считает, отправляет результат.</li>
+                        <li><strong>База = кладовая.</strong> Тут лежат продукты. В&nbsp;нашем случае&nbsp;&mdash; пользователи, их&nbsp;операции, настройки. Кладовую видит только кухня, гости туда не&nbsp;ходят.</li>
+                    </ul>
+                    <p>Эта метафора важна, потому что:</p>
+                    <ul>
+                        <li>Frontend и&nbsp;backend&nbsp;&mdash; это <em>две разные программы</em>. Они часто живут в&nbsp;двух разных папках, на&nbsp;двух разных серверах, и&nbsp;общаются между собой через API.</li>
+                        <li>Секреты (ключи, пароли) живут <em>только в&nbsp;backend</em>. Frontend их&nbsp;не&nbsp;видит&nbsp;&mdash; иначе любой гость может украсть их&nbsp;через DevTools.</li>
+                        <li>База&nbsp;&mdash; <em>отдельный сервис</em>, к&nbsp;которому подключается backend. Управлять ей&nbsp;можно отдельно: бэкапить, мигрировать, переключать.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>The metaphor to keep in mind through this etape — a restaurant:</p>
+                    <ul>
+                        <li><strong><dfn class="term" tabindex="0" data-def="the part of the app that runs in the user’s browser. What the person sees and interacts with: pages, buttons, forms.">Frontend</dfn> = the dining room.</strong> What guests see and touch: menu, tables, decor. For us — pages, buttons, forms, charts. Lives in the user’s browser.</li>
+                        <li><strong><dfn class="term" tabindex="0" data-off="the part of the app on the server. Receives requests from the frontend, hits the database, returns data. Users must never see it.">Backend</dfn> = the kitchen.</strong> Cooks dishes. Takes orders from the dining room, hits the pantry, sends food out. For us — a server that takes page requests, reads the database, computes, returns results.</li>
+                        <li><strong>Database = the pantry.</strong> Stocks live here. For us — users, their operations, settings. The pantry is seen only by the kitchen, never by guests.</li>
+                    </ul>
+                    <p>The metaphor matters because:</p>
+                    <ul>
+                        <li>Frontend and backend are <em>two different programs</em>. Often two different folders, two different servers, talking via an API.</li>
+                        <li>Secrets (keys, passwords) live <em>only in the backend</em>. The frontend never sees them — otherwise any guest can steal through DevTools.</li>
+                        <li>The database is a <em>separate service</em> the backend connects to. You manage it independently: back up, migrate, switch.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Backend на&nbsp;FastAPI: «кухня» на&nbsp;Python</span><span lang="en">Backend on FastAPI: a Python “kitchen”</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Для&nbsp;backend в&nbsp;курсе используем <strong>FastAPI</strong>&nbsp;&mdash; современный python-фреймворк, который Claude хорошо знает и&nbsp;собирает за&nbsp;минуты. Минимум кода&nbsp;&mdash; и&nbsp;у&nbsp;вас работающий сервер с&nbsp;документацией.</p>
+                    <p>Сервер на&nbsp;FastAPI&nbsp;&mdash; это набор «<dfn class="term" tabindex="0" data-def="одна функция сервера, доступная по конкретному URL. /api/operations — эндпоинт списка операций. /api/login — эндпоинт логина. У эндпоинта есть метод (GET, POST, ...) и формат данных.">эндпоинтов</dfn>». Пример:</p>
+                    <pre class="shell"><span class="cmt"># <span lang="ru">читать список операций</span><span lang="en">read the operations list</span></span>
+GET  /api/operations         → список JSON
+
+<span class="cmt"># <span lang="ru">добавить операцию</span><span lang="en">add an operation</span></span>
+POST /api/operations         → принимает JSON, возвращает созданное
+
+<span class="cmt"># <span lang="ru">войти в аккаунт</span><span lang="en">sign in</span></span>
+POST /api/login              → принимает email + password, возвращает токен</pre>
+                    <p>Каждый эндпоинт&nbsp;&mdash; это функция в&nbsp;Python, которую пишет Claude. Вы&nbsp;её&nbsp;не&nbsp;трогаете, но&nbsp;понимаете <em>что она делает</em>.</p>
+                    <p>FastAPI бесплатно даёт автоматическую документацию по&nbsp;<code>/docs</code>&nbsp;&mdash; вы&nbsp;можете тыкать кнопками и&nbsp;тестировать сервер без&nbsp;написания клиента.</p>
+                </div>
+                <div lang="en">
+                    <p>For the backend we use <strong>FastAPI</strong> — a modern Python framework Claude knows well and assembles in minutes. Minimal code — a working server with docs.</p>
+                    <p>A FastAPI server is a set of <dfn class="term" tabindex="0" data-def="one server function available at a specific URL. /api/operations — the operations list endpoint. /api/login — the login endpoint. An endpoint has a method (GET, POST, …) and a data format.">endpoints</dfn>. Example:</p>
+                    <pre class="shell"><span class="cmt"># list operations</span>
+GET  /api/operations         → JSON list
+
+<span class="cmt"># add an operation</span>
+POST /api/operations         → takes JSON, returns the created one
+
+<span class="cmt"># sign in</span>
+POST /api/login              → takes email + password, returns a token</pre>
+                    <p>Each endpoint is a Python function Claude writes. You don’t touch it — but you understand <em>what it does</em>.</p>
+                    <p>FastAPI gives free auto-docs at <code>/docs</code> — you can click buttons and test the server without writing a client.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">База данных: SQLite в&nbsp;разработке, PostgreSQL в&nbsp;интернете</span><span lang="en">Database: SQLite in dev, PostgreSQL in production</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong><dfn class="term" tabindex="0" data-def="база данных, которая живёт в одном файле .db рядом с вашим кодом. Идеальна для разработки и маленьких проектов. Не подходит для одновременной работы многих пользователей.">SQLite</dfn></strong>&nbsp;&mdash; это «база в&nbsp;файле». Один файл <code>app.db</code>&nbsp;&mdash; и&nbsp;там вся ваша информация. Идеальна для&nbsp;разработки и&nbsp;учебных проектов: нечего настраивать, всё работает.</p>
+                    <p><strong><dfn class="term" tabindex="0" data-def="полноценная база данных, работающая как отдельный сервис. Поддерживает много пользователей одновременно, надёжна, бесплатна. Стандарт для веб-приложений.">PostgreSQL</dfn></strong>&nbsp;&mdash; это «настоящая» база. Отдельный процесс, к&nbsp;которому подключается ваш backend. Поддерживает множество пользователей одновременно. На&nbsp;Railway она ставится в&nbsp;один клик.</p>
+                    <p>Стратегия в&nbsp;курсе:</p>
+                    <ul>
+                        <li>На&nbsp;вашем компьютере (разработка)&nbsp;&mdash; SQLite. Просто файл.</li>
+                        <li>В&nbsp;интернете (Railway)&nbsp;&mdash; PostgreSQL.</li>
+                        <li>Между ними переключаемся одной строкой в&nbsp;<code>.env</code>: <code>DATABASE_URL=sqlite:///./app.db</code> локально и&nbsp;<code>DATABASE_URL=postgres://...</code> на&nbsp;Railway. Код один и&nbsp;тот&nbsp;же&nbsp;&mdash; меняется только переменная окружения.</li>
+                    </ul>
+                    <p>Базой управляет ORM (например, SQLAlchemy)&nbsp;&mdash; библиотека, которая превращает Python-объекты в&nbsp;запросы&nbsp;SQL. Вам не&nbsp;нужно знать SQL: вы&nbsp;говорите Claude «создай модель User с&nbsp;email, password_hash, created_at», и&nbsp;он&nbsp;делает всё остальное.</p>
+                </div>
+                <div lang="en">
+                    <p><strong><dfn class="term" tabindex="0" data-def="a database that lives in one .db file next to your code. Perfect for dev and small projects. Not suitable for many concurrent users.">SQLite</dfn></strong> is a “database in a file.” One <code>app.db</code> file — all your info inside. Ideal for development and learning projects: nothing to set up.</p>
+                    <p><strong><dfn class="term" tabindex="0" data-def="a full database running as its own service. Handles many concurrent users, reliable, free. The standard for web apps.">PostgreSQL</dfn></strong> is a “real” database. A separate process the backend connects to. Handles many concurrent users. On Railway it’s a one-click install.</p>
+                    <p>Strategy in this course:</p>
+                    <ul>
+                        <li>On your machine (dev) — SQLite. Just a file.</li>
+                        <li>On the internet (Railway) — PostgreSQL.</li>
+                        <li>Switch by one line in <code>.env</code>: <code>DATABASE_URL=sqlite:///./app.db</code> locally and <code>DATABASE_URL=postgres://...</code> on Railway. Same code — only the env var changes.</li>
+                    </ul>
+                    <p>The database is managed by an ORM (e.g. SQLAlchemy) — a library that turns Python objects into SQL. You don’t need SQL: you say to Claude “create a User model with email, password_hash, created_at,” and it does the rest.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="процесс «знакомства приложения с пользователем»: регистрация, вход, выход, защита приватных данных. Самый стандартный способ — email + пароль + сессионный токен.">Авторизация</dfn>: регистрация, вход, защита</span><span lang="en"><dfn class="term" tabindex="0" data-def="how the app “gets to know the user”: sign-up, sign-in, sign-out, protecting private data. The classic flow — email + password + session token.">Auth</dfn>: sign-up, sign-in, protection</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Чтобы у&nbsp;каждого пользователя были <em>свои</em> данные, нужна авторизация. Минимум:</p>
+                    <ol>
+                        <li><strong>Регистрация:</strong> email + пароль → создаётся запись в&nbsp;таблице <code>users</code>. Пароль <em>хешируется</em> (превращается в&nbsp;нечитаемую строку)&nbsp;&mdash; в&nbsp;базе никогда не&nbsp;лежит «как есть».</li>
+                        <li><strong>Вход:</strong> email + пароль → сервер проверяет хеш, выдаёт <dfn class="term" tabindex="0" data-def="JSON Web Token — короткая строка, которая «доказывает» серверу, что вы вошли. Браузер хранит её и шлёт в каждом запросе. Без токена сервер вас не узнаёт.">JWT-токен</dfn>.</li>
+                        <li><strong>Защита эндпоинтов:</strong> когда браузер делает запрос к&nbsp;<code>/api/operations</code>, он&nbsp;шлёт токен. Сервер декодирует токен, узнаёт, какой это пользователь, и&nbsp;возвращает <em>только его</em> данные.</li>
+                        <li><strong>Выход:</strong> браузер просто стирает токен у&nbsp;себя.</li>
+                    </ol>
+                    <p>Что Claude делает за&nbsp;вас:</p>
+                    <ul>
+                        <li>пишет регистрацию и&nbsp;вход;</li>
+                        <li>хеширует пароли через bcrypt или argon2;</li>
+                        <li>выпускает и&nbsp;проверяет JWT;</li>
+                        <li>защищает эндпоинты «декоратором» <code>require_auth</code>;</li>
+                        <li>добавляет «забыл пароль», 2FA, OAuth&nbsp;&mdash; если попросите.</li>
+                    </ul>
+                    <p>Что важно понимать вам:</p>
+                    <ul>
+                        <li>пароли в&nbsp;базе&nbsp;&mdash; <em>только в&nbsp;виде хеша</em>. Если кто-то украдёт базу, ваши пароли всё равно не&nbsp;видны;</li>
+                        <li>JWT-секрет (ключ для&nbsp;подписи токенов) живёт <em>только в&nbsp;backend</em>, в&nbsp;<code>.env</code>;</li>
+                        <li>HTTPS обязателен для&nbsp;любых страниц с&nbsp;вводом пароля&nbsp;&mdash; и&nbsp;Vercel/Railway включают его автоматически.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>For each user to have <em>their own</em> data, you need auth. Minimum:</p>
+                    <ol>
+                        <li><strong>Sign-up:</strong> email + password → a row in the <code>users</code> table. Password is <em>hashed</em> (turned into an unreadable string) — never stored “as is.”</li>
+                        <li><strong>Sign-in:</strong> email + password → the server checks the hash, issues a <dfn class="term" tabindex="0" data-def="JSON Web Token — a short string that proves to the server you’re signed in. The browser stores it and sends it on every request. No token, no recognition.">JWT token</dfn>.</li>
+                        <li><strong>Protected endpoints:</strong> when the browser hits <code>/api/operations</code>, it sends the token. The server decodes it, learns the user, and returns <em>only their</em> data.</li>
+                        <li><strong>Sign-out:</strong> the browser just wipes the token.</li>
+                    </ol>
+                    <p>What Claude does for you:</p>
+                    <ul>
+                        <li>writes sign-up and sign-in;</li>
+                        <li>hashes passwords via bcrypt or argon2;</li>
+                        <li>issues and verifies JWTs;</li>
+                        <li>protects endpoints with a <code>require_auth</code> decorator;</li>
+                        <li>adds “forgot password,” 2FA, OAuth on request.</li>
+                    </ul>
+                    <p>What you must understand:</p>
+                    <ul>
+                        <li>passwords in the database — <em>hash only</em>. If the DB leaks, passwords are still not readable;</li>
+                        <li>the JWT secret (token signing key) lives <em>only in the backend</em>, in <code>.env</code>;</li>
+                        <li>HTTPS is required on any page with password input — Vercel/Railway enable it automatically.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Деплой одной кнопкой: Vercel + Railway</span><span lang="en">One-click deploy: Vercel + Railway</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>«Деплой» больше не&nbsp;значит «арендовать сервер, настраивать nginx, ставить SSL». Современный подход:</p>
+                    <ol>
+                        <li>Связали аккаунт <strong>Vercel</strong> с&nbsp;вашим GitHub.</li>
+                        <li>В&nbsp;Vercel «Import Project»&nbsp;&mdash; выбираете репозиторий с&nbsp;frontend.</li>
+                        <li>Vercel сам понимает, что это Next.js (или React, или Vue), собирает и&nbsp;публикует. Через 30 секунд&nbsp;&mdash; живая ссылка <code>my-app.vercel.app</code>.</li>
+                        <li>Аналогично в&nbsp;<strong>Railway</strong>: «New Project» → ваш backend-репозиторий + добавить «PostgreSQL» сервис.</li>
+                        <li>В&nbsp;настройках добавляете environment variables (например, <code>ANTHROPIC_API_KEY</code>, <code>DATABASE_URL</code>).</li>
+                        <li>Каждый <code>git push</code>&nbsp;&mdash; новый деплой. На&nbsp;каждый PR&nbsp;&mdash; своя preview-ссылка для&nbsp;ревью.</li>
+                    </ol>
+                    <p>Что важно:</p>
+                    <ul>
+                        <li><strong>Никогда не&nbsp;кладите секреты в&nbsp;код.</strong> Только Environment Variables через интерфейс платформы.</li>
+                        <li><strong>Настройте CORS</strong>&nbsp;&mdash; чтобы ваш Vercel-frontend имел право обращаться к&nbsp;Railway-backend. Claude настроит, но&nbsp;знать про&nbsp;это надо.</li>
+                        <li><strong>Бесплатные тарифы засыпают.</strong> Если приложение не&nbsp;использовали несколько часов, первый запрос будет долгий (контейнер просыпается). Это нормально для&nbsp;учебных проектов.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>“Deploy” no longer means “rent a server, configure nginx, install SSL.” The modern flow:</p>
+                    <ol>
+                        <li>Link <strong>Vercel</strong> to your GitHub.</li>
+                        <li>In Vercel “Import Project” — pick the frontend repo.</li>
+                        <li>Vercel detects Next.js (or React, or Vue), builds and publishes. 30 seconds later — a live URL <code>my-app.vercel.app</code>.</li>
+                        <li>Same in <strong>Railway</strong>: “New Project” → your backend repo + add a “PostgreSQL” service.</li>
+                        <li>Add environment variables (e.g. <code>ANTHROPIC_API_KEY</code>, <code>DATABASE_URL</code>).</li>
+                        <li>Every <code>git push</code> — a new deploy. Each PR gets its own preview URL for review.</li>
+                    </ol>
+                    <p>What matters:</p>
+                    <ul>
+                        <li><strong>Never put secrets in code.</strong> Only environment variables via the platform UI.</li>
+                        <li><strong>Configure CORS</strong> so your Vercel frontend can call your Railway backend. Claude sets it, but you should know it’s a thing.</li>
+                        <li><strong>Free tiers nap.</strong> If unused for hours, the first request is slow (container wakes up). Fine for learning projects.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Claude API в&nbsp;своём приложении: модели и&nbsp;<dfn class="term" tabindex="0" data-def="кэш одинаковых частей промпта между запросами. Если в начале промпта всегда одно и то же (системные инструкции, документы), Claude API кэширует это и берёт меньше денег и времени с повторных запросов.">prompt caching</dfn></span><span lang="en">Claude API in your app: models and <dfn class="term" tabindex="0" data-def="caching identical prompt prefixes across requests. If the start of your prompt is always the same (system instructions, documents), Claude API caches it and charges less time and money on repeats.">prompt caching</dfn></span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><strong>Три модели</strong>, между которыми выбираем для&nbsp;разных задач:</p>
+                    <ul>
+                        <li><strong>Opus</strong>&nbsp;&mdash; самая умная, самая дорогая. Для&nbsp;сложных аналитических задач, где качество важнее всего (например, финансовая аналитика капстоуна).</li>
+                        <li><strong>Sonnet</strong>&nbsp;&mdash; «золотая середина». 80% качества Opus за&nbsp;20% денег. Большинство приложений&nbsp;&mdash; на&nbsp;ней.</li>
+                        <li><strong>Haiku</strong>&nbsp;&mdash; быстрая и&nbsp;дешёвая. Для&nbsp;простых классификаций («это что&nbsp;&mdash; еда или транспорт?») и&nbsp;высоких объёмов.</li>
+                    </ul>
+                    <p>В&nbsp;коде это одна строка:</p>
+                    <pre class="shell">model="claude-sonnet-4-6"   <span class="cmt"># <span lang="ru">для типичных задач</span><span lang="en">for typical tasks</span></span>
+model="claude-opus-4-7"     <span class="cmt"># <span lang="ru">для сложного анализа</span><span lang="en">for complex analysis</span></span>
+model="claude-haiku-4-5"    <span class="cmt"># <span lang="ru">для классификации</span><span lang="en">for classification</span></span></pre>
+
+                    <p><strong>Prompt caching</strong> экономит деньги и&nbsp;время:</p>
+                    <ul>
+                        <li>Если в&nbsp;каждом запросе вы&nbsp;шлёте один и&nbsp;тот&nbsp;же «контекст» (например, описание AI-консультанта, схему ваших данных, last 30 операций пользователя)&nbsp;&mdash; Claude API <em>кэширует</em> эту часть и&nbsp;на&nbsp;повторных запросах берёт за&nbsp;неё в&nbsp;10 раз меньше.</li>
+                        <li>Кэш живёт 5&nbsp;минут. Если запросы идут чаще&nbsp;&mdash; почти всегда попадаете в&nbsp;кэш.</li>
+                        <li>Для&nbsp;нашего AI-консультанта это критично: пользователь шлёт по&nbsp;15&nbsp;вопросов подряд, кэшируется системный промпт + его портфель.</li>
+                    </ul>
+                    <p>Skill <code>claude-api</code> учит Claude правильно ставить точки кэширования. Без&nbsp;skill ваш AI-консультант будет работать в&nbsp;5–10 раз дороже.</p>
+                </div>
+                <div lang="en">
+                    <p><strong>Three models</strong> to choose between for different jobs:</p>
+                    <ul>
+                        <li><strong>Opus</strong> — smartest, priciest. For hard analytic work where quality is paramount (e.g., capstone financial analytics).</li>
+                        <li><strong>Sonnet</strong> — the “sweet spot.” 80% of Opus quality at 20% of the cost. Most apps run here.</li>
+                        <li><strong>Haiku</strong> — fast and cheap. For simple classifications (“food or transport?”) and high volumes.</li>
+                    </ul>
+                    <p>In code that’s one line:</p>
+                    <pre class="shell">model="claude-sonnet-4-6"   <span class="cmt"># for typical tasks</span>
+model="claude-opus-4-7"     <span class="cmt"># for complex analysis</span>
+model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
+
+                    <p><strong>Prompt caching</strong> saves money and time:</p>
+                    <ul>
+                        <li>If every request shares the same “context” (e.g., the AI advisor description, your data schema, the user’s last 30 ops) — Claude API <em>caches</em> that prefix and on repeats charges 10× less for it.</li>
+                        <li>The cache lives 5 minutes. If requests come more often — you’re almost always cache-hit.</li>
+                        <li>Critical for our AI advisor: a user fires 15 questions in a row, the system prompt + their portfolio get cached.</li>
+                    </ul>
+                    <p>The <code>claude-api</code> skill teaches Claude to place cache points correctly. Without the skill the AI advisor costs 5–10× more.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Что у&nbsp;Claude получается «не сразу»&nbsp;&mdash; на&nbsp;что обращать внимание</span><span lang="en">What Claude gets wrong at first — what to watch</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>На&nbsp;этом этапе впервые «настоящая» сложность. Не&nbsp;всё работает с&nbsp;первого раза. Что чаще всего ломается:</p>
+                    <ul>
+                        <li><strong>CORS-ошибки.</strong> Frontend на&nbsp;Vercel не&nbsp;может позвонить Railway-backend, потому что серверы разные. Claude всё настроит, но&nbsp;первый раз скорее всего получите ошибку «blocked by CORS policy». Решение&nbsp;&mdash; <em>«добавь cors middleware с&nbsp;allowed origins из&nbsp;.env»</em>.</li>
+                        <li><strong>Секреты не&nbsp;подгрузились.</strong> Локально работает, на&nbsp;Vercel/Railway&nbsp;&mdash; нет. Проверьте, что переменные окружения добавлены в&nbsp;dashboard платформы (не&nbsp;только в&nbsp;<code>.env</code> на&nbsp;вашем компьютере).</li>
+                        <li><strong>Миграции базы.</strong> При первом деплое таблиц ещё нет. Claude обычно делает это автоматически, но&nbsp;иногда нужно явно: <em>«добавь startup-хук, который создаёт таблицы при старте сервера»</em>.</li>
+                        <li><strong>Спящий бэкенд.</strong> Первый запрос после паузы&nbsp;&mdash; долгий. Это нормально на&nbsp;бесплатных тарифах. Решение для&nbsp;демо&nbsp;&mdash; пинговать backend каждые 5&nbsp;минут (например, через cron-задачу&nbsp;&mdash; этап&nbsp;10).</li>
+                    </ul>
+                    <p>Дисциплина: на&nbsp;каждой проблеме смотрите Claude'у в&nbsp;браузерные DevTools (через Playwright) и&nbsp;логи backend. Большинство решается за&nbsp;5–15 минут.</p>
+                </div>
+                <div lang="en">
+                    <p>This is the first etape with “real” complexity. Not everything works first try. The usual culprits:</p>
+                    <ul>
+                        <li><strong>CORS errors.</strong> The Vercel frontend can’t call the Railway backend because servers differ. Claude sets it up, but the first time you’ll usually see “blocked by CORS policy.” Fix: <em>“add cors middleware with allowed origins from .env.”</em></li>
+                        <li><strong>Secrets didn’t load.</strong> Works locally, breaks on Vercel/Railway. Confirm env vars are set in the platform dashboard (not just in your local <code>.env</code>).</li>
+                        <li><strong>Database migrations.</strong> On first deploy the tables are not there yet. Claude usually handles this, but sometimes ask explicitly: <em>“add a startup hook that creates tables on server boot.”</em></li>
+                        <li><strong>Sleeping backend.</strong> First request after a pause is slow. Normal on free tiers. Fix for demos — ping the backend every 5 minutes (e.g., via cron — etape 10).</li>
+                    </ul>
+                    <p>Discipline: on every issue, get Claude into the browser DevTools (via Playwright) and the backend logs. Most issues are solved in 5–15 minutes.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">«Hello, world» c&nbsp;настоящим сервером</span><span lang="en">A “hello, world” with a real server</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · минимальный full-stack за&nbsp;30 минут</span><span lang="en">Run · a minimal full-stack in 30 minutes</span></h4>
+            <ol lang="ru">
+                <li>Создайте папку <code>hello-fullstack</code>, две подпапки: <code>backend/</code> и&nbsp;<code>frontend/</code>. В&nbsp;корне&nbsp;&mdash; <code>CLAUDE.md</code> и&nbsp;<code>.gitignore</code>.</li>
+                <li>Войдите в&nbsp;Plan Mode и&nbsp;попросите Claude:
+                    <pre class="shell">&gt; составь spec.md для минимального full-stack «hello-fullstack»:
+&gt; — backend: FastAPI с одним эндпоинтом GET /api/hello,
+&gt;   возвращает {"message": "Hello, &lt;ваше имя&gt;"} с timestamp.
+&gt;   локально: uvicorn на 8000.
+&gt; — frontend: одна html-страница, fetch на /api/hello,
+&gt;   рендерит сообщение в крупный заголовок.
+&gt; — оба готовы к деплою на Railway (backend) и Vercel (frontend).
+&gt; — CORS настроен для localhost и для будущих vercel.app.
+&gt; критерии готовности:
+&gt;   1) backend стартует одной командой;
+&gt;   2) frontend открывается в браузере;
+&gt;   3) кнопка «обновить» получает новый timestamp.</pre>
+                </li>
+                <li>Утвердите spec, дайте исполнять.</li>
+                <li>Локально проверьте: backend запущен на&nbsp;<code>:8000</code>, frontend&nbsp;&mdash; через <code>python -m http.server 5000</code>. Должно работать.</li>
+                <li>Через playwright&nbsp;&mdash; ревизия:
+                    <pre class="shell">&gt; через playwright открой http://localhost:5000.
+&gt; нажми «обновить» три раза. timestamp каждый раз меняется?
+&gt; есть ли ошибки в console?</pre>
+                </li>
+                <li>Деплой:
+                    <pre class="shell">&gt; запушь backend на github как hello-fullstack-backend (публичный).
+&gt; деплой на Railway: новый проект из этого репо.
+&gt; запушь frontend как hello-fullstack-frontend.
+&gt; деплой на Vercel: импорт из репо.
+&gt; в обоих платформах загрузи нужные env vars.
+&gt; замени в frontend URL backend-а на railway-ссылку.
+&gt; запушь обновление.</pre>
+                </li>
+                <li>Откройте Vercel-ссылку. Убедитесь, что работает по&nbsp;живому&nbsp;URL.</li>
+                <li>Если что-то не&nbsp;работает: смотрите логи Railway и&nbsp;DevTools во&nbsp;Vercel-странице. Сообщите Claude точное сообщение об&nbsp;ошибке&nbsp;&mdash; обычно решает за&nbsp;1–2 итерации.</li>
+            </ol>
+            <ol lang="en">
+                <li>Create a <code>hello-fullstack</code> folder, two subfolders: <code>backend/</code> and <code>frontend/</code>. At the root — <code>CLAUDE.md</code> and <code>.gitignore</code>.</li>
+                <li>Enter Plan Mode and ask Claude:
+                    <pre class="shell">&gt; draft spec.md for a minimal "hello-fullstack":
+&gt; — backend: FastAPI with one GET /api/hello,
+&gt;   returns {"message": "Hello, &lt;your name&gt;"} with timestamp.
+&gt;   local: uvicorn on 8000.
+&gt; — frontend: one html page, fetch /api/hello,
+&gt;   renders the message as a big heading.
+&gt; — both ready to deploy: Railway (backend) and Vercel (frontend).
+&gt; — CORS configured for localhost and future vercel.app.
+&gt; acceptance:
+&gt;   1) backend starts with one command;
+&gt;   2) frontend opens in the browser;
+&gt;   3) "refresh" button updates the timestamp.</pre>
+                </li>
+                <li>Approve the spec, execute.</li>
+                <li>Local check: backend on <code>:8000</code>, frontend via <code>python -m http.server 5000</code>. Should work.</li>
+                <li>Playwright audit:
+                    <pre class="shell">&gt; through playwright open http://localhost:5000.
+&gt; click "refresh" three times. does the timestamp change each time?
+&gt; any console errors?</pre>
+                </li>
+                <li>Deploy:
+                    <pre class="shell">&gt; push backend to github as hello-fullstack-backend (public).
+&gt; deploy to Railway: new project from this repo.
+&gt; push frontend as hello-fullstack-frontend.
+&gt; deploy to Vercel: import from repo.
+&gt; on both platforms add the env vars.
+&gt; in frontend replace the backend URL with the Railway one.
+&gt; push the update.</pre>
+                </li>
+                <li>Open the Vercel URL. Confirm it works on the live URL.</li>
+                <li>If something fails: check Railway logs and the Vercel page DevTools. Tell Claude the exact error — usually 1–2 iterations.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>минимальный, но&nbsp;настоящий full-stack&nbsp;&mdash; от&nbsp;пустой папки до&nbsp;живой ссылки</strong>. Дальше&nbsp;&mdash; на&nbsp;этом фундаменте делаем серьёзные приложения.</p>
+            <p lang="en">What we train: <strong>a minimal but real full-stack — from empty folder to live URL</strong>. Then we build serious apps on this foundation.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Личный кабинет и&nbsp;AI-консультант</span><span lang="en">A personal office and an AI advisor</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Личный инвестиционный кабинет</span><span lang="en">Personal investment office</span></h3>
+            <p class="goal" lang="ru">Цель: полноценное приложение с&nbsp;регистрацией, базой и&nbsp;деплоем. Каждый пользователь видит <em>свой</em> портфель и&nbsp;<em>свои</em> прогнозы. URL вида <code>https://my-investing.vercel.app</code>, который не&nbsp;стыдно показать.</p>
+            <p class="goal" lang="en">Goal: a real app with sign-up, database and deploy. Each user sees <em>their</em> portfolio and <em>their</em> forecasts. A URL like <code>https://my-investing.vercel.app</code> you can show without shame.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Фазы (через spec → Plan Mode → TodoWrite, как в&nbsp;этапе&nbsp;04)</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Phases (via spec → Plan Mode → TodoWrite, as in etape 04)</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Spec и&nbsp;скелет.</strong> Папки <code>backend/</code> и&nbsp;<code>frontend/</code>, <code>CLAUDE.md</code>, <code>.gitignore</code>. spec.md с&nbsp;разделами «модели данных» (User, Operation, Forecast), «эндпоинты», «UX-флоу».</li>
+                <li><strong>Backend: модели и&nbsp;база.</strong> FastAPI + SQLAlchemy + SQLite (локально). Модели: User, Operation, Forecast. Миграции через Alembic либо «создать таблицы при старте».</li>
+                <li><strong>Backend: авторизация.</strong> Регистрация, вход, JWT. Эндпоинты <code>/api/auth/signup</code>, <code>/api/auth/login</code>, <code>/api/auth/me</code>. Хеширование bcrypt. Декоратор <code>require_auth</code>.</li>
+                <li><strong>Backend: операции.</strong> CRUD&nbsp;<code>/api/operations</code> с&nbsp;фильтром «только мои». Импорт CSV через <code>/api/operations/import</code> (multipart upload).</li>
+                <li><strong>Backend: прогноз.</strong> Эндпоинт <code>/api/forecast</code>: входы (как в&nbsp;этапе&nbsp;04), выходы&nbsp;&mdash; три сценария.</li>
+                <li><strong>Frontend: каркас.</strong> Next.js или просто React-страницы. Маршруты: <code>/</code> (лендинг), <code>/signup</code>, <code>/login</code>, <code>/dashboard</code>, <code>/forecast</code>.</li>
+                <li><strong>Frontend: формы и&nbsp;дашборд.</strong> Используем skill <code>frontend-design</code> для&nbsp;вёрстки. Внутри&nbsp;&mdash; графики из&nbsp;этапов&nbsp;02–04.</li>
+                <li><strong>Frontend: интеграция с&nbsp;backend.</strong> Хранение JWT в&nbsp;<code>localStorage</code>. Авто-добавление токена в&nbsp;каждый запрос.</li>
+                <li><strong>Деплой backend на&nbsp;Railway.</strong> Создание PostgreSQL-сервиса. Миграция SQLite → PostgreSQL через переменную <code>DATABASE_URL</code>.</li>
+                <li><strong>Деплой frontend на&nbsp;Vercel.</strong> Подмена URL backend на&nbsp;production. CORS настроен.</li>
+                <li><strong>Verification.</strong> Через playwright: регистрация, вход, импорт CSV, прогноз. Сверка чисел с&nbsp;этапом&nbsp;02 (на&nbsp;тех&nbsp;же данных).</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Spec and skeleton.</strong> Folders <code>backend/</code> and <code>frontend/</code>, <code>CLAUDE.md</code>, <code>.gitignore</code>. spec.md with sections “data models” (User, Operation, Forecast), “endpoints,” “UX flow.”</li>
+                <li><strong>Backend: models and DB.</strong> FastAPI + SQLAlchemy + SQLite (local). Models: User, Operation, Forecast. Migrations via Alembic or “create tables on startup.”</li>
+                <li><strong>Backend: auth.</strong> Sign-up, sign-in, JWT. Endpoints <code>/api/auth/signup</code>, <code>/api/auth/login</code>, <code>/api/auth/me</code>. bcrypt hashing. <code>require_auth</code> decorator.</li>
+                <li><strong>Backend: operations.</strong> CRUD on <code>/api/operations</code> with “mine only” filter. CSV import via <code>/api/operations/import</code> (multipart upload).</li>
+                <li><strong>Backend: forecast.</strong> Endpoint <code>/api/forecast</code>: inputs (as in etape 04), outputs — three scenarios.</li>
+                <li><strong>Frontend: skeleton.</strong> Next.js or plain React pages. Routes: <code>/</code> (landing), <code>/signup</code>, <code>/login</code>, <code>/dashboard</code>, <code>/forecast</code>.</li>
+                <li><strong>Frontend: forms and dashboard.</strong> Use the <code>frontend-design</code> skill for layout. Inside — etapes 02–04 charts.</li>
+                <li><strong>Frontend: backend integration.</strong> JWT in <code>localStorage</code>. Auto-attach token on each request.</li>
+                <li><strong>Backend deploy on Railway.</strong> Create a PostgreSQL service. Migrate SQLite → PostgreSQL via the <code>DATABASE_URL</code> variable.</li>
+                <li><strong>Frontend deploy on Vercel.</strong> Swap backend URL to production. CORS configured.</li>
+                <li><strong>Verification.</strong> Through Playwright: sign-up, sign-in, CSV import, forecast. Reconcile numbers with etape 02 (on the same data).</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>двух-репозиторный full-stack: backend и&nbsp;frontend как отдельные проекты;</li>
+                <li>работу с&nbsp;двумя БД одновременно (SQLite локально, PostgreSQL в&nbsp;production);</li>
+                <li>авторизацию пользователей с&nbsp;хешированием паролей и&nbsp;JWT;</li>
+                <li>деплой через Vercel + Railway, переменные окружения, CORS;</li>
+                <li>сборку приложения, которым реально могут пользоваться люди.</li>
+            </ul>
+            <ul lang="en">
+                <li>a two-repo full-stack: backend and frontend as separate projects;</li>
+                <li>two-DB workflow (SQLite local, PostgreSQL production);</li>
+                <li>user auth with password hashing and JWT;</li>
+                <li>deploy via Vercel + Railway, env vars, CORS;</li>
+                <li>shipping an app real people can use.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">AI-консультант по&nbsp;финансам на&nbsp;Claude API</span><span lang="en">AI financial advisor on the Claude API</span></h3>
+            <p class="goal" lang="ru">Цель: добавить в&nbsp;инвест-кабинет вкладку «AI-консультант». Чат, который видит ваши данные (через backend), отвечает на&nbsp;вопросы по&nbsp;портфелю, использует prompt caching и&nbsp;разные модели под&nbsp;разные задачи.</p>
+            <p class="goal" lang="en">Goal: add an “AI advisor” tab to the office. A chat that sees your data (through the backend), answers portfolio questions, uses prompt caching and different models per task.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>В&nbsp;<code>backend/</code> добавьте эндпоинт <code>/api/advisor/ask</code>:
+                    <pre class="shell">&gt; используя skill claude-api,
+&gt; добавь эндпоинт POST /api/advisor/ask.
+&gt; принимает: { question: string }.
+&gt; собирает контекст: системный промпт «ты — финансовый консультант» +
+&gt; портфель текущего пользователя (через require_auth) + последние 30 операций.
+&gt; вызывает claude-sonnet-4-6 с prompt caching на системный промпт + портфель.
+&gt; возвращает { answer: string, model: string, tokens_used: int }.
+&gt; ВАЖНО: ANTHROPIC_API_KEY — только из env, никогда не светится в логах.</pre>
+                </li>
+                <li>В&nbsp;<code>frontend/</code> добавьте страницу <code>/advisor</code> с&nbsp;чатом. История сообщений в&nbsp;state, ответы streaming-ом.</li>
+                <li>Уточните UI:
+                    <ul>
+                        <li><em>«сделай вид «классической переписки», узкая колонка, тёплая палитра»</em>;</li>
+                        <li><em>«в&nbsp;каждом ответе показывай маленькую плашку «модель + tokens», для&nbsp;прозрачности»</em>;</li>
+                        <li><em>«добавь три быстрых вопроса-кнопки сверху: «оцени мой риск», «куда переложить?», «прогноз на&nbsp;год»»</em>.</li>
+                    </ul>
+                </li>
+                <li>Обработка ошибок:
+                    <pre class="shell">&gt; добавь обработку:
+&gt; — если ANTHROPIC_API_KEY не задан — friendly ошибка «AI выключен».
+&gt; — если кончились кредиты Anthropic — друг. ошибка «лимит, попробуйте позже».
+&gt; — если backend не отвечает — повтор через 3 секунды, потом ошибка.</pre>
+                </li>
+                <li>Multi-model логика:
+                    <pre class="shell">&gt; добавь второй эндпоинт /api/advisor/classify:
+&gt; принимает «что эта операция?», использует haiku
+&gt; (классификация транзакций — простая задача, экономим деньги).
+&gt; покажи в advisor.html, как переключаются модели.</pre>
+                </li>
+                <li>Деплой backend на&nbsp;Railway, frontend на&nbsp;Vercel. <strong>В&nbsp;Railway</strong> добавьте <code>ANTHROPIC_API_KEY</code> через интерфейс (НЕ&nbsp;коммитьте в&nbsp;<code>.env</code>).</li>
+                <li>Verification:
+                    <pre class="shell">&gt; через playwright прогон:
+&gt; — войди как тестовый user;
+&gt; — открой /advisor;
+&gt; — задай 3 вопроса по портфелю;
+&gt; — проверь что:
+&gt;     1) ответы релевантны (упоминают тикеры из моего портфеля);
+&gt;     2) tokens_used меньше у второго и третьего вопроса (cache hit);
+&gt;     3) classify-эндпоинт использует haiku, а ask — sonnet.
+&gt; пришли отчёт.</pre>
+                </li>
+                <li>Финальный аудит: <em>«если кто-то получит мой Anthropic API key, как он&nbsp;узнает, через какое моё приложение он&nbsp;утёк? есть&nbsp;ли в&nbsp;логах что-то, что я&nbsp;должен очистить?»</em></li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>In <code>backend/</code> add the endpoint <code>/api/advisor/ask</code>:
+                    <pre class="shell">&gt; using the claude-api skill,
+&gt; add POST /api/advisor/ask.
+&gt; takes: { question: string }.
+&gt; builds context: system prompt "you are a financial advisor" +
+&gt; current user's portfolio (via require_auth) + last 30 operations.
+&gt; calls claude-sonnet-4-6 with prompt caching on the system prompt + portfolio.
+&gt; returns { answer: string, model: string, tokens_used: int }.
+&gt; IMPORTANT: ANTHROPIC_API_KEY only from env, never logged.</pre>
+                </li>
+                <li>In <code>frontend/</code> add an <code>/advisor</code> page with a chat. Message history in state, replies streamed.</li>
+                <li>Refine UI:
+                    <ul>
+                        <li><em>“go for ‘classic correspondence’ look — narrow column, warm palette”</em>;</li>
+                        <li><em>“each reply shows a tiny ‘model + tokens’ tag for transparency”</em>;</li>
+                        <li><em>“three quick-question buttons on top: ‘rate my risk,’ ‘where to reallocate?,’ ‘yearly forecast’”</em>.</li>
+                    </ul>
+                </li>
+                <li>Error handling:
+                    <pre class="shell">&gt; add handling:
+&gt; — if ANTHROPIC_API_KEY missing — friendly "AI off".
+&gt; — if Anthropic credits exhausted — friendly "limit, try later".
+&gt; — if backend doesn't reply — retry 3 sec, then error.</pre>
+                </li>
+                <li>Multi-model logic:
+                    <pre class="shell">&gt; add a second endpoint /api/advisor/classify:
+&gt; takes "what is this operation?", uses haiku
+&gt; (transaction classification — simple, save money).
+&gt; show on advisor.html how models switch.</pre>
+                </li>
+                <li>Deploy backend on Railway, frontend on Vercel. <strong>In Railway</strong> add <code>ANTHROPIC_API_KEY</code> via the UI (DO NOT commit to <code>.env</code>).</li>
+                <li>Verification:
+                    <pre class="shell">&gt; via playwright:
+&gt; — sign in as a test user;
+&gt; — open /advisor;
+&gt; — ask 3 portfolio questions;
+&gt; — check:
+&gt;     1) replies are relevant (mention my tickers);
+&gt;     2) tokens_used drops on q2 and q3 (cache hit);
+&gt;     3) classify uses haiku, ask uses sonnet.
+&gt; report back.</pre>
+                </li>
+                <li>Final audit: <em>“if my Anthropic API key leaks, how would they tell which app it leaked from? Are there log lines I should scrub?”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>интеграцию Claude API в&nbsp;своё приложение через skill <code>claude-api</code>;</li>
+                <li>prompt caching для&nbsp;экономии денег и&nbsp;ускорения чата;</li>
+                <li>выбор модели под&nbsp;задачу (Sonnet для&nbsp;аналитики, Haiku для&nbsp;классификации);</li>
+                <li>обработку ошибок API и&nbsp;graceful fallback;</li>
+                <li>безопасность: ключи только в&nbsp;env, не&nbsp;в&nbsp;логах.</li>
+            </ul>
+            <ul lang="en">
+                <li>integrating the Claude API into your app via <code>claude-api</code>;</li>
+                <li>prompt caching for cost savings and faster chat;</li>
+                <li>model choice per task (Sonnet for analytics, Haiku for classification);</li>
+                <li>API error handling and graceful fallback;</li>
+                <li>security: keys in env only, never in logs.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши идеи</span><span lang="en">Same moves, your ideas</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Сервис коллекции с&nbsp;регистрацией</span><span lang="en">A collection service with sign-up</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; тот&nbsp;же full-stack стек (FastAPI + PostgreSQL + Vercel-frontend + JWT-auth), но&nbsp;для&nbsp;вашей коллекции: книг, настольных игр, кофеен, мест города. Каждый пользователь ведёт свою.</p>
+            <p class="goal" lang="en">Goal: variation of A — same full-stack (FastAPI + PostgreSQL + Vercel frontend + JWT auth), but for your collection: books, board games, coffee shops, places in town. Each user runs their own.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Тот&nbsp;же скелет, что в&nbsp;A. Меняется только модель данных и&nbsp;UX.</li>
+                <li>Модель: User + Item + Tag. У&nbsp;Item: title, description, image_url, rating, tags.</li>
+                <li>UX: добавить элемент с&nbsp;загрузкой картинки, поиск по&nbsp;коллекции, фильтры по&nbsp;тегам/рейтингу, страница «случайный элемент».</li>
+                <li>Картинки можно хранить через сторонний сервис (например, Cloudinary бесплатно).</li>
+                <li>Используйте опыт этапа&nbsp;05 для&nbsp;двух репозиториев.</li>
+            </ul>
+            <ul lang="en">
+                <li>Same skeleton as A. Only the data model and UX change.</li>
+                <li>Model: User + Item + Tag. Item has: title, description, image_url, rating, tags.</li>
+                <li>UX: add an item with image upload, search across the collection, filters by tag/rating, “random item” page.</li>
+                <li>Images can live on a third-party service (e.g. Cloudinary free).</li>
+                <li>Use the etape-05 muscle for two repos.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть две публичные ссылки: backend на&nbsp;Railway и&nbsp;frontend на&nbsp;Vercel;</li>
+                        <li>можно зарегистрироваться, войти, добавить минимум 5&nbsp;элементов;</li>
+                        <li>другой человек регистрируется и&nbsp;видит <em>только свою</em> коллекцию (проверьте&nbsp;&mdash; зарегистрируйтесь дважды разным email);</li>
+                        <li>работает поиск или фильтры;</li>
+                        <li>в&nbsp;логах backend нет API-ключей и&nbsp;паролей (проверьте через Railway dashboard);</li>
+                        <li>через playwright прогнан полный сценарий «новый пользователь → регистрация → 3 элемента → выход → вход».</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>two public URLs: backend on Railway, frontend on Vercel;</li>
+                        <li>users can sign up, sign in, add at least 5 items;</li>
+                        <li>another user registers and sees <em>only their</em> collection (verify — sign up twice with different emails);</li>
+                        <li>search or filters work;</li>
+                        <li>no API keys or passwords in backend logs (check via Railway dashboard);</li>
+                        <li>Playwright walked the full “new user → sign-up → 3 items → sign-out → sign-in” scenario.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Прогуляйся по&nbsp;моему сервису через playwright как security-эксперт. Найди три места, где я&nbsp;мог&nbsp;бы случайно «утечь» данные одного пользователя другому. Как это исправить?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Walk my service via Playwright as a security reviewer. Find three places where I could leak one user’s data to another. How to fix?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Telegram-бот для&nbsp;вашего инвест-кабинета</span><span lang="en">Telegram bot for your investment office</span></h3>
+            <p class="goal" lang="ru">Цель: бот, который ходит в&nbsp;ваш backend (из&nbsp;проекта&nbsp;A) и&nbsp;даёт быстрый доступ к&nbsp;функциям с&nbsp;телефона. Команды: <code>/login</code>, <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>, <code>/ask</code>.</p>
+            <p class="goal" lang="en">Goal: a bot that talks to your backend (from project A) and gives quick mobile access. Commands: <code>/login</code>, <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>, <code>/ask</code>.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Бот&nbsp;&mdash; отдельный python-процесс на&nbsp;Railway. Использует библиотеку <code>aiogram</code> или <code>python-telegram-bot</code>.</li>
+                <li>Создайте бота через <a href="https://t.me/BotFather">@BotFather</a>, получите токен. Положите в&nbsp;Railway env vars.</li>
+                <li>Авторизация по&nbsp;Telegram: бот сохраняет связь telegram_id → user_id в&nbsp;базе. После <code>/login email password</code>&nbsp;&mdash; токен JWT хранится у&nbsp;бота на&nbsp;время.</li>
+                <li>Команды бот делает запросами к&nbsp;тому&nbsp;же backend, что использует frontend.</li>
+                <li>Команда <code>/ask</code>&nbsp;&mdash; передача в&nbsp;AI-консультант (проект&nbsp;B).</li>
+                <li>Тестовый сценарий: после <code>/login</code> и&nbsp;<code>/last</code>&nbsp;&mdash; бот отвечает 3&nbsp;последними операциями.</li>
+            </ul>
+            <ul lang="en">
+                <li>The bot is a separate Python process on Railway. Uses <code>aiogram</code> or <code>python-telegram-bot</code>.</li>
+                <li>Create a bot via <a href="https://t.me/BotFather">@BotFather</a>, get a token. Put it in Railway env vars.</li>
+                <li>Telegram-side auth: the bot stores telegram_id → user_id in the DB. After <code>/login email password</code> — the JWT is kept by the bot for a session.</li>
+                <li>The bot’s commands hit the same backend the frontend uses.</li>
+                <li>The <code>/ask</code> command forwards to the AI advisor (project B).</li>
+                <li>Test: after <code>/login</code> and <code>/last</code> the bot replies with the 3 latest operations.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>бот живёт в&nbsp;Railway как отдельный сервис, токен в&nbsp;env, не&nbsp;в&nbsp;коде;</li>
+                        <li>после <code>/login</code> и&nbsp;<code>/portfolio</code> бот возвращает текущее состояние портфеля (как&nbsp;в&nbsp;вебе);</li>
+                        <li><code>/last</code> возвращает 3&nbsp;последние операции;</li>
+                        <li><code>/forecast</code> вызывает реальный эндпоинт прогноза;</li>
+                        <li><code>/ask что-то</code> идёт в&nbsp;AI-консультанта и&nbsp;возвращает ответ;</li>
+                        <li>другой telegram-аккаунт после <code>/login</code> другим email видит <em>только свой</em> портфель;</li>
+                        <li>в&nbsp;логах нет ни&nbsp;токенов, ни&nbsp;паролей.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>the bot lives on Railway as a separate service, token in env, not in code;</li>
+                        <li>after <code>/login</code> and <code>/portfolio</code> the bot returns the current portfolio state (as on the web);</li>
+                        <li><code>/last</code> returns the 3 latest operations;</li>
+                        <li><code>/forecast</code> hits the real forecast endpoint;</li>
+                        <li><code>/ask something</code> reaches the AI advisor and returns a reply;</li>
+                        <li>another Telegram account after <code>/login</code> with a different email sees <em>only their</em> portfolio;</li>
+                        <li>no tokens or passwords in logs.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Если кто-то скомпрометирует мой Telegram-токен, что он&nbsp;сможет сделать с&nbsp;моими пользователями? Что нужно изменить, чтобы при компрометации токена бот &laquo;умер&raquo;, а&nbsp;не&nbsp;стал атакером?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“If someone leaks my Telegram token, what can they do to my users? What should I change so that, on token compromise, the bot ‘dies’ rather than becomes an attacker?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>Frontend</dt>
+            <dd>
+                <span lang="ru">«Зал ресторана»&nbsp;&mdash; часть приложения, которая работает в&nbsp;браузере пользователя. То, что человек видит, кликает, заполняет.</span>
+                <span lang="en">“The dining room” — the part of the app running in the user’s browser. What the person sees, clicks, fills in.</span>
+            </dd>
+
+            <dt>Backend</dt>
+            <dd>
+                <span lang="ru">«Кухня»&nbsp;&mdash; программа на&nbsp;сервере, принимающая запросы от&nbsp;frontend, обращающаяся к&nbsp;базе и&nbsp;возвращающая данные. Видит секреты и&nbsp;логику. Пользователь его не&nbsp;видит.</span>
+                <span lang="en">“The kitchen” — a program on the server taking frontend requests, hitting the DB, returning data. Sees secrets and logic. The user never sees it.</span>
+            </dd>
+
+            <dt><span lang="ru">База данных</span><span lang="en">Database</span></dt>
+            <dd>
+                <span lang="ru">«Кладовая»&nbsp;&mdash; постоянное хранилище данных приложения: пользователи, их&nbsp;операции, настройки. Доступна только backend.</span>
+                <span lang="en">“The pantry” — persistent storage for app data: users, ops, settings. Reachable only by the backend.</span>
+            </dd>
+
+            <dt>SQLite</dt>
+            <dd>
+                <span lang="ru">База данных «в&nbsp;одном файле». Идеальна для&nbsp;разработки. Один файл&nbsp;<code>app.db</code>&nbsp;&mdash; вся ваша информация.</span>
+                <span lang="en">A “database in one file.” Ideal for dev. One <code>app.db</code> — all your info.</span>
+            </dd>
+
+            <dt>PostgreSQL</dt>
+            <dd>
+                <span lang="ru">Полноценная база как отдельный сервис. Для&nbsp;production. На&nbsp;Railway ставится в&nbsp;один клик.</span>
+                <span lang="en">A full database as its own service. For production. One-click on Railway.</span>
+            </dd>
+
+            <dt>FastAPI</dt>
+            <dd>
+                <span lang="ru">Современный python-фреймворк для&nbsp;backend. Минимум кода, бесплатная авто-документация по&nbsp;<code>/docs</code>. Используем как «кухню».</span>
+                <span lang="en">A modern Python framework for backend. Minimal code, free auto-docs at <code>/docs</code>. We use it as the “kitchen.”</span>
+            </dd>
+
+            <dt><span lang="ru">Эндпоинт</span><span lang="en">Endpoint</span></dt>
+            <dd>
+                <span lang="ru">Одна функция backend, доступная по&nbsp;URL. Например, <code>POST /api/login</code>&nbsp;&mdash; «эндпоинт логина». Имеет HTTP-метод и&nbsp;формат данных.</span>
+                <span lang="en">One backend function reachable via a URL. E.g., <code>POST /api/login</code> — the “login endpoint.” Has an HTTP method and a data format.</span>
+            </dd>
+
+            <dt><span lang="ru">JWT-токен</span><span lang="en">JWT token</span></dt>
+            <dd>
+                <span lang="ru">JSON Web Token&nbsp;&mdash; короткая строка, которая «доказывает» серверу, что вы&nbsp;вошли. Хранится в&nbsp;браузере, шлётся на&nbsp;каждый запрос. Подписан секретом backend.</span>
+                <span lang="en">JSON Web Token — a short string proving to the server you’re signed in. Stored in the browser, sent on every request. Signed by the backend secret.</span>
+            </dd>
+
+            <dt>CORS</dt>
+            <dd>
+                <span lang="ru">Cross-Origin Resource Sharing&nbsp;&mdash; защита браузера: страница с&nbsp;одного домена по&nbsp;умолчанию не&nbsp;может звонить серверу с&nbsp;другого. Настраивается в&nbsp;backend, чтобы Vercel-frontend мог обращаться к&nbsp;Railway-backend.</span>
+                <span lang="en">Cross-Origin Resource Sharing — a browser safety: a page on one domain can’t call a server on another by default. Configured in the backend so the Vercel frontend can reach the Railway backend.</span>
+            </dd>
+
+            <dt><span lang="ru">Деплой</span><span lang="en">Deploy</span></dt>
+            <dd>
+                <span lang="ru">Процесс «отправить ваше приложение на&nbsp;сервер в&nbsp;интернете». Современный подход&nbsp;&mdash; в&nbsp;один <code>git push</code> через Vercel или Railway.</span>
+                <span lang="en">The process of “sending your app to a server on the internet.” Modern way — one <code>git push</code> via Vercel or Railway.</span>
+            </dd>
+
+            <dt>Vercel</dt>
+            <dd>
+                <span lang="ru">Платформа для&nbsp;деплоя frontend. Подключаете GitHub-репо&nbsp;&mdash; каждый push автоматически публикует новую версию. Бесплатный тариф щедрый.</span>
+                <span lang="en">A frontend-deploy platform. Connect a GitHub repo — each push publishes a new version. Generous free tier.</span>
+            </dd>
+
+            <dt>Railway</dt>
+            <dd>
+                <span lang="ru">Платформа для&nbsp;деплоя backend и&nbsp;баз. Один сервис&nbsp;&mdash; и&nbsp;backend, и&nbsp;PostgreSQL рядом. $5 кредитов в&nbsp;месяц бесплатно.</span>
+                <span lang="en">A backend and database deploy platform. One service — backend plus PostgreSQL together. $5/month free.</span>
+            </dd>
+
+            <dt>Claude API</dt>
+            <dd>
+                <span lang="ru">Программный интерфейс к&nbsp;моделям Claude от&nbsp;Anthropic. Через него ваше приложение само вызывает Claude (а&nbsp;не&nbsp;только вы&nbsp;через Claude Code). Ключ в&nbsp;<code>ANTHROPIC_API_KEY</code>.</span>
+                <span lang="en">A programmatic interface to Anthropic’s Claude models. Through it your app calls Claude (not just you via Claude Code). The key is <code>ANTHROPIC_API_KEY</code>.</span>
+            </dd>
+
+            <dt>Prompt caching</dt>
+            <dd>
+                <span lang="ru">Кэширование одинаковых частей промпта между запросами. Если в&nbsp;начале каждого запроса одно и&nbsp;то&nbsp;же, Claude API кэширует и&nbsp;берёт за&nbsp;это в&nbsp;10 раз меньше денег и&nbsp;времени. Кэш живёт 5&nbsp;минут.</span>
+                <span lang="en">Caching identical prompt prefixes across requests. If your prompt starts with the same content, Claude API caches it and charges 10× less money and time. Cache lives 5 minutes.</span>
+            </dd>
+
+            <dt><span lang="ru">Модели Claude (Opus / Sonnet / Haiku)</span><span lang="en">Claude models (Opus / Sonnet / Haiku)</span></dt>
+            <dd>
+                <span lang="ru">Три модели разной мощности и&nbsp;цены. <strong>Opus</strong>&nbsp;&mdash; самая умная, для&nbsp;сложного анализа. <strong>Sonnet</strong>&nbsp;&mdash; «золотая середина», большинство задач. <strong>Haiku</strong>&nbsp;&mdash; быстрая и&nbsp;дешёвая, для&nbsp;классификаций.</span>
+                <span lang="en">Three models of different power and price. <strong>Opus</strong> — smartest, for hard analytics. <strong>Sonnet</strong> — the sweet spot, most tasks. <strong>Haiku</strong> — fast and cheap, for classifications.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Frontend, backend, БД&nbsp;&mdash; в&nbsp;метафоре «ресторан» что чему соответствует?</span><span lang="en">In the “restaurant” metaphor, what maps to frontend, backend, DB?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Frontend = зал (что видит и&nbsp;щупает гость). Backend = кухня (готовит блюда, лезет на&nbsp;склад). БД = кладовая (там лежат продукты, видит её&nbsp;только кухня).</p>
+                        <p lang="en">Frontend = dining room (what guests see and touch). Backend = kitchen (cooks, hits the pantry). DB = pantry (stocks live here, only the kitchen sees it).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Почему пароли в&nbsp;базе хранятся хешированными, а&nbsp;не&nbsp;«как есть»?</span><span lang="en">Why are passwords stored hashed, not as-is?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Если кто-то украдёт базу&nbsp;&mdash; ваши пароли всё равно не&nbsp;видны. Хеш&nbsp;&mdash; необратимая «мясорубка»: из&nbsp;пароля считается строка, а&nbsp;из&nbsp;строки пароль обратно не&nbsp;вытащить. При входе сравнивается хеш введённого пароля с&nbsp;хешем в&nbsp;базе.</p>
+                        <p lang="en">If the DB leaks — passwords still aren’t readable. A hash is an irreversible “meat grinder”: a password yields a string, but you can’t recover the password from the string. On sign-in, the hash of the typed password is compared to the stored one.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое CORS-ошибка и&nbsp;где её&nbsp;чинят?</span><span lang="en">What is a CORS error and where do you fix it?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Браузер блокирует запросы от&nbsp;страницы на&nbsp;одном домене (Vercel) к&nbsp;серверу на&nbsp;другом (Railway), если backend явно не&nbsp;разрешил это. Чинится в&nbsp;backend: добавляется CORS middleware с&nbsp;разрешённым origin (вашим Vercel-доменом).</p>
+                        <p lang="en">The browser blocks requests from a page on one domain (Vercel) to a server on another (Railway) unless the backend explicitly allows it. Fixed in the backend: add CORS middleware with the allowed origin (your Vercel domain).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Почему ANTHROPIC_API_KEY <em>никогда</em> нельзя класть во&nbsp;frontend?</span><span lang="en">Why must ANTHROPIC_API_KEY <em>never</em> live in the frontend?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Frontend живёт в&nbsp;браузере пользователя. Любой откроет DevTools и&nbsp;увидит ваш ключ. Через минуту его украдут&nbsp;&mdash; и&nbsp;будут жечь ваши деньги через ваш аккаунт. Ключ должен быть только в&nbsp;backend, в&nbsp;env vars Railway. Frontend обращается к&nbsp;вашему backend-у, backend&nbsp;&mdash; к&nbsp;Anthropic.</p>
+                        <p lang="en">Frontend lives in the user’s browser. Anyone opens DevTools and sees your key. A minute later it’s stolen — and your money burns through your account. The key must live only in the backend, in Railway env vars. Frontend calls your backend, backend calls Anthropic.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Какую модель Claude взять для&nbsp;«классификация транзакции» и&nbsp;какую&nbsp;&mdash; для&nbsp;«годовой финансовый прогноз с&nbsp;аргументацией»?</span><span lang="en">Which Claude model for “classify a transaction” vs. “annual financial forecast with reasoning”?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Классификация транзакций&nbsp;&mdash; <strong>Haiku</strong> (быстрая, дешёвая, простая задача). Годовой прогноз с&nbsp;аргументацией&nbsp;&mdash; <strong>Opus</strong> (сложно, нужна качественная аргументация). Большинство «средних» задач&nbsp;&mdash; на&nbsp;<strong>Sonnet</strong>.</p>
+                        <p lang="en">Transaction classification — <strong>Haiku</strong> (fast, cheap, simple). Annual forecast with reasoning — <strong>Opus</strong> (complex, needs strong arguments). Most “middle” tasks — <strong>Sonnet</strong>.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем prompt caching в&nbsp;AI-консультанте?</span><span lang="en">Why prompt caching in the AI advisor?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">В&nbsp;каждом запросе мы&nbsp;шлём один и&nbsp;тот&nbsp;же системный промпт + портфель пользователя (десятки строк). Без&nbsp;кэша Claude API обрабатывает их&nbsp;каждый раз заново&nbsp;&mdash; долго и&nbsp;дорого. С&nbsp;кэшем эти части обрабатываются один раз, дальше используются «как есть»&nbsp;&mdash; в&nbsp;10 раз быстрее и&nbsp;дешевле. Особенно важно, когда пользователь шлёт серию вопросов подряд.</p>
+                        <p lang="en">Each request sends the same system prompt + the user’s portfolio (dozens of lines). Without cache Claude API processes them anew each time — slow and expensive. With cache those parts process once, then reuse — 10× faster and cheaper. Especially when the user fires a series of questions.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Что лучше для&nbsp;разработки и&nbsp;что для&nbsp;production: SQLite или PostgreSQL?</span><span lang="en">SQLite or PostgreSQL — which fits dev, which fits production?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">SQLite&nbsp;&mdash; для&nbsp;разработки и&nbsp;учебных проектов: один файл, ничего настраивать. PostgreSQL&nbsp;&mdash; для&nbsp;production, особенно когда несколько пользователей одновременно. Хорошая практика&nbsp;&mdash; код один и&nbsp;тот&nbsp;же, разница только в&nbsp;<code>DATABASE_URL</code> в&nbsp;<code>.env</code>: <code>sqlite:///./app.db</code> локально, <code>postgres://...</code> на&nbsp;Railway.</p>
+                        <p lang="en">SQLite — for dev and learning: one file, no setup. PostgreSQL — for production, especially with concurrent users. Good practice — same code, only <code>DATABASE_URL</code> differs in <code>.env</code>: <code>sqlite:///./app.db</code> locally, <code>postgres://...</code> on Railway.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e6-architecture">
+                <span lang="ru">Понимаю архитектуру full-stack: frontend, backend, БД и&nbsp;их&nbsp;ответственности.</span>
+                <span lang="en">I understand the full-stack split: frontend, backend, DB and their responsibilities.</span>
+            </li>
+            <li data-key="e6-fastapi">
+                <span lang="ru">Знаю, как Claude собирает FastAPI-сервер с&nbsp;эндпоинтами и&nbsp;БД.</span>
+                <span lang="en">I know how Claude assembles a FastAPI server with endpoints and a DB.</span>
+            </li>
+            <li data-key="e6-auth">
+                <span lang="ru">Понимаю авторизацию: хеш паролей, JWT, защита эндпоинтов.</span>
+                <span lang="en">I understand auth: password hashing, JWT, endpoint protection.</span>
+            </li>
+            <li data-key="e6-deploy">
+                <span lang="ru">Опубликовал backend на&nbsp;Railway и&nbsp;frontend на&nbsp;Vercel, с&nbsp;env vars.</span>
+                <span lang="en">I deployed backend to Railway and frontend to Vercel, with env vars.</span>
+            </li>
+            <li data-key="e6-claude-api">
+                <span lang="ru">Встроил Claude API в&nbsp;своё приложение через skill <code>claude-api</code>.</span>
+                <span lang="en">I embedded the Claude API in my app via the <code>claude-api</code> skill.</span>
+            </li>
+            <li data-key="e6-models">
+                <span lang="ru">Выбираю модель Claude (Opus / Sonnet / Haiku) под&nbsp;задачу и&nbsp;применяю prompt caching.</span>
+                <span lang="en">I pick a Claude model (Opus / Sonnet / Haiku) per task and apply prompt caching.</span>
+            </li>
+            <li data-key="e6-delivery">
+                <span lang="ru">Сделал четыре проекта: инвест-кабинет, AI-консультант, сервис коллекции, Telegram-бот.</span>
+                <span lang="en">Built four projects: investment office, AI advisor, collection service, Telegram bot.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-06" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-05.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">05 · Git, GitHub, worktrees</span><span lang="en">05 · Git, GitHub, Worktrees</span></span>
+            </a>
+            <a class="next" href="etap-07.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">07 · Subagents и&nbsp;команды агентов</span><span lang="en">07 · Subagents &amp; agent teams</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Сайт без&nbsp;регистрации&nbsp;&mdash; красивая открытка. Сайт с&nbsp;аккаунтами и&nbsp;живыми данными&nbsp;&mdash; продукт».</p>
+            <p class="signature" lang="en">“A site without sign-up is a pretty card. A site with accounts and live data is a product.”</p>
+            <p lang="ru">Этап&nbsp;06 пройден&nbsp;&mdash; вы&nbsp;умеете собирать настоящие приложения. Дальше&nbsp;&mdash; самый интересный поворот: учим Claude нанимать собственную команду стажёров.</p>
+            <p lang="en">Etape 06 done — you can ship real applications. Next — the most exciting turn: teaching Claude to hire its own team of interns.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-05.html"><span lang="ru">← Этап&nbsp;05</span><span lang="en">← Etape 05</span></a></li>
+                <li><a href="etap-07.html"><span lang="ru">→ Этап&nbsp;07</span><span lang="en">→ Etape 07</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Полевое руководство по Claude Code · A Field Guide to Claude Code</title>
+<meta name="description" content="Авторский практический курс по Claude Code: от первой команды в терминале до собственной команды AI-агентов, плагина и автоматического финансового аналитика.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="#manifest"><span lang="ru">от автора</span><span lang="en">preface</span></a>
+            <a href="#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#capstone"><span lang="ru">капстоун</span><span lang="en">capstone</span></a>
+            <a href="claude-design.html">Claude Design</a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+    <div class="shell inner">
+        <p class="meta rise d1">
+            <span><span class="dot"></span>&nbsp;&nbsp;<span lang="ru">A FIELD GUIDE</span><span lang="en">A FIELD GUIDE</span></span>
+            <span><span lang="ru">12 ЭТАПОВ + 1 ОПЦ. + КАПСТОУН</span><span lang="en">12 ETAPES + 1 OPT. + CAPSTONE</span></span>
+            <span><span lang="ru">≈ 90 ДНЕЙ ПРАКТИКИ</span><span lang="en">≈ 90 DAYS OF PRACTICE</span></span>
+            <span><span lang="ru">2&ndash;4&nbsp;Ч / ДЕНЬ</span><span lang="en">2&ndash;4&nbsp;HRS / DAY</span></span>
+        </p>
+
+        <h1 class="display rise d2">
+            <span lang="ru">Полевое руководство<br>по&nbsp;<em>Claude&nbsp;Code</em></span>
+            <span lang="en">A Field Guide<br>to&nbsp;<em>Claude&nbsp;Code</em></span>
+        </h1>
+
+        <p class="standfirst rise d3" lang="ru">
+            От&nbsp;первой команды в&nbsp;терминале до&nbsp;собственной команды AI-агентов, которая анализирует ваш портфель, готовит налоговую декларацию&nbsp;США и&nbsp;шлёт утренние сводки в&nbsp;Telegram&nbsp;&mdash; пока вы&nbsp;спите. Курс для тех, кому проще <em>направлять</em>, чем&nbsp;<em>писать</em>.
+        </p>
+        <p class="standfirst rise d3" lang="en">
+            From the first terminal command to your own team of AI agents that analyses your portfolio, drafts a US tax return and pushes morning briefs to Telegram&nbsp;&mdash; while you sleep. A course for people who would rather <em>steer</em> than&nbsp;<em>write</em>.
+        </p>
+
+        <div class="stat-row rise d4">
+            <div class="stat">
+                <span class="num">12<em>+1</em></span>
+                <span class="label"><span lang="ru">этапов · опц. · капстоун</span><span lang="en">etapes · opt. · capstone</span></span>
+            </div>
+            <div class="stat">
+                <span class="num">≈90</span>
+                <span class="label"><span lang="ru">дней практики</span><span lang="en">days of practice</span></span>
+            </div>
+            <div class="stat">
+                <span class="num">28<em>+</em></span>
+                <span class="label"><span lang="ru">проектов</span><span lang="en">projects</span></span>
+            </div>
+            <div class="stat">
+                <span class="num">0</span>
+                <span class="label"><span lang="ru">строк кода вручную</span><span lang="en">lines of code by hand</span></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== MANIFESTO ===================== -->
+<section id="manifest" class="manifesto">
+    <div class="shell">
+        <div class="row cols-2">
+            <div>
+                <span class="eyebrow"><span class="sect">§ II</span> &nbsp;·&nbsp; <span lang="ru">От автора</span><span lang="en">From the author</span></span>
+                <h2>
+                    <span lang="ru">Учить языки программирования больше не&nbsp;нужно. Нужно научиться <em>направлять</em>.</span>
+                    <span lang="en">You no longer need to learn programming languages. You need to learn how to <em>steer</em>.</span>
+                </h2>
+                <div class="cols-text body" lang="ru">
+                    <p class="has-drop">Этот курс&nbsp;&mdash; не&nbsp;про синтаксис Python, не&nbsp;про теги HTML и&nbsp;не&nbsp;про методы JavaScript. За&nbsp;вас всё это пишет&nbsp;Claude. Ваше дело&nbsp;&mdash; <em>идея</em>, <em>постановка</em>, <em>проверка</em> и&nbsp;<em>итерация</em>.</p>
+                    <p>Те&nbsp;же навыки, что у&nbsp;тимлида с&nbsp;командой стажёров: вы&nbsp;не&nbsp;пишете сами, но&nbsp;обязаны понимать достаточно, чтобы оценить результат и&nbsp;поправить курс.</p>
+                    <p>Сквозная тема&nbsp;&mdash; <strong>инвестиции и&nbsp;финансовая аналитика</strong>. Каждый этап решает реальную задачу: от&nbsp;калькулятора сложного процента до&nbsp;ежедневного отчёта по&nbsp;портфелю и&nbsp;автоматической подготовки <em>U.S. Form&nbsp;1040</em> по&nbsp;первичным документам.</p>
+                    <p>Принцип каждого этапа: то, что вы&nbsp;делаете самостоятельно,&nbsp;&mdash; всегда вариация того, что мы&nbsp;только что разобрали по&nbsp;шагам. Новых концепций в&nbsp;самостоятельной работе не&nbsp;бывает.</p>
+                    <p>В&nbsp;начале каждого этапа&nbsp;&mdash; блок «<strong>Подготовка</strong>»: что и&nbsp;где скачать, что зачем нужно, как проверить установку. Никаких пропущенных шагов.</p>
+                </div>
+                <div class="cols-text body" lang="en">
+                    <p class="has-drop">This course is not about Python syntax, HTML tags, or JavaScript methods. Claude writes all of that for you. Your job is the <em>idea</em>, the <em>brief</em>, the <em>review</em>, and the <em>iteration</em>.</p>
+                    <p>The same skills as a tech lead with a team of interns: you do not write yourself, but you must understand enough to judge the result and correct course.</p>
+                    <p>The running thread is <strong>investing and financial analytics</strong>. Every etape solves a real task: from a compound-interest calculator to a daily portfolio report and automated drafting of <em>U.S. Form&nbsp;1040</em> from primary documents.</p>
+                    <p>Principle of every etape: what you do on your own is always a variation of what we just walked through together. No new concepts appear in solo work.</p>
+                    <p>Each etape opens with a “<strong>Setup</strong>” block: what to install, what for, where to get it, and how to verify. No missing steps.</p>
+                </div>
+            </div>
+
+            <aside>
+                <div class="aside-card">
+                    <span class="label"><span lang="ru">Метод</span><span lang="en">Method</span></span>
+                    <h3><span lang="ru">Малые шаги · много практики · никакого жаргона без объяснения</span><span lang="en">Small steps · much practice · no jargon left unexplained</span></h3>
+                    <p lang="ru">Каждый этап даёт самостоятельный полезный артефакт&nbsp;&mdash; вашу работу, на&nbsp;которую можно показать пальцем. К&nbsp;концу курса у&nbsp;вас 28+ работающих проектов, опубликованных в&nbsp;интернете.</p>
+                    <p lang="en">Every etape leaves you with a standalone useful artefact&nbsp;&mdash; your work, something to point at. By the end you have 28+ working projects published on the web.</p>
+                </div>
+                <div class="aside-card" style="margin-top:1.5rem;">
+                    <span class="label"><span lang="ru">После курса</span><span lang="en">After the course</span></span>
+                    <h3><span lang="ru">Вы — AI-нативный разработчик с&nbsp;командой агентов</span><span lang="en">You become an AI-native builder with an agent team</span></h3>
+                    <p lang="ru">В&nbsp;одиночку делаете то, на&nbsp;что раньше нужна была команда: сайт, веб-приложение, бот, парсер, аналитический скрипт, плагин для&nbsp;Claude Code, MCP-сервер, многоагентный пайплайн. С&nbsp;условием: код пишет Claude, вы&nbsp;направляете.</p>
+                    <p lang="en">Solo, you do what used to need a team: a website, a web app, a bot, a parser, an analytics script, a Claude Code plugin, an MCP server, a multi-agent pipeline. On one condition: Claude writes the code, you steer.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<hr class="rule double" style="max-width:76rem; margin-left:auto; margin-right:auto;">
+
+<!-- ===================== CONTENTS ===================== -->
+<section id="contents">
+    <div class="shell">
+        <div class="toc-head">
+            <h2><span style="color:var(--accent); font-style:italic; font-weight:400;">§</span> <span lang="ru">Содержание</span><span lang="en">Contents</span></h2>
+            <span class="meta"><span lang="ru">12 этапов · 1 опциональный · 2 капстоуна (внутри и&nbsp;финал)</span><span lang="en">12 etapes · 1 optional · 2 capstones (inside &amp; final)</span></span>
+        </div>
+
+        <ol class="etap-list">
+
+            <li><a class="etap-row" data-id="etap-00" href="etapes/etap-00.html">
+                <div class="num">00</div>
+                <div class="body">
+                    <h3><span lang="ru">Первый запуск</span><span lang="en">First Launch</span></h3>
+                    <p lang="ru">Установка, режимы разрешений, первое общение с&nbsp;Claude Code. Создаём, читаем, изменяем файлы через диалог. Снимаем страх.</p>
+                    <p lang="en">Installation, permission modes, first conversation with Claude Code. Create, read, edit files through dialogue. Remove the fear.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">1–2 дня</span><span lang="en">1–2 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-01" href="etapes/etap-01.html">
+                <div class="num">01</div>
+                <div class="body">
+                    <h3><span lang="ru">Промпт-инжиниринг для Claude Code</span><span lang="en">Prompt Engineering for Claude Code</span></h3>
+                    <p lang="ru">Анатомия хорошего промпта: цель, ограничения, формат, пример. Итерация, откат, варианты. Калькулятор сложного процента и&nbsp;первая игра в&nbsp;браузере.</p>
+                    <p lang="en">Anatomy of a good prompt: goal, constraints, format, example. Iteration, rollback, variants. A compound-interest calculator and your first browser game.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">4–6 дней</span><span lang="en">4–6 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-02" href="etapes/etap-02.html">
+                <div class="num">02</div>
+                <div class="body">
+                    <h3><span lang="ru">Контекст проекта и&nbsp;память Claude Code</span><span lang="en">Project Context &amp; Claude Code Memory</span></h3>
+                    <p lang="ru">Файл <code>CLAUDE.md</code>, ссылки <code>@file</code>, auto-memory в&nbsp;<code>~/.claude/memory/</code>. Многофайловые проекты. Дашборд инвестиционного портфеля из CSV.</p>
+                    <p lang="en">The <code>CLAUDE.md</code> file, <code>@file</code> mentions, auto-memory in <code>~/.claude/memory/</code>. Multi-file projects. An investment portfolio dashboard from a CSV.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">5–7 дней</span><span lang="en">5–7 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-03" href="etapes/etap-03.html">
+                <div class="num">03</div>
+                <div class="body">
+                    <h3><span lang="ru">Web, MCP и&nbsp;готовые Skills</span><span lang="en">Web, MCP &amp; Ready-Made Skills</span></h3>
+                    <p lang="ru">Smithery как реестр skills и&nbsp;MCP. Подключаем Claude к&nbsp;интернету: WebSearch, WebFetch, Context7, Playwright. Трекер котировок и&nbsp;криптовалют через открытые&nbsp;API.</p>
+                    <p lang="en">Smithery as a registry of skills and MCPs. Plug Claude into the internet: WebSearch, WebFetch, Context7, Playwright. A stocks-and-crypto tracker via open APIs.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">6–8 дней</span><span lang="en">6–8 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-04" href="etapes/etap-04.html">
+                <div class="num">04</div>
+                <div class="body">
+                    <h3><span lang="ru">Plan Mode, спецификации и&nbsp;крупные задачи</span><span lang="en">Plan Mode, Specs &amp; Large Tasks</span></h3>
+                    <p lang="ru">Разделяем «продумай» и&nbsp;«сделай». Spec-driven development, <code>/compact</code>, verification. Анализ доходности портфеля и&nbsp;трёх-сценарный прогноз сбережений.</p>
+                    <p lang="en">Separate “think it through” from “do it.” Spec-driven development, <code>/compact</code>, verification. Yearly portfolio-return analysis and a three-scenario savings forecast.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">5–7 дней</span><span lang="en">5–7 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-05" href="etapes/etap-05.html">
+                <div class="num">05</div>
+                <div class="body">
+                    <h3><span lang="ru">Git, GitHub и&nbsp;worktrees</span><span lang="en">Git, GitHub &amp; Worktrees</span></h3>
+                    <p lang="ru">«Машина времени» для проекта. GitHub Pages даёт ссылки кому угодно. Параллельные ветки через worktrees. Защита от&nbsp;утечки секретов.</p>
+                    <p lang="en">A “time machine” for your project. GitHub Pages gives shareable links. Parallel branches through worktrees. Guardrails against secret leaks.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">4–5 дней</span><span lang="en">4–5 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-06" href="etapes/etap-06.html">
+                <div class="num">06</div>
+                <div class="body">
+                    <h3><span lang="ru">Полноценные веб-приложения и&nbsp;деплой</span><span lang="en">Full Web Applications &amp; Deployment</span></h3>
+                    <p lang="ru">Frontend + backend + БД + авторизация. Выбор модели (Opus / Sonnet / Haiku), prompt caching, IDE-расширения. «Личный инвест-кабинет» и&nbsp;AI-консультант на&nbsp;Claude API в&nbsp;интернете.</p>
+                    <p lang="en">Frontend + backend + DB + auth. Model selection (Opus / Sonnet / Haiku), prompt caching, IDE extensions. Your “Personal Investment Office” and an AI advisor on the Claude API, live on the web.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">8–10 дней</span><span lang="en">8–10 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row special" data-id="etap-07" href="etapes/etap-07.html">
+                <div class="num">07</div>
+                <div class="body">
+                    <h3><span lang="ru">Subagents и&nbsp;команды агентов</span><span lang="en">Subagents &amp; Agent Teams</span></h3>
+                    <p lang="ru">Главный Claude нанимает «отдел стажёров»: 4 параллельных subagent'а проводят due diligence по&nbsp;акции, главный собирает в&nbsp;инвест-мемо. Foreground vs background, worktree-isolation.</p>
+                    <p lang="en">Main Claude hires an “intern team”: 4 parallel subagents run due diligence on a stock, the main one consolidates into an investment memo. Foreground vs background, worktree isolation.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">8–10 дней</span><span lang="en">8–10 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-08a" href="etapes/etap-08a.html">
+                <div class="num">08<span style="font-size:0.6em; color:var(--ink-muted);">a</span></div>
+                <div class="body">
+                    <h3><span lang="ru">Кастомизация: Skills, Slash, Hooks, Output Styles</span><span lang="en">Customisation: Skills, Slash, Hooks, Output Styles</span></h3>
+                    <p lang="ru">Claude Code превращается в&nbsp;ваш личный. Свой skill «персональный CFO», команды <code>/прогноз</code>, <code>/cfo</code>, hook «контроль рабочего времени», свои output-стили.</p>
+                    <p lang="en">Claude Code becomes yours. A custom “personal CFO” skill, <code>/forecast</code> and <code>/cfo</code> commands, a “time tracking” hook, custom output styles.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">7–9 дней</span><span lang="en">7–9 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row special" data-id="etap-08b" href="etapes/etap-08b.html">
+                <div class="num">08<span style="font-size:0.6em; color:var(--accent);">b</span></div>
+                <div class="body">
+                    <h3><span lang="ru">Большой проект — AI Tax Assistant&nbsp;USA</span><span lang="en">Major Project — AI Tax Assistant USA</span></h3>
+                    <p lang="ru">Капстоун-внутри-курса. Парсим первичку (W-2, 1099, 1098), считаем AGI&nbsp;/ deductions&nbsp;/ credits, заполняем fillable PDF&nbsp;Form 1040, выдаём отчёт-сопровождение.</p>
+                    <p lang="en">A capstone-within-the-course. Parse primary docs (W-2, 1099, 1098), compute AGI&nbsp;/ deductions&nbsp;/ credits, fill a fillable PDF Form&nbsp;1040, produce an audit report.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">10–14 дней</span><span lang="en">10–14 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-09" href="etapes/etap-09.html">
+                <div class="num">09</div>
+                <div class="body">
+                    <h3><span lang="ru">MCP-серверы и&nbsp;собственные плагины</span><span lang="en">MCP Servers &amp; Your Own Plugins</span></h3>
+                    <p lang="ru">Свой MCP «Daily Trader» с&nbsp;инструментами <code>get_price</code>, <code>compute_signal</code>, <code>set_alert</code>. Упаковка skills, commands, hooks и&nbsp;MCP в&nbsp;один плагин и&nbsp;публикация на&nbsp;Smithery.</p>
+                    <p lang="en">A custom “Daily Trader” MCP with tools <code>get_price</code>, <code>compute_signal</code>, <code>set_alert</code>. Bundle skills, commands, hooks, MCP into one plugin and publish on Smithery.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">7–9 дней</span><span lang="en">7–9 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-10" href="etapes/etap-10.html">
+                <div class="num">10</div>
+                <div class="body">
+                    <h3><span lang="ru">Автопилот, фоновые задачи и&nbsp;мониторинг</span><span lang="en">Autopilot, Background Tasks &amp; Monitoring</span></h3>
+                    <p lang="ru">Claude работает без&nbsp;вас: cron, schedule, push-уведомления, фоновые задачи, Monitor, аналитика через PostHog LLM Analytics. «Финансовый дворецкий» и&nbsp;«Дневник на&nbsp;автопилоте».</p>
+                    <p lang="en">Claude works while you do not: cron, schedule, push notifications, background tasks, Monitor, analytics via PostHog LLM Analytics. The “Financial Butler” and “Diary on Autopilot.”</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">7–9 дней</span><span lang="en">7–9 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row" data-id="etap-11" href="etapes/etap-11.html">
+                <div class="num">11<span style="font-size:0.55em; color:var(--ink-muted); margin-left:0.2em;">opt</span></div>
+                <div class="body">
+                    <h3><span lang="ru">Claude Agent SDK <span style="color:var(--ink-muted); font-weight:400;">(опционально)</span></span><span lang="en">Claude Agent SDK <span style="color:var(--ink-muted); font-weight:400;">(optional)</span></span></h3>
+                    <p lang="ru">Для тех, кто хочет идти дальше: Claude как библиотека внутри ваших скриптов. Headless-режим для CI/CD, интеграция с&nbsp;Telegram и&nbsp;X (Twitter). Twitter-сигналы и&nbsp;AI-консьерж в&nbsp;Telegram.</p>
+                    <p lang="en">For those who want to go further: Claude as a library inside your own scripts. Headless mode for CI/CD, integration with Telegram and X (Twitter). Twitter signals and an AI concierge in Telegram.</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">7–10 дней</span><span lang="en">7–10 days</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+            <li><a class="etap-row special" data-id="capstone" href="etapes/capstone.html">
+                <div class="num">§</div>
+                <div class="body">
+                    <h3><span lang="ru">Финальный капстоун-проект</span><span lang="en">Final Capstone Project</span></h3>
+                    <p lang="ru">Один большой продукт от&nbsp;идеи до&nbsp;публичной ссылки, использующий весь арсенал. Четыре варианта: «Мой инвестиционный ИИ», «Налоговая студия», «Семейный финансовый портал», «Совместный AI-фонд».</p>
+                    <p lang="en">One large product from idea to public URL, using the whole arsenal. Four options: “My Investing AI,” “Tax Studio,” “Family Finance Portal,” “Co-op AI Fund.”</p>
+                </div>
+                <div class="meta">
+                    <span class="duration"><span lang="ru">3–4 недели</span><span lang="en">3–4 weeks</span></span>
+                    <span class="status"><span lang="ru">не начато</span><span lang="en">not started</span></span>
+                </div>
+            </a></li>
+
+        </ol>
+    </div>
+</section>
+
+<!-- ===================== WHAT YOU'LL MASTER ===================== -->
+<section>
+    <div class="shell">
+        <div class="toc-head">
+            <h2><span style="color:var(--accent); font-style:italic; font-weight:400;">§</span> <span lang="ru">Что вы освоите</span><span lang="en">What you will master</span></h2>
+            <span class="meta"><span lang="ru">семь навыков-стержней</span><span lang="en">seven core skills</span></span>
+        </div>
+
+        <div class="learn-grid">
+            <div class="learn-item">
+                <span class="roman">i.</span>
+                <div>
+                    <h4><span lang="ru">Промпт-инжиниринг для агентов</span><span lang="en">Prompt engineering for agents</span></h4>
+                    <p lang="ru">Формулировать задачу так, чтобы первая версия от&nbsp;Claude была близка к&nbsp;нужной. Контекст, ограничения, итерация, откат.</p>
+                    <p lang="en">Phrase a task so Claude’s first attempt is close to what you wanted. Context, constraints, iteration, rollback.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">ii.</span>
+                <div>
+                    <h4><span lang="ru">Чтение результата</span><span lang="en">Reading the result</span></h4>
+                    <p lang="ru">Понимать ровно настолько, чтобы оценить «правильно&nbsp;/ неправильно&nbsp;/ безопасно». Без знания синтаксиса.</p>
+                    <p lang="en">Understand just enough to judge “correct / wrong / safe.” Without knowing syntax.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">iii.</span>
+                <div>
+                    <h4><span lang="ru">Управление контекстом и&nbsp;памятью</span><span lang="en">Context &amp; memory management</span></h4>
+                    <p lang="ru"><code>CLAUDE.md</code>, <code>@</code>-ссылки, auto-memory, плановые режимы, длинные сессии без&nbsp;«уплывания» цели.</p>
+                    <p lang="en"><code>CLAUDE.md</code>, <code>@</code>-mentions, auto-memory, plan modes, long sessions that do not drift off-goal.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">iv.</span>
+                <div>
+                    <h4><span lang="ru">Команды агентов и&nbsp;параллелизм</span><span lang="en">Agent teams &amp; parallelism</span></h4>
+                    <p lang="ru">Subagents, multi-agent пайплайны, foreground&nbsp;/&nbsp;background, worktree-isolation. «Отделы стажёров» вместо одного исполнителя.</p>
+                    <p lang="en">Subagents, multi-agent pipelines, foreground / background, worktree isolation. “Intern departments” instead of a single worker.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">v.</span>
+                <div>
+                    <h4><span lang="ru">Кастомизация инструмента</span><span lang="en">Customising the tool</span></h4>
+                    <p lang="ru">Свои skills, slash-команды, hooks, MCP-серверы и&nbsp;плагины. Claude Code, заточенный под&nbsp;ваши задачи.</p>
+                    <p lang="en">Your own skills, slash commands, hooks, MCP servers and plugins. Claude Code shaped to your work.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">vi.</span>
+                <div>
+                    <h4><span lang="ru">Финансовая аналитика как навык</span><span lang="en">Financial analytics as a skill</span></h4>
+                    <p lang="ru">Дашборды, прогнозы по&nbsp;сценариям, парсинг первичных документов, автоматизированная отчётность, U.S. Tax Return.</p>
+                    <p lang="en">Dashboards, scenario forecasts, parsing primary documents, automated reporting, U.S. tax returns.</p>
+                </div>
+            </div>
+            <div class="learn-item">
+                <span class="roman">vii.</span>
+                <div>
+                    <h4><span lang="ru">Полный цикл продукта</span><span lang="en">Full product cycle</span></h4>
+                    <p lang="ru">От&nbsp;идеи до&nbsp;публичной ссылки: фронтенд, бэкенд, база, авторизация, деплой, мониторинг, push, автопилот.</p>
+                    <p lang="en">From idea to a public link: frontend, backend, database, auth, deployment, monitoring, push, autopilot.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CAPSTONE BLOCK ===================== -->
+<section id="capstone">
+    <div class="shell">
+        <span class="eyebrow"><span class="sect">§ FINALE</span> &nbsp;·&nbsp; <span lang="ru">Капстоун-проект</span><span lang="en">Capstone project</span></span>
+        <div class="callout-big">
+            <span class="stamp"><span lang="ru">3–4 недели</span><span lang="en">3–4 weeks</span></span>
+            <h2>
+                <span lang="ru">Один большой продукт<br>от&nbsp;идеи до&nbsp;публичной ссылки.</span>
+                <span lang="en">One big product<br>from idea to public link.</span>
+            </h2>
+            <p class="lead" lang="ru">К&nbsp;этому моменту у&nbsp;вас в&nbsp;руках весь арсенал: фронтенд, бэкенд, база, авторизация, MCP, свой плагин, команда subagents, автоматизация, деплой и&nbsp;мониторинг. Капстоун&nbsp;&mdash; собрать всё это в&nbsp;единый продукт, которым реально пользуются&nbsp;люди.</p>
+            <p class="lead" lang="en">By now you have the full arsenal: frontend, backend, database, auth, MCP, your plugin, a subagent team, automation, deployment and monitoring. The capstone&nbsp;&mdash; assemble it all into one product that real people use.</p>
+
+            <div style="margin-top: 2rem; display: grid; gap: 1.5rem;">
+                <div>
+                    <span class="eyebrow"><span class="sect"><span lang="ru">вариант&nbsp;A</span><span lang="en">option&nbsp;A</span></span></span>
+                    <span lang="ru"><strong>Мой инвестиционный ИИ.</strong> Полноценный сервис: учёт портфеля, импорт из&nbsp;брокерских отчётов, аналитика и&nbsp;прогнозы по&nbsp;сценариям, AI-консультант на&nbsp;Claude&nbsp;API, ежедневная сводка в&nbsp;Telegram.</span>
+                    <span lang="en"><strong>My Investing AI.</strong> A full service: portfolio tracking, broker-report import, scenario analytics and forecasts, an AI advisor on the Claude API, a daily Telegram digest.</span>
+                </div>
+                <div>
+                    <span class="eyebrow"><span class="sect"><span lang="ru">вариант&nbsp;B</span><span lang="en">option&nbsp;B</span></span></span>
+                    <span lang="ru"><strong>Налоговая студия.</strong> Развитие проекта 08b в&nbsp;многопользовательский веб-сервис: загрузка первички, автозаполнение Form&nbsp;1040, очередь, аудит-лог, аккаунты бухгалтеров.</span>
+                    <span lang="en"><strong>Tax Studio.</strong> Grow the 08b project into a multi-user web service: upload of primary docs, auto-filling Form&nbsp;1040, a queue, an audit log, accountant logins.</span>
+                </div>
+                <div>
+                    <span class="eyebrow"><span class="sect"><span lang="ru">вариант&nbsp;C</span><span lang="en">option&nbsp;C</span></span></span>
+                    <span lang="ru"><strong>Семейный финансовый портал.</strong> Общий бюджет, цели накоплений, расписание оплат, Telegram-бот, расходы по&nbsp;категориям с&nbsp;автоматической классификацией.</span>
+                    <span lang="en"><strong>Family Finance Portal.</strong> Shared budget, saving goals, payment schedule, Telegram bot, categorised expenses with automatic classification.</span>
+                </div>
+                <div>
+                    <span class="eyebrow"><span class="sect"><span lang="ru">вариант&nbsp;D · новый</span><span lang="en">option&nbsp;D · new</span></span></span>
+                    <span lang="ru"><strong>Совместный AI-фонд.</strong> Групповой инвестиционный сервис: участники предлагают идеи через Telegram-бота, AI-команда (subagents этапа&nbsp;07) делает дью-дилидженс по&nbsp;каждой, голосование, агрегированные позиции, ежемесячный отчёт. По&nbsp;сути&nbsp;&mdash; DAO для инвестиций без&nbsp;блокчейна.</span>
+                    <span lang="en"><strong>Co-op AI Fund.</strong> A group-investing service: members suggest ideas through a Telegram bot, the AI team (subagents from etape 07) runs due diligence on each, voting, aggregated positions, a monthly report. A DAO for investing — without the blockchain.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== DESIGN TUTORIAL CTA ===================== -->
+<section id="design-cta">
+    <div class="shell">
+        <span class="eyebrow"><span class="sect">§ +1</span> &nbsp;·&nbsp; <span lang="ru">Опционально, после курса</span><span lang="en">Optional, after the course</span></span>
+        <div class="callout-big">
+            <span class="stamp"><span lang="ru">10 этапов · ≈60 дней</span><span lang="en">10 etapes · ≈60 days</span></span>
+            <h2>
+                <span lang="ru">Прошли курс?<br>Дальше&nbsp;&mdash; <em>дизайн</em>.</span>
+                <span lang="en">Done with the course?<br>Next&nbsp;&mdash; <em>design</em>.</span>
+            </h2>
+            <p class="lead" lang="ru">Полевое руководство по&nbsp;<strong>Claude&nbsp;Design</strong>&nbsp;&mdash; новому продукту Anthropic Labs (запуск 17&nbsp;апреля 2026, <code>claude.ai/design</code>). Десять этапов и&nbsp;капстоун, в&nbsp;которых вы&nbsp;переносите все навыки основного курса в&nbsp;визуальный контекст: brand-system из&nbsp;tokens, кликабельные прототипы, handoff в&nbsp;Claude&nbsp;Code, питч-деки, маркетинговые ассеты, 3D-туры. Тот&nbsp;же тон, тот&nbsp;же ритм, новый медиум.</p>
+            <p class="lead" lang="en">A field guide to <strong>Claude&nbsp;Design</strong>&nbsp;&mdash; the new Anthropic Labs product (launched 17&nbsp;April&nbsp;2026 at <code>claude.ai/design</code>). Ten etapes and a capstone in which you port every main-course skill into a visual context: brand systems from tokens, clickable prototypes, handoff to Claude&nbsp;Code, pitch decks, marketing assets, 3D tours. Same tone, same rhythm, new medium.</p>
+            <p class="lead" lang="ru">Тьюториал спроектирован <em>для тех, кто прошёл этот курс</em>: пропускает базу (промпты, итерации, референсы — вы&nbsp;их&nbsp;уже знаете) и&nbsp;концентрируется на&nbsp;том, что специфично для дизайна&nbsp;&mdash; визуальная грамотность («композиция / иерархия / атмосфера»), три инструмента уточнения (текст / инлайн / слайдер), workspace inheritance.</p>
+            <p class="lead" lang="en">The tutorial is designed <em>for graduates of this course</em>: it skips the basics (prompts, iteration, references — you know them) and focuses on what is design-specific&nbsp;&mdash; visual literacy (&ldquo;composition / hierarchy / atmosphere&rdquo;), the three refinement tools (text / inline / slider), workspace inheritance.</p>
+            <div style="margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="claude-design.html" style="display: inline-flex; align-items: center; padding: 0.85rem 1.5rem; background: var(--accent); color: var(--bg); text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em; border-radius: 999px; box-shadow: var(--shadow); transition: background var(--t), transform var(--t);">
+                    <span lang="ru">→ Открыть Claude Design</span><span lang="en">→ Open Claude Design</span>
+                </a>
+                <a href="claude-design.html#contents" style="display: inline-flex; align-items: center; padding: 0.85rem 1.5rem; border: 1px solid var(--rule); color: var(--ink); text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 999px;">
+                    <span lang="ru">Содержание курса</span><span lang="en">Course contents</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Лучшее, что можно сделать с&nbsp;инструментом,&nbsp;&mdash; научиться им&nbsp;<em>пользоваться</em>, а&nbsp;не&nbsp;объяснять, как он&nbsp;устроен внутри».</p>
+            <p class="signature" lang="en">“The best thing you can do with a tool is learn to <em>use</em> it&nbsp;&mdash; not to explain how it works inside.”</p>
+            <p lang="ru">Курс собран и&nbsp;вёрстан вручную, без&nbsp;фреймворков и&nbsp;сборщиков, как часть учебного материала&nbsp;&mdash; чтобы первый же&nbsp;этап подкрепился узнаваемостью инструментария.</p>
+            <p lang="en">The course is hand-built and hand-typeset, without frameworks or bundlers, as part of the curriculum itself&nbsp;&mdash; so the very first etape is reinforced by familiar tooling.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Колофон</span><span lang="en">Colophon</span></h5>
+            <ul>
+                <li><span lang="ru">шрифты: Fraunces, Newsreader,</span><span lang="en">type: Fraunces, Newsreader,</span></li>
+                <li>IBM&nbsp;Plex&nbsp;Mono</li>
+                <li>HTML / CSS / JavaScript</li>
+                <li><span lang="ru">0&nbsp;зависимостей</span><span lang="en">0 dependencies</span></li>
+                <li><span lang="ru">localStorage для прогресса</span><span lang="en">localStorage for progress</span></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Навигация</span><span lang="en">Navigation</span></h5>
+            <ul>
+                <li><a href="#manifest"><span lang="ru">От автора</span><span lang="en">Preface</span></a></li>
+                <li><a href="#contents"><span lang="ru">Содержание</span><span lang="en">Contents</span></a></li>
+                <li><a href="#capstone"><span lang="ru">Капстоун</span><span lang="en">Capstone</span></a></li>
+                <li><a href="etapes/etap-00.html"><span lang="ru">→ Начать с этапа 00</span><span lang="en">→ Start with etape 00</span></a></li>
+                <li><a href="claude-design.html"><span lang="ru">→ Курс по&nbsp;Claude&nbsp;Design</span><span lang="en">→ Claude Design course</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="progress.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 02 · Загрузка контекста — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 02 тьюториала по Claude Design: загрузка .docx, .xlsx, .pptx и захват стиля с URL — превращаем реальные клиентские брифы и таблицы в готовый дизайн без переписывания.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ D</span>
+            <a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a>
+        </div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="02">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 02</span><span lang="en">Etape 02</span></span> &nbsp;·&nbsp; <span lang="ru">Загрузка контекста</span><span lang="en">Uploading Context</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Не&nbsp;пересказывайте бриф.<br><em>Загрузите</em> его.</span>
+            <span lang="en">Do not retell the brief.<br><em>Upload</em> it.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            В&nbsp;Claude Code вы&nbsp;прикрепляли файл через <code>@file</code>. В&nbsp;Claude Design&nbsp;&mdash; через панель загрузки в&nbsp;диалоге. Принцип тот&nbsp;же, эффект другой: Claude не&nbsp;читает файл как текст, а&nbsp;<dfn class="term" tabindex="0" data-def="Claude Design разбирает структуру документа (заголовки, таблицы, списки, колонки) и переводит её в визуальные элементы. .xlsx-таблица становится повторяющимися блоками, .docx-бриф — ТЗ для лендинга.">структурно парсит</dfn>&nbsp;и собирает дизайн из&nbsp;неё. На&nbsp;этом этапе превращаем реальные клиентские брифы, таблицы и&nbsp;шаблоны деков в&nbsp;готовый визуал без переписывания.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            In Claude Code you attached files via <code>@file</code>. In Claude Design&nbsp;&mdash; via the upload panel in the dialogue. Same principle, different effect: Claude does not read the file as text but <dfn class="term" tabindex="0" data-def="Claude Design parses document structure (headings, tables, lists, columns) and translates it into visual elements. An .xlsx becomes repeating blocks; a .docx brief becomes a brief for a landing.">structurally parses</dfn> it, then assembles the design from that structure. This etape turns real client briefs, sheets, and deck templates into finished visuals without rewriting.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">4–5 дней · 1–2&nbsp;ч/день</span><span lang="en">4–5 days · 1–2&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">.docx как бриф · .xlsx как структурированный контент · захват с&nbsp;URL · границы загрузки</span><span lang="en">.docx as brief · .xlsx as structured content · capture from URL · upload boundaries</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">реальные документы становятся первичным input</span><span lang="en">real documents become primary input</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd>
+                    <span lang="ru">меню кофейни из&nbsp;.xlsx (12 позиций × 3 колонки), портфельный дашборд из&nbsp;CSV, лендинг из&nbsp;.docx-брифа</span>
+                    <span lang="en">a café menu from .xlsx (12 items × 3 columns), portfolio dashboard from CSV, landing from a .docx brief</span>
+                </dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что мы&nbsp;пройдём по&nbsp;шагам</span><span lang="en">What we will walk through</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">.docx как бриф: Claude парсит, а&nbsp;не&nbsp;пересказывает</span><span lang="en">.docx as a brief: Claude parses, does not retell</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;реальной работе бриф редко приходит в&nbsp;виде текстового промпта. Чаще&nbsp;&mdash; .docx или Google&nbsp;Doc от&nbsp;клиента, маркетолога или арт-директора. Десять страниц с&nbsp;заголовками, списками, таблицами тарифов, скриншотами референсов.</p>
+                    <p>Раньше у&nbsp;вас был один путь: переписать его в&nbsp;промпт, теряя структуру. В&nbsp;Claude Design&nbsp;&mdash; прикрепляете .docx прямо в&nbsp;диалог, и&nbsp;в&nbsp;промпте говорите коротко:</p>
+                    <pre class="shell">&gt; собери лендинг по бриф-документу выше.
+&gt; формат 1280×800 десктоп + мобильная.
+&gt; стиль возьми из 4-го раздела «mood»: scandinavian café aesthetic.
+&gt; в hero — тезис из «one-line tagline». в блоке «о нас» — текст из раздела 2.</pre>
+                    <p>Claude видит структуру: где заголовок «mood», где раздел «about», где таблица позиций. Можете сослаться на&nbsp;конкретный раздел брифа в&nbsp;промпте&nbsp;&mdash; <em>«в&nbsp;hero возьми тезис из&nbsp;раздела 1.2»</em>&nbsp;&mdash; Claude находит его сам.</p>
+                    <p><strong>Что хорошо парсится:</strong></p>
+                    <ul>
+                        <li>Заголовки (h1, h2, h3 в&nbsp;Word) → семантическая иерархия</li>
+                        <li>Маркированные/нумерованные списки → блоки на&nbsp;странице</li>
+                        <li>Таблицы → повторяющиеся структуры (см.&nbsp;следующую тему про .xlsx)</li>
+                        <li>Курсив, жирный, ссылки → сохраняются в&nbsp;типографике</li>
+                        <li>Изображения внутри документа → используются как референсы</li>
+                    </ul>
+                    <p><strong>Что теряется:</strong></p>
+                    <ul>
+                        <li>Сложная вёрстка с&nbsp;колонками&nbsp;&mdash; Claude видит только текст</li>
+                        <li>Кастомные шрифты&nbsp;&mdash; заменятся на&nbsp;ближайшие из&nbsp;его типографического словаря</li>
+                        <li>Footnotes, endnotes&nbsp;&mdash; обычно игнорируются (это редко важно для брифа)</li>
+                    </ul>
+                    <div class="note">Главное правило: <strong>хорошо структурированный документ работает лучше длинного промпта</strong>. Если бриф пришёл сплошным текстом без заголовков&nbsp;&mdash; уйдите 5&nbsp;минут на&nbsp;то, чтобы расставить h1/h2 и&nbsp;списки. Окупится 30 минут на&nbsp;первой&nbsp;же итерации.</div>
+                </div>
+                <div lang="en">
+                    <p>In real work a brief rarely arrives as a text prompt. More often&nbsp;&mdash; a .docx or a Google Doc from a client, marketer, or art director. Ten pages of headings, lists, pricing tables, reference screenshots.</p>
+                    <p>You used to have one path: rewrite it into a prompt, losing structure. In Claude Design&nbsp;&mdash; attach the .docx in the dialogue and in the prompt say it short:</p>
+                    <pre class="shell">&gt; assemble the landing per the brief above.
+&gt; format 1280×800 desktop + mobile.
+&gt; pull style from section 4 "mood": scandinavian café aesthetic.
+&gt; hero — the line from "one-line tagline". in "about us" — text from section 2.</pre>
+                    <p>Claude sees the structure: where the &ldquo;mood&rdquo; heading sits, where &ldquo;about&rdquo; lives, where the items table is. You can refer to a specific section of the brief in the prompt&nbsp;&mdash; <em>&ldquo;hero text from section 1.2&rdquo;</em>&nbsp;&mdash; Claude finds it.</p>
+                    <p><strong>Parses well:</strong></p>
+                    <ul>
+                        <li>Headings (h1, h2, h3 in Word) → semantic hierarchy</li>
+                        <li>Bulleted/numbered lists → page blocks</li>
+                        <li>Tables → repeating structures (see the .xlsx topic next)</li>
+                        <li>Italic, bold, links → preserved in typography</li>
+                        <li>Embedded images → used as references</li>
+                    </ul>
+                    <p><strong>Lost:</strong></p>
+                    <ul>
+                        <li>Complex column layouts&nbsp;&mdash; Claude sees only the text</li>
+                        <li>Custom fonts&nbsp;&mdash; replaced with the nearest from its type library</li>
+                        <li>Footnotes / endnotes&nbsp;&mdash; usually ignored (rarely matters for a brief)</li>
+                    </ul>
+                    <div class="note">The headline rule: <strong>a well-structured document beats a long prompt</strong>. If the brief came as a wall of text without headings&nbsp;&mdash; spend five minutes adding h1/h2 and lists. Pays back 30 minutes on the very first iteration.</div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">.xlsx как структурированный контент: таблица → повторяющиеся блоки</span><span lang="en">.xlsx as structured content: table → repeating blocks</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Это самая «волшебная» возможность загрузок. Любая таблица&nbsp;&mdash; меню, прайс-лист, тикеры портфеля, уровни игры, план комнат, расписание, контактный список&nbsp;&mdash; превращается в&nbsp;повторяющиеся визуальные элементы.</p>
+                    <p>Принцип: <strong>колонки = поля, строки = повторы</strong>.</p>
+                    <p>Пример. Таблица меню кофейни:</p>
+                    <pre class="shell">| Раздел   | Позиция        | Описание                | Цена |
+|----------|----------------|-------------------------|------|
+| espresso | Espresso       | Один шот, 30 мл         | 180  |
+| espresso | Doppio         | Двойной, 60 мл          | 220  |
+| espresso | Macchiato      | С пенкой молока         | 240  |
+| filter   | V60            | Hand-pour, Эфиопия      | 280  |
+| filter   | Aeropress      | Под давлением, Колумбия | 280  |
+| filter   | Cold brew      | 18 часов на холоде      | 320  |
+| sweets   | Цельнозерновой | Овёс, мёд, изюм         | 180  |
+| sweets   | Морковный      | Грецкий орех, корица    | 220  |
+| sweets   | Шоколадный     | 70% Сент-Винсент        | 240  |</pre>
+                    <p>Загружаете .xlsx с&nbsp;этой таблицей. В&nbsp;промпте:</p>
+                    <pre class="shell">&gt; меню кофейни «Северный край» по таблице выше.
+&gt; формат A4 вертикальный, для печати.
+&gt; стиль: Müller-Brockmann.
+&gt; группировка: колонка «раздел» — это секции (espresso / filter / sweets).
+&gt; в каждой секции — три строки. покажи название, описание, цену.
+&gt; цены выровняй по правому краю.</pre>
+                    <p>Claude собирает три секции по&nbsp;три позиции, шрифты подбирает по&nbsp;референсу, цены выравнивает по&nbsp;правому краю. Если в&nbsp;следующий раз таблица обновится (добавите cold brew с&nbsp;тропической Эфиопией)&nbsp;&mdash; перезагружаете .xlsx, и&nbsp;Claude перерисовывает меню с&nbsp;новой строкой.</p>
+                    <p>Это работает для любого «спискового» дизайна:</p>
+                    <ul>
+                        <li><strong>Кофейня:</strong> меню, прайс-лист, акции</li>
+                        <li><strong>Финансы:</strong> портфель (тикер, цена, % изменение, доля), сравнение фондов</li>
+                        <li><strong>Игра:</strong> уровни (имя, сложность, описание), список персонажей, инвентарь</li>
+                        <li><strong>Квартира:</strong> план комнат (комната, площадь, материал, бюджет), смета</li>
+                        <li><strong>Универсально:</strong> команда (имя, роль, фото), кейсы, контакты, расписание событий</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>This is the most &ldquo;magical&rdquo; upload feature. Any table&nbsp;&mdash; menu, price list, portfolio tickers, game levels, floor plan, schedule, contact list&nbsp;&mdash; turns into repeating visual elements.</p>
+                    <p>Principle: <strong>columns = fields, rows = repeats</strong>.</p>
+                    <p>Example. Café menu table:</p>
+                    <pre class="shell">| Section  | Item            | Description              | Price |
+|----------|-----------------|--------------------------|-------|
+| espresso | Espresso        | Single shot, 30 ml       | 180   |
+| espresso | Doppio          | Double, 60 ml            | 220   |
+| espresso | Macchiato       | With milk foam           | 240   |
+| filter   | V60             | Hand-pour, Ethiopia      | 280   |
+| filter   | Aeropress       | Under pressure, Colombia | 280   |
+| filter   | Cold brew       | 18 hours cold            | 320   |
+| sweets   | Wholegrain      | Oats, honey, raisins     | 180   |
+| sweets   | Carrot          | Walnut, cinnamon         | 220   |
+| sweets   | Chocolate       | 70% Saint-Vincent        | 240   |</pre>
+                    <p>Upload the .xlsx with this table. In the prompt:</p>
+                    <pre class="shell">&gt; café menu "Northern Coast" from the table above.
+&gt; format A4 vertical, for print.
+&gt; style: Müller-Brockmann.
+&gt; grouping: the "section" column = section blocks (espresso / filter / sweets).
+&gt; each section — three rows. show name, description, price.
+&gt; right-align prices.</pre>
+                    <p>Claude assembles three three-item sections, picks typography from the reference, right-aligns prices. Next time the table updates (you add a cold brew from a tropical Ethiopia)&nbsp;&mdash; re-upload the .xlsx, Claude redraws the menu with the new row.</p>
+                    <p>It works for any &ldquo;list-based&rdquo; design:</p>
+                    <ul>
+                        <li><strong>Café:</strong> menu, price list, promos</li>
+                        <li><strong>Finance:</strong> portfolio (ticker, price, % change, weight), fund comparisons</li>
+                        <li><strong>Game:</strong> levels (name, difficulty, brief), character roster, inventory</li>
+                        <li><strong>Apartment:</strong> room plan (room, area, material, budget), cost estimate</li>
+                        <li><strong>Universal:</strong> team (name, role, photo), cases, contacts, event schedule</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">.pptx как шаблон: стилевая основа</span><span lang="en">.pptx as a template: stylistic foundation</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Если у&nbsp;компании есть фирменный шаблон презентаций (логотип в&nbsp;углу, корпоративная палитра, типографика, slide-master)&nbsp;&mdash; загружаете его как .pptx, и&nbsp;Claude использует его как стилевую основу для нового контента.</p>
+                    <pre class="shell">&gt; загруженная презентация — наш фирменный шаблон.
+&gt; собери дек на 12 слайдов про новую инвест-стратегию,
+&gt; используя те же палитру, шрифты, расположение логотипа,
+&gt; структуру (титул / содержание / 8 контентных / итог / контакты).
+&gt; контент возьми из приложенного брифа.docx.</pre>
+                    <p>Это <em>наследование стиля</em>, а&nbsp;не&nbsp;«редактирование оригинала». Claude не&nbsp;трогает ваш шаблон&nbsp;&mdash; он&nbsp;читает его и&nbsp;собирает новые слайды в&nbsp;этой стилистике.</p>
+                    <p>Полезно, когда:</p>
+                    <ul>
+                        <li>Вы&nbsp;работаете в&nbsp;корпорации с&nbsp;жёстким брендгайдом</li>
+                        <li>Клиент прислал шаблон и&nbsp;просит «как у&nbsp;нас»</li>
+                        <li>У&nbsp;вас есть прошлогодняя удачная презентация, и&nbsp;нужно сделать новую в&nbsp;той&nbsp;же стилистике</li>
+                    </ul>
+                    <p>Дек как артефакт мы&nbsp;разберём подробно в&nbsp;этапе&nbsp;06 (питч-дек из&nbsp;.xlsx), здесь&nbsp;&mdash; только сам приём загрузки шаблона.</p>
+                </div>
+                <div lang="en">
+                    <p>If your company has a corporate slide template (logo in the corner, brand palette, type, slide-master)&nbsp;&mdash; upload it as .pptx, and Claude uses it as the stylistic foundation for new content.</p>
+                    <pre class="shell">&gt; the uploaded deck is our corporate template.
+&gt; produce a 12-slide deck about a new investment strategy
+&gt; using the same palette, fonts, logo placement,
+&gt; structure (title / agenda / 8 content slides / summary / contacts).
+&gt; content from the attached brief.docx.</pre>
+                    <p>That is <em>style inheritance</em>, not &ldquo;editing the original.&rdquo; Claude does not touch your template&nbsp;&mdash; it reads it and assembles new slides in that style.</p>
+                    <p>Useful when:</p>
+                    <ul>
+                        <li>You work in a corporation with a strict brand guide</li>
+                        <li>A client sent a template and asks for &ldquo;our look&rdquo;</li>
+                        <li>You have last year&rsquo;s successful deck and need a new one in the same style</li>
+                    </ul>
+                    <p>The deck as an artefact gets a full etape (06, pitch deck from .xlsx); here&nbsp;&mdash; only the template-upload technique.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Захват с&nbsp;живого сайта: стилевой и&nbsp;компонентный референс</span><span lang="en">Capture from a live site: style &amp; component reference</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Помимо файлов, Claude Design принимает <strong>URL живого сайта</strong> как референс. Это сильнейший приём, когда вам нужен «как у&nbsp;Stripe.com», но&nbsp;точнее, чем эпитет.</p>
+                    <pre class="shell">&gt; референс по стилю и компонентам: https://stripe.com
+&gt; собери лендинг для нашего инвест-сервиса в этой стилистике —
+&gt; крупная типографика, чистая сетка, продуктовые иллюстрации с градиентами,
+&gt; цветовые акценты на фоне нейтральной палитры.
+&gt; контент возьми из брифа.docx (приложен).</pre>
+                    <p>Claude захватывает <em>стилевые сигналы</em>: палитру, типографику, структуру композиции, паттерны интерактивных элементов. Не&nbsp;копирует код или конкретные графические элементы&nbsp;&mdash; перенимает <em>дизайн-язык</em>.</p>
+                    <p>Хорошо работает для:</p>
+                    <ul>
+                        <li><strong>Промо-сайтов:</strong> Stripe, Linear, Vercel, Apple, Mercury, Notion</li>
+                        <li><strong>Журналов:</strong> Wallpaper, Monocle, NYT, FT, The New Yorker</li>
+                        <li><strong>Брендов:</strong> Aēsop, MUJI, Patagonia, Glossier</li>
+                        <li><strong>Прецедентов в&nbsp;нише:</strong> ваши конкуренты или вдохновители</li>
+                    </ul>
+                    <p>Можно сослаться на&nbsp;несколько сайтов одновременно, описав <em>что взять с&nbsp;каждого</em>:</p>
+                    <pre class="shell">&gt; стиль: типографика как у https://wallpaper.com (крупный serif),
+&gt; палитра как у https://aesop.com (приглушённая, тёплая),
+&gt; layout-сетка как у https://stripe.com.</pre>
+                </div>
+                <div lang="en">
+                    <p>Besides files, Claude Design accepts a <strong>live-site URL</strong> as a reference. The strongest move when you need &ldquo;like Stripe.com&rdquo; with more precision than an epithet.</p>
+                    <pre class="shell">&gt; style and component reference: https://stripe.com
+&gt; build a landing for our investment service in this style —
+&gt; large typography, clean grid, product illustrations with gradients,
+&gt; colour accents on a neutral palette.
+&gt; content from the attached brief.docx.</pre>
+                    <p>Claude captures the <em>style signals</em>: palette, typography, composition, interaction patterns. It does not copy code or specific graphics&nbsp;&mdash; it inherits the <em>design language</em>.</p>
+                    <p>Works well for:</p>
+                    <ul>
+                        <li><strong>Promo sites:</strong> Stripe, Linear, Vercel, Apple, Mercury, Notion</li>
+                        <li><strong>Magazines:</strong> Wallpaper, Monocle, NYT, FT, The New Yorker</li>
+                        <li><strong>Brands:</strong> Aēsop, MUJI, Patagonia, Glossier</li>
+                        <li><strong>Precedents in your niche:</strong> competitors or aspirational peers</li>
+                    </ul>
+                    <p>You can cite multiple sites at once, naming what to take from each:</p>
+                    <pre class="shell">&gt; style: typography like https://wallpaper.com (big serif),
+&gt; palette like https://aesop.com (muted, warm),
+&gt; layout grid like https://stripe.com.</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Совмещение источников и&nbsp;границы загрузки</span><span lang="en">Combining sources &amp; upload boundaries</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Реальный мощный промпт почти всегда совмещает несколько источников:</p>
+                    <pre class="shell">&gt; задача: лендинг для запуска инди-игры «Tide of Stars».
+&gt; контент: возьми из game-brief.docx (приложен) — описание, фичи, скриншоты.
+&gt; уровни: список из levels.xlsx (приложен) — секция «уровни».
+&gt; стиль: референсный сайт https://hadesgame.com.
+&gt; формат: 1280×800 десктоп + мобильная.
+&gt; структура: hero с trailer-видео, фичи в три колонки, уровни сеткой, dev-blog ссылка внизу.</pre>
+                    <p>Claude принимает все три источника одновременно: вытаскивает контент из .docx, повторяющиеся блоки из .xlsx, стилевой язык с&nbsp;URL.</p>
+                    <h4 style="margin-top:1.5em;">Что НЕ&nbsp;переносится</h4>
+                    <ul>
+                        <li><strong>PDF</strong>&nbsp;&mdash; импортируется только как текст. Layout PDF теряется. Если есть .docx-исходник&nbsp;&mdash; используйте&nbsp;его. Если только PDF&nbsp;&mdash; возможно, проще пересказать структуру в&nbsp;промпте.</li>
+                        <li><strong>SVG/.ai-исходники</strong>&nbsp;&mdash; иконки и&nbsp;иллюстрации Claude перерисовывает по&nbsp;своему пониманию. Полное соответствие исходнику не&nbsp;гарантируется. Если нужно использовать конкретную иконку как&nbsp;есть&nbsp;&mdash; экспортируйте её&nbsp;как PNG, и&nbsp;скажите «используй как&nbsp;есть».</li>
+                        <li><strong>Сложные Excel-формулы</strong>&nbsp;&mdash; Claude видит только итоговые значения, не&nbsp;формулу. Если важна сама формула (для дашборда расчётов)&nbsp;&mdash; вынесите её&nbsp;в&nbsp;отдельную колонку «формула как&nbsp;текст».</li>
+                        <li><strong>Защищённые/корпоративные сайты</strong>&nbsp;&mdash; URL-захват требует публичного доступа. Если ваш референс за&nbsp;паролем&nbsp;&mdash; экспортируйте скриншот.</li>
+                    </ul>
+                    <h4 style="margin-top:1.5em;">Когда файл, когда промпт</h4>
+                    <p>Простое правило: <strong>если контент структурирован&nbsp;&mdash; файл; если идея или короткая инструкция&nbsp;&mdash; промпт</strong>.</p>
+                    <ul>
+                        <li>Список из&nbsp;3+ повторяющихся элементов → файл (.xlsx или .docx со&nbsp;списком).</li>
+                        <li>Стилевые требования, которые меняются по&nbsp;ходу итераций → промпт.</li>
+                        <li>Корпоративный шаблон → файл (.pptx).</li>
+                        <li>Срочная правка одного блока → промпт.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>A really powerful prompt almost always combines several sources:</p>
+                    <pre class="shell">&gt; task: landing for an indie-game launch "Tide of Stars."
+&gt; content: from game-brief.docx (attached) — description, features, screenshots.
+&gt; levels: from levels.xlsx (attached) — "levels" sheet.
+&gt; style: reference site https://hadesgame.com.
+&gt; format: 1280×800 desktop + mobile.
+&gt; structure: hero with trailer-video, features in three columns, levels grid, dev-blog link at the bottom.</pre>
+                    <p>Claude consumes all three at once: content from .docx, repeating blocks from .xlsx, style language from the URL.</p>
+                    <h4 style="margin-top:1.5em;">What does NOT carry over</h4>
+                    <ul>
+                        <li><strong>PDF</strong>&nbsp;&mdash; imports as text only. PDF layout is lost. If a .docx source exists&nbsp;&mdash; use it. If only PDF&nbsp;&mdash; maybe easier to retell structure in the prompt.</li>
+                        <li><strong>SVG / .ai sources</strong>&nbsp;&mdash; Claude redraws icons and illustrations by its own reading. Exact source-match is not guaranteed. If you must use a specific icon as-is&nbsp;&mdash; export to PNG and say &ldquo;use as-is.&rdquo;</li>
+                        <li><strong>Complex Excel formulas</strong>&nbsp;&mdash; Claude sees only the resulting values, not the formula. If the formula itself matters (for a calculation dashboard)&nbsp;&mdash; put it in a &ldquo;formula as text&rdquo; column.</li>
+                        <li><strong>Protected / corporate sites</strong>&nbsp;&mdash; URL capture needs public access. If your reference is behind a login&nbsp;&mdash; export a screenshot.</li>
+                    </ul>
+                    <h4 style="margin-top:1.5em;">File vs prompt</h4>
+                    <p>Simple rule: <strong>if content is structured&nbsp;&mdash; a file; if it&rsquo;s an idea or short instruction&nbsp;&mdash; a prompt</strong>.</p>
+                    <ul>
+                        <li>A list of 3+ repeating items → file (.xlsx or .docx with a list).</li>
+                        <li>Style requirements that shift across iterations → prompt.</li>
+                        <li>Corporate template → file (.pptx).</li>
+                        <li>One-block urgent fix → prompt.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Один бриф, два пути</span><span lang="en">One brief, two paths</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Этот короткий прогон ставит на&nbsp;место разницу между «текстовым промптом с&nbsp;брифом» и&nbsp;«загрузкой .docx». Заняет 10–15 минут.</p>
+        <p class="reading" lang="en">A short run that locks in the difference between &ldquo;a text prompt with the brief&rdquo; and &ldquo;a .docx upload.&rdquo; 10–15 minutes.</p>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · текстовый промпт vs .docx</span><span lang="en">Run · text prompt vs .docx</span></h4>
+            <ol lang="ru">
+                <li>В&nbsp;Word/Google&nbsp;Docs создайте короткий бриф (1 страница) на&nbsp;любую тему: лендинг для собственного pet-project, услуги фрилансера, домашнего ивента. Структурируйте: <strong>h1 — название</strong>, <strong>h2 — три раздела</strong> (Цель, Аудитория, Тон), маркированный список ключевых требований.</li>
+                <li>Скопируйте весь текст брифа. Откройте Claude Design, новый проект. Вставьте текст как обычный промпт. Дождитесь первой версии.</li>
+                <li>Не&nbsp;уточняйте&nbsp;&mdash; запомните, что получилось.</li>
+                <li>Сохраните бриф как .docx. Снова новый проект Claude Design. <strong>Прикрепите .docx</strong> в&nbsp;диалог. Промпт коротко: <em>«собери лендинг по&nbsp;брифу выше, формат 1280×800, стиль возьми из&nbsp;раздела «Тон»»</em>.</li>
+                <li>Сравните две первые версии. На&nbsp;что Claude обратил внимание во&nbsp;втором случае, чего не&nbsp;было в&nbsp;первом? Иерархия лучше? Структурные блоки точнее? Стиль ближе?</li>
+            </ol>
+            <ol lang="en">
+                <li>In Word/Google Docs create a short brief (1 page) on any topic: a landing for your pet project, a freelance service, a home event. Structure it: <strong>h1 — name</strong>, <strong>h2 — three sections</strong> (Goal, Audience, Tone), bulleted list of key requirements.</li>
+                <li>Copy the whole brief. Open Claude Design, new project. Paste as a regular prompt. Wait for the first take.</li>
+                <li>Do not refine&nbsp;&mdash; remember the output.</li>
+                <li>Save the brief as .docx. New Claude Design project again. <strong>Attach the .docx</strong> in the dialogue. Short prompt: <em>&ldquo;assemble the landing per the brief above, format 1280×800, style from the &lsquo;Tone&rsquo; section.&rdquo;</em></li>
+                <li>Compare the two first takes. What did Claude pick up in the second one that wasn&rsquo;t in the first? Sharper hierarchy? More accurate structural blocks? Closer style?</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>чувствовать ROI загрузки</strong>. Структура документа становится структурой дизайна автоматически.</p>
+            <p lang="en">What we are training: <strong>feeling the ROI of upload</strong>. Document structure becomes design structure automatically.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Реальный контент → готовый дизайн</span><span lang="en">Real content → finished design</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;кофейня</span><span lang="en">Project A · guided · café track</span></span>
+            <h3><span lang="ru">Меню кофейни из&nbsp;.xlsx</span><span lang="en">Café menu from .xlsx</span></h3>
+            <p class="goal" lang="ru">Цель: меню A4 на&nbsp;печать, собранное из&nbsp;9-строчной .xlsx-таблицы. Тренируем «таблица → повторяющиеся блоки».</p>
+            <p class="goal" lang="en">Goal: an A4 print menu assembled from a 9-row .xlsx table. We train &ldquo;table → repeating blocks.&rdquo;</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>В&nbsp;Excel/Google&nbsp;Sheets создайте таблицу с&nbsp;колонками <code>Раздел | Позиция | Описание | Цена</code> и&nbsp;9 строк (как в&nbsp;примере выше: 3 espresso + 3 filter + 3 sweets). Сохраните как .xlsx.</li>
+                <li>Откройте Claude Design, новый проект. Прикрепите .xlsx.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; меню кофейни «Северный край» из приложенной таблицы.
+&gt; формат A4 вертикальный, для печати.
+&gt; стиль: Müller-Brockmann (модульная сетка, sans-serif, минимум цвета, один акцент кирпично-красный).
+&gt; группировка: колонка «Раздел» — это секции (espresso / filter / sweets).
+&gt; в каждой секции — три позиции. покажи название (полужирный),
+&gt;   описание (тонкий, серый), цену (моноширинно, выровнено по правому краю).
+&gt; вверху — заголовок MENU крупно. внизу — адрес «ул. Морская, 12», часы «8:00 — 21:00».</pre>
+                </li>
+                <li>Дождитесь первой версии. Если разделы перепутаны или цены не&nbsp;по&nbsp;правому краю&nbsp;&mdash; уточните инлайн-комментарием на&nbsp;конкретной секции (этап&nbsp;01).</li>
+                <li>Добавьте десятую позицию в&nbsp;.xlsx (например, «Эфиопия Юрга», cold brew, 340₽). Перезагрузите файл в&nbsp;тот&nbsp;же диалог. <em>«Обнови меню по&nbsp;новой версии таблицы»</em>. Заметьте, что Claude добавил позицию в&nbsp;нужную секцию автоматически.</li>
+                <li>Когда нравится&nbsp;&mdash; <em>Export → PDF</em>. Откройте на&nbsp;компьютере, проверьте печать.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>In Excel/Google Sheets create a table with columns <code>Section | Item | Description | Price</code> and 9 rows (as in the example above: 3 espresso + 3 filter + 3 sweets). Save as .xlsx.</li>
+                <li>Open Claude Design, new project. Attach the .xlsx.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; café menu "Northern Coast" from the attached table.
+&gt; format A4 vertical, for print.
+&gt; style: Müller-Brockmann (modular grid, sans-serif, minimal colour, one brick-red accent).
+&gt; grouping: the "Section" column = section blocks (espresso / filter / sweets).
+&gt; each section — three items. name (bold), description (thin, grey),
+&gt;   price (monospace, right-aligned).
+&gt; top — heading MENU big. bottom — address "12 Marine Street", hours "8:00 — 21:00".</pre>
+                </li>
+                <li>Wait for the first take. If sections are mixed up or prices not right-aligned&nbsp;&mdash; refine via inline comment on the specific section (etape 01).</li>
+                <li>Add a tenth item to .xlsx (e.g., &ldquo;Ethiopia Yirga,&rdquo; cold brew, 340₽). Re-upload to the same dialogue. <em>&ldquo;Update the menu to the new table.&rdquo;</em> Note: Claude adds the item to the right section automatically.</li>
+                <li>When happy&nbsp;&mdash; <em>Export → PDF</em>. Open it locally, check the print.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>превращать .xlsx-таблицу в&nbsp;повторяющиеся визуальные блоки;</li>
+                <li>обновлять дизайн через перезагрузку источника, а&nbsp;не&nbsp;через переписывание промпта;</li>
+                <li>группировать по&nbsp;колонке (одна колонка = одна секция).</li>
+            </ul>
+            <ul lang="en">
+                <li>turning an .xlsx into repeating visual blocks;</li>
+                <li>updating the design by re-uploading, not rewriting the prompt;</li>
+                <li>grouping by column (one column = one section).</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;финансы</span><span lang="en">Project B · guided · finance track</span></span>
+            <h3><span lang="ru">Дашборд портфеля из&nbsp;CSV</span><span lang="en">Portfolio dashboard from CSV</span></h3>
+            <p class="goal" lang="ru">Цель: однострочный дашборд для веба (1280×800) из&nbsp;вашего портфельного CSV. Тренируем «таблица числовых данных → визуальные карточки + сводка».</p>
+            <p class="goal" lang="en">Goal: a single-page web dashboard (1280×800) built from your portfolio CSV. We train &ldquo;numeric table → visual cards + summary.&rdquo;</p>
+
+            <h4 lang="ru">Шаги</h4>
+            <h4 lang="en">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте CSV-таблицу с&nbsp;портфелем: колонки <code>Тикер | Название | Цена | %изм | Доля%</code>, 8–12 строк. Если ведёте реальный портфель&nbsp;&mdash; экспортируйте из&nbsp;брокерского отчёта.</li>
+                <li>В&nbsp;Claude Design новый проект, прикрепите CSV.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; дашборд для «Личного инвест-кабинета» из приложенной таблицы.
+&gt; формат 1280×800 десктоп.
+&gt; стиль: editorial-financial, как у https://stripe.com и FT-сайта.
+&gt; структура:
+&gt;   hero (верхние 200px) — общая стоимость портфеля, итоговый %, индикатор «вверх/вниз».
+&gt;   далее — карточки по каждой позиции: тикер крупно, название, цена,
+&gt;     %изм цветом (зелёный/красный), миниатюрный sparkline. сетка по 3-4 в ряду.
+&gt;   справа — сводка по долям (donut chart, легенда с тикерами).
+&gt;   внизу — последняя строка обновления.</pre>
+                </li>
+                <li>Если sparkline-данных нет&nbsp;&mdash; Claude нарисует условный (это&nbsp;ок для прототипа). Если хотите реальные&nbsp;&mdash; добавьте колонку <code>history7d</code> с&nbsp;7 значениями через запятую и&nbsp;уточните: <em>«sparkline по&nbsp;колонке history7d»</em>.</li>
+                <li>Уточняйте композицией (инлайн): <em>«donut больше, легенду в&nbsp;два столбца», «сделай зону hero выше — 280px»</em>.</li>
+                <li>Подгоняйте атмосферу слайдером: warmth, contrast.</li>
+                <li>Когда нравится&nbsp;&mdash; <em>Export → HTML</em>. У&nbsp;вас живой дашборд, который можно открыть в&nbsp;браузере.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create a CSV with your portfolio: columns <code>Ticker | Name | Price | %chg | Weight%</code>, 8–12 rows. If you keep a real portfolio&nbsp;&mdash; export from your broker report.</li>
+                <li>New Claude Design project, attach the CSV.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; dashboard for "Personal Investment Office" from the attached table.
+&gt; format 1280×800 desktop.
+&gt; style: editorial-financial, like https://stripe.com and FT.
+&gt; structure:
+&gt;   hero (top 200px) — total portfolio value, total %, up/down indicator.
+&gt;   then — per-position cards: ticker big, name, price,
+&gt;     %chg coloured (green/red), tiny sparkline. grid 3–4 per row.
+&gt;   right — weight summary (donut chart, ticker legend).
+&gt;   bottom — last-update line.</pre>
+                </li>
+                <li>If no sparkline data&nbsp;&mdash; Claude draws stylised (fine for a prototype). For real ones&nbsp;&mdash; add a <code>history7d</code> column with 7 comma-separated values and say: <em>&ldquo;sparkline from history7d.&rdquo;</em></li>
+                <li>Refine composition (inline): <em>&ldquo;donut bigger, legend in two columns,&rdquo; &ldquo;hero zone taller — 280px.&rdquo;</em></li>
+                <li>Tune atmosphere with sliders: warmth, contrast.</li>
+                <li>When happy&nbsp;&mdash; <em>Export → HTML</em>. You get a live dashboard you can open in a browser.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>превращать числовые данные в&nbsp;визуальные карточки + сводку;</li>
+                <li>совмещать .xlsx-источник + URL-стилевой референс;</li>
+                <li>экспортировать в&nbsp;HTML для живого использования.</li>
+            </ul>
+            <ul lang="en">
+                <li>turning numeric data into visual cards + summary;</li>
+                <li>combining .xlsx source + URL style reference;</li>
+                <li>exporting to HTML for live use.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши документы</span><span lang="en">Same moves, your documents</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек на&nbsp;ваш выбор</span><span lang="en">Project C · solo · track of your choice</span></span>
+            <h3><span lang="ru">Лендинг из&nbsp;вашего .docx-брифа</span><span lang="en">Landing from your .docx brief</span></h3>
+            <p class="goal" lang="ru">Цель: лендинг (любая ниша&nbsp;&mdash; кофейня, дизайн-бюро, инди-студия, ваш проект) собранный исключительно из&nbsp;.docx-брифа, написанного <em>как для реального клиента</em>.</p>
+            <p class="goal" lang="en">Goal: a landing (any niche&nbsp;&mdash; café, design bureau, indie studio, your own project) assembled purely from a .docx brief written <em>like for a real client</em>.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Бриф структурируйте: <strong>1.&nbsp;Контекст</strong> (зачем, для&nbsp;кого), <strong>2.&nbsp;Цели</strong>, <strong>3.&nbsp;Тон и&nbsp;стиль</strong>, <strong>4.&nbsp;Структура</strong> (что должно быть на&nbsp;странице), <strong>5.&nbsp;Референсы</strong> (URL и&nbsp;описание).</li>
+                <li>Внутри раздела «Структура» используйте <em>нумерованный список</em>&nbsp;&mdash; Claude увидит его как порядок секций.</li>
+                <li>В&nbsp;промпте к&nbsp;.docx можно указать: <em>«стиль возьми из&nbsp;раздела&nbsp;3 «Тон», структуру&nbsp;&mdash; из&nbsp;раздела&nbsp;4»</em>.</li>
+                <li>Если в&nbsp;брифе есть таблица (например, прайс)&nbsp;&mdash; Claude автоматически рендерит её&nbsp;как блок.</li>
+            </ul>
+            <ul lang="en">
+                <li>Structure the brief: <strong>1.&nbsp;Context</strong> (why, for whom), <strong>2.&nbsp;Goals</strong>, <strong>3.&nbsp;Tone &amp; style</strong>, <strong>4.&nbsp;Structure</strong> (what the page must have), <strong>5.&nbsp;References</strong> (URLs &amp; notes).</li>
+                <li>Inside &ldquo;Structure&rdquo; use a <em>numbered list</em>&nbsp;&mdash; Claude reads it as section order.</li>
+                <li>The prompt can say: <em>&ldquo;style from section 3 &lsquo;Tone&rsquo;, structure from section 4.&rdquo;</em></li>
+                <li>If the brief has a table (e.g., a price list)&nbsp;&mdash; Claude renders it as a block automatically.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть отдельный .docx-файл со&nbsp;структурой 5 разделов и&nbsp;маркированными списками;</li>
+                        <li>лендинг собран в&nbsp;Claude Design <em>с&nbsp;прикреплённым .docx</em> (а&nbsp;не&nbsp;вставкой текста);</li>
+                        <li>в&nbsp;дизайне явно видна структура из&nbsp;раздела&nbsp;4 брифа;</li>
+                        <li>стиль подхвачен из&nbsp;раздела&nbsp;3, не&nbsp;«среднестатистический»;</li>
+                        <li>обновили .docx (добавили блок), перезагрузили&nbsp;&mdash; дизайн обновился без&nbsp;нового промпта.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a standalone .docx with a 5-section structure and bulleted lists;</li>
+                        <li>the landing was assembled <em>with the .docx attached</em> (not pasted text);</li>
+                        <li>section-4 structure is clearly reflected in the design;</li>
+                        <li>style is picked from section 3, not generic;</li>
+                        <li>updated the .docx (added a block), re-uploaded&nbsp;&mdash; the design refreshed without a new prompt.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«проанализируй мой бриф.docx и&nbsp;скажи, какие разделы получились слабыми (двусмысленными, недостаточно структурированными) и&nbsp;что в&nbsp;них&nbsp;бы улучшил, чтобы первая итерация дизайна была точнее».</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>&ldquo;analyse my brief.docx and tell me which sections came out weak (ambiguous, under-structured) and what I would improve so the first design iteration lands more accurately.&rdquo;</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек на&nbsp;ваш выбор</span><span lang="en">Project D · solo · track of your choice</span></span>
+            <h3><span lang="ru">Стилевой клон с&nbsp;живого сайта</span><span lang="en">Style clone from a live site</span></h3>
+            <p class="goal" lang="ru">Цель: лендинг для своего проекта в&nbsp;стилистике одного конкретного сайта-референса (URL-захват). Тренируем «инкассировать» дизайн-язык, не&nbsp;копируя контент.</p>
+            <p class="goal" lang="en">Goal: a landing for your project in the style of one specific reference site (URL capture). We train how to &ldquo;cash in&rdquo; a design language without copying content.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Выберите сайт-референс с&nbsp;<em>сильным узнаваемым языком</em>: Stripe, Linear, Aēsop, Apple, Mercury, Notion, MUJI, Wallpaper, Glossier, Vercel.</li>
+                <li>Промпт: <em>«стиль и&nbsp;компоненты как у&nbsp;[URL]»</em>. Можно указать, что именно перенять: <em>«типографику и&nbsp;палитру оттуда, layout-сетку оставь свою»</em>.</li>
+                <li>Контент можно дать любым способом: коротким промптом, .docx-брифом, .xlsx-таблицей.</li>
+                <li>Тестируйте «знает&nbsp;ли Claude этот сайт»: спросите сначала <em>«опиши дизайн-язык [URL] в&nbsp;3-х фразах»</em>. Если ответ конкретный&nbsp;&mdash; можно использовать. Если общий&nbsp;&mdash; добавьте описание стиля сами.</li>
+            </ul>
+            <ul lang="en">
+                <li>Pick a reference with a <em>strong, recognisable language</em>: Stripe, Linear, Aēsop, Apple, Mercury, Notion, MUJI, Wallpaper, Glossier, Vercel.</li>
+                <li>Prompt: <em>&ldquo;style and components like [URL].&rdquo;</em> You can specify what to inherit: <em>&ldquo;take typography and palette from there, keep my own layout grid.&rdquo;</em></li>
+                <li>Content can come from anywhere: short prompt, .docx brief, .xlsx table.</li>
+                <li>Test whether Claude &ldquo;knows&rdquo; the site: first ask <em>&ldquo;describe the design language of [URL] in 3 sentences.&rdquo;</em> Concrete answer&nbsp;&mdash; safe to use. Generic&nbsp;&mdash; add a style description yourself.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>сайт-референс назван конкретно (URL, не&nbsp;«как у&nbsp;Apple-подобных»);</li>
+                        <li>в&nbsp;вашем дизайне видны минимум 3&nbsp;стилевых сигнала с&nbsp;референса (палитра, типографика, композиционный приём);</li>
+                        <li>контент полностью свой&nbsp;&mdash; не&nbsp;копия страниц референса;</li>
+                        <li>вы&nbsp;можете в&nbsp;двух фразах объяснить, что именно перенесли и&nbsp;почему это работает.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>the reference is named concretely (URL, not &ldquo;Apple-like&rdquo;);</li>
+                        <li>at least 3 style signals from the reference are visible (palette, type, compositional move);</li>
+                        <li>content is entirely yours&nbsp;&mdash; not a copy of the reference site;</li>
+                        <li>you can explain in two sentences what you carried over and why it works.</li>
+                    </ul>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Новые слова, которые встретились</span><span lang="en">New words that came up</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt><span lang="ru">Структурный парсинг</span><span lang="en">Structural parsing</span></dt>
+            <dd>
+                <span lang="ru">Способ, которым Claude Design читает загруженные файлы: не&nbsp;как сплошной текст, а&nbsp;разбирая структуру (заголовки, таблицы, списки, колонки) и&nbsp;переводя её&nbsp;в&nbsp;визуальные элементы. .xlsx-таблица становится повторяющимися блоками; .docx-бриф&nbsp;&mdash; ТЗ&nbsp;для лендинга.</span>
+                <span lang="en">How Claude Design reads uploaded files: not as a wall of text but by parsing structure (headings, tables, lists, columns) and translating it into visual elements. An .xlsx becomes repeating blocks; a .docx brief becomes a brief for a landing.</span>
+            </dd>
+
+            <dt><span lang="ru">Колонки = поля, строки = повторы</span><span lang="en">Columns = fields, rows = repeats</span></dt>
+            <dd>
+                <span lang="ru">Главный принцип превращения .xlsx в&nbsp;дизайн. Имена колонок становятся свойствами визуальной карточки/блока; каждая строка&nbsp;&mdash; экземпляр карточки. Меню (раздел/позиция/цена) → секции с&nbsp;позициями. Портфель (тикер/цена/доля) → сетка карточек.</span>
+                <span lang="en">The headline principle of turning .xlsx into design. Column names become block properties; each row becomes one card instance. Menu (section/item/price) → section blocks. Portfolio (ticker/price/weight) → card grid.</span>
+            </dd>
+
+            <dt><span lang="ru">Style inheritance (наследование стиля)</span><span lang="en">Style inheritance</span></dt>
+            <dd>
+                <span lang="ru">Приём загрузки .pptx-шаблона: Claude использует его как стилевую основу для нового контента, не&nbsp;трогая исходный файл. Полезно для корпоративных брендгайдов и&nbsp;«мы&nbsp;работаем в&nbsp;этом шаблоне» ситуаций.</span>
+                <span lang="en">The .pptx template move: Claude uses it as a stylistic foundation for new content without touching the original file. Useful for corporate brand guides and &ldquo;we work in this template&rdquo; situations.</span>
+            </dd>
+
+            <dt><span lang="ru">URL-захват</span><span lang="en">URL capture</span></dt>
+            <dd>
+                <span lang="ru">Возможность дать Claude Design ссылку на&nbsp;живой сайт как стилевой и&nbsp;компонентный референс. Claude захватывает дизайн-язык (палитру, типографику, композиционные приёмы), не&nbsp;копируя код или конкретный графический контент. Сильнее, чем эпитет «современный».</span>
+                <span lang="en">The ability to give Claude Design a live-site URL as style &amp; component reference. Claude captures the design language (palette, typography, compositional moves) without copying code or specific graphics. Stronger than the epithet &ldquo;modern.&rdquo;</span>
+            </dd>
+
+            <dt><span lang="ru">Совмещение источников</span><span lang="en">Combining sources</span></dt>
+            <dd>
+                <span lang="ru">Реальный мощный промпт совмещает несколько входов: .docx (контент), .xlsx (повторяющиеся блоки), URL (стилевой референс). Claude обрабатывает их&nbsp;одновременно, что эквивалентно «дай весь контекст разом, а&nbsp;не&nbsp;кусками».</span>
+                <span lang="en">A real-world powerful prompt combines multiple inputs: .docx (content), .xlsx (repeating blocks), URL (style reference). Claude consumes them at once, equivalent to &ldquo;give the full context once, not in chunks.&rdquo;</span>
+            </dd>
+
+            <dt><span lang="ru">Primary input</span><span lang="en">Primary input</span></dt>
+            <dd>
+                <span lang="ru">Источник, который определяет содержание и&nbsp;структуру дизайна. В&nbsp;Claude Code это обычно файл, в&nbsp;который пишут код. В&nbsp;Claude Design это часто <em>загружаемый документ</em>: .docx-бриф, .xlsx-данные, .pptx-шаблон. Промпт играет вспомогательную роль («стиль такой-то, структура такая-то»).</span>
+                <span lang="en">The source that determines design content and structure. In Claude Code it&rsquo;s typically the file the code writes into. In Claude Design it&rsquo;s often the <em>uploaded document</em>: a .docx brief, .xlsx data, .pptx template. The prompt plays a supporting role (&ldquo;this style, that structure&rdquo;).</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text">
+                    <span lang="ru">В&nbsp;чём разница между «вставить бриф текстом в&nbsp;промпт» и&nbsp;«загрузить .docx с&nbsp;брифом»?</span>
+                    <span lang="en">What is the difference between &ldquo;paste the brief as text&rdquo; and &ldquo;upload a .docx brief&rdquo;?</span>
+                </p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                <div class="answer">
+                    <p lang="ru">При вставке текстом теряется структура (заголовки, списки, таблицы). При загрузке .docx Claude парсит структуру и&nbsp;использует её&nbsp;как семантическую иерархию: h1&nbsp;→ заголовок страницы, h2&nbsp;→ секции, списки&nbsp;→ блоки, таблицы&nbsp;→ повторяющиеся элементы. Структурированный документ работает лучше длинного промпта.</p>
+                    <p lang="en">Pasting text loses structure (headings, lists, tables). With a .docx upload Claude parses the structure and uses it as semantic hierarchy: h1 → page title, h2 → sections, lists → blocks, tables → repeating elements. A structured document beats a long prompt.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text">
+                    <span lang="ru">Как Claude использует .xlsx с&nbsp;9-строчной таблицей меню кофейни?</span>
+                    <span lang="en">How does Claude use an .xlsx with a 9-row café menu table?</span>
+                </p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                <div class="answer">
+                    <p lang="ru">Колонки становятся полями карточки (раздел, позиция, описание, цена), строки&nbsp;&mdash; повторами. Если в&nbsp;промпте указать «группировка по&nbsp;колонке Раздел»&nbsp;&mdash; получим три секции по&nbsp;три позиции. Обновили таблицу → перезагрузили в&nbsp;тот&nbsp;же диалог → дизайн обновился автоматически.</p>
+                    <p lang="en">Columns become card fields (section, item, description, price), rows become repeats. With &ldquo;group by Section&rdquo; in the prompt you get three sections of three items. Update the table → re-upload to the same dialogue → design updates automatically.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text">
+                    <span lang="ru">Что Claude делает с&nbsp;загруженным .pptx-шаблоном&nbsp;&mdash; редактирует или генерирует новые слайды?</span>
+                    <span lang="en">What does Claude do with an uploaded .pptx template&nbsp;&mdash; edit or generate new slides?</span>
+                </p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                <div class="answer">
+                    <p lang="ru">Генерирует новые. Это <em>наследование стиля</em>: исходный файл не&nbsp;трогается, Claude читает палитру, типографику, расположение логотипа, slide-master&nbsp;&mdash; и&nbsp;собирает новые слайды в&nbsp;этой стилистике. Полезно для работы с&nbsp;корпоративным брендгайдом.</p>
+                    <p lang="en">Generates new. This is <em>style inheritance</em>: the original file is untouched. Claude reads palette, typography, logo placement, slide-master&nbsp;&mdash; and assembles new slides in that style. Useful for corporate brand-guide work.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text">
+                    <span lang="ru">Как захватить стиль с&nbsp;живого сайта-референса?</span>
+                    <span lang="en">How do you capture style from a live reference site?</span>
+                </p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                <div class="answer">
+                    <p lang="ru">Дать URL прямо в&nbsp;промпте: «стиль и&nbsp;компоненты как у&nbsp;https://stripe.com». Claude захватывает дизайн-язык (палитру, типографику, layout-патт), не&nbsp;копируя код или конкретные графические элементы. Можно указать, что именно перенять: «типографику оттуда, layout оставь свой».</p>
+                    <p lang="en">Give a URL in the prompt: &ldquo;style and components like https://stripe.com.&rdquo; Claude captures the design language (palette, typography, layout patterns) without copying code or specific graphics. You can specify what to inherit: &ldquo;typography from there, keep my own layout.&rdquo;</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text">
+                    <span lang="ru">Что НЕ&nbsp;переносится корректно при загрузке файлов?</span>
+                    <span lang="en">What does NOT carry over cleanly when uploading files?</span>
+                </p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                <div class="answer">
+                    <p lang="ru">PDF (теряет layout, импортируется как текст), SVG/.ai-исходники (Claude перерисовывает по&nbsp;своему пониманию), сложные Excel-формулы (видны только итоговые значения), сайты за&nbsp;паролем (URL-захват требует публичного доступа).</p>
+                    <p lang="en">PDF (loses layout, imports as text), SVG/.ai sources (Claude redraws from its own reading), complex Excel formulas (only computed values visible), password-gated sites (URL capture needs public access).</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text">
+                    <span lang="ru">Когда лучше загрузить файл, а&nbsp;когда написать всё в&nbsp;промпт?</span>
+                    <span lang="en">When upload, when prompt?</span>
+                </p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                <div class="answer">
+                    <p lang="ru"><strong>Файл</strong>&nbsp;&mdash; если контент структурирован (3+ повторяющихся элемента, многораздельный документ, корпоративный шаблон). <strong>Промпт</strong>&nbsp;&mdash; для идеи, стилевых требований, срочных правок одного блока. Совмещение&nbsp;&mdash; норма: .docx + .xlsx + URL в&nbsp;одном диалоге работает лучше всего.</p>
+                    <p lang="en"><strong>File</strong>&nbsp;&mdash; if content is structured (3+ repeats, multi-section document, corporate template). <strong>Prompt</strong>&nbsp;&mdash; for ideas, style requirements, urgent one-block fixes. Combining is the norm: .docx + .xlsx + URL in one dialogue works best.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text">
+                    <span lang="ru">Можно&nbsp;ли совместить .docx + .xlsx + URL в&nbsp;одном промпте?</span>
+                    <span lang="en">Can you combine .docx + .xlsx + URL in one prompt?</span>
+                </p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                <div class="answer">
+                    <p lang="ru">Да, и&nbsp;это нормальный режим работы. Прикрепляете оба файла в&nbsp;диалог, в&nbsp;промпте указываете URL и&nbsp;объясняете, что откуда брать: «контент из&nbsp;брифа.docx, повторяющиеся блоки из&nbsp;levels.xlsx, стиль с&nbsp;https://...». Claude обрабатывает все три источника одновременно.</p>
+                    <p lang="en">Yes, and it&rsquo;s the normal working mode. Attach both files in the dialogue, give the URL in the prompt, explain where each comes from: &ldquo;content from brief.docx, repeating blocks from levels.xlsx, style from https://...&rdquo;. Claude consumes all three at once.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="d2-docx"><span lang="ru">Прикрепляю .docx-бриф в&nbsp;диалог Claude Design и&nbsp;ссылаюсь на&nbsp;его разделы в&nbsp;промпте.</span><span lang="en">I attach a .docx brief and reference its sections in the prompt.</span></li>
+            <li data-key="d2-xlsx"><span lang="ru">Превращаю .xlsx-таблицу в&nbsp;повторяющиеся блоки (колонки = поля, строки = повторы).</span><span lang="en">I turn an .xlsx into repeating blocks (columns = fields, rows = repeats).</span></li>
+            <li data-key="d2-pptx"><span lang="ru">Использую .pptx как стилевую основу (style inheritance), не&nbsp;редактируя исходный файл.</span><span lang="en">I use .pptx as a stylistic foundation (style inheritance), not editing the original.</span></li>
+            <li data-key="d2-url"><span lang="ru">Захватываю стиль с&nbsp;живого сайта через URL и&nbsp;умею проверить, что Claude его «знает».</span><span lang="en">I capture style from a live URL and verify Claude &ldquo;knows&rdquo; it.</span></li>
+            <li data-key="d2-combine"><span lang="ru">Совмещаю несколько источников в&nbsp;одном промпте: .docx + .xlsx + URL.</span><span lang="en">I combine multiple sources in one prompt: .docx + .xlsx + URL.</span></li>
+            <li data-key="d2-limits"><span lang="ru">Знаю границы: PDF, SVG-исходники, формулы, защищённые сайты&nbsp;&mdash; что не&nbsp;переносится.</span><span lang="en">I know the boundaries: PDF, SVG sources, formulas, gated sites&nbsp;&mdash; what does not carry over.</span></li>
+            <li data-key="d2-deliverables"><span lang="ru">Сделал артефакты этапа: меню кофейни из&nbsp;.xlsx, дашборд портфеля из&nbsp;CSV, лендинг из&nbsp;.docx-брифа, клон стиля с&nbsp;URL.</span><span lang="en">Etape artefacts done: café menu from .xlsx, portfolio dashboard from CSV, landing from .docx brief, style clone from URL.</span></li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="design-02" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="claude-design-01.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">01 · Первый промпт и&nbsp;три инструмента</span><span lang="en">01 · First Prompt &amp; Three Refinement Tools</span></span>
+            </a>
+            <a class="next disabled" href="#" aria-disabled="true">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">03 · Brand system <em>(скоро)</em></span><span lang="en">03 · Brand System <em>(soon)</em></span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Дизайнер не&nbsp;переписывает бриф клиента&nbsp;&mdash; он&nbsp;его читает».</p>
+            <p class="signature" lang="en">&ldquo;A designer does not rewrite the client&rsquo;s brief&nbsp;&mdash; they read it.&rdquo;</p>
+            <p lang="ru">Этап&nbsp;02 пройден. Реальные документы стали вашим первичным input. Дальше учимся <strong>извлекать бренд-систему из&nbsp;кодбазы</strong> или Figma&nbsp;&mdash; чтобы все будущие проекты автоматически наследовали единый визуальный язык.</p>
+            <p lang="en">Etape 02 is behind you. Real documents became your primary input. Next we learn to <strong>extract a brand system from a codebase</strong> or Figma&nbsp;&mdash; so every future project inherits one visual language automatically.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="claude-design-01.html"><span lang="ru">← Этап&nbsp;01</span><span lang="en">← Etape 01</span></a></li>
+                <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

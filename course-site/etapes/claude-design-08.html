@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 08 · Code-powered прототипы — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 08: 3D-туры, shader-фоны, голосовой UI, motion, видео — возможности Claude Design, которых нет в Figma и Canva.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand"><span class="mark">§ D</span><a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a></div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="08">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 08</span><span lang="en">Etape 08</span></span> &nbsp;·&nbsp; <span lang="ru">Code-powered прототипы</span><span lang="en">Code-Powered Prototypes</span></p>
+        <h1 class="rise d2"><span lang="ru">3D-тур по&nbsp;квартире.<br>Shader-фон.<br>Голос в&nbsp;интерфейсе.<br><em>Без&nbsp;After Effects, без&nbsp;Three.js, без&nbsp;кода</em>.</span><span lang="en">3D apartment tour.<br>Shader background.<br>Voice in the UI.<br><em>No After Effects, no Three.js, no code.</em></span></h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Это территория, где Claude Design сильно отрывается от&nbsp;Figma и&nbsp;Canva. Под капотом workspace умеет генерировать <em>живые</em> фрагменты&nbsp;&mdash; стилизованный 3D-тур с&nbsp;переключением материалов, shader-фон в&nbsp;hero-секции, простой voice UI с&nbsp;микрофоном, motion-переходы. Не&nbsp;фотореализм, но&nbsp;достаточно, чтобы клиент или инвестор кивнул «понял идею». На&nbsp;этом этапе&nbsp;&mdash; границы возможного, реалистичные ожидания, и&nbsp;как использовать это к&nbsp;месту.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Territory where Claude Design pulls away from Figma and Canva. Under the hood the workspace can generate <em>live</em> fragments&nbsp;&mdash; a stylised 3D tour with switchable materials, a shader hero, a simple voice UI with a mic, motion transitions. Not photorealism, but enough for a client or investor to nod &ldquo;got it.&rdquo; This etape: limits, realistic expectations, when to use it well.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div><dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt><dd><span lang="ru">5–7 дней · 1–2&nbsp;ч/день</span><span lang="en">5–7 days · 1–2&nbsp;hrs/day</span></dd></div>
+            <div><dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt><dd><span lang="ru">3D-туры · shader-фоны · voice UI · motion · границы возможного</span><span lang="en">3D tours · shader bg · voice UI · motion · limits</span></dd></div>
+            <div><dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt><dd><span lang="ru">«вау-моменты», которыми можно реально показывать продукт</span><span lang="en">&ldquo;wow moments&rdquo; you can actually use to show a product</span></dd></div>
+            <div><dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt><dd><span lang="ru">3D-тур по&nbsp;концепту квартиры + shader-фон лендинга + voice-mic UI</span><span lang="en">3D apartment-concept tour + shader landing hero + voice-mic UI</span></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span><h2><span lang="ru">Что мы&nbsp;пройдём</span><span lang="en">What we will walk through</span></h2></div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">3D-тур: стилизованная сцена с&nbsp;переключаемыми материалами</span><span lang="en">3D tour: a stylised scene with switchable materials</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Самая «волшебная» возможность для трека «квартира» (и&nbsp;для архитектурных продуктов вообще)&nbsp;&mdash; <em>стилизованный 3D-тур</em>. Вы&nbsp;даёте план комнат и&nbsp;список вариантов отделки, Claude Design генерирует кликабельную 3D-сцену.</p>
+                    <pre class="shell">&gt; 3D-тур по квартире-студии 45 м². план приложен (apartment.xlsx, лист &laquo;rooms&raquo;).
+&gt; стиль: scandinavian modern, тёплая палитра, дневной свет.
+&gt; для каждой комнаты — 4 ракурса (входной угол, центр, окно, потолок).
+&gt; интерактив: переключатель материалов (3 варианта пола: дуб светлый / дуб тёмный / бетон),
+&gt;   переключатель стен (белый / шалфей / тёмно-синий),
+&gt;   переключатель освещения (день / закат / ночь).
+&gt; формат: широкий 1920×1080 для презентации.
+&gt; экспорт: HTML с интерактивностью (для отправки клиенту по ссылке).</pre>
+                    <p>Claude собирает <em>стилизованную</em> 3D-сцену&nbsp;&mdash; не&nbsp;фотореализм Corona/V-Ray, но&nbsp;осмысленная композиция с&nbsp;узнаваемой геометрией мебели и&nbsp;правильным светом. Достаточно, чтобы клиент за&nbsp;15 секунд понял «сюда мы&nbsp;идём».</p>
+                    <p>Что точно работает: переключение цветов и&nbsp;материалов, изменение освещения, перемещение камеры между фиксированными ракурсами.</p>
+                    <p>Что нужно делать вручную/в&nbsp;Corona: фотореалистичный финальный рендер для рекламы или для просмотра в&nbsp;1:1 масштабе на&nbsp;большом экране.</p>
+                </div>
+                <div lang="en">
+                    <p>The most &ldquo;magical&rdquo; capability for the apartment track (and architectural products in general)&nbsp;&mdash; a <em>stylised 3D tour</em>. You give a floor plan and a list of finishes, Claude Design generates a clickable 3D scene.</p>
+                    <pre class="shell">&gt; 3D tour of a 45 m² studio apartment. plan attached (apartment.xlsx, "rooms" sheet).
+&gt; style: scandinavian modern, warm palette, daylight.
+&gt; per room — 4 angles (entry corner, centre, window, ceiling).
+&gt; interactive: material switcher (3 floors: light oak / dark oak / concrete),
+&gt;   wall switcher (white / sage / deep blue),
+&gt;   lighting switcher (day / sunset / night).
+&gt; format: wide 1920×1080 for presentation.
+&gt; export: HTML with interactivity (for sending the client a link).</pre>
+                    <p>Claude assembles a <em>stylised</em> 3D scene&nbsp;&mdash; not photoreal Corona/V-Ray, but a sensible composition with recognisable furniture geometry and correct light. Enough for a client to grasp &ldquo;this is where we&rsquo;re going&rdquo; in 15 seconds.</p>
+                    <p>What works reliably: switching colours/materials, changing lighting, moving camera across fixed angles.</p>
+                    <p>What still needs Corona: a photoreal final render for ads or 1:1 viewing on a big screen.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Shader-фон: «нескучный» hero без&nbsp;After Effects</span><span lang="en">Shader background: a non-boring hero without After Effects</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Shader&nbsp;&mdash; это процедурная графика, считающаяся в&nbsp;браузере на&nbsp;GPU. То, что у&nbsp;вас постоянно перед глазами на&nbsp;Linear, Stripe, OpenAI&nbsp;&mdash; чуть-чуть мерцающие градиенты, плавающие пятна света, переливы. Раньше это требовало WebGL и&nbsp;знания GLSL. Сейчас&nbsp;&mdash; одного промпта.</p>
+                    <pre class="shell">&gt; shader-фон для hero-секции лендинга «Tide of Stars».
+&gt; визуально: глубокое звёздное небо с медленными переливами синего → фиолетового,
+&gt;   мягкие пятна света, легкое смещение от движения мыши.
+&gt; перформанс: 60fps на среднем mac, должно работать на mobile.
+&gt; код: production-ready, передаётся в handoff bundle для Claude Code.</pre>
+                    <p>На&nbsp;холсте появится hero с&nbsp;живым шейдер-фоном. Можно дальше править через диалог: «медленнее переливы», «добавь падающую звезду каждые 10 секунд», «уменьши контраст синего».</p>
+                    <p>Когда нужен shader:</p>
+                    <ul>
+                        <li>Hero лендинга, который должен «дышать» (Stripe, Linear, OpenAI-тип сайтов).</li>
+                        <li>Атмосфера в&nbsp;игровом UI (этап&nbsp;04).</li>
+                        <li>Лоадер для долгих операций.</li>
+                    </ul>
+                    <p>Когда не&nbsp;нужен:</p>
+                    <ul>
+                        <li>Контентная страница (читать&nbsp;текст). Shader отвлекает.</li>
+                        <li>Печать&nbsp;&mdash; shader не&nbsp;распечатается.</li>
+                        <li>Слабые устройства&nbsp;&mdash; в&nbsp;handoff Claude Code добавит fallback на&nbsp;статичный градиент.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>A shader is procedural graphics computed in the browser on the GPU. The thing you see on Linear, Stripe, OpenAI&nbsp;&mdash; gently shifting gradients, drifting light blobs. Used to require WebGL + GLSL. Now it&rsquo;s one prompt.</p>
+                    <pre class="shell">&gt; shader background for the "Tide of Stars" landing hero.
+&gt; visual: deep starlit sky with slow blue → violet shifts,
+&gt;   soft light blobs, mild displacement on mouse movement.
+&gt; perf: 60fps on mid-range mac, must work on mobile.
+&gt; code: production-ready, ships in the handoff bundle to Claude Code.</pre>
+                    <p>The canvas shows a hero with a live shader background. Refine via dialogue: &ldquo;slower shifts,&rdquo; &ldquo;add a shooting star every 10s,&rdquo; &ldquo;reduce blue contrast.&rdquo;</p>
+                    <p>When you need a shader:</p>
+                    <ul>
+                        <li>Landing hero that must &ldquo;breathe&rdquo; (Stripe, Linear, OpenAI-type sites).</li>
+                        <li>Atmosphere in game UI (etape 4).</li>
+                        <li>Loader for long ops.</li>
+                    </ul>
+                    <p>When you don&rsquo;t:</p>
+                    <ul>
+                        <li>Content page (text-reading). Shader distracts.</li>
+                        <li>Print&nbsp;&mdash; shaders don&rsquo;t print.</li>
+                        <li>Weak devices&nbsp;&mdash; on handoff Claude Code adds a static-gradient fallback.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Voice UI: микрофон в&nbsp;интерфейсе AI-консультанта</span><span lang="en">Voice UI: a microphone in the AI advisor interface</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Голосовой ввод&nbsp;&mdash; одна из&nbsp;тех штук, что Figma не&nbsp;умеет вообще. Claude Design генерирует базовый <em>voice-aware</em> UI: микрофон-кнопка, индикатор записи, визуализация уровня звука, transcript-stream справа. Не&nbsp;production-grade, но&nbsp;для прототипа AI-консультанта или voice-search&nbsp;&mdash; достаточно.</p>
+                    <pre class="shell">&gt; интерфейс AI-консультанта для инвест-кабинета.
+&gt; центральная зона: чат с пользователем (как Claude.ai, в стиле workspace).
+&gt; внизу — кнопка микрофона (большой круг), индикатор записи (animated waveform),
+&gt;   transcript появляется в реальном времени над инпутом.
+&gt; справа панель — список «спросите меня про»: 5 типичных вопросов.
+&gt; формат: 1280×800 десктоп.
+&gt; voice API: Web Speech (Whisper не нужен для прототипа).</pre>
+                    <p>Получите кликабельный прототип, где кнопка микрофона <em>реально записывает</em> в&nbsp;браузере (Web Speech API), показывает транскрипт. На&nbsp;этом этапе Claude обработка ответа&nbsp;&mdash; имитация (хардкод). Реальная интеграция с&nbsp;Claude API делается в&nbsp;Claude Code (этап&nbsp;06 основного курса).</p>
+                </div>
+                <div lang="en">
+                    <p>Voice input is one thing Figma can&rsquo;t do at all. Claude Design generates a basic <em>voice-aware</em> UI: mic button, recording indicator, audio-level visualisation, transcript stream on the right. Not production-grade, but enough for a voice-advisor or voice-search prototype.</p>
+                    <pre class="shell">&gt; AI advisor UI for the investment-office.
+&gt; centre: chat with user (like Claude.ai, in workspace style).
+&gt; bottom — mic button (large circle), recording indicator (animated waveform),
+&gt;   transcript appears live above the input.
+&gt; right panel — "ask me about": 5 typical questions.
+&gt; format: 1280×800 desktop.
+&gt; voice API: Web Speech (no Whisper needed for the prototype).</pre>
+                    <p>You get a clickable prototype where the mic <em>actually records</em> in the browser (Web Speech API) and shows the transcript. At this etape Claude&rsquo;s response handling is mocked. Real Claude API integration happens in Claude Code (main course etape 06).</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Motion-переходы между сценариями</span><span lang="en">Motion transitions between scenarios</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Анимация перехода между состояниями&nbsp;&mdash; маленькая, но&nbsp;«дорогая» деталь, отличающая premium-продукт от&nbsp;дешёвого. В&nbsp;статичном дизайне её&nbsp;нет, в&nbsp;After Effects она требует часа работы, в&nbsp;Claude Design&nbsp;&mdash; одна фраза.</p>
+                    <pre class="shell">&gt; на лендинге &laquo;Личного инвест-кабинета&raquo; есть переключатель «сценарий прогноза»:
+&gt;   pessimistic / base / optimistic.
+&gt; добавь анимацию перехода между сценариями:
+&gt;   — числа в карточках плавно меняются (counting-animation),
+&gt;   — линия графика morph-анимацией перерисовывается из старого состояния в новое,
+&gt;   — donut-chart distribuции тоже плавно изменяет сегменты,
+&gt;   — фон чуть-чуть меняет тёмность (тревожнее для pessimistic, теплее для optimistic).
+&gt; общая длительность 600–800ms, easing — cubic-bezier(0.2, 0.7, 0.2, 1).</pre>
+                    <p>Получаете живой переход. Для финального деплоя через handoff Claude Code оптимизирует анимации (CSS view-transitions, GPU-accelerated transforms). Но&nbsp;на&nbsp;этапе прототипа уже видно, как продукт «дышит».</p>
+                </div>
+                <div lang="en">
+                    <p>State transition animation&nbsp;&mdash; a small but &ldquo;expensive&rdquo; detail separating premium from cheap. Absent in static design, an hour in After Effects, one sentence in Claude Design.</p>
+                    <pre class="shell">&gt; on the "Personal Investment Office" landing there&rsquo;s a "forecast scenario" switcher:
+&gt;   pessimistic / base / optimistic.
+&gt; add transition animation between scenarios:
+&gt;   — card numbers count smoothly (counting animation),
+&gt;   — chart line morphs from old to new shape,
+&gt;   — donut segments smoothly resize,
+&gt;   — background slightly shifts darkness (anxious for pessimistic, warmer for optimistic).
+&gt; total 600–800ms, easing cubic-bezier(0.2, 0.7, 0.2, 1).</pre>
+                    <p>Live transition. On final handoff, Claude Code optimises (CSS view-transitions, GPU-accelerated transforms). But on the prototype stage you already see the product &ldquo;breathing.&rdquo;</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Реалистичные ожидания: что точно НЕ&nbsp;умеет</span><span lang="en">Realistic expectations: what it does NOT do</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Перечислю явно, чтобы не&nbsp;было разочарований:</p>
+                    <ul>
+                        <li><strong>Фотореалистичный 3D-рендер</strong>&nbsp;&mdash; уровень Corona, V-Ray, Octane. Claude Design делает <em>стилизованный</em> 3D, не&nbsp;photoreal. Для рекламы недвижимости в&nbsp;ЦИАНе&nbsp;&mdash; Corona.</li>
+                        <li><strong>Видео-монтаж</strong>&nbsp;&mdash; нарезка, наложение, цветокоррекция. Это работа Premiere/DaVinci. Claude Design может встроить уже готовое видео в&nbsp;дизайн.</li>
+                        <li><strong>3D-моделирование персонажей</strong>&nbsp;&mdash; Blender, ZBrush. Claude может использовать готовую модель как референс для стилизации.</li>
+                        <li><strong>Сложная музыка/звуковой дизайн</strong>&nbsp;&mdash; Ableton, Logic. Claude может вставить готовый аудио-файл.</li>
+                        <li><strong>Production-grade voice UI</strong>&nbsp;&mdash; интеграция с&nbsp;OpenAI Whisper, Claude API, нормальная обработка ошибок, fallback на&nbsp;текст. Это работа Claude Code.</li>
+                    </ul>
+                    <p>Главное правило: <strong>Claude Design делает прототип, а&nbsp;не&nbsp;продакшен</strong>. Если кому-то нужно посмотреть и&nbsp;понять идею&nbsp;&mdash; достаточно. Если запускаете в&nbsp;продакшен&nbsp;&mdash; передавайте через handoff в&nbsp;Claude Code, оттуда в&nbsp;нужные специальные инструменты.</p>
+                </div>
+                <div lang="en">
+                    <p>Listed explicitly to avoid disappointment:</p>
+                    <ul>
+                        <li><strong>Photoreal 3D rendering</strong>&nbsp;&mdash; Corona, V-Ray, Octane. Claude Design does <em>stylised</em> 3D, not photoreal. For real-estate ads&nbsp;&mdash; Corona.</li>
+                        <li><strong>Video editing</strong>&nbsp;&mdash; cuts, overlays, grading. Premiere/DaVinci. Claude Design can embed a finished video in the design.</li>
+                        <li><strong>3D character modelling</strong>&nbsp;&mdash; Blender, ZBrush. Claude can use a finished model as reference for stylisation.</li>
+                        <li><strong>Complex music / sound design</strong>&nbsp;&mdash; Ableton, Logic. Claude can drop in an audio file.</li>
+                        <li><strong>Production-grade voice UI</strong>&nbsp;&mdash; OpenAI Whisper, Claude API integration, error handling, text fallback. That&rsquo;s Claude Code.</li>
+                    </ul>
+                    <p>Headline rule: <strong>Claude Design ships prototypes, not production</strong>. If someone needs to see and grasp an idea&nbsp;&mdash; enough. For production&nbsp;&mdash; hand off to Claude Code, then to specialist tools.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell"><div class="section-head"><span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span><h2><span lang="ru">Один shader за&nbsp;15 минут</span><span lang="en">One shader in 15 min</span></h2></div>
+        <div class="practice">
+            <h4><span lang="ru">Прогон · shader-hero для существующего лендинга</span><span lang="en">Run · shader hero for an existing landing</span></h4>
+            <ol lang="ru">
+                <li>Возьмите любой свой лендинг (этап&nbsp;01 или 02). Откройте.</li>
+                <li>Промпт: <em>«в&nbsp;hero-секции замени статичный фон на&nbsp;shader: медленные переливы из&nbsp;двух цветов workspace, лёгкий drift, 60fps»</em>.</li>
+                <li>Дождитесь. Откройте Internal&nbsp;URL, посмотрите на&nbsp;живой фон.</li>
+                <li>Уточните слайдером «speed»&nbsp;&mdash; найдите момент, когда фон «дышит», а&nbsp;не&nbsp;«мельтешит».</li>
+                <li>Экспорт: handoff bundle. Откройте в&nbsp;Claude Code: <em>«проверь shader-перформанс на&nbsp;mobile, добавь fallback на&nbsp;статичный градиент для prefers-reduced-motion»</em>.</li>
+            </ol>
+            <ol lang="en">
+                <li>Take any existing landing (etape 1 or 2). Open it.</li>
+                <li>Prompt: <em>&ldquo;in the hero replace the static background with a shader: slow shifts of two workspace colours, light drift, 60fps.&rdquo;</em></li>
+                <li>Wait. Open the Internal URL, watch the live background.</li>
+                <li>Tune via slider &ldquo;speed&rdquo;&nbsp;&mdash; find the &ldquo;breathing&rdquo; sweet spot, not &ldquo;flickering.&rdquo;</li>
+                <li>Export handoff bundle. In Claude Code: <em>&ldquo;check mobile shader perf, add static-gradient fallback for prefers-reduced-motion.&rdquo;</em></li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span><h2><span lang="ru">Живые прототипы</span><span lang="en">Live prototypes</span></h2></div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;квартира</span><span lang="en">Project A · guided · apartment track</span></span>
+            <h3><span lang="ru">3D-тур по&nbsp;концепту квартиры</span><span lang="en">Apartment-concept 3D tour</span></h3>
+            <p class="goal" lang="ru">Цель: интерактивный 3D-тур для презентации клиенту&nbsp;&mdash; квартира 45&nbsp;м² с&nbsp;тремя вариантами отделки. Экспорт в&nbsp;HTML, ссылка на&nbsp;живую страницу.</p>
+            <p class="goal" lang="en">Goal: an interactive 3D tour for a client pitch&nbsp;&mdash; a 45 m² flat with three finish variants. HTML export, live link.</p>
+
+            <ol class="steps" lang="ru">
+                <li>В&nbsp;Excel создайте план: лист «rooms» с&nbsp;колонками <code>name | area | walls | floor | accent</code>, 3 строки (гостиная, спальня, кухня).</li>
+                <li>Workspace дизайн-бюро (новый или из&nbsp;этапа&nbsp;03), бренд загружен.</li>
+                <li>Промпт: <em>«3D-тур по&nbsp;квартире-студии 45&nbsp;м². план приложен. стиль scandinavian modern, тёплая палитра, дневной свет. для каждой комнаты&nbsp;&mdash; 4 ракурса. интерактив: 3 варианта пола, 3 варианта стен, 3 варианта освещения. формат 1920×1080. экспорт в&nbsp;HTML с&nbsp;интерактивностью»</em>.</li>
+                <li>Уточните каждую комнату инлайн-комментарием: «больше воздуха в&nbsp;гостиной», «уровни освещения сделать ярче для спальни».</li>
+                <li>Откройте Internal&nbsp;URL и&nbsp;покажите паре близких людей: за&nbsp;30 секунд понимают концепт?</li>
+                <li>Handoff bundle для финального хостинга в&nbsp;Claude Code (Vercel или GitHub Pages).</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>In Excel make a plan: &ldquo;rooms&rdquo; sheet with <code>name | area | walls | floor | accent</code>, 3 rows (living, bedroom, kitchen).</li>
+                <li>Design-bureau workspace (new or from etape 3), brand loaded.</li>
+                <li>Prompt: <em>&ldquo;3D tour of a 45 m² studio. plan attached. scandinavian modern, warm palette, daylight. 4 angles per room. interactive: 3 floors / 3 walls / 3 lighting. 1920×1080. HTML with interactivity.&rdquo;</em></li>
+                <li>Refine inline per room: &ldquo;more air in the living,&rdquo; &ldquo;brighter lighting in bedroom.&rdquo;</li>
+                <li>Open Internal URL, show 2 close people: 30 seconds to grasp the concept?</li>
+                <li>Handoff bundle for final hosting in Claude Code (Vercel or GitHub Pages).</li>
+            </ol>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;игра</span><span lang="en">Project B · guided · game track</span></span>
+            <h3><span lang="ru">Shader-hero лендинга игры</span><span lang="en">Shader hero for a game landing</span></h3>
+            <p class="goal" lang="ru">Цель: лендинг «Tide of Stars» с&nbsp;живым shader-фоном, мерцающее звёздное небо, медленные переливы. Деплой как живой URL для шаринга в&nbsp;соцсетях.</p>
+            <p class="goal" lang="en">Goal: a &ldquo;Tide of Stars&rdquo; landing with a live shader background, twinkling starlit sky, slow shifts. Deploy as a live URL for social shares.</p>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell"><div class="section-head"><span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span><h2><span lang="ru">Свои &laquo;вау&raquo;-моменты</span><span lang="en">Your &ldquo;wow&rdquo; moments</span></h2></div>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек&nbsp;финансы</span><span lang="en">Project C · solo · finance track</span></span>
+            <h3><span lang="ru">AI-консультант с&nbsp;voice UI и&nbsp;motion-переходами</span><span lang="en">AI advisor with voice UI and motion transitions</span></h3>
+            <p class="goal" lang="ru">Цель: прототип AI-консультанта в&nbsp;«Личном инвест-кабинете»: голосовой ввод (Web Speech), визуализация уровня звука, transcript real-time, motion-переходы между сценариями прогноза.</p>
+            <p class="goal" lang="en">Goal: an AI advisor prototype in the &ldquo;Personal Investment Office&rdquo;: voice input (Web Speech), audio-level visualisation, live transcript, motion transitions between forecast scenarios.</p>
+        </article>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек&nbsp;кофейня</span><span lang="en">Project D · solo · café track</span></span>
+            <h3><span lang="ru">3D-визуализация кофе-обжарки в&nbsp;hero</span><span lang="en">3D coffee-roasting visualisation in hero</span></h3>
+            <p class="goal" lang="ru">Цель: на&nbsp;hero-секции лендинга кофейни&nbsp;&mdash; стилизованная 3D-сцена обжарки кофейного зерна, медленно вращается, при наведении мыши&nbsp;&mdash; ускоряется. Не&nbsp;photoreal&nbsp;&mdash; графический, в&nbsp;стиле бренда.</p>
+            <p class="goal" lang="en">Goal: on the café landing hero&nbsp;&mdash; a stylised 3D scene of coffee bean roasting, slowly rotating, accelerating on mouse hover. Not photoreal&nbsp;&mdash; graphic, in the brand style.</p>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell"><div class="section-head"><span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span><h2><span lang="ru">Новые слова</span><span lang="en">New words</span></h2></div>
+        <dl class="glossary">
+            <dt><span lang="ru">Стилизованный 3D-тур</span><span lang="en">Stylised 3D tour</span></dt>
+            <dd><span lang="ru">Кликабельная 3D-сцена с&nbsp;переключаемыми материалами, освещением, ракурсами. <em>Не</em> фотореализм Corona/V-Ray. Достаточно для презентации концепта клиенту до&nbsp;этапа реализации.</span><span lang="en">A clickable 3D scene with switchable materials, lighting, angles. <em>Not</em> Corona/V-Ray photorealism. Enough for client concept-pitch before production.</span></dd>
+            <dt><span lang="ru">Shader-фон</span><span lang="en">Shader background</span></dt>
+            <dd><span lang="ru">Процедурная графика, считающаяся в&nbsp;браузере на&nbsp;GPU. Живые переливы и&nbsp;дрейф, как у&nbsp;Stripe и&nbsp;Linear. Раньше требовал WebGL+GLSL, теперь&nbsp;&mdash; промпта.</span><span lang="en">Procedural graphics computed in the browser on the GPU. Live shifts and drift, like Stripe and Linear. Used to require WebGL+GLSL, now a prompt.</span></dd>
+            <dt><span lang="ru">Voice UI</span><span lang="en">Voice UI</span></dt>
+            <dd><span lang="ru">Интерфейс с&nbsp;голосовым вводом: микрофон-кнопка, индикатор записи, audio-уровень, real-time transcript. На&nbsp;уровне прототипа Claude Design генерирует базу через Web Speech API; для production-grade нужен handoff в&nbsp;Claude Code с&nbsp;интеграцией Whisper/Claude API.</span><span lang="en">Voice-input UI: mic button, recording indicator, audio level, live transcript. At prototype level Claude Design generates the basics via Web Speech API; production-grade needs Claude Code with Whisper/Claude API integration.</span></dd>
+            <dt><span lang="ru">Motion-переход</span><span lang="en">Motion transition</span></dt>
+            <dd><span lang="ru">Анимация перехода между состояниями (счёт чисел, morph графиков, цветовые сдвиги). Маленькая, но&nbsp;«дорогая» деталь&nbsp;&mdash; отличает premium от&nbsp;cheap. 600–800ms, easing типа cubic-bezier(0.2,0.7,0.2,1).</span><span lang="en">A state-transition animation (counting numbers, chart morphs, colour shifts). A small but &ldquo;expensive&rdquo; detail separating premium from cheap. 600–800ms, easing like cubic-bezier(0.2,0.7,0.2,1).</span></dd>
+            <dt><span lang="ru">Прототип vs&nbsp;продакшен</span><span lang="en">Prototype vs production</span></dt>
+            <dd><span lang="ru">Главное правило: Claude Design делает прототип. Для production-режима (фотореализм, видео, complex audio, real voice integration)&nbsp;&mdash; handoff в&nbsp;Claude Code и&nbsp;дальше в&nbsp;нужные специальные инструменты.</span><span lang="en">The headline rule: Claude Design ships prototypes. For production (photorealism, video, complex audio, real voice integration)&nbsp;&mdash; handoff to Claude Code and onward to specialist tools.</span></dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell"><div class="section-head"><span class="num">§ VI · Quiz</span><h2><span lang="ru">Семь вопросов</span><span lang="en">Seven questions</span></h2></div>
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1"><div class="q"><p class="q-text"><span lang="ru">Чем «стилизованный 3D-тур» отличается от&nbsp;Corona-рендера?</span><span lang="en">Stylised 3D tour vs Corona render?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Стилизованный — графический, узнаваемая геометрия и&nbsp;правильный свет, без&nbsp;photoreal-материалов. Corona — фотореализм 1:1 с&nbsp;real-world. Claude Design делает первое — этого хватает для презентации клиенту, но&nbsp;не&nbsp;для рекламы недвижимости.</p><p lang="en">Stylised is graphic, recognisable geometry and correct light, no photoreal materials. Corona is 1:1 photorealism. Claude Design does the first&nbsp;&mdash; enough for client pitch, not for real-estate ads.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q2"><div class="q"><p class="q-text"><span lang="ru">Когда нужен shader-фон, а&nbsp;когда нет?</span><span lang="en">When shader, when not?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Нужен: hero лендинга, который должен «дышать» (Stripe/Linear-стиль), атмосфера в&nbsp;игровом UI, лоадер. Не&nbsp;нужен: контентные страницы (отвлекает), печать, слабые устройства (хотя есть fallback).</p><p lang="en">Yes: landing hero that must &ldquo;breathe&rdquo; (Stripe/Linear-style), game-UI atmosphere, loader. No: content pages (distracts), print, weak devices (though fallback exists).</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q3"><div class="q"><p class="q-text"><span lang="ru">Что Claude Design генерирует для voice UI на&nbsp;этапе прототипа?</span><span lang="en">Voice UI in prototype stage?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Базу через Web Speech API: кнопка микрофона, индикатор записи, audio-визуализация, real-time transcript. Без&nbsp;интеграции с&nbsp;Whisper/Claude API&nbsp;&mdash; это работа Claude Code в&nbsp;handoff.</p><p lang="en">The basics via Web Speech API: mic button, recording indicator, audio visualisation, live transcript. Without Whisper/Claude API integration&nbsp;&mdash; that&rsquo;s Claude Code work post-handoff.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q4"><div class="q"><p class="q-text"><span lang="ru">Какие 3 инструмента переключаемые в&nbsp;3D-туре?</span><span lang="en">3 switchable tools in a 3D tour?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Материалы (пол/стены), освещение (день/закат/ночь), ракурс камеры. Это надёжно работает. Дополнительные эффекты (туман, погода) могут быть капризны.</p><p lang="en">Materials (floor/walls), lighting (day/sunset/night), camera angle. Reliable. Extra effects (fog, weather) can be flaky.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q5"><div class="q"><p class="q-text"><span lang="ru">Что Claude Design точно НЕ&nbsp;умеет?</span><span lang="en">What does Claude Design NOT do?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Photoreal 3D-рендер, видео-монтаж, 3D-моделирование персонажей, complex sound design, production-grade voice UI. Для всего этого&nbsp;&mdash; специализированные инструменты после handoff.</p><p lang="en">Photoreal 3D rendering, video editing, 3D character modelling, complex sound design, production-grade voice UI. Specialist tools after handoff.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q6"><div class="q"><p class="q-text"><span lang="ru">Хороший easing для motion-переходов?</span><span lang="en">Good easing for motion transitions?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru"><code>cubic-bezier(0.2, 0.7, 0.2, 1)</code>&nbsp;&mdash; быстрый старт, плавное замедление в&nbsp;конце. 600–800ms по&nbsp;общей длительности&nbsp;&mdash; типичный «премиум»-диапазон.</p><p lang="en"><code>cubic-bezier(0.2, 0.7, 0.2, 1)</code>&nbsp;&mdash; quick start, soft slow-down. 600–800ms total&nbsp;&mdash; typical &ldquo;premium&rdquo; range.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q7"><div class="q"><p class="q-text"><span lang="ru">Как делать prefers-reduced-motion fallback?</span><span lang="en">prefers-reduced-motion fallback?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Через handoff в&nbsp;Claude Code: «добавь fallback на&nbsp;статичный градиент для prefers-reduced-motion». Доступность важна&nbsp;&mdash; некоторые пользователи (vestibular disorders) физически плохо переносят анимации.</p><p lang="en">Via handoff to Claude Code: &ldquo;add static-gradient fallback for prefers-reduced-motion.&rdquo; Accessibility matters&nbsp;&mdash; some users (vestibular disorders) cannot tolerate animations.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+        </ol>
+        <div class="quiz-summary"><h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where next?</span></h4><div class="stats"><span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span><span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span><span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span></div><p class="advice"></p></div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell"><div class="section-head"><span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span><h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2></div>
+        <ul class="checklist">
+            <li data-key="d8-3d"><span lang="ru">Делаю стилизованный 3D-тур с&nbsp;переключаемыми материалами и&nbsp;светом.</span><span lang="en">I make a stylised 3D tour with switchable materials and lighting.</span></li>
+            <li data-key="d8-shader"><span lang="ru">Добавляю shader-фон в&nbsp;hero, не&nbsp;превращая страницу в&nbsp;цирк.</span><span lang="en">I add a shader hero without turning the page into a circus.</span></li>
+            <li data-key="d8-voice"><span lang="ru">Делаю прототип voice UI через Web Speech API, понимаю границы (production = Claude Code).</span><span lang="en">I prototype voice UI via Web Speech API, know the limits (production = Claude Code).</span></li>
+            <li data-key="d8-motion"><span lang="ru">Добавляю motion-переходы между состояниями: 600–800ms, правильный easing.</span><span lang="en">I add motion transitions between states: 600–800ms, right easing.</span></li>
+            <li data-key="d8-limits"><span lang="ru">Знаю, что НЕ&nbsp;умеет (photoreal, video, character modelling) и&nbsp;куда уходить за&nbsp;этим.</span><span lang="en">I know what is NOT supported (photoreal, video, character modelling) and where to go for it.</span></li>
+            <li data-key="d8-deliverables"><span lang="ru">Сделал артефакты: 3D-тур + shader-hero + voice UI на&nbsp;своих треках, все экспортированы как HTML.</span><span lang="en">Etape artefacts: 3D tour + shader hero + voice UI on chosen tracks, all exported as HTML.</span></li>
+        </ul>
+        <div class="complete-bar"><p lang="ru">Готовы закрыть этап?</p><p lang="en">Ready to close the etape?</p>
+            <button class="btn-complete" data-id="design-08" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="tight"><div class="shell"><div class="etap-nav">
+    <a class="prev" href="claude-design-07.html">
+        <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+        <span class="step-title"><span lang="ru">07 · Маркетинговые ассеты</span><span lang="en">07 · Marketing Assets</span></span>
+    </a>
+    <a class="next disabled" href="#" aria-disabled="true">
+        <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+        <span class="step-title"><span lang="ru">09 · Командная работа <em>(скоро)</em></span><span lang="en">09 · Teamwork <em>(soon)</em></span></span>
+    </a>
+</div></div></section>
+
+</main>
+
+<footer class="colophon"><div class="shell inner">
+    <div>
+        <p class="signature" lang="ru">«Прототип, который двигается, продаётся в&nbsp;три раза дороже, чем тот, что не&nbsp;двигается».</p>
+        <p class="signature" lang="en">&ldquo;A prototype that moves sells three times higher than one that doesn&rsquo;t.&rdquo;</p>
+        <p lang="ru">Этап&nbsp;08 пройден. Дальше&nbsp;&mdash; <strong>командная работа</strong>: групповой диалог, ревью, выбор финальной версии.</p>
+        <p lang="en">Etape 08 done. Next&nbsp;&mdash; <strong>teamwork</strong>: group dialogue, review, picking the final version.</p>
+    </div>
+    <div><h5><span lang="ru">Внутри этапа</span><span lang="en">Inside</span></h5><ul><li><a href="#topics">§&nbsp;I</a></li><li><a href="#projects">§&nbsp;III</a></li><li><a href="#glossary">§&nbsp;V</a></li><li><a href="#quiz">§&nbsp;VI</a></li><li><a href="#checklist">§&nbsp;VII</a></li></ul></div>
+    <div><h5><span lang="ru">Курс</span><span lang="en">Course</span></h5><ul>
+        <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Contents</span></a></li>
+        <li><a href="claude-design-07.html"><span lang="ru">← Этап&nbsp;07</span><span lang="en">← Etape 07</span></a></li>
+        <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+    </ul></div>
+</div></footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

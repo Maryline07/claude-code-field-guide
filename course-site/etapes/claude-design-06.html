@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 06 · Питч-дек из .xlsx — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 06: 12-слайдовый питч-дек из .xlsx-метрик. Конвенции деков, типографика для слайдов, экспорт в PPTX и PDF.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand"><span class="mark">§ D</span><a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a></div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="06">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 06</span><span lang="en">Etape 06</span></span> &nbsp;·&nbsp; <span lang="ru">Питч-дек из&nbsp;.xlsx</span><span lang="en">Pitch Deck from .xlsx</span></p>
+        <h1 class="rise d2"><span lang="ru">Метрики в&nbsp;таблице.<br>Дек на&nbsp;<em>12 слайдов</em>.</span><span lang="en">Metrics in a sheet.<br><em>12 slides</em> on the deck.</span></h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Презентация для инвестора, B2B-партнёра, тендера или публики&nbsp;&mdash; это структурный жанр с&nbsp;<dfn class="term" tabindex="0" data-def="канонический набор слайдов в pitch-деке для инвестора: cover, problem, solution, market, traction, business model, team, ask. Мелкие вариации, но структура устоялась за 20 лет YC и Sequoia.">конвенциями</dfn>, которые лучше знать, чем изобретать. На&nbsp;этом этапе превращаем .xlsx с&nbsp;метриками в&nbsp;готовый дек на&nbsp;12 слайдов: cover, problem, solution, market, traction, business model, team, ask. Экспорт в&nbsp;PPTX (для аудитории, любящей PowerPoint) или PDF (для всех остальных).
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            A pitch&nbsp;&mdash; for investors, B2B partners, tenders, or the public&nbsp;&mdash; is a structural genre with <dfn class="term" tabindex="0" data-def="the canonical slide set of an investor pitch deck: cover, problem, solution, market, traction, business model, team, ask. Minor variations, but the structure crystallised over 20 years of YC and Sequoia.">conventions</dfn> better learned than reinvented. This etape turns an .xlsx of metrics into a 12-slide deck: cover, problem, solution, market, traction, business model, team, ask. Export to PPTX (for PowerPoint-loving audiences) or PDF (everyone else).
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div><dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt><dd><span lang="ru">4–5 дней · 1–2&nbsp;ч/день</span><span lang="en">4–5 days · 1–2&nbsp;hrs/day</span></dd></div>
+            <div><dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt><dd><span lang="ru">конвенции дека · типографика для слайдов · .xlsx → дек · PPTX vs PDF</span><span lang="en">deck conventions · slide typography · .xlsx → deck · PPTX vs PDF</span></dd></div>
+            <div><dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt><dd><span lang="ru">12-слайдовый дек, готовый показать инвестору</span><span lang="en">a 12-slide investor-ready deck</span></dd></div>
+            <div><dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt><dd><span lang="ru">PPTX и&nbsp;PDF одного дека на&nbsp;вашем выбранном треке</span><span lang="en">PPTX and PDF of one deck on your chosen track</span></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span><h2><span lang="ru">Что мы&nbsp;пройдём</span><span lang="en">What we will walk through</span></h2></div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Канон дека: 12&nbsp;слайдов, которые ждут инвесторы</span><span lang="en">Deck canon: the 12 slides investors expect</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>За&nbsp;20 лет YC, Sequoia и&nbsp;a16z в&nbsp;питче для инвестора устоялась структура. Не&nbsp;религия, но&nbsp;точка отсчёта&nbsp;&mdash; от&nbsp;неё легче отступать, чем изобретать с&nbsp;нуля.</p>
+                    <ol>
+                        <li><strong>Cover</strong>&nbsp;&mdash; имя компании, одна строка-tagline, ваше имя, дата.</li>
+                        <li><strong>Problem</strong>&nbsp;&mdash; какую боль вы&nbsp;решаете и&nbsp;для кого. Конкретно. С&nbsp;цифрой.</li>
+                        <li><strong>Solution</strong>&nbsp;&mdash; что вы&nbsp;делаете. Одной фразой.</li>
+                        <li><strong>Why now</strong>&nbsp;&mdash; почему именно сейчас (тренд, технология, регуляция).</li>
+                        <li><strong>Market</strong>&nbsp;&mdash; TAM/SAM/SOM с&nbsp;цифрами и&nbsp;источниками. Без&nbsp;«мировой рынок $1Т, нам надо 1%».</li>
+                        <li><strong>Product</strong>&nbsp;&mdash; скриншот/прототип в&nbsp;деле. Эта секция обычно из&nbsp;этапа&nbsp;04 у&nbsp;вас уже есть.</li>
+                        <li><strong>Traction</strong>&nbsp;&mdash; метрики роста. Если есть&nbsp;&mdash; график. Если нет&nbsp;&mdash; что вы&nbsp;уже сделали (контракты, LOI, пилоты).</li>
+                        <li><strong>Business model</strong>&nbsp;&mdash; как вы&nbsp;зарабатываете. Юнит-экономика на&nbsp;одной таблице.</li>
+                        <li><strong>Competition</strong>&nbsp;&mdash; ваше место на&nbsp;карте. Часто матрица 2×2.</li>
+                        <li><strong>Team</strong>&nbsp;&mdash; кто&nbsp;вы и&nbsp;почему именно вы&nbsp;это сделаете.</li>
+                        <li><strong>Ask</strong>&nbsp;&mdash; сколько привлекаете, на&nbsp;что, какой следующий milestone.</li>
+                        <li><strong>Contact / Q&amp;A</strong>&nbsp;&mdash; имя, email, ссылки.</li>
+                    </ol>
+                    <p>Для разных аудиторий слайды можно ужать: для тендера&nbsp;&mdash; убрать «why now», добавить «методология». Для презентации внутри компании&nbsp;&mdash; вырезать «market» и&nbsp;«ask». Но&nbsp;<em>знать</em> канон&nbsp;&mdash; обязательно.</p>
+                </div>
+                <div lang="en">
+                    <p>Twenty years of YC, Sequoia, a16z have settled the structure. Not religion, but a baseline&nbsp;&mdash; easier to break from than to invent.</p>
+                    <ol>
+                        <li><strong>Cover</strong>&nbsp;&mdash; company name, one-line tagline, your name, date.</li>
+                        <li><strong>Problem</strong>&nbsp;&mdash; what pain you solve and for whom. Specific. With a number.</li>
+                        <li><strong>Solution</strong>&nbsp;&mdash; what you do. One sentence.</li>
+                        <li><strong>Why now</strong>&nbsp;&mdash; why this moment (trend, tech, regulation).</li>
+                        <li><strong>Market</strong>&nbsp;&mdash; TAM/SAM/SOM with sources. Not &ldquo;world market $1T, we want 1%.&rdquo;</li>
+                        <li><strong>Product</strong>&nbsp;&mdash; screenshot/prototype in action. Usually you already have this from etape 04.</li>
+                        <li><strong>Traction</strong>&nbsp;&mdash; growth metrics. If yes, a chart. If not, what you&rsquo;ve done (LOIs, pilots).</li>
+                        <li><strong>Business model</strong>&nbsp;&mdash; how you earn. Unit economics on one table.</li>
+                        <li><strong>Competition</strong>&nbsp;&mdash; your place on the map. Often a 2×2.</li>
+                        <li><strong>Team</strong>&nbsp;&mdash; who you are and why you&rsquo;ll do this.</li>
+                        <li><strong>Ask</strong>&nbsp;&mdash; how much, on what, next milestone.</li>
+                        <li><strong>Contact / Q&amp;A</strong>&nbsp;&mdash; name, email, links.</li>
+                    </ol>
+                    <p>For other audiences slides can be trimmed: tenders&nbsp;&mdash; drop &ldquo;why now,&rdquo; add &ldquo;methodology.&rdquo; Internal&nbsp;&mdash; cut &ldquo;market&rdquo; and &ldquo;ask.&rdquo; But <em>knowing</em> the canon is required.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">.xlsx-метрики → визуальный дек</span><span lang="en">.xlsx metrics → visual deck</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Главный приём этапа: метрики живут в&nbsp;.xlsx, а&nbsp;дек собирается из&nbsp;них. Это уже знакомо вам по&nbsp;этапу&nbsp;02 («колонки = поля, строки = повторы»), но&nbsp;здесь паттерн другой: <em>каждая строка таблицы → один слайд или один блок на&nbsp;слайде</em>.</p>
+                    <p>Например, вы&nbsp;ведёте «один лист с&nbsp;цифрами по&nbsp;воронке»:</p>
+                    <pre class="shell">| Метрика     | Значение | %изм | Комментарий            |
+|-------------|----------|------|------------------------|
+| Visitors    | 28,500   | +12% | Q3 запуск EN-сайта     |
+| Sign-ups    | 2,140    | +18% | Конверсия 7.5%         |
+| Activated   | 1,580    | +24% | После онбординга       |
+| Paying      | 312      | +38% | $19/mo средний чек     |
+| MRR         | $5,930   | +38% | На рост 2-3% / неделю  |</pre>
+                    <p>Промпт:</p>
+                    <pre class="shell">&gt; слайд traction для дека (вертикальный список 5 метрик).
+&gt; формат 1920×1080, стиль workspace.
+&gt; для каждой метрики: имя крупно, значение огромно (display-font),
+&gt;   процент изменения цветом (зелёный/красный),
+&gt;   комментарий мелко курсивом.
+&gt; внизу: одна линия trend, маленьким шрифтом.</pre>
+                    <p>Claude собирает один слайд traction из&nbsp;5 метрик. Если это надо как 5 отдельных слайдов («одна метрика на&nbsp;слайд для драматичности»)&nbsp;&mdash; уточняйте: <em>«разбей на&nbsp;5 слайдов: на&nbsp;каждом одна метрика во&nbsp;всю ширину»</em>.</p>
+                </div>
+                <div lang="en">
+                    <p>The headline move: metrics live in .xlsx, the deck assembles from them. Familiar from etape 02 (&ldquo;columns = fields, rows = repeats&rdquo;), but the pattern here is different: <em>each table row → one slide or one block on a slide</em>.</p>
+                    <pre class="shell">| Metric      | Value    | %chg | Note                   |
+|-------------|----------|------|------------------------|
+| Visitors    | 28,500   | +12% | Q3 EN site launch      |
+| Sign-ups    | 2,140    | +18% | Conversion 7.5%        |
+| Activated   | 1,580    | +24% | Post-onboarding        |
+| Paying      | 312      | +38% | $19/mo avg ticket      |
+| MRR         | $5,930   | +38% | 2-3% weekly growth     |</pre>
+                    <pre class="shell">&gt; traction slide for the deck (5-metric vertical list).
+&gt; format 1920×1080, workspace style.
+&gt; per metric: name large, value huge (display font),
+&gt;   %change coloured (green/red), note small italic.
+&gt; bottom: one trend line, small.</pre>
+                    <p>Claude assembles one traction slide from the 5 metrics. If you want 5 separate slides (&ldquo;one metric per slide for drama&rdquo;)&nbsp;&mdash; refine: <em>&ldquo;split into 5 slides: one metric full-bleed each.&rdquo;</em></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Типографика для слайдов: больше воздуха, крупнее размер</span><span lang="en">Slide typography: more air, larger sizes</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Ошибка №1 у&nbsp;новичков: типографика веба переносится на&nbsp;слайд. Не&nbsp;работает. Вот почему:</p>
+                    <ul>
+                        <li>Слайд читается в&nbsp;2–3 метрах от&nbsp;экрана. Минимальный читаемый размер&nbsp;&mdash; 24pt body, 60pt+ display. На&nbsp;вебе body&nbsp;&mdash; 16–17px.</li>
+                        <li>На&nbsp;слайде 5–10 секунд внимания на&nbsp;всё. Поэтому&nbsp;&mdash; одна мысль на&nbsp;слайд, крупно. Не&nbsp;абзац мелким.</li>
+                        <li>Пропорции 16:9&nbsp;&mdash; широкие. Контент тяготеет к&nbsp;центру с&nbsp;большим воздухом по&nbsp;краям.</li>
+                    </ul>
+                    <p>Промпт-правило для Claude Design:</p>
+                    <pre class="shell">&gt; стиль слайдов: editorial-presentation.
+&gt;   body — 28pt минимум, display — 80pt.
+&gt;   1 главная идея на слайд. остальное — контекст.
+&gt;   воздух занимает не меньше 40% площади слайда.
+&gt;   нет bullet-списков длиннее 3 пунктов.</pre>
+                    <p>Если у&nbsp;вас есть фирменный шаблон .pptx (этап&nbsp;02)&nbsp;&mdash; загрузите его, Claude подстроит типографику под наследуемый стиль. Иначе&nbsp;&mdash; выбирайте читаемые шрифты с&nbsp;характером: Inter, Söhne, Editorial New, Tiempos.</p>
+                </div>
+                <div lang="en">
+                    <p>Newcomer mistake №1: web typography ported to slides. Doesn&rsquo;t work. Why:</p>
+                    <ul>
+                        <li>Slides read at 2–3 metres. Minimum readable&nbsp;&mdash; 24pt body, 60pt+ display. Web body is 16–17px.</li>
+                        <li>5–10 seconds of attention per slide. So&nbsp;&mdash; one idea per slide, large. Not a small paragraph.</li>
+                        <li>16:9 is wide. Content tends to centre with generous margins.</li>
+                    </ul>
+                    <pre class="shell">&gt; slide style: editorial-presentation.
+&gt;   body — 28pt min, display — 80pt.
+&gt;   1 main idea per slide. Rest — context.
+&gt;   whitespace takes ≥ 40% of slide.
+&gt;   no bullet lists longer than 3 items.</pre>
+                    <p>If you have a corporate .pptx template (etape 02)&nbsp;&mdash; load it, Claude inherits the typography. Otherwise pick characterful but readable types: Inter, Söhne, Editorial New, Tiempos.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Экспорт PPTX vs&nbsp;PDF: для какой аудитории</span><span lang="en">PPTX vs PDF: which audience</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Оба формата открывает Claude Design&nbsp;&mdash; <em>Export → PPTX</em> или <em>Export → PDF</em>. Не&nbsp;вопрос «как», вопрос «для кого».</p>
+                    <p><strong>PPTX&nbsp;&mdash; когда</strong>:</p>
+                    <ul>
+                        <li>Аудитория&nbsp;&mdash; корпоративные PMs, бизнес-исполнители, банкиры, госзакупки. Для них PPTX&nbsp;&mdash; «нормально».</li>
+                        <li>Получатель захочет править ваши слайды (вставить свой комментарий, переставить порядок).</li>
+                        <li>Презентация интегрируется в&nbsp;их&nbsp;корпоративный шаблон.</li>
+                    </ul>
+                    <p><strong>PDF&nbsp;&mdash; когда</strong>:</p>
+                    <ul>
+                        <li>Венчурные капиталисты, дизайнеры, технологические комитеты&nbsp;&mdash; читают PDF лучше.</li>
+                        <li>Вам важно, чтобы шрифты, отступы, цвета не&nbsp;«поплыли» (PDF&nbsp;&mdash; герметичный артефакт).</li>
+                        <li>Вы&nbsp;отправляете дек по&nbsp;email или хостите как ссылку (PDF меньше весит).</li>
+                    </ul>
+                    <p>На&nbsp;практике&nbsp;&mdash; экспортируйте оба, если есть лимит времени&nbsp;&mdash; начните с&nbsp;PDF.</p>
+                </div>
+                <div lang="en">
+                    <p>Claude Design exports both&nbsp;&mdash; <em>Export → PPTX</em> or <em>Export → PDF</em>. Not a &ldquo;how&rdquo; question, a &ldquo;for whom&rdquo; question.</p>
+                    <p><strong>PPTX&nbsp;&mdash; when</strong>:</p>
+                    <ul>
+                        <li>Audience: corporate PMs, business execs, bankers, procurement. To them, PPTX is &ldquo;normal.&rdquo;</li>
+                        <li>The recipient will edit your slides (insert comments, reshuffle).</li>
+                        <li>The deck integrates into their corporate template.</li>
+                    </ul>
+                    <p><strong>PDF&nbsp;&mdash; when</strong>:</p>
+                    <ul>
+                        <li>VCs, designers, tech committees&nbsp;&mdash; read PDF better.</li>
+                        <li>Fonts, spacing, colours must hold (PDF is sealed).</li>
+                        <li>Sending by email or hosting as a link (PDF is lighter).</li>
+                    </ul>
+                    <p>In practice&nbsp;&mdash; export both. Time-pressed&nbsp;&mdash; start with PDF.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head"><span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span><h2><span lang="ru">XLSX → 8 слайдов</span><span lang="en">XLSX → 8 slides</span></h2></div>
+        <div class="practice">
+            <h4><span lang="ru">Прогон · 8-строчный .xlsx → 8-слайдовый дек</span><span lang="en">Run · 8-row .xlsx → 8-slide deck</span></h4>
+            <ol lang="ru">
+                <li>Создайте .xlsx с&nbsp;8 строками&nbsp;&mdash; одна строка на&nbsp;каждый слайд канона. Колонки: <code>section | title | text | number</code> (где number опциональна).</li>
+                <li>Заполните строки: cover, problem, solution, market, traction, business model, team, ask.</li>
+                <li>В&nbsp;Claude Design новый проект, прикрепите .xlsx.</li>
+                <li>Промпт: <em>«дек на&nbsp;8 слайдов 1920×1080, по&nbsp;одной строке таблицы на&nbsp;слайд. секция = тип слайда, title = заголовок, text = тело, number = крупный показатель если есть. стиль editorial-presentation»</em>.</li>
+                <li>Откройте все 8&nbsp;слайдов рядом. Что выглядит цельно? Что выпадает?</li>
+                <li><em>Export → PDF</em>. Откройте, прочтите как инвестор: за&nbsp;1 минуту понятно ли, в&nbsp;чём суть?</li>
+            </ol>
+            <ol lang="en">
+                <li>Create .xlsx with 8 rows&nbsp;&mdash; one per canonical slide. Columns: <code>section | title | text | number</code> (number optional).</li>
+                <li>Fill: cover, problem, solution, market, traction, business model, team, ask.</li>
+                <li>New Claude Design project, attach the .xlsx.</li>
+                <li>Prompt: <em>&ldquo;8-slide deck 1920×1080, one row per slide. section = slide type, title = headline, text = body, number = big stat if any. Editorial-presentation style.&rdquo;</em></li>
+                <li>Open all 8 side by side. What feels cohesive? What sticks out?</li>
+                <li><em>Export → PDF</em>. Read as an investor: in 1 minute, is the story clear?</li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head"><span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span><h2><span lang="ru">Полные деки</span><span lang="en">Full decks</span></h2></div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;игра</span><span lang="en">Project A · guided · game track</span></span>
+            <h3><span lang="ru">Питч инди-студии для инвестора</span><span lang="en">Indie studio investor pitch</span></h3>
+            <p class="goal" lang="ru">Цель: 12-слайдовый дек для воображаемой инди-студии (продолжение Aurora Pixel из&nbsp;этапа&nbsp;03). Метрики из&nbsp;.xlsx, ассеты из&nbsp;этапов&nbsp;03–04, экспорт в&nbsp;PDF и&nbsp;PPTX.</p>
+            <p class="goal" lang="en">Goal: a 12-slide deck for an imaginary indie studio (Aurora Pixel from etape 03 continued). Metrics from .xlsx, assets from etapes 03–04, export to PDF and PPTX.</p>
+            <ol class="steps" lang="ru">
+                <li>Workspace «Aurora Pixel». Бренд уже загружен.</li>
+                <li>Создайте .xlsx <code>aurora-metrics.xlsx</code>: лист «slides» с&nbsp;12 строками канона + лист «traction» с&nbsp;5–10 метриками (visitors, wishlist, traction по&nbsp;месяцам).</li>
+                <li>Прикрепите .xlsx + загрузите ассеты из&nbsp;предыдущих этапов (постер, key art, скриншоты UI).</li>
+                <li>Промпт: <em>«12-слайдовый pitch deck для инвестора, инди-студия Aurora Pixel. формат 1920×1080. структура: cover/problem/solution/why-now/market/product/traction/business-model/competition/team/ask/contact. стиль workspace + editorial-presentation. на&nbsp;слайде product&nbsp;&mdash; key art из&nbsp;ассетов; на&nbsp;traction&nbsp;&mdash; график из&nbsp;листа «traction»; на&nbsp;ask&nbsp;&mdash; одна большая цифра $XXM»</em>.</li>
+                <li>Сверьтесь со&nbsp;всеми 12. Если что-то не&nbsp;то&nbsp;&mdash; правьте инлайн на&nbsp;конкретном слайде.</li>
+                <li><em>Export → PDF и&nbsp;PPTX</em>.</li>
+                <li>Откройте PDF на&nbsp;планшете и&nbsp;прочитайте как инвестор. За&nbsp;3 минуты понятно, что и&nbsp;зачем?</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Workspace &ldquo;Aurora Pixel.&rdquo; Brand loaded.</li>
+                <li>Create <code>aurora-metrics.xlsx</code>: &ldquo;slides&rdquo; sheet with 12 canon rows + &ldquo;traction&rdquo; sheet with 5–10 monthly metrics.</li>
+                <li>Attach .xlsx + load assets from prior etapes (poster, key art, UI screenshots).</li>
+                <li>Prompt: <em>&ldquo;12-slide investor pitch deck, indie studio Aurora Pixel. 1920×1080. Structure: cover/problem/solution/why-now/market/product/traction/business-model/competition/team/ask/contact. Workspace + editorial-presentation style. Product slide&nbsp;&mdash; key art from assets; traction&nbsp;&mdash; chart from the traction sheet; ask&nbsp;&mdash; one big $XXM number.&rdquo;</em></li>
+                <li>Verify all 12. Refine inline on specific slides.</li>
+                <li><em>Export → PDF and PPTX</em>.</li>
+                <li>Open PDF on a tablet and read as an investor. Story clear in 3 minutes?</li>
+            </ol>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;финансы</span><span lang="en">Project B · guided · finance track</span></span>
+            <h3><span lang="ru">Дек инвест-фонда для&nbsp;LP</span><span lang="en">Investment fund deck for LPs</span></h3>
+            <p class="goal" lang="ru">Цель: дек для подачи инвест-фонда LP. Структура: thesis, target portfolio, return drivers, risks, team, fund terms.</p>
+            <p class="goal" lang="en">Goal: a deck for pitching an investment fund to LPs. Structure: thesis, target portfolio, return drivers, risks, team, fund terms.</p>
+            <ol class="steps" lang="ru">
+                <li>Workspace «Личный инвест-кабинет» или новый «Fund pitch».</li>
+                <li>.xlsx с&nbsp;3 листами: «thesis» (4 пункта), «portfolio-targets» (10 компаний-кандидатов), «expected-returns» (3 сценария).</li>
+                <li>Промпт: <em>«дек инвест-фонда для LP, 10 слайдов. структура: cover, thesis, market opportunity, target portfolio (с&nbsp;логотипами в&nbsp;сетке), expected returns (3 сценария: pessimistic/base/optimistic), risks, team, fund terms (size, fees, period), track record, ask. формат 1920×1080. стиль editorial-financial, FT-типографика»</em>.</li>
+                <li>Уточните слайд «expected returns»: <em>«сделай как трёхколоночное сравнение&nbsp;&mdash; pessimistic слева, base в&nbsp;центре крупнее, optimistic справа. для каждого: 5-летний&nbsp;IRR крупно, описание условий мелко»</em>.</li>
+                <li>Экспорт: PDF (для отправки LP) и&nbsp;PPTX (для тех, кто захочет править).</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Workspace &ldquo;Personal Investment Office&rdquo; or new &ldquo;Fund pitch.&rdquo;</li>
+                <li>.xlsx with 3 sheets: &ldquo;thesis&rdquo; (4 points), &ldquo;portfolio-targets&rdquo; (10 candidate companies), &ldquo;expected-returns&rdquo; (3 scenarios).</li>
+                <li>Prompt: <em>&ldquo;LP pitch deck, 10 slides. Cover, thesis, market opportunity, target portfolio (logo grid), expected returns (3 scenarios), risks, team, fund terms (size, fees, period), track record, ask. 1920×1080. Editorial-financial, FT typography.&rdquo;</em></li>
+                <li>Refine the &ldquo;expected returns&rdquo; slide: <em>&ldquo;3-column comparison&nbsp;&mdash; pessimistic left, base centre larger, optimistic right. Each: 5-year IRR big, conditions small.&rdquo;</em></li>
+                <li>Export: PDF (to LPs) and PPTX (for those who&rsquo;ll edit).</li>
+            </ol>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell"><div class="section-head"><span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span><h2><span lang="ru">Свои деки</span><span lang="en">Your decks</span></h2></div>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек&nbsp;кофейня</span><span lang="en">Project C · solo · café track</span></span>
+            <h3><span lang="ru">Дек франшизы кофейни</span><span lang="en">Café franchise deck</span></h3>
+            <p class="goal" lang="ru">Цель: 10-слайдовый дек продажи франшизы кофейни «Северный край» потенциальному партнёру. Юнит-экономика, локации, бренд, рост.</p>
+            <p class="goal" lang="en">Goal: 10-slide café franchise deck for a prospective partner. Unit economics, locations, brand, growth.</p>
+        </article>
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек на&nbsp;ваш выбор</span><span lang="en">Project D · solo · track of your choice</span></span>
+            <h3><span lang="ru">Дек тендера для дизайн-бюро</span><span lang="en">Design bureau tender deck</span></h3>
+            <p class="goal" lang="ru">Цель: дек для участия в&nbsp;тендере (любая ниша): кейсы, методология, команда, цены. Без&nbsp;«ask»&nbsp;&mdash; для тендера структура другая.</p>
+            <p class="goal" lang="en">Goal: a tender pitch deck (any niche): cases, methodology, team, prices. No &ldquo;ask&rdquo;&nbsp;&mdash; tender structure differs.</p>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell"><div class="section-head"><span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span><h2><span lang="ru">Новые слова</span><span lang="en">New words</span></h2></div>
+        <dl class="glossary">
+            <dt><span lang="ru">Канон 12&nbsp;слайдов</span><span lang="en">12-slide canon</span></dt>
+            <dd><span lang="ru">Канонический набор: cover, problem, solution, why-now, market, product, traction, business model, competition, team, ask, contact. Не&nbsp;религия, но&nbsp;точка отсчёта&nbsp;&mdash; от&nbsp;неё легче отступать, чем изобретать.</span><span lang="en">Canonical set: cover, problem, solution, why-now, market, product, traction, business model, competition, team, ask, contact. Not religion, but a baseline&nbsp;&mdash; easier to break from than reinvent.</span></dd>
+            <dt><span lang="ru">Editorial-presentation</span><span lang="en">Editorial-presentation</span></dt>
+            <dd><span lang="ru">Стилевая система слайдов: 28pt body, 80pt+ display, ≥40% воздуха, 1 идея на&nbsp;слайд, без&nbsp;bullet-списков длиннее 3 пунктов. Альтернатива «корпоративному PowerPoint».</span><span lang="en">A slide style system: 28pt body, 80pt+ display, ≥40% whitespace, 1 idea per slide, no bullet lists longer than 3. The alternative to &ldquo;corporate PowerPoint.&rdquo;</span></dd>
+            <dt><span lang="ru">Строка → слайд</span><span lang="en">Row → slide</span></dt>
+            <dd><span lang="ru">Главный паттерн использования .xlsx для дека: каждая строка таблицы становится одним слайдом или одним блоком на&nbsp;слайде. Соблюдает принцип «колонки = поля, строки = повторы», но&nbsp;применённый к&nbsp;слайдам.</span><span lang="en">The headline .xlsx-for-deck pattern: each row becomes one slide or one block. Same &ldquo;columns = fields, rows = repeats&rdquo; principle, applied to slides.</span></dd>
+            <dt><span lang="ru">PPTX vs&nbsp;PDF</span><span lang="en">PPTX vs PDF</span></dt>
+            <dd><span lang="ru">PPTX&nbsp;&mdash; для аудитории, любящей PowerPoint, или планирующей править ваши слайды. PDF&nbsp;&mdash; для VC, дизайнеров, отправки по&nbsp;email. На&nbsp;практике&nbsp;&mdash; экспортируйте оба.</span><span lang="en">PPTX&nbsp;&mdash; for PowerPoint-loving audiences or those planning to edit. PDF&nbsp;&mdash; for VCs, designers, email. In practice&nbsp;&mdash; export both.</span></dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell"><div class="section-head"><span class="num">§ VI · Quiz</span><h2><span lang="ru">Семь вопросов</span><span lang="en">Seven questions</span></h2></div>
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1"><div class="q"><p class="q-text"><span lang="ru">Из&nbsp;каких 12&nbsp;слайдов состоит канонический pitch?</span><span lang="en">12-slide canon?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">cover, problem, solution, why-now, market, product, traction, business model, competition, team, ask, contact.</p><p lang="en">cover, problem, solution, why-now, market, product, traction, business model, competition, team, ask, contact.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q2"><div class="q"><p class="q-text"><span lang="ru">Почему web-типографика не&nbsp;подходит слайдам?</span><span lang="en">Why doesn&rsquo;t web typography work on slides?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Слайд читается с&nbsp;2–3&nbsp;м, нужны 28pt body / 80pt display. На&nbsp;вебе body 16–17px. Плюс на&nbsp;слайд&nbsp;&mdash; 5–10 секунд внимания, поэтому одна идея крупно, а&nbsp;не&nbsp;абзац мелко.</p><p lang="en">Slides read at 2–3 m, need 28pt body / 80pt display. Web body 16–17px. Plus 5–10 seconds attention per slide, so one idea large, not a paragraph small.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q3"><div class="q"><p class="q-text"><span lang="ru">Как .xlsx превращается в&nbsp;дек?</span><span lang="en">How does .xlsx become a deck?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Каждая строка таблицы → один слайд (или один блок на&nbsp;слайде). Колонки = поля слайда (заголовок, текст, число). Альтернатива линейному распределению&nbsp;&mdash; группировка по&nbsp;колонке-секции, как в&nbsp;этапе&nbsp;02.</p><p lang="en">Each row → one slide (or one block on a slide). Columns = slide fields (title, text, number). Alternative: group-by-column, like in etape 2.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q4"><div class="q"><p class="q-text"><span lang="ru">PPTX или PDF&nbsp;&mdash; для VC?</span><span lang="en">PPTX or PDF for VCs?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">PDF. VC лучше читают PDF; шрифты и&nbsp;вёрстка не&nbsp;«поплывут»; меньше весит для отправки по&nbsp;email. PPTX оставьте для корпоративных PMs и&nbsp;тех, кто будет редактировать ваши слайды.</p><p lang="en">PDF. VCs read PDF better; fonts and layout don&rsquo;t drift; lighter for email. PPTX&nbsp;&mdash; for corporate PMs or anyone who&rsquo;ll edit your slides.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q5"><div class="q"><p class="q-text"><span lang="ru">Минимальные размеры шрифта на&nbsp;слайде?</span><span lang="en">Minimum slide font sizes?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Body не&nbsp;меньше 28pt, display от&nbsp;80pt и&nbsp;выше. Воздух&nbsp;&mdash; не&nbsp;меньше 40% площади. Bullet-списки&nbsp;&mdash; не&nbsp;длиннее 3 пунктов.</p><p lang="en">Body 28pt+, display 80pt+. Whitespace ≥40% of slide. Bullet lists ≤3 items.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q6"><div class="q"><p class="q-text"><span lang="ru">Как использовать корпоративный шаблон .pptx в&nbsp;деке?</span><span lang="en">How to use a corporate .pptx template in a deck?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Загрузить как style-inheritance source (этап&nbsp;02). Claude собирает новые слайды в&nbsp;стилистике шаблона: палитра, шрифты, расположение логотипа, slide-master.</p><p lang="en">Load as a style-inheritance source (etape 2). Claude assembles new slides in the template&rsquo;s style: palette, fonts, logo placement, slide-master.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+            <li class="quiz-item" data-q="q7"><div class="q"><p class="q-text"><span lang="ru">Что менять для тендера и&nbsp;что для&nbsp;LP?</span><span lang="en">What changes for a tender vs LP?</span></p></div><details><summary>show</summary><div class="answer"><p lang="ru">Тендер: убрать «why-now» и&nbsp;«ask», добавить «методология» и&nbsp;«цены». LP: вместо «ask»&nbsp;&mdash; «fund terms», вместо «traction»&nbsp;&mdash; «track record». Канон&nbsp;&mdash; точка отсчёта, не&nbsp;закон.</p><p lang="en">Tender: drop &ldquo;why-now&rdquo; and &ldquo;ask,&rdquo; add &ldquo;methodology&rdquo; and &ldquo;prices.&rdquo; LP: replace &ldquo;ask&rdquo; with &ldquo;fund terms,&rdquo; &ldquo;traction&rdquo; with &ldquo;track record.&rdquo; Canon is a baseline, not law.</p></div></details><div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div></li>
+        </ol>
+        <div class="quiz-summary"><h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where next?</span></h4><div class="stats"><span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span><span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span><span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span></div><p class="advice"></p></div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell"><div class="section-head"><span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span><h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2></div>
+        <ul class="checklist">
+            <li data-key="d6-canon"><span lang="ru">Знаю канонические 12 слайдов и&nbsp;могу адаптировать под аудиторию.</span><span lang="en">I know the 12 canonical slides and adapt to audience.</span></li>
+            <li data-key="d6-xlsx-deck"><span lang="ru">Превращаю .xlsx-метрики в&nbsp;дек по&nbsp;схеме «строка → слайд».</span><span lang="en">I turn .xlsx metrics into a deck via &ldquo;row → slide.&rdquo;</span></li>
+            <li data-key="d6-typography"><span lang="ru">Применяю слайдовую типографику: 28pt body, 80pt display, 40% воздуха.</span><span lang="en">I apply slide typography: 28pt body, 80pt display, 40% whitespace.</span></li>
+            <li data-key="d6-template"><span lang="ru">Использую корпоративный .pptx-шаблон через style-inheritance.</span><span lang="en">I use corporate .pptx template via style-inheritance.</span></li>
+            <li data-key="d6-export"><span lang="ru">Знаю, когда PPTX, когда PDF, и&nbsp;умею экспортировать оба.</span><span lang="en">I know when PPTX, when PDF, and export both.</span></li>
+            <li data-key="d6-deliverables"><span lang="ru">Сделал артефакты: 12-слайдовый дек инди-студии и&nbsp;10-слайдовый дек инвест-фонда.</span><span lang="en">Etape artefacts: 12-slide indie-studio deck and 10-slide investment-fund deck.</span></li>
+            <li data-key="d6-test"><span lang="ru">Прочёл свой дек как инвестор: за&nbsp;3 минуты понятна&nbsp;ли история?</span><span lang="en">I read my deck as an investor: is the story clear in 3 minutes?</span></li>
+        </ul>
+        <div class="complete-bar"><p lang="ru">Готовы закрыть этап?</p><p lang="en">Ready to close the etape?</p>
+            <button class="btn-complete" data-id="design-06" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="tight"><div class="shell"><div class="etap-nav">
+    <a class="prev" href="claude-design-05.html">
+        <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+        <span class="step-title"><span lang="ru">05 · Handoff в&nbsp;Claude&nbsp;Code</span><span lang="en">05 · Handoff to Claude Code</span></span>
+    </a>
+    <a class="next disabled" href="#" aria-disabled="true">
+        <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+        <span class="step-title"><span lang="ru">07 · Маркетинговые ассеты <em>(скоро)</em></span><span lang="en">07 · Marketing Assets <em>(soon)</em></span></span>
+    </a>
+</div></div></section>
+
+</main>
+
+<footer class="colophon"><div class="shell inner">
+    <div>
+        <p class="signature" lang="ru">«Дек&nbsp;&mdash; это история. Слайды&nbsp;&mdash; абзацы. Не&nbsp;ставьте абзац там, где нужна точка».</p>
+        <p class="signature" lang="en">&ldquo;A deck is a story. Slides are paragraphs. Don&rsquo;t put a paragraph where a period belongs.&rdquo;</p>
+        <p lang="ru">Этап&nbsp;06 пройден. Дек готов отправлять. Дальше&nbsp;&mdash; <strong>маркетинговые ассеты</strong>: один бренд, десять форматов соцсетей, баннеров и&nbsp;OG.</p>
+        <p lang="en">Etape 06 done. Deck ready to send. Next&nbsp;&mdash; <strong>marketing assets</strong>: one brand, ten formats of social, banners, OG.</p>
+    </div>
+    <div><h5><span lang="ru">Внутри этапа</span><span lang="en">Inside</span></h5><ul><li><a href="#topics">§&nbsp;I</a></li><li><a href="#projects">§&nbsp;III</a></li><li><a href="#glossary">§&nbsp;V</a></li><li><a href="#quiz">§&nbsp;VI</a></li><li><a href="#checklist">§&nbsp;VII</a></li></ul></div>
+    <div><h5><span lang="ru">Курс</span><span lang="en">Course</span></h5><ul>
+        <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Contents</span></a></li>
+        <li><a href="claude-design-05.html"><span lang="ru">← Этап&nbsp;05</span><span lang="en">← Etape 05</span></a></li>
+        <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+    </ul></div>
+</div></footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

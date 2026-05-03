@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 00 · Подготовка — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 00 тьюториала по Claude Design: подписка, доступ, первый запуск и первый артефакт — обложка за пять минут.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ D</span>
+            <a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a>
+        </div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="00">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 00</span><span lang="en">Etape 00</span></span> &nbsp;·&nbsp; <span lang="ru">Подготовка</span><span lang="en">Setup</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Здравствуй, <em>Claude&nbsp;Design</em>.<br>Здесь начинается дизайн без&nbsp;Figma.</span>
+            <span lang="en">Hello, <em>Claude&nbsp;Design</em>.<br>Design without Figma starts here.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Вы&nbsp;пришли с&nbsp;основного курса по&nbsp;Claude Code&nbsp;&mdash; промпт, итерация, конкретные референсы, «спросите Claude напоследок» вам&nbsp;знакомы. На&nbsp;этом этапе переносим эти навыки в&nbsp;визуальный контекст: открываем <code>claude.ai/design</code>, разбираемся, чем <dfn class="term" tabindex="0" data-def="рабочее пространство Claude Design в браузере: слева — диалог с Claude, в центре — холст с дизайном, сверху — переключатель вида и экспорт.">workspace</dfn> отличается от&nbsp;CLI, и&nbsp;учимся главному новому навыку&nbsp;&mdash; <em>читать дизайн, чтобы дать осмысленный feedback</em>.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            You arrived from the main Claude Code course&nbsp;&mdash; prompts, iteration, concrete references, &ldquo;ask Claude last&rdquo; are familiar. This etape ports those skills into a visual context: open <code>claude.ai/design</code>, see what the <dfn class="term" tabindex="0" data-def="the Claude Design browser workspace: dialogue on the left, the design canvas in the centre, the view-switch and export at the top.">workspace</dfn> changes versus the CLI, and learn the one truly new skill&nbsp;&mdash; <em>reading a design well enough to give meaningful feedback</em>.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">1–2 дня · 1–2&nbsp;ч/день</span><span lang="en">1–2 days · 1–2&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">подписка · доступ · workspace · первый промпт</span><span lang="en">subscription · access · workspace · first prompt</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">снять страх «я не дизайнер»</span><span lang="en">drop the “I’m not a designer” fear</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd>
+                    <span lang="ru">четыре <dfn class="term" tabindex="0" data-def="готовая работа курса, на которую можно показать пальцем — pdf, png, ссылка на дизайн в claude.ai/design.">обложки</dfn>: меню кофейни, постер игры, обложка плейлиста, афиша события</span>
+                    <span lang="en">four <dfn class="term" tabindex="0" data-def="a finished work to point at — a PDF, PNG, or a link to the design in claude.ai/design.">covers</dfn>: a café menu, a game poster, a playlist cover, an event poster</span>
+                </dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что мы&nbsp;пройдём по&nbsp;шагам</span><span lang="en">What we will walk through</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Claude Design vs Claude Code: что общее, что разное</span><span lang="en">Claude Design vs Claude Code: what is shared, what is new</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Claude Design&nbsp;&mdash; это сиблинг Claude Code, заточенный под визуальные артефакты вместо файлов. Большая часть навыков из&nbsp;основного курса переносится напрямую. Меняется среда, инструменты обратной связи и&nbsp;формат вывода.</p>
+                    <p><strong>Что общее:</strong></p>
+                    <ul>
+                        <li>Та&nbsp;же модель&nbsp;&mdash; <dfn class="term" tabindex="0" data-def="самая мощная vision-модель Claude на момент запуска Claude Design. «Vision» означает: модель видит изображения и понимает их.">Opus&nbsp;4.7</dfn> (теперь vision-modus в&nbsp;явном виде: Claude видит картинки).</li>
+                        <li>Та&nbsp;же подписка&nbsp;&mdash; Pro/Max/Team/Enterprise.</li>
+                        <li>Та&nbsp;же логика «арт-директор → исполнитель», итерация по&nbsp;диалогу, конкретные референсы лучше эпитетов.</li>
+                        <li>Тот&nbsp;же приём «спросите Claude напоследок»&nbsp;&mdash; работает один в&nbsp;один.</li>
+                    </ul>
+                    <p><strong>Что меняется:</strong></p>
+                    <ul>
+                        <li><strong>Среда.</strong> Не&nbsp;терминал, а&nbsp;браузер на&nbsp;<a href="https://claude.ai/design"><code>claude.ai/design</code></a>. Workspace вместо CLI.</li>
+                        <li><strong>Медиум.</strong> Не&nbsp;файлы, а&nbsp;холст с&nbsp;пространственной композицией. Это требует нового навыка&nbsp;&mdash; «читать дизайн» (отдельная тема ниже).</li>
+                        <li><strong>Три инструмента уточнения вместо одного.</strong> В&nbsp;Claude Code всё через текстовый промпт. Здесь: <em>текстовый промпт</em>, <em>инлайн-комментарий</em> на&nbsp;конкретном элементе холста, <em>слайдеры</em> для тонкой подстройки. Разные инструменты для разных задач&nbsp;&mdash; разбираем в&nbsp;этапе&nbsp;01.</li>
+                        <li><strong>Native экспорт в&nbsp;дизайн-форматы.</strong> PDF, PPTX, Canva, HTML, folder, Internal&nbsp;URL. Без скриптов, одной кнопкой.</li>
+                        <li><strong>Persistent history.</strong> Все итерации сохраняются автоматически. В&nbsp;Claude Code это даёт git, тут&nbsp;&mdash; встроено в&nbsp;workspace.</li>
+                        <li><strong><dfn class="term" tabindex="0" data-def="передача дизайна в разработку: Claude Design упаковывает структуру, токены и ассеты в bundle и отдаёт его напрямую в Claude Code. Закрывает цикл «идея → дизайн → код → деплой».">Handoff</dfn> в&nbsp;Claude Code.</strong> Дизайн упаковывается в&nbsp;bundle и&nbsp;уходит напрямую в&nbsp;Claude Code на&nbsp;имплементацию. Цикл «идея → дизайн → код → деплой» закрывается двумя инструментами без&nbsp;ручной интеграции&nbsp;&mdash; разбираем в&nbsp;этапе&nbsp;05.</li>
+                    </ul>
+                    <p>Запущен 17&nbsp;апреля 2026&nbsp;года, на&nbsp;момент прохождения курса в&nbsp;<dfn class="term" tabindex="0" data-def="режим раннего доступа Anthropic. Продукт работает, но интерфейс активно меняется. Принципы остаются, кнопки могут переименовываться или переезжать.">research preview</dfn>&nbsp;&mdash; UI&nbsp;может отличаться от&nbsp;скриншотов в&nbsp;этом тьюториале. Принципы&nbsp;&mdash; нет.</p>
+                </div>
+                <div lang="en">
+                    <p>Claude Design is Claude Code&rsquo;s sibling, scoped to visual artefacts instead of files. Most of your main-course skills port over directly. What changes: the environment, the feedback tools, the output format.</p>
+                    <p><strong>What is shared:</strong></p>
+                    <ul>
+                        <li>The same model&nbsp;&mdash; <dfn class="term" tabindex="0" data-def="the most capable Claude vision model at the time of launch. «Vision» means the model sees images and understands them.">Opus&nbsp;4.7</dfn> (now in explicit vision mode: Claude sees images).</li>
+                        <li>The same subscriptions&nbsp;&mdash; Pro / Max / Team / Enterprise.</li>
+                        <li>The same &ldquo;art director → executor&rdquo; logic, dialogue-driven iteration, concrete references over epithets.</li>
+                        <li>The &ldquo;ask Claude last&rdquo; move&nbsp;&mdash; works identically.</li>
+                    </ul>
+                    <p><strong>What changes:</strong></p>
+                    <ul>
+                        <li><strong>Environment.</strong> Not a terminal, a browser at <a href="https://claude.ai/design"><code>claude.ai/design</code></a>. A workspace instead of a CLI.</li>
+                        <li><strong>Medium.</strong> Not files, a canvas with spatial composition. Requires a new skill&nbsp;&mdash; &ldquo;reading a design&rdquo; (its own topic below).</li>
+                        <li><strong>Three refinement tools instead of one.</strong> In Claude Code everything is the text prompt. Here: <em>text prompt</em>, <em>inline comment</em> on a specific canvas element, <em>sliders</em> for fine tuning. Different tools for different jobs&nbsp;&mdash; etape 01 covers boundaries.</li>
+                        <li><strong>Native export to design formats.</strong> PDF, PPTX, Canva, HTML, folder, Internal URL. No scripts, one click.</li>
+                        <li><strong>Persistent history.</strong> Every iteration saved automatically. Where Claude Code uses git, this is built in.</li>
+                        <li><strong><dfn class="term" tabindex="0" data-def="passing the design into development: Claude Design packs structure, tokens and assets into a bundle and hands it straight to Claude Code. Closes the «idea → design → code → deploy» loop.">Handoff</dfn> to Claude Code.</strong> The design packs into a bundle and ships straight to Claude Code for implementation. The &ldquo;idea → design → code → deploy&rdquo; loop closes across two tools without manual integration&nbsp;&mdash; covered in etape 05.</li>
+                    </ul>
+                    <p>Launched 17 April 2026, currently in <dfn class="term" tabindex="0" data-def="Anthropic's early-access mode. The product works, but the interface is changing actively. Principles persist; buttons may rename or relocate.">research preview</dfn>&nbsp;&mdash; the UI may differ from the screenshots in this tutorial. Principles will not.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Подписка и&nbsp;Enterprise-доступ&nbsp;&mdash; коротко</span><span lang="en">Subscription and Enterprise access&nbsp;&mdash; in brief</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Подписка та&nbsp;же, что для основного курса. Доступ есть на&nbsp;Pro, Max, Team, Enterprise. Если вы&nbsp;уже подписаны&nbsp;&mdash; ничего делать не&nbsp;нужно, <code>claude.ai/design</code> просто откроется.</p>
+                    <p><strong>Одна особенность для Enterprise.</strong> В&nbsp;корпоративных организациях Claude Design <em>выключен по&nbsp;умолчанию</em>. Это сделано специально&nbsp;&mdash; политики конфиденциальности могут требовать ревью до&nbsp;выдачи инструмента сотрудникам.</p>
+                    <p>Если вы&nbsp;Enterprise-юзер и&nbsp;<code>claude.ai/design</code> отвечает «not available»:</p>
+                    <ol>
+                        <li>Если вы&nbsp;админ организации&nbsp;&mdash; <em>Settings → Labs / Beta features → Claude Design</em>, тумблер вкл. Подождите пару минут.</li>
+                        <li>Если не&nbsp;админ&nbsp;&mdash; пишите в&nbsp;IT/HR со&nbsp;ссылкой на&nbsp;<a href="https://www.anthropic.com/news/claude-design-anthropic-labs">анонс продукта</a>. Anthropic явно подтверждает: дизайны не&nbsp;идут на&nbsp;тренировку моделей и&nbsp;соблюдают ту&nbsp;же политику, что остальной Claude.</li>
+                    </ol>
+                    <p>На&nbsp;этап&nbsp;00 хватит базовых лимитов даже Pro. Если упрётесь в&nbsp;потолок&nbsp;&mdash; либо ждите окно, либо включите opt-in pay-as-you-go.</p>
+                </div>
+                <div lang="en">
+                    <p>The subscription is the same as for the main course. Access on Pro, Max, Team, Enterprise. If you are already subscribed&nbsp;&mdash; do nothing, <code>claude.ai/design</code> simply opens.</p>
+                    <p><strong>One Enterprise quirk.</strong> In corporate orgs Claude Design is <em>off by default</em>&nbsp;&mdash; intentional, since confidentiality policies may need a review before staff get the tool.</p>
+                    <p>If you are an Enterprise user and <code>claude.ai/design</code> says &ldquo;not available&rdquo;:</p>
+                    <ol>
+                        <li>If you are the org admin&nbsp;&mdash; <em>Settings → Labs / Beta features → Claude Design</em>, flip the toggle. Wait a couple of minutes.</li>
+                        <li>If not&nbsp;&mdash; ping IT/HR with a link to the <a href="https://www.anthropic.com/news/claude-design-anthropic-labs">launch post</a>. Anthropic explicitly confirms: designs do not go into model training and follow the same policy as the rest of Claude.</li>
+                    </ol>
+                    <p>Etape 00 fits inside Pro&rsquo;s baseline allowance. If you hit a ceiling&nbsp;&mdash; wait for the window or enable opt-in pay-as-you-go.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Первый запуск: разбираем интерфейс <code>claude.ai/design</code></span><span lang="en">First launch: getting oriented at <code>claude.ai/design</code></span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Открываем <a href="https://claude.ai/design"><code>claude.ai/design</code></a>. Перед вами три зоны:</p>
+                    <ol>
+                        <li><strong>Слева&nbsp;&mdash; диалог.</strong> Сюда пишете промпты, прикрепляете файлы (<code>.docx</code>, <code>.pptx</code>, <code>.xlsx</code>, картинки), вставляете ссылки. Это «вход».</li>
+                        <li><strong>В&nbsp;центре&nbsp;&mdash; <dfn class="term" tabindex="0" data-def="центральная область рабочего пространства, где Claude собирает и показывает вам дизайн. Размер холста подстраивается под формат: A4, лендинг, пост соцсети, обложка.">холст</dfn>.</strong> Здесь живёт сам дизайн. Размер холста подстраивается под формат: A4 для печати, 1080×1080 для соцсетей, 1920×1080 для презентации.</li>
+                        <li><strong>Сверху&nbsp;&mdash; меню.</strong> Тут переключатель вида (Design&nbsp;/ Code), кнопка <em>Share</em> (доступ для других), <em>Export</em> (PDF, PPTX, Canva, HTML, folder, ссылка), <em>Handoff to Claude Code</em> (для разработчика).</li>
+                    </ol>
+                    <p>Слева сверху&nbsp;&mdash; ваши прошлые проекты («History»). Каждый проект&nbsp;&mdash; это отдельный диалог со&nbsp;своим холстом и&nbsp;историей правок.</p>
+                    <p>Если что-то не&nbsp;нравится&nbsp;&mdash; просто закройте проект и&nbsp;начните новый. Claude Design ничего не&nbsp;ломает на&nbsp;вашем компьютере; всё живёт внутри браузера.</p>
+                </div>
+                <div lang="en">
+                    <p>Open <a href="https://claude.ai/design"><code>claude.ai/design</code></a>. You see three zones:</p>
+                    <ol>
+                        <li><strong>Left&nbsp;&mdash; the dialogue.</strong> Where you write prompts, attach files (<code>.docx</code>, <code>.pptx</code>, <code>.xlsx</code>, images), drop links. The &ldquo;input.&rdquo;</li>
+                        <li><strong>Centre&nbsp;&mdash; the <dfn class="term" tabindex="0" data-def="the central area of the workspace where Claude assembles and shows you the design. Canvas size adapts to format: A4, landing, social post, cover.">canvas</dfn>.</strong> Where the design lives. Canvas size adapts to format: A4 for print, 1080×1080 for social, 1920×1080 for a slide.</li>
+                        <li><strong>Top&nbsp;&mdash; the menu.</strong> Here: view switch (Design / Code), <em>Share</em> (access for others), <em>Export</em> (PDF, PPTX, Canva, HTML, folder, link), <em>Handoff to Claude Code</em> (for developers).</li>
+                    </ol>
+                    <p>Top-left&nbsp;&mdash; your past projects (&ldquo;History&rdquo;). Each project is a separate dialogue with its own canvas and edit history.</p>
+                    <p>If something feels off&nbsp;&mdash; just close the project and start a new one. Claude Design does not touch your machine; everything lives inside the browser.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Первый артефакт за&nbsp;тридцать минут</span><span lang="en">A first artefact in thirty minutes</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Самый быстрый способ почувствовать продукт&nbsp;&mdash; собрать обложку. Структура промпта вам знакома (цель, формат, стиль, структура), новое&nbsp;&mdash; <em>где</em> вы&nbsp;это пишете и&nbsp;<em>чем</em> уточняете.</p>
+                    <pre class="shell"><span class="cmt"># «New project» → пишем в диалог</span>
+&gt; обложка-меню для крафтовой кофейни «Северный край».
+&gt; формат A4 вертикальный, для печати.
+&gt; стиль: скандинавская типографика — Müller-Brockmann meets Acne Studios.
+&gt; структура: вверху крупный заголовок MENU, под ним — название кофейни;
+&gt; в центре — три раздела (espresso / filter / sweets) с тремя позициями в каждом;
+&gt; внизу — адрес-заглушка и часы.</pre>
+                    <p>Первая версия за&nbsp;30–60 секунд. Дальше&nbsp;&mdash; <strong>пробуем все три инструмента уточнения</strong>, чтобы почувствовать их&nbsp;на&nbsp;вкус (детально границы&nbsp;&mdash; в&nbsp;этапе&nbsp;01):</p>
+                    <ul>
+                        <li><strong>Текстовый промпт</strong> в&nbsp;диалог&nbsp;&mdash; для смены концепции или замены раздела. Пример: <em>«поменяй стиль на&nbsp;editorial, как у&nbsp;Wallpaper»</em>.</li>
+                        <li><strong>Инлайн-комментарий</strong>&nbsp;&mdash; замечание, привязанное к&nbsp;конкретному элементу на&nbsp;холсте. Жест выбора элемента может называться по-разному (наведение, клик, контекстное меню) — UI&nbsp;в&nbsp;research preview меняется. Принцип постоянный: <em>привязать заметку к&nbsp;конкретной штуке</em>, чтобы Claude однозначно понял, о&nbsp;чём речь.</li>
+                        <li><strong>Слайдер</strong>&nbsp;&mdash; для тонкой подстройки spacing, color, layout без&nbsp;слов. Тянете полоску, смотрите холст в&nbsp;реальном времени, ловите момент.</li>
+                    </ul>
+                    <p>Когда нравится&nbsp;&mdash; сверху <em>Export → PDF</em>. Файл в&nbsp;<code>Downloads</code>. Это и&nbsp;есть ваш первый артефакт в&nbsp;Claude Design.</p>
+                </div>
+                <div lang="en">
+                    <p>The fastest way to feel the product is to assemble a cover. The prompt anatomy is familiar (goal, format, style, structure); what is new is <em>where</em> you write it and <em>how</em> you refine.</p>
+                    <pre class="shell"><span class="cmt"># «New project» → into the dialogue</span>
+&gt; menu cover for a craft café "Northern Coast."
+&gt; format A4 vertical, for print.
+&gt; style: Scandinavian typography — Müller-Brockmann meets Acne Studios.
+&gt; structure: top — large MENU heading, below — café name;
+&gt; centre — three sections (espresso / filter / sweets), three items each;
+&gt; bottom — placeholder address and hours.</pre>
+                    <p>First take in 30–60 seconds. Then&nbsp;&mdash; <strong>try all three refinement tools</strong> to taste them (etape 01 covers boundaries in detail):</p>
+                    <ul>
+                        <li><strong>Text prompt</strong> in the dialogue&nbsp;&mdash; for concept swap or section replacement. Example: <em>&ldquo;change the style to editorial, à la Wallpaper.&rdquo;</em></li>
+                        <li><strong>Inline comment</strong>&nbsp;&mdash; a note attached to a specific element on the canvas. The element-select gesture may vary (hover, click, context menu) — research-preview UI shifts. The principle stays: <em>attach a note to a specific thing</em>, so Claude knows unambiguously what you mean.</li>
+                        <li><strong>Slider</strong>&nbsp;&mdash; wordless fine-tuning of spacing, colour, layout. Drag, watch the canvas live, catch the moment.</li>
+                    </ul>
+                    <p>When you like it&nbsp;&mdash; top bar, <em>Export → PDF</em>. File in <code>Downloads</code>. That is your first Claude Design artefact.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Чтение дизайна: три слоя визуального чтения</span><span lang="en">Reading a design: three layers</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;Claude Code feedback бинарен: тесты зелёные или красные, ESLint молчит или ругается. В&nbsp;дизайне feedback неоднозначен&nbsp;&mdash; никто не&nbsp;скажет, что лендинг «сломан». Но&nbsp;вы&nbsp;всё равно должны уметь сформулировать, что именно «не&nbsp;так», чтобы Claude мог поправить. Это и&nbsp;есть главный новый навык&nbsp;&mdash; <em>визуальная грамотность</em>, которой основной курс не&nbsp;учил.</p>
+                    <p>Помогает читать дизайн в&nbsp;трёх слоях. Каждый слой&nbsp;&mdash; отдельный канал диагностики, и&nbsp;каждый чинится своим инструментом уточнения.</p>
+                    <p><strong>Слой&nbsp;1. <dfn class="term" tabindex="0" data-def="первый слой чтения дизайна: распределение элементов по холсту, центр композиции, баланс «тяжёлых» и «лёгких» зон. Если в композиции что-то «не на своём месте» — чините инлайн-комментарием.">Композиция</dfn>: что где.</strong></p>
+                    <ul>
+                        <li>Распределение элементов по&nbsp;холсту: где hero, где блоки контента, где CTA, где футер.</li>
+                        <li>Центр композиции&nbsp;&mdash; куда падает глаз в&nbsp;первую секунду.</li>
+                        <li>Баланс: уравновешен ли&nbsp;холст, или один блок «тяжелее» соседних.</li>
+                    </ul>
+                    <p><em>Если что-то «не&nbsp;на&nbsp;своём месте»&nbsp;&mdash; это композиция. Чините инлайн-комментарием на&nbsp;конкретном элементе.</em></p>
+                    <p><strong>Слой&nbsp;2. <dfn class="term" tabindex="0" data-def="второй слой чтения: визуальный порядок прочтения. Что глаз видит первым, что вторым. Хорошая иерархия выделяет главное размером, весом или цветом. Чините текстовым промптом — это смысловая правка.">Иерархия</dfn>: что главное.</strong></p>
+                    <ul>
+                        <li>В&nbsp;каком порядке глаз проходит по&nbsp;странице. Что прочитывается первым? Вторым?</li>
+                        <li>Цена видна раньше или позже описания? Имя бренда читается раньше или позже слогана?</li>
+                        <li>Размер, вес, цвет, контраст&nbsp;&mdash; всё, что выделяет «главное» из&nbsp;«второстепенного».</li>
+                    </ul>
+                    <p><em>Если самое важное теряется в&nbsp;шуме&nbsp;&mdash; это иерархия. Чините текстовым промптом: «выдели цену крупнее», «слоган подзаголовком, не&nbsp;равным h1».</em></p>
+                    <p><strong>Слой&nbsp;3. <dfn class="term" tabindex="0" data-def="третий слой чтения: общее «настроение» дизайна. Тёплый/холодный, плотный/воздушный, дорогой/доступный, формальный/игривый. Субъективно, но описуемо. Чините слайдером — это финальная отделка.">Атмосфера</dfn>: какой mood.</strong></p>
+                    <ul>
+                        <li>Тёплый&nbsp;/ холодный, плотный&nbsp;/ воздушный, дорогой&nbsp;/ доступный, формальный&nbsp;/ игривый.</li>
+                        <li>Какая аудитория зайдёт на&nbsp;этот лендинг и&nbsp;купит?</li>
+                        <li>На&nbsp;каком &laquo;соседе&raquo; этот дизайн стоит&nbsp;бы в&nbsp;воображаемом ряду&nbsp;&mdash; рядом с&nbsp;Apple, рядом с&nbsp;Etsy, рядом с&nbsp;<em>Ray Gun</em>?</li>
+                    </ul>
+                    <p><em>Если общий mood мимо&nbsp;&mdash; это атмосфера. Чините слайдером: warmth, contrast, density.</em></p>
+                    <div class="note">Главная польза трёх слоёв&nbsp;&mdash; не&nbsp;«три категории», а&nbsp;<strong>прямая связь между диагнозом и&nbsp;инструментом</strong>. Композиция → инлайн. Иерархия → текст. Атмосфера → слайдер. Запомните это правило&nbsp;&mdash; и&nbsp;все ваши последующие правки станут точнее.</div>
+                </div>
+                <div lang="en">
+                    <p>In Claude Code, feedback is binary: tests green or red, ESLint quiet or shouting. In design, feedback is ambiguous&nbsp;&mdash; no one will tell you the landing is &ldquo;broken.&rdquo; You still have to articulate what specifically is &ldquo;off&rdquo; so Claude can fix it. That is the new skill&nbsp;&mdash; <em>visual literacy</em>&nbsp;&mdash; the main course did not teach.</p>
+                    <p>Three layers help you read. Each is a separate diagnostic channel, and each fixes with its own refinement tool.</p>
+                    <p><strong>Layer 1. <dfn class="term" tabindex="0" data-def="first reading layer: distribution of elements across the canvas, the centre of composition, the balance between «heavy» and «light» zones. If something is «in the wrong place» — fix it with an inline comment.">Composition</dfn>: what goes where.</strong></p>
+                    <ul>
+                        <li>Element distribution: where the hero, content blocks, CTA, footer sit.</li>
+                        <li>Compositional centre&nbsp;&mdash; where the eye lands in the first second.</li>
+                        <li>Balance: is the canvas weighted evenly, or is one block heavier than its neighbours.</li>
+                    </ul>
+                    <p><em>If something is &ldquo;in the wrong place&rdquo;&nbsp;&mdash; that is composition. Fix it with an inline comment on the specific element.</em></p>
+                    <p><strong>Layer 2. <dfn class="term" tabindex="0" data-def="second reading layer: the visual order of reading. What the eye sees first, second. Good hierarchy promotes the important by size, weight, or colour. Fix it by text prompt — a semantic edit.">Hierarchy</dfn>: what matters most.</strong></p>
+                    <ul>
+                        <li>The order in which the eye traverses the page. What reads first? Second?</li>
+                        <li>Is price visible before or after the description? The brand name before or after the slogan?</li>
+                        <li>Size, weight, colour, contrast&nbsp;&mdash; whatever lifts &ldquo;important&rdquo; out of &ldquo;secondary.&rdquo;</li>
+                    </ul>
+                    <p><em>If the important thing gets lost in the noise&nbsp;&mdash; that is hierarchy. Fix it by text prompt: &ldquo;promote the price,&rdquo; &ldquo;slogan as a subheading, not equal to h1.&rdquo;</em></p>
+                    <p><strong>Layer 3. <dfn class="term" tabindex="0" data-def="third reading layer: overall «mood» of the design. Warm/cold, dense/airy, expensive/accessible, formal/playful. Subjective but describable. Fix it with a slider — final polish.">Atmosphere</dfn>: what mood.</strong></p>
+                    <ul>
+                        <li>Warm vs cool, dense vs airy, expensive vs accessible, formal vs playful.</li>
+                        <li>What audience will land on this and convert?</li>
+                        <li>In an imaginary line-up, who is this design&rsquo;s neighbour&nbsp;&mdash; Apple, Etsy, <em>Ray Gun</em>?</li>
+                    </ul>
+                    <p><em>If the overall mood is off&nbsp;&mdash; that is atmosphere. Fix it with a slider: warmth, contrast, density.</em></p>
+                    <div class="note">The headline value of the three layers is not &ldquo;three categories,&rdquo; it is <strong>a direct mapping from diagnosis to tool</strong>. Composition → inline. Hierarchy → text. Atmosphere → slider. Memorise that rule&nbsp;&mdash; every future correction gets sharper.</div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Сохранение, экспорт, доступ</span><span lang="en">Saving, exporting, sharing</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;Claude Design нет&nbsp;кнопки «Save». Каждая ваша правка автоматически фиксируется в&nbsp;истории проекта. Закрыли вкладку&nbsp;&mdash; вернулись через час&nbsp;&mdash; всё на&nbsp;месте.</p>
+                    <p>Когда дизайн готов&nbsp;&mdash; верхнее меню, <em>Export</em>. Доступны шесть форматов:</p>
+                    <ul>
+                        <li><strong>PDF</strong>&nbsp;&mdash; печать, отправка по&nbsp;email, документы.</li>
+                        <li><strong>PPTX</strong>&nbsp;&mdash; для презентаций, особенно если ваш руководитель/клиент любит PowerPoint.</li>
+                        <li><strong>Canva</strong>&nbsp;&mdash; импорт прямо в&nbsp;ваш Canva-аккаунт для дальнейшей шлифовки маркетологом.</li>
+                        <li><strong>HTML</strong>&nbsp;&mdash; одна страница в&nbsp;виде сайта. Можно открыть в&nbsp;браузере, выложить.</li>
+                        <li><strong>Folder</strong>&nbsp;&mdash; папка с&nbsp;ассетами (PNG, SVG, исходники), для дальнейшей работы.</li>
+                        <li><strong>Internal URL</strong>&nbsp;&mdash; ссылка прямо на&nbsp;ваш дизайн в&nbsp;Claude Design. Удобно делиться внутри организации без&nbsp;скачивания.</li>
+                    </ul>
+                    <p>Кнопка <em>Share</em> рядом с&nbsp;<em>Export</em>&nbsp;&mdash; даёт ссылку для коллег. Три уровня доступа:</p>
+                    <ol>
+                        <li><strong>Private</strong>&nbsp;&mdash; видите только вы.</li>
+                        <li><strong>View-only</strong>&nbsp;&mdash; коллеги смотрят и&nbsp;комментируют, но&nbsp;не&nbsp;правят.</li>
+                        <li><strong>Edit access</strong>&nbsp;&mdash; коллеги могут правки и&nbsp;писать в&nbsp;тот&nbsp;же диалог с&nbsp;Claude. Это и&nbsp;есть «групповой разговор», который мы&nbsp;разберём в&nbsp;этапе&nbsp;09.</li>
+                    </ol>
+                    <p>На&nbsp;этом этапе экспортируйте только в&nbsp;PDF&nbsp;&mdash; этого достаточно. Остальные форматы появятся в&nbsp;следующих этапах по&nbsp;мере необходимости.</p>
+                </div>
+                <div lang="en">
+                    <p>There is no &ldquo;Save&rdquo; button in Claude Design. Every edit lands in the project history automatically. Close the tab, come back in an hour&nbsp;&mdash; everything is there.</p>
+                    <p>When the design is ready&nbsp;&mdash; top menu, <em>Export</em>. Six formats:</p>
+                    <ul>
+                        <li><strong>PDF</strong>&nbsp;&mdash; print, email, documents.</li>
+                        <li><strong>PPTX</strong>&nbsp;&mdash; for slide decks, especially if your boss/client loves PowerPoint.</li>
+                        <li><strong>Canva</strong>&nbsp;&mdash; import straight into your Canva account for marketer-side polish.</li>
+                        <li><strong>HTML</strong>&nbsp;&mdash; one page as a site. Open in any browser, publish anywhere.</li>
+                        <li><strong>Folder</strong>&nbsp;&mdash; a folder of assets (PNG, SVG, sources) for further work.</li>
+                        <li><strong>Internal URL</strong>&nbsp;&mdash; a link straight to your design inside Claude Design. Useful for in-org sharing without downloads.</li>
+                    </ul>
+                    <p>The <em>Share</em> button next to <em>Export</em>&nbsp;&mdash; gives a link for colleagues. Three access levels:</p>
+                    <ol>
+                        <li><strong>Private</strong>&nbsp;&mdash; only you.</li>
+                        <li><strong>View-only</strong>&nbsp;&mdash; colleagues read and comment, do not edit.</li>
+                        <li><strong>Edit access</strong>&nbsp;&mdash; colleagues edit and write into the same dialogue with Claude. The &ldquo;group conversation&rdquo; we cover in etape 09.</li>
+                    </ol>
+                    <p>For this etape, export to PDF only&nbsp;&mdash; that is enough. The other formats arrive in later etapes as needed.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Полевые правила: что Claude Design умеет, а&nbsp;что&nbsp;&mdash; пока нет</span><span lang="en">Field rules: what Claude Design does well, and what it does not yet</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Чтобы не&nbsp;разочаровываться, держите в&nbsp;голове, что Claude Design&nbsp;&mdash; это&nbsp;research&nbsp;preview. Несколько правил:</p>
+                    <ul>
+                        <li><strong>Хорошо умеет</strong>: лендинги, обложки, постеры, питч-деки, инфографика, маркетинговые ассеты, прототипы интерфейсов, шаблонная типографика.</li>
+                        <li><strong>Сносно умеет</strong>: 3D-визуализация интерьера и&nbsp;продукта (это новинка, иногда сбивается с&nbsp;пропорций), анимация переходов, иконки в&nbsp;одном стиле.</li>
+                        <li><strong>Не&nbsp;умеет</strong>: фотореалистичный рендер уровня Corona&nbsp;/ V-Ray, видео-монтаж, 3D-моделирование персонажей, ретушь фотографий. Это работа специальных инструментов.</li>
+                    </ul>
+                    <p>Если просите что-то из&nbsp;«не&nbsp;умеет»&nbsp;&mdash; Claude вежливо предложит обходной путь. Например, на&nbsp;«сделай рендер квартиры как в&nbsp;каталоге IKEA»&nbsp;&mdash; ответит, что фотореалистичного рендера он&nbsp;не&nbsp;даёт, но&nbsp;может собрать <em>стилизованный 3D-тур</em> с&nbsp;переключением материалов и&nbsp;освещения. Часто этого достаточно для согласования с&nbsp;клиентом до&nbsp;этапа реализации.</p>
+                    <p>Главное правило: <strong>если у&nbsp;вас уже есть Figma или Adobe и&nbsp;вы&nbsp;знаете, как ими пользоваться, для финальной шлифовки часто разумнее экспортировать туда</strong>. Claude Design&nbsp;&mdash; это «дизайнер первой версии и&nbsp;вариантов», а&nbsp;не&nbsp;замена всего pipeline. Этому посвящён этап&nbsp;10 (опц.) с&nbsp;Canva-pipeline.</p>
+                </div>
+                <div lang="en">
+                    <p>To avoid disappointment, hold this in mind: Claude Design is a research preview. A few rules:</p>
+                    <ul>
+                        <li><strong>Does well</strong>: landings, covers, posters, pitch decks, infographics, marketing assets, UI prototypes, template-driven typography.</li>
+                        <li><strong>Decent at</strong>: interior and product 3D (new, sometimes off on proportions), motion transitions, one-family icon sets.</li>
+                        <li><strong>Does not do</strong>: photoreal rendering at Corona/V-Ray level, video editing, 3D character modelling, photo retouching. Specialist tools own that work.</li>
+                    </ul>
+                    <p>If you ask for something it does not do&nbsp;&mdash; Claude politely offers a workaround. Asked for &ldquo;an IKEA-catalogue render of the flat&rdquo; it will reply that photoreal rendering is not its job, but it can build a <em>stylised 3D tour</em> with switchable materials and lighting. Often enough to get a client sign-off before production work begins.</p>
+                    <p>The main rule: <strong>if you already own Figma or Adobe and know how to drive them, for final polish it is often smart to export there</strong>. Claude Design is a &ldquo;first-version-and-variants designer,&rdquo; not a whole-pipeline replacement. Etape 10 (optional) covers the Canva pipeline for that reason.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Десятиминутный прогон по&nbsp;workspace</span><span lang="en">A ten-minute workspace warm-up</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Прежде чем браться за&nbsp;проекты, сделайте небольшую разминку прямо сейчас. Это занимает 5–10&nbsp;минут и&nbsp;ставит на&nbsp;место всё, о&nbsp;чём вы&nbsp;только что прочитали.</p>
+        <p class="reading" lang="en">Before tackling the projects, take a brief warm-up right now. It takes 5–10 minutes and locks in everything you just read.</p>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон №&nbsp;1 · Открываем, оглядываемся, делаем «hello»</span><span lang="en">Run №&nbsp;1 · Open, look around, ship a &ldquo;hello&rdquo;</span></h4>
+            <ol lang="ru">
+                <li>Откройте <code>claude.ai/design</code>. Если видите сообщение «not available»&nbsp;&mdash; вернитесь к&nbsp;теме «Доступ для Enterprise».</li>
+                <li>Найдите три зоны: диалог слева, холст в&nbsp;центре, меню сверху. Просто покажите их&nbsp;себе пальцем&nbsp;&mdash; запомните, где что.</li>
+                <li>Нажмите «New project». В&nbsp;диалог напишите одно предложение: <em>«квадратная обложка плейлиста для весенних утренних прогулок, акварельный стиль»</em>.</li>
+                <li>Дождитесь, пока Claude соберёт первую версию.</li>
+                <li>Не&nbsp;поправляйте&nbsp;&mdash; просто посмотрите на&nbsp;холст. Спросите себя: «что мне нравится? что&nbsp;нет?». Не&nbsp;записывайте, просто почувствуйте.</li>
+                <li>Сверху меню&nbsp;&mdash; <em>Export → PDF</em>. Скачайте файл. Откройте на&nbsp;компьютере.</li>
+            </ol>
+            <ol lang="en">
+                <li>Open <code>claude.ai/design</code>. If you see &ldquo;not available&rdquo;&nbsp;&mdash; return to the &ldquo;Enterprise access&rdquo; topic.</li>
+                <li>Find the three zones: dialogue on the left, canvas in the centre, menu on top. Just point at them&nbsp;&mdash; lock the layout in memory.</li>
+                <li>Click &ldquo;New project.&rdquo; In the dialogue, type one sentence: <em>&ldquo;a square playlist cover for spring morning walks, watercolour style.&rdquo;</em></li>
+                <li>Wait for Claude to assemble the first take.</li>
+                <li>Do not refine&nbsp;&mdash; just look at the canvas. Ask yourself: &ldquo;what do I like? what do I not?&rdquo; No notes, just feel.</li>
+                <li>Top menu&nbsp;&mdash; <em>Export → PDF</em>. Download. Open on your computer.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>не&nbsp;бояться нажать кнопку</strong>, увидеть, что Claude отвечает за&nbsp;30 секунд, скачать первый файл.</p>
+            <p lang="en">What we are training: <strong>not fearing the button</strong>, seeing that Claude replies in 30 seconds, downloading your first file.</p>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон №&nbsp;2 · Три инструмента уточнения</span><span lang="en">Run №&nbsp;2 · The three refinement tools</span></h4>
+            <ol lang="ru">
+                <li>Не&nbsp;закрывайте предыдущий проект, продолжайте в&nbsp;нём.</li>
+                <li><strong>Текстовый промпт.</strong> Напишите в&nbsp;диалог: <em>«сделай палитру холоднее, добавь туман и&nbsp;берёзовый ствол на&nbsp;фоне»</em>. Дождитесь правки.</li>
+                <li><strong>Инлайн-комментарий.</strong> Наведите курсор на&nbsp;заголовок. Появится значок облачка&nbsp;&mdash; кликните. Напишите: <em>«крупнее в&nbsp;1.5&nbsp;раза, и&nbsp;шрифт пусть будет рукописный»</em>.</li>
+                <li><strong>Слайдер.</strong> Найдите в&nbsp;интерфейсе слайдеры (обычно справа от&nbsp;холста или внизу). Подвигайте слайдер «contrast» или «warmth»&nbsp;&mdash; смотрите, как меняется холст.</li>
+                <li>Если совсем ничего не&nbsp;нравится после трёх правок&nbsp;&mdash; нажмите «New project», начните заново с&nbsp;другим промптом. Это нормальный приём.</li>
+            </ol>
+            <ol lang="en">
+                <li>Stay in the same project, do not close it.</li>
+                <li><strong>Text prompt.</strong> Type into the dialogue: <em>&ldquo;cool the palette down, add fog and a birch trunk in the background.&rdquo;</em> Wait for the update.</li>
+                <li><strong>Inline comment.</strong> Hover over the heading. A speech-bubble appears&nbsp;&mdash; click. Write: <em>&ldquo;1.5× bigger, and switch to a handwritten typeface.&rdquo;</em></li>
+                <li><strong>Slider.</strong> Find the sliders (usually right of the canvas or below). Pull the &ldquo;contrast&rdquo; or &ldquo;warmth&rdquo; slider&nbsp;&mdash; watch the canvas adapt.</li>
+                <li>If nothing clicks after three edits&nbsp;&mdash; hit &ldquo;New project,&rdquo; start fresh with another prompt. A perfectly normal move.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>выбирать инструмент уточнения под задачу</strong>. Текст&nbsp;&mdash; для смысла, инлайн-комментарий&nbsp;&mdash; для конкретного элемента, слайдер&nbsp;&mdash; для тонкой подстройки.</p>
+            <p lang="en">What we are training: <strong>matching the refinement tool to the task</strong>. Text&nbsp;&mdash; for meaning, inline comment&nbsp;&mdash; for a specific element, slider&nbsp;&mdash; for fine tuning.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Два первых артефакта</span><span lang="en">Your first two artefacts</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Каждый проект делается через диалог с&nbsp;Claude Design. Я&nbsp;даю «отправную» формулировку и&nbsp;несколько уточняющих промптов&nbsp;&mdash; пробуйте сначала свои, потом сверьтесь с&nbsp;моими.</p>
+        <p class="reading" lang="en">Each project is built through dialogue with Claude Design. I give a starting brief and a few follow-up prompts&nbsp;&mdash; try yours first, then compare with mine.</p>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Меню крафтовой кофейни</span><span lang="en">Craft café menu</span></h3>
+            <p class="goal" lang="ru">Цель: одностраничное меню для печати&nbsp;A4 с&nbsp;тремя разделами и&nbsp;тремя позициями в&nbsp;каждом, экспорт в&nbsp;PDF, готовый для печати на&nbsp;домашнем принтере.</p>
+            <p class="goal" lang="en">Goal: a single-sheet A4 menu, three sections with three items each, exported to a print-ready PDF you can run on a home printer.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Откройте <code>claude.ai/design</code>, нажмите «New project».</li>
+                <li>Начальный промпт:
+                    <pre class="shell">&gt; одностраничное меню для крафтовой кофейни «Северный край».
+&gt; формат: A4 вертикальный, для печати.
+&gt; стиль: скандинавская типографика, тёплая бежево-кофейная палитра, минимализм.
+&gt; структура:
+&gt;   — заголовок MENU крупно вверху;
+&gt;   — название кофейни «Северный край» под заголовком, помельче, серифом;
+&gt;   — три секции с тремя позициями: espresso (3 позиции), filter (3 позиции), sweets (3 позиции);
+&gt;   — у каждой позиции: название, краткое описание (1 строка), цена;
+&gt;   — внизу: адрес-заглушка «ул. Морская, 12» и часы «8:00 — 21:00».
+&gt; никаких иконок и фотографий, только типографика.</pre>
+                </li>
+                <li>Дождитесь первой версии. Откройте холст, посмотрите на&nbsp;него <em>как клиент в&nbsp;кафе</em>: понятно ли, что есть три раздела? легко&nbsp;ли найти цену?</li>
+                <li>Если первая версия близка&nbsp;&mdash; уточняйте текстовыми промптами:
+                    <pre class="shell">&gt; заголовок MENU сделай в полтора раза крупнее.
+&gt; убери разделительные линии между секциями — пусть пробелы делают своё.
+&gt; цены выровняй по правому краю каждой строки.</pre>
+                </li>
+                <li>Если первая версия далеко&nbsp;&mdash; не&nbsp;мучайте, нажмите «New project», переформулируйте начальный промпт (например: добавьте конкретный референс «как меню Café Loram в&nbsp;Стокгольме»).</li>
+                <li>Когда нравится&nbsp;&mdash; <em>Export → PDF</em>. Файл попадёт в&nbsp;<code>Downloads</code>. Откройте, проверьте: на&nbsp;A4&nbsp;ли это печатается, не&nbsp;обрезано&nbsp;ли с&nbsp;краёв.</li>
+                <li>Сохраните Internal URL дизайна (<em>Share → Copy link</em>)&nbsp;&mdash; он&nbsp;понадобится при сдаче чек-листа.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Open <code>claude.ai/design</code>, click &ldquo;New project.&rdquo;</li>
+                <li>Starting prompt:
+                    <pre class="shell">&gt; single-sheet menu for a craft café "Northern Coast."
+&gt; format: A4 vertical, for print.
+&gt; style: Scandinavian typography, warm beige-coffee palette, minimal.
+&gt; structure:
+&gt;   — heading MENU big at the top;
+&gt;   — café name "Northern Coast" below it, smaller, in a serif;
+&gt;   — three sections with three items: espresso (3), filter (3), sweets (3);
+&gt;   — each item: name, one-line description, price;
+&gt;   — bottom: placeholder address "12 Marine Street" and hours "8:00 — 21:00".
+&gt; no icons, no photos, only type.</pre>
+                </li>
+                <li>Wait for the first take. Look at the canvas <em>like a customer in the café</em>: are the three sections clear? is the price easy to find?</li>
+                <li>If close&nbsp;&mdash; refine with text prompts:
+                    <pre class="shell">&gt; make the MENU heading 1.5× bigger.
+&gt; drop the dividing rules between sections — let whitespace do the work.
+&gt; right-align the prices on each line.</pre>
+                </li>
+                <li>If far off&nbsp;&mdash; do not torture it. New project, rewrite the brief (add a concrete reference: &ldquo;like the Café Loram menu in Stockholm&rdquo;).</li>
+                <li>When you like it&nbsp;&mdash; <em>Export → PDF</em>. The file lands in <code>Downloads</code>. Open it, check: is it A4-printable, no edges clipped.</li>
+                <li>Save the Internal URL of the design (<em>Share → Copy link</em>)&nbsp;&mdash; you will need it for the checklist.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>писать структурированный начальный промпт с&nbsp;форматом и&nbsp;стилем;</li>
+                <li>уточнять текстом «крупнее, убери, выровняй»;</li>
+                <li>экспортировать в&nbsp;PDF и&nbsp;проверять результат вне Claude Design.</li>
+            </ul>
+            <ul lang="en">
+                <li>writing a structured starting prompt with format and style;</li>
+                <li>refining by text&nbsp;&mdash; &ldquo;bigger, drop, align&rdquo;;</li>
+                <li>exporting to PDF and checking the result outside Claude Design.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Постер инди-игры для&nbsp;Steam</span><span lang="en">Indie-game poster for Steam</span></h3>
+            <p class="goal" lang="ru">Цель: один <dfn class="term" tabindex="0" data-def="главная иллюстрация продукта, которая идёт в шапку Steam, на постер, в превью соцсетей. У неё одна задача: за 1 секунду объяснить «что это и о чём».">key&nbsp;art</dfn>-постер вертикального формата для воображаемой инди-игры. Тренируем работу с&nbsp;инлайн-комментариями.</p>
+            <p class="goal" lang="en">Goal: one vertical-format <dfn class="term" tabindex="0" data-def="the master product illustration that lives at the top of Steam, on the poster, in social previews. Its one job: in one second, communicate what it is and what it is about.">key art</dfn> poster for an imaginary indie game. We train inline comments here.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Новый проект. Начальный промпт:
+                    <pre class="shell">&gt; постер для инди-игры «Tide of Stars».
+&gt; жанр: исследовательский платформер, главная героиня — девочка-астроном.
+&gt; формат: вертикальный (1080×1920), как для Steam-страницы.
+&gt; стиль: hand-painted, как у Studio Ghibli и Inside, тёплая закатная палитра.
+&gt; центр композиции: маленькая фигурка с фонариком на скале, над ней — огромное звёздное небо.
+&gt; внизу — название игры крупным шрифтом и подзаголовок «An astronomy adventure».
+&gt; внизу мелко: «coming 2026», логотип студии «Aurora Pixel».</pre>
+                </li>
+                <li>Скорее всего, Claude поставит фигурку слишком крупно или сместит композицию. <em>Не&nbsp;пишите длинный текстовый промпт</em>&nbsp;&mdash; вместо этого попробуйте инлайн-комментарии.</li>
+                <li>Наведите курсор на&nbsp;фигурку героини на&nbsp;холсте. Появится облачко-комментарий. Кликните, напишите: <em>«меньше в&nbsp;два раза, и&nbsp;сдвинь вправо-вниз, чтобы небо было главным»</em>.</li>
+                <li>Также инлайн на&nbsp;названии: <em>«шрифт изменить на&nbsp;ручной курсив, как у&nbsp;старых сказок»</em>.</li>
+                <li>Финальная подгонка слайдером: подвигайте «warmth»/«contrast» (если есть)&nbsp;&mdash; найдите момент, когда закат становится самым тёплым.</li>
+                <li>Когда нравится&nbsp;&mdash; <em>Export → PNG</em> (или PDF, если нужна печать). Сохраните Internal URL.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>New project. Starting prompt:
+                    <pre class="shell">&gt; poster for an indie game "Tide of Stars."
+&gt; genre: exploration platformer, protagonist a girl-astronomer.
+&gt; format: vertical (1080×1920), like a Steam page.
+&gt; style: hand-painted, in the line of Studio Ghibli and Inside, warm sunset palette.
+&gt; centre: a small figure with a lantern on a cliff, above her — a vast starlit sky.
+&gt; bottom — the game title in big type and subtitle "An astronomy adventure."
+&gt; small at the very bottom: "coming 2026", studio logo "Aurora Pixel."</pre>
+                </li>
+                <li>Likely Claude will scale the figure too big or shift the composition. <em>Do not write a long text correction</em>&nbsp;&mdash; try inline comments instead.</li>
+                <li>Hover over the figure on the canvas. A comment-bubble appears. Click, write: <em>&ldquo;half the size, shift down-right, let the sky be the hero.&rdquo;</em></li>
+                <li>Inline on the title: <em>&ldquo;swap the typeface to a hand-drawn italic, like in old fairy-tale books.&rdquo;</em></li>
+                <li>Final tuning with sliders: pull &ldquo;warmth&rdquo;/&ldquo;contrast&rdquo; (if available)&nbsp;&mdash; find the moment the sunset turns warmest.</li>
+                <li>When you like it&nbsp;&mdash; <em>Export → PNG</em> (or PDF for print). Save the Internal URL.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>работать с&nbsp;<strong>инлайн-комментариями</strong> вместо длинных текстовых правок;</li>
+                <li>отдавать конкретные стилевые референсы («как у&nbsp;Studio Ghibli»);</li>
+                <li>экспортировать в&nbsp;PNG для соцсетей.</li>
+            </ul>
+            <ul lang="en">
+                <li>using <strong>inline comments</strong> instead of long text rewrites;</li>
+                <li>handing over concrete style references (&ldquo;like Studio Ghibli&rdquo;);</li>
+                <li>exporting to PNG for social.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши темы</span><span lang="en">Same moves, your themes</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Эти задачи&nbsp;&mdash; <em>вариации</em> только что разобранных проектов. Никаких новых концепций. Если что-то идёт не&nbsp;так&nbsp;&mdash; вернитесь к&nbsp;инструкциям&nbsp;A&nbsp;и&nbsp;B и&nbsp;посмотрите, как там было сформулировано.</p>
+        <p class="reading" lang="en">These are <em>variations</em> of the projects we just walked through. No new concepts. If something goes wrong&nbsp;&mdash; return to projects A and B and check the wording.</p>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Обложка плейлиста или постер любимого фильма</span><span lang="en">Playlist cover or favourite-film poster</span></h3>
+            <p class="goal" lang="ru">Цель: одна обложка квадратного формата (1080×1080) или вертикального постера. Тема и&nbsp;стиль на&nbsp;ваш выбор. Минимум&nbsp;3 итерации&nbsp;&mdash; сначала текст, потом инлайн, потом слайдер.</p>
+            <p class="goal" lang="en">Goal: one square cover (1080×1080) or a vertical poster. Topic and style your choice. At least 3 iterations&nbsp;&mdash; first text, then inline, then slider.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Структура промпта та&nbsp;же, что в&nbsp;«Меню кофейни»&nbsp;&mdash; меняется только содержимое: формат, стиль, что должно быть в&nbsp;центре, что внизу.</li>
+                <li>Если делаете обложку плейлиста&nbsp;&mdash; стиль может быть «акварельный», «коллаж в&nbsp;духе 90-х», «риторические штрихи как у&nbsp;Saul&nbsp;Bass», «японская графика середины&nbsp;XX&nbsp;века». Конкретный референс резко улучшает первую версию.</li>
+                <li>Если фильм&nbsp;&mdash; пробуйте: <em>«как фестивальный плакат для&nbsp;Каннского фестиваля»</em>, <em>«в&nbsp;стиле афиш Польской школы 70-х»</em>, <em>«нуар, чёрно-белый, с&nbsp;одним красным акцентом»</em>.</li>
+                <li>Не&nbsp;экономьте на&nbsp;референсах. Один конкретный («как у&nbsp;Saul&nbsp;Bass») лучше десяти расплывчатых («стильно, современно»).</li>
+            </ul>
+            <ul lang="en">
+                <li>Same prompt structure as the café menu&nbsp;&mdash; only the content changes: format, style, centre, bottom.</li>
+                <li>For a playlist cover, try: &ldquo;watercolour,&rdquo; &ldquo;90s collage,&rdquo; &ldquo;Saul Bass strokes,&rdquo; &ldquo;mid-20th-century Japanese graphic.&rdquo; A concrete reference sharpens the first take dramatically.</li>
+                <li>For a film&nbsp;&mdash; try: <em>&ldquo;a Cannes festival poster,&rdquo;</em> <em>&ldquo;in the line of 70s Polish School posters,&rdquo;</em> <em>&ldquo;noir, black-and-white, one red accent.&rdquo;</em></li>
+                <li>Do not skimp on references. One concrete (&ldquo;like Saul Bass&rdquo;) beats ten vague (&ldquo;stylish, modern&rdquo;).</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть один экспортированный файл (PNG или PDF) на&nbsp;вашем компьютере;</li>
+                        <li>вы&nbsp;использовали хотя&nbsp;бы один <strong>текстовый промпт</strong>, один <strong>инлайн-комментарий</strong> и&nbsp;один <strong>слайдер</strong>;</li>
+                        <li>в&nbsp;дизайне есть конкретный стилевой референс (вы&nbsp;явно назвали имя художника, эпоху или стиль);</li>
+                        <li>вы&nbsp;можете коротко рассказать, какая итерация дала самый большой прирост качества и&nbsp;почему.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>one exported file (PNG or PDF) on your computer;</li>
+                        <li>you used at least one <strong>text prompt</strong>, one <strong>inline comment</strong> and one <strong>slider</strong>;</li>
+                        <li>the design carries a concrete style reference (you named an artist, era, or style explicitly);</li>
+                        <li>you can briefly say which iteration gave the biggest quality jump and why.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        В&nbsp;том&nbsp;же диалоге Claude&nbsp;Design попросите: <em>«посмотри на&nbsp;финальный холст. Если бы ты&nbsp;увидел эту обложку первый раз&nbsp;&mdash; что бы&nbsp;тебе сразу понравилось, а&nbsp;что насторожило? отвечай как редактор, а&nbsp;не&nbsp;как&nbsp;ассистент»</em>. Это и&nbsp;есть ваше «контрольное мнение со&nbsp;стороны»&nbsp;&mdash; в&nbsp;курсе мы&nbsp;будем пользоваться этим приёмом постоянно.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        In the same Claude Design dialogue: <em>&ldquo;look at the final canvas. If you saw this cover for the first time&nbsp;&mdash; what would you like immediately, and what would worry you? answer as an editor, not as an assistant.&rdquo;</em> That is your &ldquo;outside opinion&rdquo;&nbsp;&mdash; a habit we will use throughout.
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Афиша личного события</span><span lang="en">Personal-event poster</span></h3>
+            <p class="goal" lang="ru">Цель: афиша на&nbsp;A3&nbsp;вертикально для события, которое <em>действительно</em> у&nbsp;вас в&nbsp;ближайший месяц&nbsp;&mdash; день рождения, домашний концерт, новоселье, кофе-встреча, прогулка по&nbsp;парку с&nbsp;друзьями. Это «настоящий артефакт»&nbsp;&mdash; не&nbsp;абстрактный, а&nbsp;для конкретного дня и&nbsp;места.</p>
+            <p class="goal" lang="en">Goal: an A3 vertical poster for an event that is <em>actually</em> happening in your life this month&nbsp;&mdash; a birthday, a house concert, a housewarming, a coffee meet-up, a park walk with friends. A &ldquo;real artefact&rdquo;&nbsp;&mdash; tied to a real date and place, not abstract.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Структура&nbsp;&mdash; как у&nbsp;«Постера инди-игры»: что в&nbsp;центре, что внизу.</li>
+                <li>Обязательно конкретные данные: дата, время, адрес. Это превращает «упражнение» в&nbsp;«рабочую афишу».</li>
+                <li>Хорошо: добавить наверху небольшой сторителлинг&nbsp;&mdash; одну строку «зачем мы&nbsp;собираемся». Афиша без&nbsp;этой строки сухая.</li>
+                <li>Ещё лучше: попросить две версии&nbsp;&mdash; одну для бумажного формата (A3, печать), другую для соцсетей (квадрат 1080×1080). Один и&nbsp;тот&nbsp;же дизайн в&nbsp;двух раскладках.</li>
+                <li>Распечатайте или отправьте друзьям. Это и&nbsp;есть «отдала в&nbsp;мир, а&nbsp;не&nbsp;в&nbsp;ящик».</li>
+            </ul>
+            <ul lang="en">
+                <li>Structure&nbsp;&mdash; same as the indie-game poster: what is at the centre, what is at the bottom.</li>
+                <li>Concrete details are mandatory: date, time, address. That turns &ldquo;an exercise&rdquo; into &ldquo;a working poster.&rdquo;</li>
+                <li>Nice: add a one-line story at the top&nbsp;&mdash; &ldquo;why we are gathering.&rdquo; Posters without it feel dry.</li>
+                <li>Even nicer: ask for two versions&nbsp;&mdash; print (A3) and social (1080×1080 square). Same design, two layouts.</li>
+                <li>Print it or send it to friends. That is &ldquo;released into the world,&rdquo; not &ldquo;archived in a folder.&rdquo;</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>афиша содержит конкретные дату, время и&nbsp;адрес (не&nbsp;«lorem ipsum»);</li>
+                        <li>есть две раскладки: одна для печати (A3), одна квадратная для соцсетей;</li>
+                        <li>сверху одна строка-история, объясняющая, зачем событие;</li>
+                        <li>вы&nbsp;экспортировали обе версии и&nbsp;хотя&nbsp;бы одну отправили человеку, который придёт.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>the poster carries real date, time and address (no &ldquo;lorem ipsum&rdquo;);</li>
+                        <li>two layouts exist: A3 print and a 1080×1080 square for social;</li>
+                        <li>a one-line story at the top explaining why the event;</li>
+                        <li>you exported both versions and sent at least one to a person who will actually attend.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«сравни обе версии&nbsp;&mdash; A3 и&nbsp;квадрат. Что в&nbsp;квадратной адаптации работает хуже, чем в&nbsp;A3? как это&nbsp;поправить, оставив тот&nbsp;же бренд?»</em>. Этот разбор&nbsp;&mdash; маленькая репетиция «multi-formate брендинга», который мы&nbsp;будем делать в&nbsp;этапе&nbsp;08.
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>&ldquo;compare the two versions&nbsp;&mdash; A3 and square. What works worse in the square adaptation? how to fix it while keeping the same brand?&rdquo;</em> A small rehearsal for the multi-format branding we cover in etape 08.
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Новые слова, которые встретились</span><span lang="en">New words that came up</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">В&nbsp;тексте этапа эти слова подчёркнуты пунктиром&nbsp;&mdash; наведите или коснитесь, и&nbsp;всплывёт короткая справка. Здесь&nbsp;&mdash; полный словарь для закрепления.</p>
+        <p class="reading" lang="en">Inside the text these words are underlined with dots&nbsp;&mdash; hover or tap to see a short tooltip. Here is the full glossary for reinforcement.</p>
+
+        <dl class="glossary">
+            <dt><span lang="ru">Workspace</span><span lang="en">Workspace</span></dt>
+            <dd>
+                <span lang="ru">Рабочее пространство Claude Design в&nbsp;браузере. Слева&nbsp;&mdash; диалог с&nbsp;Claude, в&nbsp;центре&nbsp;&mdash; холст с&nbsp;дизайном, сверху&nbsp;&mdash; меню (вид, экспорт, share, handoff). Каждый проект живёт в&nbsp;своём workspace и&nbsp;сохраняется автоматически.</span>
+                <span lang="en">The Claude Design browser workspace. Dialogue on the left, design canvas in the centre, menu on top (view, export, share, handoff). Every project lives in its own workspace and is saved automatically.</span>
+            </dd>
+
+            <dt><span lang="ru">Холст</span><span lang="en">Canvas</span></dt>
+            <dd>
+                <span lang="ru">Центральная область workspace, где Claude собирает и&nbsp;показывает дизайн. Размер подстраивается под формат: A4 для печати, 1080×1080 для соцсетей, 1920×1080 для презентации.</span>
+                <span lang="en">The central area of the workspace where Claude assembles and shows the design. Size adapts to format: A4 for print, 1080×1080 for social, 1920×1080 for slides.</span>
+            </dd>
+
+            <dt><span lang="ru">Композиция</span><span lang="en">Composition</span></dt>
+            <dd>
+                <span lang="ru">Первый слой чтения дизайна: <em>что где</em>. Распределение элементов по&nbsp;холсту, центр композиции, баланс «тяжёлых» и&nbsp;«лёгких» зон. Если в&nbsp;композиции что-то «не&nbsp;на&nbsp;своём месте»&nbsp;&mdash; чините инлайн-комментарием.</span>
+                <span lang="en">The first reading layer: <em>what goes where</em>. Element distribution, the centre of composition, the balance of &ldquo;heavy&rdquo; and &ldquo;light&rdquo; zones. If something is &ldquo;in the wrong place&rdquo;&nbsp;&mdash; fix it with an inline comment.</span>
+            </dd>
+
+            <dt><span lang="ru">Иерархия</span><span lang="en">Hierarchy</span></dt>
+            <dd>
+                <span lang="ru">Второй слой чтения: <em>что главное</em>. Визуальный порядок прочтения, что глаз видит первым, что вторым. Хорошая иерархия выделяет главное размером, весом или цветом. Чините текстовым промптом&nbsp;&mdash; это смысловая правка.</span>
+                <span lang="en">The second reading layer: <em>what matters most</em>. The visual order of reading, what the eye sees first, second. Good hierarchy promotes the important by size, weight, or colour. Fix it by text prompt&nbsp;&mdash; a semantic edit.</span>
+            </dd>
+
+            <dt><span lang="ru">Атмосфера</span><span lang="en">Atmosphere</span></dt>
+            <dd>
+                <span lang="ru">Третий слой чтения: <em>какой mood</em>. Тёплый/холодный, плотный/воздушный, дорогой/доступный, формальный/игривый. Субъективно, но&nbsp;описуемо. Чините слайдером&nbsp;&mdash; это финальная отделка.</span>
+                <span lang="en">The third reading layer: <em>the mood</em>. Warm/cool, dense/airy, expensive/accessible, formal/playful. Subjective but describable. Fix with a slider&nbsp;&mdash; final polish.</span>
+            </dd>
+
+            <dt><span lang="ru">Инлайн-комментарий</span><span lang="en">Inline comment</span></dt>
+            <dd>
+                <span lang="ru">Замечание, привязанное к&nbsp;конкретному элементу холста. Жест выбора элемента может называться по-разному (наведение, контекстное меню, кнопка)&nbsp;&mdash; UI&nbsp;в&nbsp;research preview меняется. Принцип постоянный: <em>привязать заметку к&nbsp;конкретной штуке</em>.</span>
+                <span lang="en">A note attached to a specific element on the canvas. The element-select gesture may vary (hover, context menu, button)&nbsp;&mdash; the research-preview UI shifts. The principle stays: <em>attach a note to a specific thing</em>.</span>
+            </dd>
+
+            <dt><span lang="ru">Слайдер</span><span lang="en">Slider</span></dt>
+            <dd>
+                <span lang="ru">Регулятор для тонкой подстройки spacing, color, layout без&nbsp;слов. Тянете полоску&nbsp;&mdash; смотрите, как холст меняется в&nbsp;реальном времени. Самый «безопасный» из&nbsp;трёх инструментов: двинули&nbsp;&mdash; не&nbsp;понравилось&nbsp;&mdash; вернули.</span>
+                <span lang="en">A wordless control for spacing, colour, layout. Drag&nbsp;&mdash; watch the canvas update live. The &ldquo;safest&rdquo; of the three tools: pull&nbsp;&mdash; not great&nbsp;&mdash; pull back.</span>
+            </dd>
+
+            <dt><span lang="ru">Research preview</span><span lang="en">Research preview</span></dt>
+            <dd>
+                <span lang="ru">Режим раннего доступа Anthropic. Продукт работает, но&nbsp;интерфейс меняется активно. Принципы постоянны, кнопки могут переименовываться или переезжать. Не&nbsp;пугайтесь, если UI&nbsp;отличается от&nbsp;скриншотов&nbsp;&mdash; спросите Claude в&nbsp;диалоге, как сейчас называется нужная функция.</span>
+                <span lang="en">Anthropic&rsquo;s early-access mode. The product works, but the interface is changing actively. Principles persist, buttons may rename or relocate. If the UI differs from the screenshots&nbsp;&mdash; ask Claude in the dialogue what the function is called now.</span>
+            </dd>
+
+            <dt><span lang="ru">Opus 4.7</span><span lang="en">Opus 4.7</span></dt>
+            <dd>
+                <span lang="ru">Самая мощная vision-модель Claude на&nbsp;момент запуска Claude Design. «Vision» означает, что модель видит изображения. Поэтому Claude Design принимает референс-картинки и&nbsp;собирает дизайн в&nbsp;их&nbsp;стилистике.</span>
+                <span lang="en">The most capable Claude vision model at the time of launch. &ldquo;Vision&rdquo; means the model sees images. That is why Claude Design accepts reference images and matches their style.</span>
+            </dd>
+
+            <dt><span lang="ru">Handoff</span><span lang="en">Handoff</span></dt>
+            <dd>
+                <span lang="ru">Передача дизайна в&nbsp;разработку. Одна кнопка: дизайн упаковывается в&nbsp;bundle (структура, токены, ассеты) и&nbsp;уходит напрямую в&nbsp;Claude Code на&nbsp;имплементацию. Подробно&nbsp;&mdash; в&nbsp;этапе&nbsp;05.</span>
+                <span lang="en">Handing the design to development. One button: design packs into a bundle (structure, tokens, assets) and ships straight to Claude Code for implementation. Etape 05 covers it.</span>
+            </dd>
+
+            <dt><span lang="ru">Internal URL</span><span lang="en">Internal URL</span></dt>
+            <dd>
+                <span lang="ru">Ссылка прямо на&nbsp;ваш дизайн в&nbsp;Claude Design. Открывается у&nbsp;тех, кто залогинен в&nbsp;вашу организацию (Share = view-only или edit). Удобно для ревью без&nbsp;скачивания файлов.</span>
+                <span lang="en">A link straight to your design inside Claude Design. Opens for people logged into your org (Share = view-only or edit). Useful for review without downloads.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Постарайтесь сначала ответить мысленно или вслух&nbsp;&mdash; и&nbsp;только потом раскрыть «правильный ответ». После того как сверились, отметьте: <em>знал</em> или <em>не знал</em>.</p>
+        <p class="reading" lang="en">Try answering mentally or out loud first&nbsp;&mdash; only then reveal the &ldquo;right answer.&rdquo; After comparing, mark it: <em>knew</em> or <em>did not know</em>.</p>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Что переносится из&nbsp;Claude Code в&nbsp;Claude Design напрямую, а&nbsp;что меняется?</span>
+                        <span lang="en">What ports directly from Claude Code into Claude Design, and what changes?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Переносится:</strong> модель (Opus&nbsp;4.7), подписка, итерация по&nbsp;диалогу, конкретные референсы лучше эпитетов, приём «спросите Claude напоследок». <strong>Меняется:</strong> среда (браузер вместо CLI), медиум (холст вместо файлов), три инструмента уточнения вместо одного, native экспорт в&nbsp;дизайн-форматы, persistent history (без&nbsp;git).</p>
+                        <p lang="en"><strong>Ports over:</strong> the model (Opus 4.7), subscriptions, dialogue-driven iteration, &ldquo;concrete references beat epithets,&rdquo; the &ldquo;ask Claude last&rdquo; move. <strong>Changes:</strong> the environment (browser, not CLI), medium (canvas, not files), three refinement tools instead of one, native exports to design formats, persistent history (no git needed).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">По&nbsp;какому адресу живёт Claude Design и&nbsp;на&nbsp;какой модели работает?</span>
+                        <span lang="en">Where does Claude Design live and which model runs it?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>claude.ai/design</code>, работает на&nbsp;Opus&nbsp;4.7&nbsp;&mdash; самой мощной vision-модели Claude на&nbsp;момент запуска (17&nbsp;апреля 2026).</p>
+                        <p lang="en"><code>claude.ai/design</code>, on Opus 4.7&nbsp;&mdash; the most capable Claude vision model at launch (17 April 2026).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Какие подписки Anthropic дают доступ к&nbsp;Claude Design?</span>
+                        <span lang="en">Which Anthropic subscriptions give access to Claude Design?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Pro, Max, Team, Enterprise. На&nbsp;Enterprise дополнительно нужно, чтобы администратор включил Claude Design в&nbsp;настройках организации&nbsp;&mdash; по&nbsp;умолчанию выключено.</p>
+                        <p lang="en">Pro, Max, Team, Enterprise. Enterprise additionally requires the org admin to enable Claude Design in organisation settings&nbsp;&mdash; off by default.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Какие три инструмента уточнения есть в&nbsp;Claude Design и&nbsp;для чего каждый?</span>
+                        <span lang="en">What are the three refinement tools in Claude Design, and what is each for?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Текстовый промпт</strong>&nbsp;&mdash; для смысловых правок («сделай контрастнее, добавь блок»). <strong>Инлайн-комментарий</strong>&nbsp;&mdash; для точечных задач на&nbsp;конкретном элементе («этот&nbsp;&mdash; меньше»). <strong>Слайдер</strong>&nbsp;&mdash; для тонкой подстройки spacing, color, layout без&nbsp;слов.</p>
+                        <p lang="en"><strong>Text prompt</strong>&nbsp;&mdash; for semantic edits (&ldquo;higher contrast, add a block&rdquo;). <strong>Inline comment</strong>&nbsp;&mdash; for pointed tasks on a specific element (&ldquo;this&nbsp;&mdash; smaller&rdquo;). <strong>Slider</strong>&nbsp;&mdash; for wordless fine-tuning of spacing, colour, layout.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Какие три слоя чтения дизайна и&nbsp;каким инструментом чинится каждый?</span>
+                        <span lang="en">What are the three reading layers, and which tool fixes each?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Композиция</strong> (что&nbsp;где, баланс холста)&nbsp;&mdash; чините инлайн-комментарием на&nbsp;конкретном элементе. <strong>Иерархия</strong> (что главное, в&nbsp;каком порядке читается)&nbsp;&mdash; чините текстовым промптом, это смысловая правка. <strong>Атмосфера</strong> (какой mood, тёплый/холодный, плотный/воздушный)&nbsp;&mdash; чините слайдером, это финальная отделка.</p>
+                        <p lang="en"><strong>Composition</strong> (what goes where, canvas balance)&nbsp;&mdash; fix with an inline comment on the specific element. <strong>Hierarchy</strong> (what matters, the reading order)&nbsp;&mdash; fix by text prompt, a semantic edit. <strong>Atmosphere</strong> (the mood, warm/cool, dense/airy)&nbsp;&mdash; fix with a slider, final polish.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">Что Claude Design <em>не&nbsp;умеет</em> делать&nbsp;&mdash; для чего нужны другие инструменты?</span>
+                        <span lang="en">What does Claude Design <em>not</em> do&nbsp;&mdash; what still needs other tools?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Фотореалистичный 3D-рендер уровня Corona&nbsp;/ V-Ray, видео-монтаж, 3D-моделирование персонажей, ретушь фотографий. Стилизованный 3D-тур и&nbsp;иконки в&nbsp;одном стиле&nbsp;&mdash; уже умеет, хотя ещё иногда сбивается.</p>
+                        <p lang="en">Photoreal 3D rendering at Corona/V-Ray level, video editing, 3D character modelling, photo retouching. Stylised 3D tours and one-family icon sets&nbsp;&mdash; it can do, though it still trips up sometimes.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q">
+                    <p class="q-text">
+                        <span lang="ru">UI Claude Design отличается от&nbsp;того, что описано в&nbsp;тьюториале. Что делать?</span>
+                        <span lang="en">The Claude Design UI differs from the tutorial&rsquo;s description. What now?</span>
+                    </p>
+                </div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Это нормально для research preview&nbsp;&mdash; интерфейс меняется. <strong>Принципы остаются</strong>: workspace, холст, три инструмента уточнения, экспорт, share, handoff. Кнопки могут переименовываться или переезжать. Если не&nbsp;найдёте функцию&nbsp;&mdash; спросите Claude в&nbsp;том&nbsp;же диалоге: <em>«как сейчас в&nbsp;интерфейсе привязать комментарий к&nbsp;конкретному элементу?»</em>&nbsp;&mdash; и&nbsp;он&nbsp;покажет.</p>
+                        <p lang="en">Normal for a research preview&nbsp;&mdash; the interface drifts. <strong>Principles persist</strong>: workspace, canvas, three refinement tools, export, share, handoff. Buttons may rename or relocate. If you cannot find a feature&nbsp;&mdash; ask Claude in the same dialogue: <em>&ldquo;how do I attach a comment to a specific element in the current interface?&rdquo;</em> It will show you.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Отметьте галочками, что освоено уверенно. Если на&nbsp;одном из&nbsp;пунктов сомневаетесь&nbsp;&mdash; вернитесь к&nbsp;соответствующей теме или практике. Этап готов к&nbsp;закрытию, когда все галочки стоят.</p>
+        <p class="reading" lang="en">Tick what you have nailed. If unsure on a point&nbsp;&mdash; return to the relevant topic or practice. The etape is ready to close when all ticks are up.</p>
+
+        <ul class="checklist">
+            <li data-key="d0-access">
+                <span lang="ru">Доступ открыт: <code>claude.ai/design</code> загружается, для Enterprise админ включил в&nbsp;Settings.</span>
+                <span lang="en">Access is open: <code>claude.ai/design</code> loads; on Enterprise the admin enabled it in Settings.</span>
+            </li>
+            <li data-key="d0-vsclaudecode">
+                <span lang="ru">Понимаю, что переносится из&nbsp;Claude Code (модель, итерация, референсы) и&nbsp;что меняется (среда, медиум, три инструмента, экспорт, persistent history, handoff).</span>
+                <span lang="en">I get what ports from Claude Code (model, iteration, references) and what changes (environment, medium, three tools, export, persistent history, handoff).</span>
+            </li>
+            <li data-key="d0-workspace">
+                <span lang="ru">Ориентируюсь в&nbsp;workspace: диалог, холст, верхнее меню (Share, Export, Handoff).</span>
+                <span lang="en">I navigate the workspace: dialogue, canvas, top menu (Share, Export, Handoff).</span>
+            </li>
+            <li data-key="d0-tools">
+                <span lang="ru">Попробовал все три инструмента уточнения хотя&nbsp;бы раз: текстовый промпт, инлайн-комментарий, слайдер.</span>
+                <span lang="en">Tried all three refinement tools at least once: text prompt, inline comment, slider.</span>
+            </li>
+            <li data-key="d0-reading">
+                <span lang="ru">Умею читать дизайн в&nbsp;трёх слоях: композиция (что&nbsp;где), иерархия (что главное), атмосфера (какой mood)&nbsp;&mdash; и&nbsp;знаю, какой инструмент чинит каждый слой.</span>
+                <span lang="en">I read designs in three layers: composition (what goes where), hierarchy (what matters), atmosphere (mood)&nbsp;&mdash; and know which tool fixes each.</span>
+            </li>
+            <li data-key="d0-deliverable">
+                <span lang="ru">Сделал минимум один артефакт и&nbsp;экспортировал в&nbsp;PDF (или PNG, или HTML).</span>
+                <span lang="en">Shipped at least one artefact, exported as PDF (or PNG, or HTML).</span>
+            </li>
+            <li data-key="d0-rules">
+                <span lang="ru">Знаю field rules: что Claude Design делает хорошо, что сносно, чего не&nbsp;делает&nbsp;&mdash; и&nbsp;куда уходить за&nbsp;остальным.</span>
+                <span lang="en">I know the field rules: what Claude Design does well, decently, not at all&nbsp;&mdash; and where to go for the rest.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="design-00" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev disabled" href="#" aria-disabled="true">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">Это первый этап</span><span lang="en">This is the first etape</span></span>
+            </a>
+            <a class="next" href="claude-design-01.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">01 · Первый промпт и&nbsp;три инструмента уточнения</span><span lang="en">01 · First Prompt &amp; the Three Refinement Tools</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Дизайнером не&nbsp;становятся, нажав на&nbsp;кнопку. Зато можно начать пользоваться дизайн-инструментом за&nbsp;один вечер».</p>
+            <p class="signature" lang="en">&ldquo;You do not become a designer by clicking a button. But you can start using a design tool in one evening.&rdquo;</p>
+            <p lang="ru">Этап&nbsp;00 пройден&nbsp;&mdash; основное снято: Claude Design открыт, интерфейс знаком, четыре обложки лежат в&nbsp;<code>Downloads</code>, страх ушёл. Дальше&nbsp;&mdash; учимся писать дизайн-промпты так, чтобы первая версия Claude была близка к&nbsp;нужной.</p>
+            <p lang="en">Etape 00 is behind you&nbsp;&mdash; the core task is solved: Claude Design is open, the interface familiar, four covers sit in <code>Downloads</code>, the fear is gone. Next&nbsp;&mdash; we learn to phrase design briefs so Claude&rsquo;s first attempt is close to what you wanted.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="claude-design-01.html"><span lang="ru">→ Этап&nbsp;01</span><span lang="en">→ Etape 01</span></a></li>
+                <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

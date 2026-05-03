@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 09 · MCP-серверы и собственные плагины — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 09 курса по Claude Code: свой MCP-сервер, упаковка skills + commands + hooks + MCP в плагин, публикация на Smithery.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="09">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 09</span><span lang="en">Etape 09</span></span> &nbsp;·&nbsp; <span lang="ru">MCP-серверы и&nbsp;собственные плагины</span><span lang="en">MCP servers &amp; your own plugins</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">От&nbsp;потребителя&nbsp;&mdash; к&nbsp;<em>автору</em>.</span>
+            <span lang="en">From consumer to <em>author</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            До&nbsp;этого мы&nbsp;ставили чужие MCP и&nbsp;skills. Сегодня делаем <em>свои</em>: MCP-сервер «Daily Trader» с&nbsp;инструментами <code>get_price</code>, <code>compute_signal</code>, <code>set_alert</code>; плагин, упаковывающий все наработки курса (skills, slash-команды, hooks, MCP); публикуем на&nbsp;Smithery, чтобы установить одной командой откуда угодно.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            We installed others’ MCPs and skills. Today we build <em>our own</em>: a “Daily Trader” MCP server with <code>get_price</code>, <code>compute_signal</code>, <code>set_alert</code>; a plugin packaging the whole course (skills, slash commands, hooks, MCP); published on Smithery so we can install it anywhere with one command.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">7–9 дней · 2–4&nbsp;ч/день</span><span lang="en">7–9 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">свой MCP · transports · plugin.json · публикация на&nbsp;Smithery</span><span lang="en">custom MCP · transports · plugin.json · Smithery publish</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">создаёте инструменты, расширяющие Claude Code для&nbsp;других</span><span lang="en">you build tools that extend Claude Code for others</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">MCP «Daily Trader» + плагин «Личный кабинет», опубликованный на&nbsp;Smithery</span><span lang="en">a “Daily Trader” MCP + a “Personal Office” plugin, published on Smithery</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что нужно для&nbsp;своего MCP и&nbsp;плагина</span><span lang="en">What you need for a custom MCP and plugin</span></h2>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3><span lang="ru">Из&nbsp;этапов 03–08</span><span lang="en">From etapes 03–08</span></h3>
+            <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Node.js, Claude Code, GitHub-аккаунт, <code>gh</code>.</li>
+                <li>Smithery CLI&nbsp;&mdash; ставится по&nbsp;ходу через <code>npx @smithery/cli@latest</code>.</li>
+                <li>Все ваши skills, slash-команды и&nbsp;hooks из&nbsp;этапа&nbsp;08a (будем упаковывать в&nbsp;плагин).</li>
+                <li>Alpha Vantage&nbsp;API key (этап&nbsp;03)&nbsp;&mdash; для&nbsp;инструмента <code>get_price</code> в&nbsp;MCP.</li>
+            </ul>
+            <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Node.js, Claude Code, GitHub account, <code>gh</code>.</li>
+                <li>Smithery CLI — pulled in along the way via <code>npx @smithery/cli@latest</code>.</li>
+                <li>All your skills, slash commands and hooks from etape 08a (we’ll bundle them into a plugin).</li>
+                <li>Alpha Vantage API key (etape 03) — for the <code>get_price</code> tool in the MCP.</li>
+            </ul>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skills</span><span lang="en">recommended · skills</span></span>
+            <h3>plugin-dev / mcp-integration / plugin-structure</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> набор skills из&nbsp;пакета <code>plugin-dev</code>: учат Claude правильно делать MCP-серверы, оформлять плагины, настраивать <code>plugin.json</code>, использовать <code>${CLAUDE_PLUGIN_ROOT}</code>.<br>
+            <strong>Зачем сейчас:</strong> без&nbsp;них Claude может сделать MCP, который запустится, но&nbsp;не&nbsp;будет соответствовать стандартам публикации.<br>
+            <strong>Где взять:</strong> встроенный маркетплейс Claude Code (<code>claude-plugins-official</code>), как <code>superpowers</code> в&nbsp;этапе&nbsp;01. Исходники&nbsp;&mdash; <a href="https://github.com/anthropics/claude-plugins-official">github.com/anthropics/claude-plugins-official</a>.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a bundle of skills from the <code>plugin-dev</code> package: teaches Claude to build MCP servers right, package plugins, set up <code>plugin.json</code>, use <code>${CLAUDE_PLUGIN_ROOT}</code>.<br>
+            <strong>Why now:</strong> without them Claude can build an MCP that runs but doesn’t meet publishing standards.<br>
+            <strong>Where:</strong> Claude Code’s built-in marketplace (<code>claude-plugins-official</code>), like <code>superpowers</code> on etape 01. Source on <a href="https://github.com/anthropics/claude-plugins-official">github.com/anthropics/claude-plugins-official</a>.</p>
+            <pre class="shell"><span class="cmt"># <span lang="ru">внутри claude (slash-команда, не shell)</span><span lang="en">inside claude (slash command, not shell)</span></span>
+/plugin install plugin-dev@claude-plugins-official</pre>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · аккаунт</span><span lang="en">recommended · account</span></span>
+            <h3>Smithery</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> крупнейший «магазин» MCP-серверов и&nbsp;плагинов для&nbsp;Claude и&nbsp;других AI-клиентов.<br>
+            <strong>Зачем сейчас:</strong> чтобы опубликовать ваш плагин и&nbsp;он&nbsp;ставился у&nbsp;других одной командой.<br>
+            <strong>Где взять:</strong> <a href="https://smithery.ai">smithery.ai</a>, регистрация через GitHub. Бесплатно для&nbsp;публичных плагинов.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the biggest “store” of MCP servers and plugins for Claude and other AI clients.<br>
+            <strong>Why now:</strong> to publish your plugin so others install it with one command.<br>
+            <strong>Where:</strong> <a href="https://smithery.ai">smithery.ai</a>, sign in via GitHub. Free for public plugins.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Как Claude получает «новые навыки»</span><span lang="en">How Claude gains “new abilities”</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">MCP изнутри: что отдаёт сервер и&nbsp;что получает Claude</span><span lang="en">MCP from the inside: what the server returns, what Claude receives</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;этапе&nbsp;03 мы&nbsp;ставили готовые MCP. Сейчас разбираемся, что именно происходит внутри. У&nbsp;MCP-сервера три типа «выдач»:</p>
+                    <ol>
+                        <li><strong>Tools</strong>&nbsp;&mdash; функции, которые Claude может вызвать. Например, <code>get_price(ticker: str)</code> возвращает текущую цену акции. Имя, параметры, описание&nbsp;&mdash; всё это сервер сообщает Claude при подключении.</li>
+                        <li><strong>Resources</strong>&nbsp;&mdash; «документы», которые Claude может прочитать. Например, <code>portfolio://my-current-positions</code>&nbsp;&mdash; ваш текущий портфель. Сервер отдаёт содержимое по&nbsp;запросу.</li>
+                        <li><strong>Prompts</strong>&nbsp;&mdash; готовые шаблоны промптов от&nbsp;сервера. Полезно, чтобы пользователю было проще «нажать кнопку», а&nbsp;не&nbsp;писать промпт с&nbsp;нуля.</li>
+                    </ol>
+                    <p>Минимум для&nbsp;нашего «Daily Trader» MCP&nbsp;&mdash; четыре tool'а:</p>
+                    <ul>
+                        <li><code>get_price(ticker)</code>&nbsp;&mdash; текущая цена акции (через Alpha Vantage);</li>
+                        <li><code>get_history(ticker, days)</code>&nbsp;&mdash; история за&nbsp;N&nbsp;дней;</li>
+                        <li><code>compute_signal(ticker)</code>&nbsp;&mdash; технический сигнал (например, простое moving average crossover);</li>
+                        <li><code>set_alert(ticker, threshold)</code>&nbsp;&mdash; записать алерт в&nbsp;файл, чтобы хук этапа&nbsp;10 проверил утром.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>On etape 03 we installed ready MCPs. Now we look inside. An MCP server returns three kinds of things:</p>
+                    <ol>
+                        <li><strong>Tools</strong> — functions Claude can call. E.g. <code>get_price(ticker: str)</code> returns the current stock price. Name, parameters, description — all this the server tells Claude on connect.</li>
+                        <li><strong>Resources</strong> — “documents” Claude can read. E.g. <code>portfolio://my-current-positions</code> — your current portfolio. The server returns the content on request.</li>
+                        <li><strong>Prompts</strong> — ready prompt templates from the server. Useful so users “press a button” instead of writing prompts from scratch.</li>
+                    </ol>
+                    <p>Minimum for our “Daily Trader” MCP — four tools:</p>
+                    <ul>
+                        <li><code>get_price(ticker)</code> — current stock price (via Alpha Vantage);</li>
+                        <li><code>get_history(ticker, days)</code> — history for N days;</li>
+                        <li><code>compute_signal(ticker)</code> — a technical signal (e.g., simple moving-average crossover);</li>
+                        <li><code>set_alert(ticker, threshold)</code> — write an alert to a file for the etape-10 hook to read in the morning.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="способ соединения MCP-сервера с клиентом. Stdio — через стандартный ввод-вывод процесса (самый частый). HTTP/SSE/WebSocket — по сети. Для нашего курса хватит stdio.">Transports</dfn>: как сервер общается с&nbsp;Claude</span><span lang="en"><dfn class="term" tabindex="0" data-def="how an MCP server talks to a client. Stdio — process stdin/stdout (most common). HTTP/SSE/WebSocket — over the network. Stdio is enough for this course.">Transports</dfn>: how the server talks to Claude</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Четыре способа соединения:</p>
+                    <ul>
+                        <li><strong>stdio</strong>&nbsp;&mdash; через стандартный ввод-вывод процесса. Самый простой и&nbsp;частый. Сервер запускается локально, общается с&nbsp;Claude через stdin/stdout.</li>
+                        <li><strong>http</strong>&nbsp;&mdash; по&nbsp;HTTP. Сервер живёт на&nbsp;удалённой машине.</li>
+                        <li><strong>sse</strong>&nbsp;&mdash; Server-Sent Events. Тоже по&nbsp;HTTP, но&nbsp;со&nbsp;стримингом.</li>
+                        <li><strong>websocket</strong>&nbsp;&mdash; двусторонний канал по&nbsp;WebSocket.</li>
+                    </ul>
+                    <p>Для&nbsp;учебного MCP, который ходит к&nbsp;Alpha Vantage, выбираем <strong>stdio</strong>: процесс запускается локально, никаких серверов поднимать не&nbsp;надо. Sublime для&nbsp;старта.</p>
+                    <p>Когда понадобится http/sse: если ваш MCP делится между несколькими пользователями (например, корпоративный) или его нужно вызывать из&nbsp;web-интерфейса. Это уже второй проект для&nbsp;вашей команды&nbsp;&mdash; не&nbsp;этого этапа.</p>
+                </div>
+                <div lang="en">
+                    <p>Four ways to connect:</p>
+                    <ul>
+                        <li><strong>stdio</strong> — through the process’s stdin/stdout. The simplest and most common. The server runs locally, talks to Claude via standard streams.</li>
+                        <li><strong>http</strong> — over HTTP. The server lives on a remote machine.</li>
+                        <li><strong>sse</strong> — Server-Sent Events. Also HTTP, with streaming.</li>
+                        <li><strong>websocket</strong> — full duplex over WebSocket.</li>
+                    </ul>
+                    <p>For a learning MCP hitting Alpha Vantage, pick <strong>stdio</strong>: the process runs locally, no servers needed. Perfect to start.</p>
+                    <p>You’ll want http/sse later: when the MCP is shared (e.g. corporate), or when you call it from a web app. That’s a second project for your team — not this etape.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Структура своего MCP: один файл, четыре функции, манифест</span><span lang="en">Custom MCP layout: one file, four functions, a manifest</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Минимальная структура папки:</p>
+                    <pre class="shell">daily-trader-mcp/
+├── package.json          # описание пакета
+├── server.ts             # главный файл — реализация MCP
+├── README.md             # как ставить и использовать
+└── .gitignore</pre>
+                    <p>В&nbsp;<code>package.json</code>&nbsp;&mdash; зависимости (<code>@modelcontextprotocol/sdk</code> от&nbsp;Anthropic) и&nbsp;имя пакета:</p>
+                    <pre class="shell">{
+  "name": "@&lt;your-username&gt;/daily-trader-mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": { "daily-trader-mcp": "dist/server.js" },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}</pre>
+                    <p>Внутри <code>server.ts</code>&nbsp;&mdash; четыре функции (по&nbsp;одной на&nbsp;tool) и&nbsp;регистрация через MCP&nbsp;SDK:</p>
+                    <pre class="shell">// псевдокод — Claude напишет настоящий
+server.addTool("get_price", { ticker: string },
+  async ({ ticker }) =&gt; {
+    const price = await fetchAlphaVantage(ticker);
+    return { content: [{ type: "text", text: `${ticker}: $${price}` }] };
+  });
+
+server.addTool("compute_signal", ...);
+server.addTool("set_alert", ...);
+server.addTool("get_history", ...);</pre>
+                    <p>Skill <code>mcp-integration</code> учит Claude писать сразу правильные функции с&nbsp;валидацией параметров и&nbsp;дружелюбными ошибками. Без&nbsp;него вы&nbsp;получите рабочий MCP, но&nbsp;«хрупкий».</p>
+                </div>
+                <div lang="en">
+                    <p>Minimal folder layout:</p>
+                    <pre class="shell">daily-trader-mcp/
+├── package.json          # package metadata
+├── server.ts             # main file — MCP impl
+├── README.md             # install &amp; usage
+└── .gitignore</pre>
+                    <p>In <code>package.json</code> — deps (Anthropic’s <code>@modelcontextprotocol/sdk</code>) and the package name:</p>
+                    <pre class="shell">{
+  "name": "@&lt;your-username&gt;/daily-trader-mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": { "daily-trader-mcp": "dist/server.js" },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}</pre>
+                    <p>Inside <code>server.ts</code> — four functions (one per tool) and registration via the MCP SDK:</p>
+                    <pre class="shell">// pseudocode — Claude writes the real one
+server.addTool("get_price", { ticker: string },
+  async ({ ticker }) =&gt; {
+    const price = await fetchAlphaVantage(ticker);
+    return { content: [{ type: "text", text: `${ticker}: $${price}` }] };
+  });
+
+server.addTool("compute_signal", ...);
+server.addTool("set_alert", ...);
+server.addTool("get_history", ...);</pre>
+                    <p>The <code>mcp-integration</code> skill teaches Claude to write proper functions with parameter validation and friendly errors. Without it, you get a working but fragile MCP.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Плагин: упаковка skills + commands + hooks + MCP в&nbsp;одно</span><span lang="en">Plugin: bundling skills + commands + hooks + MCP in one</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>До&nbsp;этого мы&nbsp;ставили skills и&nbsp;MCP <em>отдельно</em>. Это работает, но&nbsp;неудобно: пользователь должен помнить, какие из&nbsp;них «работают вместе».</p>
+                    <p><strong>Плагин</strong>&nbsp;&mdash; это бандл. Один пакет, в&nbsp;котором лежат:</p>
+                    <ul>
+                        <li><code>skills/</code>&nbsp;&mdash; ваши skills (как в&nbsp;этапе&nbsp;08a);</li>
+                        <li><code>commands/</code>&nbsp;&mdash; ваши slash-команды;</li>
+                        <li><code>hooks/</code>&nbsp;&mdash; ваши hooks с&nbsp;настройками;</li>
+                        <li><code>mcp/</code>&nbsp;&mdash; ваш MCP-сервер;</li>
+                        <li><code>plugin.json</code>&nbsp;&mdash; манифест: что есть в&nbsp;плагине, какие версии, описание.</li>
+                    </ul>
+                    <pre class="shell">my-personal-office/
+├── plugin.json
+├── README.md
+├── skills/
+│   ├── investing-analyst/
+│   ├── personal-cfo/
+│   └── auto-publisher/
+├── commands/
+│   ├── прогноз.md
+│   ├── timesheet.md
+│   └── cfo.md
+├── hooks/
+│   └── settings.json     # hook на SessionStart/End
+└── mcp/
+    └── daily-trader/
+        ├── package.json
+        └── server.ts</pre>
+                    <p>В&nbsp;<code>plugin.json</code>&nbsp;&mdash; описание для&nbsp;Smithery: имя, версия, что внутри:</p>
+                    <pre class="shell">{
+  "name": "@&lt;you&gt;/personal-office",
+  "version": "1.0.0",
+  "description": "Личный финансовый кабинет: skills для аналитики,
+                  команды-шорткаты, hooks контроля времени,
+                  Daily Trader MCP с инструментами get_price/signal/alert.",
+  "skills": ["./skills/investing-analyst",
+             "./skills/personal-cfo",
+             "./skills/auto-publisher"],
+  "commands": ["./commands/прогноз.md",
+               "./commands/timesheet.md",
+               "./commands/cfo.md"],
+  "mcp_servers": [{
+    "name": "daily-trader",
+    "transport": "stdio",
+    "command": "node",
+    "args": ["./mcp/daily-trader/dist/server.js"],
+    "env": ["ALPHAVANTAGE_KEY"]
+  }],
+  "hooks": "./hooks/settings.json"
+}</pre>
+                    <p>Установив плагин одной командой, пользователь получает <em>сразу всё</em>&nbsp;&mdash; и&nbsp;skills, и&nbsp;команды, и&nbsp;MCP, и&nbsp;hooks. Это и&nbsp;есть «AI-нативный продукт».</p>
+                </div>
+                <div lang="en">
+                    <p>So far we installed skills and MCPs <em>separately</em>. It works, but the user must know which ones “go together.”</p>
+                    <p>A <strong>plugin</strong> is a bundle. One package containing:</p>
+                    <ul>
+                        <li><code>skills/</code> — your skills (as in etape 08a);</li>
+                        <li><code>commands/</code> — your slash commands;</li>
+                        <li><code>hooks/</code> — your hooks with settings;</li>
+                        <li><code>mcp/</code> — your MCP server;</li>
+                        <li><code>plugin.json</code> — manifest: what’s inside, versions, description.</li>
+                    </ul>
+                    <pre class="shell">my-personal-office/
+├── plugin.json
+├── README.md
+├── skills/
+│   ├── investing-analyst/
+│   ├── personal-cfo/
+│   └── auto-publisher/
+├── commands/
+│   ├── forecast.md
+│   ├── timesheet.md
+│   └── cfo.md
+├── hooks/
+│   └── settings.json     # SessionStart/End hook
+└── mcp/
+    └── daily-trader/
+        ├── package.json
+        └── server.ts</pre>
+                    <p>The <code>plugin.json</code> describes the plugin to Smithery: name, version, contents:</p>
+                    <pre class="shell">{
+  "name": "@&lt;you&gt;/personal-office",
+  "version": "1.0.0",
+  "description": "Personal financial office: analytics skills,
+                  shortcut commands, time-tracking hooks,
+                  a Daily Trader MCP with get_price/signal/alert.",
+  "skills": ["./skills/investing-analyst",
+             "./skills/personal-cfo",
+             "./skills/auto-publisher"],
+  "commands": ["./commands/forecast.md",
+               "./commands/timesheet.md",
+               "./commands/cfo.md"],
+  "mcp_servers": [{
+    "name": "daily-trader",
+    "transport": "stdio",
+    "command": "node",
+    "args": ["./mcp/daily-trader/dist/server.js"],
+    "env": ["ALPHAVANTAGE_KEY"]
+  }],
+  "hooks": "./hooks/settings.json"
+}</pre>
+                    <p>Installing the plugin with one command — the user gets <em>everything</em>: skills, commands, MCP, hooks. That is the “AI-native product.”</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Публикация на&nbsp;Smithery: один <code>git push</code>&nbsp;&mdash; и&nbsp;ваш плагин в&nbsp;магазине</span><span lang="en">Publishing on Smithery: one <code>git push</code> and your plugin is in the store</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Smithery подцепляется к&nbsp;вашему публичному GitHub-репо с&nbsp;<code>plugin.json</code>. Шаги:</p>
+                    <ol>
+                        <li>Залить ваш плагин в&nbsp;публичный репо <code>my-personal-office</code>.</li>
+                        <li>На&nbsp;<a href="https://smithery.ai">smithery.ai</a> в&nbsp;вашем профиле&nbsp;&mdash; «Submit a plugin», указать ссылку на&nbsp;репо.</li>
+                        <li>Smithery валидирует <code>plugin.json</code>, проверяет, что зависимости работают.</li>
+                        <li>Через 5–10&nbsp;минут плагин виден на&nbsp;витрине, ставится одной командой:</li>
+                    </ol>
+                    <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest install @&lt;you&gt;/personal-office --client claude</pre>
+                    <p>Что важно:</p>
+                    <ul>
+                        <li><strong>Никаких секретов в&nbsp;коммитах.</strong> ANTHROPIC_API_KEY, ALPHAVANTAGE_KEY и&nbsp;т.&nbsp;п. требуйте через ENV. <code>plugin.json</code> в&nbsp;<code>mcp_servers[].env</code> перечисляет, какие переменные нужны&nbsp;&mdash; Smithery предложит пользователю их&nbsp;ввести.</li>
+                        <li><strong>Семантическое версионирование.</strong> 1.0.0 → 1.0.1 (багфикс) → 1.1.0 (фича) → 2.0.0 (breaking). Каждый push с&nbsp;новой версией&nbsp;&mdash; автоматический re-publish.</li>
+                        <li><strong>README обязателен.</strong> С&nbsp;примерами «что делать» и&nbsp;описанием каждого инструмента.</li>
+                        <li><strong>Лицензия.</strong> MIT&nbsp;&mdash; самый частый выбор для&nbsp;open-source плагинов.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>Smithery hooks into your public GitHub repo with a <code>plugin.json</code>. Steps:</p>
+                    <ol>
+                        <li>Push your plugin to the public <code>my-personal-office</code> repo.</li>
+                        <li>On <a href="https://smithery.ai">smithery.ai</a> in your profile — “Submit a plugin,” point to the repo.</li>
+                        <li>Smithery validates the <code>plugin.json</code>, checks deps work.</li>
+                        <li>5–10 minutes later your plugin shows up in the store, installable with one command:</li>
+                    </ol>
+                    <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest install @&lt;you&gt;/personal-office --client claude</pre>
+                    <p>What matters:</p>
+                    <ul>
+                        <li><strong>No secrets in commits.</strong> Require ANTHROPIC_API_KEY, ALPHAVANTAGE_KEY etc. via ENV. <code>plugin.json</code> declares them in <code>mcp_servers[].env</code> — Smithery prompts the user.</li>
+                        <li><strong>Semver.</strong> 1.0.0 → 1.0.1 (bugfix) → 1.1.0 (feature) → 2.0.0 (breaking). Each push with a new version — auto re-publish.</li>
+                        <li><strong>README required.</strong> Examples of usage and descriptions for each tool.</li>
+                        <li><strong>Licence.</strong> MIT is the most common pick for open-source plugins.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Безопасность плагинов: «доверяй, но&nbsp;проверяй»</span><span lang="en">Plugin safety: trust but verify</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Плагин получает доступ ко&nbsp;всем инструментам Claude Code. Это <em>опасно</em>, если вы&nbsp;ставите чужой плагин и&nbsp;не&nbsp;знаете, что внутри.</p>
+                    <p>Что делает Smithery для&nbsp;безопасности:</p>
+                    <ul>
+                        <li>Все плагины&nbsp;&mdash; в&nbsp;публичных GitHub-репо, можно прочитать код.</li>
+                        <li>При установке&nbsp;&mdash; явно показывается, какие env переменные плагин запрашивает.</li>
+                        <li>Сообщества помечают «verified» статусы для&nbsp;плагинов от&nbsp;известных авторов.</li>
+                    </ul>
+                    <p>Что должны делать вы:</p>
+                    <ul>
+                        <li>Перед установкой&nbsp;&mdash; зайдите в&nbsp;репо плагина, прочитайте <code>plugin.json</code>, посмотрите <code>mcp/server.ts</code>;</li>
+                        <li>Если плагин запрашивает доступ к&nbsp;вашим API-ключам или файлам&nbsp;&mdash; <em>понимайте, зачем</em>;</li>
+                        <li>Свежие плагины от&nbsp;неизвестных авторов&nbsp;&mdash; ставьте в&nbsp;тестовой папке, не&nbsp;в&nbsp;основном проекте.</li>
+                    </ul>
+                    <p>Особое внимание: hook на&nbsp;<code>PreToolUse</code> может перехватить любой ваш Bash. Хук на&nbsp;<code>UserPromptSubmit</code>&nbsp;&mdash; видит каждое ваше сообщение. Не&nbsp;ставьте плагин с&nbsp;этими хуками вслепую.</p>
+                </div>
+                <div lang="en">
+                    <p>A plugin gets access to all Claude Code tools. That’s <em>dangerous</em> if you install a stranger’s plugin without checking.</p>
+                    <p>Smithery’s safety:</p>
+                    <ul>
+                        <li>All plugins are in public GitHub repos — you can read the code.</li>
+                        <li>On install — env variables the plugin requests are shown explicitly.</li>
+                        <li>The community flags “verified” statuses for known-author plugins.</li>
+                    </ul>
+                    <p>Your part:</p>
+                    <ul>
+                        <li>Before installing — open the plugin’s repo, read <code>plugin.json</code>, look at <code>mcp/server.ts</code>;</li>
+                        <li>If the plugin asks for API keys or files — <em>understand why</em>;</li>
+                        <li>Fresh plugins from unknown authors — install in a sandbox folder, not your main project.</li>
+                    </ul>
+                    <p>Especially: a <code>PreToolUse</code> hook can intercept any Bash you run. A <code>UserPromptSubmit</code> hook sees every message. Don’t install a plugin with those blindly.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">«Hello MCP»&nbsp;&mdash; один tool за&nbsp;15 минут</span><span lang="en">“Hello MCP” — one tool in 15 minutes</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · MCP с&nbsp;одним инструментом</span><span lang="en">Run · MCP with a single tool</span></h4>
+            <ol lang="ru">
+                <li>Создайте папку <code>hello-mcp</code>, запустите <code>claude</code>.</li>
+                <li>Промпт:
+                    <pre class="shell">&gt; используя skill mcp-integration,
+&gt; собери минимальный MCP-сервер на TypeScript:
+&gt;   - один tool: hello(name: string) → "Hello, {name}!"
+&gt;   - transport: stdio.
+&gt; package.json + server.ts + README.md.
+&gt; собери (npm install + npx tsc).</pre>
+                </li>
+                <li>Подключите локально:
+                    <pre class="shell">&gt; добавь mcp в ~/.claude/settings.json как локальный stdio-сервер,
+&gt; имя hello-local, command: node, args: [абс_путь_к_dist/server.js].</pre>
+                </li>
+                <li>Перезапустите Claude. <code>/mcp</code>&nbsp;&mdash; в&nbsp;списке должен появиться <code>hello-local</code>. Тест:
+                    <pre class="shell">&gt; через hello-local вызови hello с именем "Claude".</pre>
+                </li>
+                <li>Если что-то не&nbsp;работает&nbsp;&mdash; смотрите логи: <code>~/.claude/logs/mcp-hello-local.log</code> (или просите Claude найти).</li>
+                <li>Прогон-проверка: <em>«добавь второй tool reverse(s: string), который возвращает строку наоборот. собери, перезапусти claude, протестируй»</em>.</li>
+            </ol>
+            <ol lang="en">
+                <li>Create <code>hello-mcp</code>, launch <code>claude</code>.</li>
+                <li>Prompt:
+                    <pre class="shell">&gt; using the mcp-integration skill,
+&gt; build a minimal TypeScript MCP server:
+&gt;   - one tool: hello(name: string) → "Hello, {name}!"
+&gt;   - transport: stdio.
+&gt; package.json + server.ts + README.md.
+&gt; build it (npm install + npx tsc).</pre>
+                </li>
+                <li>Wire it locally:
+                    <pre class="shell">&gt; add the mcp to ~/.claude/settings.json as a local stdio server,
+&gt; name hello-local, command: node, args: [abs_path_to_dist/server.js].</pre>
+                </li>
+                <li>Restart Claude. <code>/mcp</code> — <code>hello-local</code> should appear. Test:
+                    <pre class="shell">&gt; via hello-local call hello with name "Claude".</pre>
+                </li>
+                <li>If broken — check logs: <code>~/.claude/logs/mcp-hello-local.log</code> (or have Claude find them).</li>
+                <li>Drill: <em>“add a second tool reverse(s: string) that returns the string reversed. build, restart claude, test.”</em></li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>создание MCP с&nbsp;нуля + локальное подключение</strong>. Дальше&nbsp;&mdash; настоящий «Daily Trader».</p>
+            <p lang="en">What we train: <strong>creating an MCP from scratch + local hookup</strong>. Next — a real “Daily Trader.”</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">MCP «Daily Trader» и&nbsp;плагин «Личный кабинет»</span><span lang="en">“Daily Trader” MCP and the “Personal Office” plugin</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">MCP «Daily Trader»</span><span lang="en">“Daily Trader” MCP</span></h3>
+            <p class="goal" lang="ru">Цель: MCP с&nbsp;четырьмя tool'ами (<code>get_price</code>, <code>get_history</code>, <code>compute_signal</code>, <code>set_alert</code>) и&nbsp;двумя resources (<code>portfolio://current-positions</code>, <code>alerts://pending</code>). Подключаемый локально, готовый к&nbsp;упаковке в&nbsp;плагин (проект&nbsp;B).</p>
+            <p class="goal" lang="en">Goal: an MCP with four tools (<code>get_price</code>, <code>get_history</code>, <code>compute_signal</code>, <code>set_alert</code>) and two resources (<code>portfolio://current-positions</code>, <code>alerts://pending</code>). Locally hooked up, ready to bundle into a plugin (project B).</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>daily-trader-mcp</code>. Через Plan Mode попросите spec и&nbsp;план реализации.</li>
+                <li>Реализация четырёх tool'ов:
+                    <ul>
+                        <li><code>get_price(ticker)</code>&nbsp;&mdash; вызывает Alpha Vantage GLOBAL_QUOTE, возвращает <code>{ ticker, price, change_pct, currency, as_of }</code>;</li>
+                        <li><code>get_history(ticker, days)</code>&nbsp;&mdash; TIME_SERIES_DAILY, возвращает массив <code>{ date, close }</code>;</li>
+                        <li><code>compute_signal(ticker)</code>&nbsp;&mdash; считает MA-5 и&nbsp;MA-20, возвращает <code>{ signal: "buy" | "sell" | "hold", reason }</code>;</li>
+                        <li><code>set_alert(ticker, threshold, direction)</code>&nbsp;&mdash; пишет в&nbsp;<code>~/.claude/alerts.json</code>.</li>
+                    </ul>
+                </li>
+                <li>Реализация двух resources:
+                    <ul>
+                        <li><code>portfolio://current-positions</code>&nbsp;&mdash; читает <code>~/portfolio-journal/data/operations.csv</code>, считает текущие позиции;</li>
+                        <li><code>alerts://pending</code>&nbsp;&mdash; читает <code>~/.claude/alerts.json</code>.</li>
+                    </ul>
+                </li>
+                <li>Кэширование цен: <code>~/.claude/.daily-trader-cache/</code> с&nbsp;TTL 15&nbsp;мин (как в&nbsp;этапе&nbsp;03).</li>
+                <li>Обработка ошибок: rate limit, отсутствие ключа, недоступная сеть&nbsp;&mdash; везде дружелюбные сообщения.</li>
+                <li>Сборка: <code>npm install</code> + <code>npx tsc</code>. Подключение в&nbsp;<code>~/.claude/settings.json</code> как stdio-сервер.</li>
+                <li>Тесты:
+                    <pre class="shell">&gt; через daily-trader вызови get_price для AAPL.
+&gt; через daily-trader вызови compute_signal для NVDA.
+&gt; через daily-trader вызови set_alert("AAPL", 200, "above").
+&gt; покажи resources://portfolio (если CSV доступен).</pre>
+                </li>
+                <li>Verification: <em>«запусти red-team subagent. brief: пройди по&nbsp;моему server.ts как security-reviewer. найди три места, где можно ошибиться: rate limit, утечка ключа, неполная валидация»</em>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create <code>daily-trader-mcp</code>. Via Plan Mode draft a spec and a plan.</li>
+                <li>Implement four tools:
+                    <ul>
+                        <li><code>get_price(ticker)</code> — calls Alpha Vantage GLOBAL_QUOTE, returns <code>{ ticker, price, change_pct, currency, as_of }</code>;</li>
+                        <li><code>get_history(ticker, days)</code> — TIME_SERIES_DAILY, returns <code>{ date, close }[]</code>;</li>
+                        <li><code>compute_signal(ticker)</code> — computes MA-5 and MA-20, returns <code>{ signal: "buy" | "sell" | "hold", reason }</code>;</li>
+                        <li><code>set_alert(ticker, threshold, direction)</code> — writes to <code>~/.claude/alerts.json</code>.</li>
+                    </ul>
+                </li>
+                <li>Implement two resources:
+                    <ul>
+                        <li><code>portfolio://current-positions</code> — reads <code>~/portfolio-journal/data/operations.csv</code>, computes current positions;</li>
+                        <li><code>alerts://pending</code> — reads <code>~/.claude/alerts.json</code>.</li>
+                    </ul>
+                </li>
+                <li>Price cache: <code>~/.claude/.daily-trader-cache/</code> with 15-min TTL (etape 03 trick).</li>
+                <li>Error handling: rate limit, missing key, no network — friendly messages everywhere.</li>
+                <li>Build: <code>npm install</code> + <code>npx tsc</code>. Wire into <code>~/.claude/settings.json</code> as a stdio server.</li>
+                <li>Tests:
+                    <pre class="shell">&gt; via daily-trader call get_price for AAPL.
+&gt; via daily-trader call compute_signal for NVDA.
+&gt; via daily-trader call set_alert("AAPL", 200, "above").
+&gt; show resources://portfolio (if CSV is available).</pre>
+                </li>
+                <li>Verification: <em>“spawn a red-team subagent. brief: walk my server.ts as a security reviewer. find three places to fail: rate limit, key leak, incomplete validation.”</em></li>
+            </ol>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Плагин «Личный кабинет» с&nbsp;публикацией на&nbsp;Smithery</span><span lang="en">“Personal Office” plugin published on Smithery</span></h3>
+            <p class="goal" lang="ru">Цель: упаковать всё, что вы&nbsp;сделали в&nbsp;этапах 07–09 (skills, slash, hooks, MCP), в&nbsp;один плагин и&nbsp;опубликовать. После публикации&nbsp;&mdash; установить плагин в&nbsp;«чистом» окружении (на&nbsp;другом компьютере или в&nbsp;новой папке), убедиться, что всё работает у&nbsp;другого пользователя.</p>
+            <p class="goal" lang="en">Goal: bundle everything from etapes 07–09 (skills, slash, hooks, MCP) into one plugin and publish. Then install the plugin in a clean environment (another machine or fresh folder) — confirm it works for another user.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>my-personal-office/</code>. Подпапки <code>skills/</code>, <code>commands/</code>, <code>hooks/</code>, <code>mcp/daily-trader/</code>.</li>
+                <li>Скопируйте туда:
+                    <ul>
+                        <li>skills (этап&nbsp;08a): <code>investing-analyst</code>, <code>personal-cfo</code>, <code>auto-publisher</code>;</li>
+                        <li>commands (этап&nbsp;08a): <code>прогноз.md</code>, <code>cfo.md</code>, <code>timesheet.md</code>;</li>
+                        <li>hooks: <code>settings.json</code> с&nbsp;timesheet-хуком;</li>
+                        <li>MCP: проект&nbsp;A (<code>daily-trader-mcp</code>).</li>
+                    </ul>
+                </li>
+                <li>Сгенерируйте <code>plugin.json</code> через skill <code>plugin-structure</code>:
+                    <pre class="shell">&gt; используя skill plugin-structure,
+&gt; составь plugin.json для @&lt;you&gt;/personal-office:
+&gt; перечисли все skills, commands, hooks, mcp_servers
+&gt; (env: ALPHAVANTAGE_KEY).
+&gt; описание&nbsp;&mdash; одна строка о том, что это «личный финансовый кабинет
+&gt; на основе курса Полевое руководство по Claude Code».</pre>
+                </li>
+                <li>Напишите <code>README.md</code>: установка одной командой, что внутри (skills, commands, hooks, MCP), какие env нужны, лицензия MIT, скриншоты или asciinema для&nbsp;демо.</li>
+                <li>Создайте репо на&nbsp;GitHub:
+                    <pre class="shell">&gt; через gh создай ПУБЛИЧНЫЙ репо &lt;you&gt;/personal-office,
+&gt; запушь туда my-personal-office/ как корень,
+&gt; добавь лицензию MIT.</pre>
+                </li>
+                <li>Опубликуйте на&nbsp;Smithery:
+                    <pre class="shell">&gt; помоги мне:
+&gt; 1) зайти на smithery.ai (через web search покажи актуальную ссылку на submit);
+&gt; 2) пройти процесс «submit a plugin» с моим репо;
+&gt; 3) дождаться валидации и показать получившуюся ссылку.</pre>
+                </li>
+                <li>Чистая установка: возьмите другую папку, в&nbsp;которой ничего нет:
+                    <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest install @&lt;you&gt;/personal-office --client claude</pre>
+                </li>
+                <li>Тест: запустите <code>claude</code> в&nbsp;этой папке. <code>/mcp</code>, <code>/skills</code>, <code>/commands</code>&nbsp;&mdash; всё должно появиться. Прогоните <code>/прогноз</code>, <code>/cfo</code>&nbsp;&mdash; работает.</li>
+                <li>Финал: добавьте теги/категории в&nbsp;Smithery («finance», «investing», «course»), чтобы вас находили.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create <code>my-personal-office/</code>. Subfolders <code>skills/</code>, <code>commands/</code>, <code>hooks/</code>, <code>mcp/daily-trader/</code>.</li>
+                <li>Copy there:
+                    <ul>
+                        <li>skills (etape 08a): <code>investing-analyst</code>, <code>personal-cfo</code>, <code>auto-publisher</code>;</li>
+                        <li>commands (etape 08a): <code>forecast.md</code>, <code>cfo.md</code>, <code>timesheet.md</code>;</li>
+                        <li>hooks: <code>settings.json</code> with the timesheet hook;</li>
+                        <li>MCP: project A (<code>daily-trader-mcp</code>).</li>
+                    </ul>
+                </li>
+                <li>Generate <code>plugin.json</code> via the <code>plugin-structure</code> skill:
+                    <pre class="shell">&gt; using plugin-structure,
+&gt; build plugin.json for @&lt;you&gt;/personal-office:
+&gt; list all skills, commands, hooks, mcp_servers
+&gt; (env: ALPHAVANTAGE_KEY).
+&gt; description — one line about a "personal financial office
+&gt; based on the Field Guide to Claude Code course".</pre>
+                </li>
+                <li>Write <code>README.md</code>: one-command install, what’s inside (skills, commands, hooks, MCP), required envs, MIT licence, screenshots or asciinema for the demo.</li>
+                <li>Create a GitHub repo:
+                    <pre class="shell">&gt; via gh create a PUBLIC repo &lt;you&gt;/personal-office,
+&gt; push my-personal-office/ as the root,
+&gt; add an MIT licence.</pre>
+                </li>
+                <li>Publish on Smithery:
+                    <pre class="shell">&gt; help me:
+&gt; 1) go to smithery.ai (via web search show the current submit link);
+&gt; 2) run "submit a plugin" with my repo;
+&gt; 3) wait for validation and show the resulting URL.</pre>
+                </li>
+                <li>Clean install: take another folder, totally empty:
+                    <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest install @&lt;you&gt;/personal-office --client claude</pre>
+                </li>
+                <li>Test: launch <code>claude</code> there. <code>/mcp</code>, <code>/skills</code>, <code>/commands</code> — all should appear. Run <code>/forecast</code>, <code>/cfo</code> — works.</li>
+                <li>Finally: add Smithery tags/categories (“finance,” “investing,” “course”) so others find you.</li>
+            </ol>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Свои MCP и&nbsp;плагины</span><span lang="en">Your own MCPs and plugins</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Плагин «Coach» под&nbsp;вашу сферу</span><span lang="en">A “Coach” plugin for your area</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;B&nbsp;&mdash; тот&nbsp;же стек (skills + commands + hooks + MCP), но&nbsp;для&nbsp;<em>не&nbsp;финансовой</em> сферы. Например: фитнес-коуч (трекер тренировок), языковой коуч (карточки и&nbsp;планы), музыкальный коуч (трекер практики), коуч продуктивности (помодоро + анализ дня).</p>
+            <p class="goal" lang="en">Goal: variation of B — same stack (skills + commands + hooks + MCP), for a <em>non-financial</em> domain. E.g., a fitness coach (workout tracker), language coach (cards and plans), music coach (practice tracker), productivity coach (Pomodoro + day review).</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Скиллы&nbsp;&mdash; для&nbsp;генерации плана/анализа прогресса.</li>
+                <li>Команды&nbsp;&mdash; быстрые шорткаты типа <code>/тренировка</code>, <code>/прогресс</code>, <code>/сегодня</code>.</li>
+                <li>MCP&nbsp;&mdash; tool'ы для&nbsp;работы с&nbsp;вашими данными: <code>add_session</code>, <code>get_streak</code>, <code>compute_kpi</code>. Resources&nbsp;&mdash; ваш «дневник» (CSV или JSON).</li>
+                <li>Hook&nbsp;&mdash; SessionStart с&nbsp;напоминанием «не&nbsp;забыли отметить вчерашнюю практику?».</li>
+                <li>Опубликовать на&nbsp;Smithery с&nbsp;тегами вашей сферы.</li>
+            </ul>
+            <ul lang="en">
+                <li>Skills — to generate plans / analyse progress.</li>
+                <li>Commands — fast shortcuts like <code>/workout</code>, <code>/progress</code>, <code>/today</code>.</li>
+                <li>MCP — tools for your data: <code>add_session</code>, <code>get_streak</code>, <code>compute_kpi</code>. Resources — your “journal” (CSV or JSON).</li>
+                <li>Hook — SessionStart reminder: “did you log yesterday’s practice?”</li>
+                <li>Publish on Smithery with domain tags.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>в&nbsp;репо <code>&lt;you&gt;/&lt;coach&gt;</code> опубликован плагин с&nbsp;<code>plugin.json</code>;</li>
+                        <li>есть минимум 2 skill, 2 slash-команды, 1 hook, 1 MCP с&nbsp;3+ tools;</li>
+                        <li>плагин виден на&nbsp;Smithery, ставится одной командой;</li>
+                        <li>проверена «чистая» установка в&nbsp;другой папке&nbsp;&mdash; всё работает;</li>
+                        <li>README двуязычный, со&nbsp;скриншотом или asciinema-демо;</li>
+                        <li>лицензия MIT, нет утечек секретов в&nbsp;коммитах.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>repo <code>&lt;you&gt;/&lt;coach&gt;</code> hosts the plugin with a <code>plugin.json</code>;</li>
+                        <li>at least 2 skills, 2 slash commands, 1 hook, 1 MCP with 3+ tools;</li>
+                        <li>plugin visible on Smithery, one-command install;</li>
+                        <li>verified clean install in another folder — everything works;</li>
+                        <li>README is bilingual with a screenshot or asciinema demo;</li>
+                        <li>MIT licence, no secret leaks in commits.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Запусти subagent с&nbsp;ролью &laquo;тестировщик плагинов&raquo;. Brief: установи мой плагин в&nbsp;временной папке, прогони все команды и&nbsp;скиллы, найди два места, где интерфейс «странный» (непонятное название, нелогичный порядок параметров, кривая ошибка). Что&nbsp;бы&nbsp;ты&nbsp;улучшил?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Spawn a subagent with the ‘plugin tester’ role. Brief: install my plugin in a temp folder, run every command and skill, find two places where the interface feels ‘off’ (odd name, illogical parameters, ugly error). What would you improve?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">«Студия плагинов»: страница со&nbsp;всеми вашими плагинами</span><span lang="en">“Plugin Studio”: a page listing all your plugins</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;B на&nbsp;уровне «бренд». Сделайте лендинг <code>&lt;you&gt;-studio.github.io</code>, на&nbsp;котором перечислены все ваши плагины (Personal Office, Coach, и&nbsp;любые ещё, что появятся), с&nbsp;живыми ссылками на&nbsp;Smithery, скриншотами и&nbsp;дисклеймером «это учебные плагины из&nbsp;курса».</p>
+            <p class="goal" lang="en">Goal: variation of B at the “brand” level. Build a <code>&lt;you&gt;-studio.github.io</code> landing listing all your plugins (Personal Office, Coach, and any future ones), with live Smithery links, screenshots, and a disclaimer “these are learning plugins from the course.”</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Используйте опыт этапа&nbsp;05 (GitHub Pages) и&nbsp;<code>frontend-design</code>.</li>
+                <li>Стилистика&nbsp;&mdash; не&nbsp;«AI-усреднённое»: подберите свою.</li>
+                <li>Обязательны: имя «студии», ваш «pitch» в&nbsp;одну фразу, список плагинов карточками, скриншоты/демо, контакты.</li>
+                <li>Опционально: блог-секция «учебные заметки» с&nbsp;уроками, выученными по&nbsp;ходу курса.</li>
+                <li>Свяжите страницу с&nbsp;вашим публичным портфолио из&nbsp;этапа&nbsp;05.</li>
+            </ul>
+            <ul lang="en">
+                <li>Use the etape-05 muscle (GitHub Pages) and <code>frontend-design</code>.</li>
+                <li>Style — not “AI default,” pick a voice.</li>
+                <li>Required: studio name, one-line pitch, plugin list as cards, screenshots/demos, contacts.</li>
+                <li>Optional: a “field notes” blog section with lessons learnt during the course.</li>
+                <li>Link the page from your public portfolio (etape 05).</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть живой URL <code>&lt;you&gt;-studio.github.io</code>;</li>
+                        <li>на&nbsp;странице минимум 2&nbsp;плагина (из&nbsp;проектов B и&nbsp;C);</li>
+                        <li>каждая карточка ведёт на&nbsp;живую страницу плагина в&nbsp;Smithery и&nbsp;на&nbsp;GitHub-репо;</li>
+                        <li>есть скриншоты или короткое видео для&nbsp;каждого плагина;</li>
+                        <li>дисклеймер «учебные плагины» виден сверху, чтобы не&nbsp;вводить пользователя в&nbsp;заблуждение;</li>
+                        <li>через playwright проверена адаптивность (desktop, tablet, phone).</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a live URL at <code>&lt;you&gt;-studio.github.io</code>;</li>
+                        <li>at least 2 plugins listed (projects B and C);</li>
+                        <li>each card links to the live Smithery plugin page and to the GitHub repo;</li>
+                        <li>each plugin has screenshots or a short video;</li>
+                        <li>a “learning plugins” disclaimer is visible at the top, so users aren’t misled;</li>
+                        <li>responsive verified via Playwright (desktop, tablet, phone).</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Запусти subagent с&nbsp;ролью «дизайн-редактор журнала о&nbsp;технологиях». Brief: оцени мою студийную страницу. Что бы&nbsp;ты&nbsp;поправил, чтобы её&nbsp;можно было показать на&nbsp;конференции? Что в&nbsp;ней «авторское», а&nbsp;что выглядит как шаблон?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Spawn a subagent with the ‘tech-magazine design editor’ role. Brief: review my studio page. What would you fix so it’s conference-worthy? What feels authored vs templated?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt><span lang="ru">MCP-сервер</span><span lang="en">MCP server</span></dt>
+            <dd>
+                <span lang="ru">Программа, реализующая Model Context Protocol. Отдаёт Claude tools, resources и&nbsp;prompts. Запускается локально (stdio) или удалённо (http/sse/websocket).</span>
+                <span lang="en">A program implementing the Model Context Protocol. Hands Claude tools, resources and prompts. Runs locally (stdio) or remotely (http/sse/websocket).</span>
+            </dd>
+
+            <dt>Tools / Resources / Prompts</dt>
+            <dd>
+                <span lang="ru">Три типа выдач MCP. <strong>Tools</strong>&nbsp;&mdash; функции, которые Claude вызывает (<code>get_price</code>). <strong>Resources</strong>&nbsp;&mdash; «документы», которые он&nbsp;читает (<code>portfolio://current</code>). <strong>Prompts</strong>&nbsp;&mdash; готовые шаблоны промптов от&nbsp;сервера.</span>
+                <span lang="en">Three MCP outputs. <strong>Tools</strong> — functions Claude calls (<code>get_price</code>). <strong>Resources</strong> — “documents” it reads (<code>portfolio://current</code>). <strong>Prompts</strong> — ready prompt templates from the server.</span>
+            </dd>
+
+            <dt>Transport</dt>
+            <dd>
+                <span lang="ru">Способ соединения MCP с&nbsp;Claude. Stdio (через ввод-вывод процесса), http, sse, websocket. Для&nbsp;учебных и&nbsp;личных&nbsp;&mdash; почти всегда stdio.</span>
+                <span lang="en">How an MCP connects to Claude. Stdio (process I/O), http, sse, websocket. For learning and personal use — almost always stdio.</span>
+            </dd>
+
+            <dt>plugin.json</dt>
+            <dd>
+                <span lang="ru">Манифест плагина. Описывает имя, версию, описание, и&nbsp;что внутри (skills, commands, hooks, mcp_servers). Используется Smithery для&nbsp;валидации и&nbsp;установки.</span>
+                <span lang="en">A plugin manifest. Describes name, version, description, and contents (skills, commands, hooks, mcp_servers). Used by Smithery to validate and install.</span>
+            </dd>
+
+            <dt><span lang="ru">Плагин</span><span lang="en">Plugin</span></dt>
+            <dd>
+                <span lang="ru">Бандл, объединяющий skills, commands, hooks и&nbsp;MCP-серверы в&nbsp;один пакет. Устанавливается одной командой. Главный способ «делиться возможностями» Claude Code с&nbsp;другими.</span>
+                <span lang="en">A bundle uniting skills, commands, hooks and MCP servers in one package. One-command install. The primary way to “share Claude Code capabilities” with others.</span>
+            </dd>
+
+            <dt>SDK MCP</dt>
+            <dd>
+                <span lang="ru">Библиотека от&nbsp;Anthropic (<code>@modelcontextprotocol/sdk</code>) для&nbsp;TypeScript/Python. Берёт на&nbsp;себя протокол&nbsp;&mdash; вы&nbsp;пишете только tool/resource/prompt-функции.</span>
+                <span lang="en">An Anthropic library (<code>@modelcontextprotocol/sdk</code>) for TypeScript/Python. Handles the protocol — you write only the tool/resource/prompt functions.</span>
+            </dd>
+
+            <dt><span lang="ru">Семантическое версионирование (semver)</span><span lang="en">Semantic versioning (semver)</span></dt>
+            <dd>
+                <span lang="ru">Соглашение MAJOR.MINOR.PATCH. PATCH&nbsp;&mdash; багфиксы (<code>1.0.0 → 1.0.1</code>), MINOR&nbsp;&mdash; новые фичи без&nbsp;ломающих изменений (<code>1.0.0 → 1.1.0</code>), MAJOR&nbsp;&mdash; ломающие изменения (<code>1.0.0 → 2.0.0</code>).</span>
+                <span lang="en">A MAJOR.MINOR.PATCH convention. PATCH — bugfixes (<code>1.0.0 → 1.0.1</code>), MINOR — new features without breaking changes (<code>1.0.0 → 1.1.0</code>), MAJOR — breaking changes (<code>1.0.0 → 2.0.0</code>).</span>
+            </dd>
+
+            <dt>Smithery</dt>
+            <dd>
+                <span lang="ru">Реестр-витрина MCP-серверов и&nbsp;плагинов для&nbsp;Claude и&nbsp;других AI-клиентов. Подключается к&nbsp;вашему GitHub-репо. Установка одной командой.</span>
+                <span lang="en">A registry/storefront for MCP servers and plugins for Claude and other AI clients. Hooks into your GitHub repo. One-command install.</span>
+            </dd>
+
+            <dt><code>${CLAUDE_PLUGIN_ROOT}</code></dt>
+            <dd>
+                <span lang="ru">Переменная, которая внутри плагина указывает на&nbsp;его корневую папку. Используется в&nbsp;<code>plugin.json</code> и&nbsp;manifests skills, чтобы ссылаться на&nbsp;файлы плагина независимо от&nbsp;того, куда его поставили.</span>
+                <span lang="en">A variable that, inside a plugin, points to its root folder. Used in <code>plugin.json</code> and skill manifests to reference plugin files regardless of where it was installed.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Чем плагин отличается от&nbsp;«просто MCP» и&nbsp;«просто skill»?</span><span lang="en">How does a plugin differ from a “plain MCP” and a “plain skill”?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Плагин&nbsp;&mdash; <em>бандл</em>: skills + commands + hooks + MCP в&nbsp;одной упаковке. Один плагин&nbsp;&mdash; одна команда установки. Просто MCP&nbsp;&mdash; только сервер с&nbsp;tools. Просто skill&nbsp;&mdash; только инструкция, без&nbsp;tools и&nbsp;hooks. Плагин&nbsp;&mdash; «продукт», MCP/skill&nbsp;&mdash; «компоненты».</p>
+                        <p lang="en">A plugin is a <em>bundle</em>: skills + commands + hooks + MCP in one package. One plugin — one install. A plain MCP — just a server with tools. A plain skill — just instructions, no tools or hooks. Plugin = “product,” MCP/skill = “components.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Какой transport выбрать для&nbsp;учебного MCP, и&nbsp;почему?</span><span lang="en">Which transport for a learning MCP, and why?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>stdio</strong>. Сервер запускается локально, общается с&nbsp;Claude через стандартный ввод-вывод&nbsp;&mdash; никаких сетей, портов, SSL. Самый простой и&nbsp;надёжный вариант. http/sse/websocket нужны, когда сервер общий и&nbsp;удалённый.</p>
+                        <p lang="en"><strong>stdio</strong>. The server runs locally, talks to Claude via stdin/stdout — no networks, ports, SSL. Simplest and most reliable. http/sse/websocket are for shared, remote servers.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое resources в&nbsp;MCP, и&nbsp;чем они отличаются от&nbsp;tools?</span><span lang="en">What are MCP resources, and how do they differ from tools?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>Tools</strong>&nbsp;&mdash; <em>действия</em>: функции, которые Claude вызывает с&nbsp;параметрами и&nbsp;получает результат (<code>set_alert</code>). <strong>Resources</strong>&nbsp;&mdash; <em>документы</em>: «открой по&nbsp;этому URL» (<code>portfolio://current</code>). Resources идут в&nbsp;контекст, как файлы; tools&nbsp;&mdash; вызываются ради побочного эффекта или вычисления.</p>
+                        <p lang="en"><strong>Tools</strong> — <em>actions</em>: functions Claude calls with parameters and gets a result (<code>set_alert</code>). <strong>Resources</strong> — <em>documents</em>: “open this URL” (<code>portfolio://current</code>). Resources flow into context like files; tools are called for side effects or computation.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Почему секретные ключи нельзя класть в&nbsp;<code>plugin.json</code>?</span><span lang="en">Why can secret keys not live in <code>plugin.json</code>?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>plugin.json</code> публичен&nbsp;&mdash; лежит в&nbsp;вашем репо, который видят все. Любой ключ оттуда утечёт за&nbsp;часы. Правильно: в&nbsp;<code>plugin.json</code> в&nbsp;<code>mcp_servers[].env</code> перечислить <em>имена</em> переменных (<code>ALPHAVANTAGE_KEY</code>), а&nbsp;значения пользователь вводит при установке&nbsp;&mdash; они хранятся локально, не&nbsp;уходят в&nbsp;Smithery.</p>
+                        <p lang="en"><code>plugin.json</code> is public — it lives in your repo, visible to all. Any key there leaks within hours. Correct: in <code>plugin.json</code>’s <code>mcp_servers[].env</code> list <em>names</em> (<code>ALPHAVANTAGE_KEY</code>); the user enters values on install — they live locally, not on Smithery.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Что в&nbsp;semver&nbsp;1.0.0 → 2.0.0&nbsp;&mdash; багфикс или ломающее изменение?</span><span lang="en">In semver, is 1.0.0 → 2.0.0 a bugfix or a breaking change?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">MAJOR&nbsp;&mdash; ломающее. Если вы&nbsp;поменяли имя tool, выкинули resource, изменили формат данных&nbsp;&mdash; это 2.0.0. Багфикс&nbsp;&mdash; <code>1.0.0 → 1.0.1</code>. Новая фича без&nbsp;ломки старых&nbsp;&mdash; <code>1.0.0 → 1.1.0</code>.</p>
+                        <p lang="en">MAJOR — breaking. If you renamed a tool, dropped a resource, changed a data shape — that’s 2.0.0. Bugfix — <code>1.0.0 → 1.0.1</code>. New feature without breaking old — <code>1.0.0 → 1.1.0</code>.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Как проверить, что плагин «по-настоящему» работает у&nbsp;другого пользователя?</span><span lang="en">How do you verify the plugin “really works” for another user?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Поставить его в&nbsp;<em>чистом</em> окружении (другая папка, другой компьютер, другой&nbsp;OS) и&nbsp;пройти базовый сценарий: <code>/skills</code> и&nbsp;<code>/mcp</code>&nbsp;&mdash; всё на&nbsp;месте; вызвать каждую slash-команду и&nbsp;инструмент MCP&nbsp;&mdash; работает. Если у&nbsp;себя «у&nbsp;меня&nbsp;всё работало», а&nbsp;на&nbsp;чистой машине&nbsp;&mdash; нет, обычно проблема в&nbsp;неуказанной зависимости или невыставленной env-переменной.</p>
+                        <p lang="en">Install in a <em>clean</em> environment (another folder, another machine, another OS) and walk a baseline: <code>/skills</code> and <code>/mcp</code> — all there; call each slash command and MCP tool — works. If it “worked on my machine” but not on a clean one, it’s usually a missing dependency or unset env variable.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Что особенно опасно в&nbsp;чужих плагинах, и&nbsp;как защититься?</span><span lang="en">What is especially dangerous in third-party plugins, and how do you defend?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Hooks на&nbsp;<code>PreToolUse</code> (могут перехватить любой Bash) и&nbsp;<code>UserPromptSubmit</code> (видят каждое ваше сообщение). Также&nbsp;&mdash; MCP-серверы с&nbsp;запросом доступа к&nbsp;вашим ключам или файловой системе. Защита: читайте <code>plugin.json</code> и&nbsp;<code>server.ts</code> перед установкой; ставьте сначала в&nbsp;тестовой папке; для&nbsp;неизвестных авторов&nbsp;&mdash; смотрите «verified» статус и&nbsp;количество звёзд на&nbsp;GitHub.</p>
+                        <p lang="en"><code>PreToolUse</code> hooks (can intercept any Bash) and <code>UserPromptSubmit</code> hooks (see every message). Also — MCP servers asking for your keys or filesystem. Defence: read <code>plugin.json</code> and <code>server.ts</code> before install; sandbox-install first; for unknown authors — check “verified” status and GitHub stars.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e9-mcp-from-scratch"><span lang="ru">Создал MCP-сервер с&nbsp;нуля на&nbsp;TypeScript: tools, resources, stdio.</span><span lang="en">Built an MCP server from scratch in TypeScript: tools, resources, stdio.</span></li>
+            <li data-key="e9-transports"><span lang="ru">Понимаю четыре transport (stdio / http / sse / websocket) и&nbsp;знаю, когда какой.</span><span lang="en">I understand four transports (stdio / http / sse / websocket) and which fits when.</span></li>
+            <li data-key="e9-plugin"><span lang="ru">Собрал плагин: <code>plugin.json</code> + skills + commands + hooks + MCP.</span><span lang="en">I bundled a plugin: <code>plugin.json</code> + skills + commands + hooks + MCP.</span></li>
+            <li data-key="e9-publish"><span lang="ru">Опубликовал плагин на&nbsp;Smithery, проверил установку «с&nbsp;чистого листа».</span><span lang="en">I published a plugin on Smithery, verified clean-slate installation.</span></li>
+            <li data-key="e9-versioning"><span lang="ru">Использую semver и&nbsp;понимаю, чем отличаются PATCH / MINOR / MAJOR.</span><span lang="en">I use semver and tell PATCH / MINOR / MAJOR apart.</span></li>
+            <li data-key="e9-security"><span lang="ru">Знаю, какие риски у&nbsp;чужих плагинов и&nbsp;как защититься.</span><span lang="en">I know third-party plugin risks and how to mitigate.</span></li>
+            <li data-key="e9-delivery"><span lang="ru">Сделал четыре проекта: Daily Trader MCP, плагин Personal Office, свой Coach-плагин, страницу «студии».</span><span lang="en">Built four projects: Daily Trader MCP, Personal Office plugin, my Coach plugin, the studio page.</span></li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-09" type="button"><span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span></button>
+        </div>
+    </div>
+</section>
+
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-08b.html"><span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span><span class="step-title"><span lang="ru">08b · AI Tax Assistant</span><span lang="en">08b · AI Tax Assistant</span></span></a>
+            <a class="next" href="etap-10.html"><span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span><span class="step-title"><span lang="ru">10 · Автопилот, фоновые задачи и&nbsp;мониторинг</span><span lang="en">10 · Autopilot, Background Tasks &amp; Monitoring</span></span></a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Установить чужой плагин&nbsp;&mdash; пять секунд. Сделать свой и&nbsp;опубликовать&nbsp;&mdash; неделя. Эта неделя превращает вас из&nbsp;пользователя в&nbsp;автора».</p>
+            <p class="signature" lang="en">“Installing someone’s plugin takes five seconds. Building and publishing your own takes a week. That week turns you from a user into an author.”</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-08b.html"><span lang="ru">← Этап&nbsp;08b</span><span lang="en">← Etape 08b</span></a></li>
+                <li><a href="etap-10.html"><span lang="ru">→ Этап&nbsp;10</span><span lang="en">→ Etape 10</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

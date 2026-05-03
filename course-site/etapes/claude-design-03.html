@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 03 · Brand system из кода и Figma — Полевое руководство по Claude Design</title>
+<meta name="description" content="Этап 03 тьюториала по Claude Design: извлечение design tokens из кодбазы или Figma и применение единого бренда ко всем будущим проектам в workspace.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>D</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ D</span>
+            <a href="../claude-design.html"><span lang="ru">Полевое руководство по Claude Design</span><span lang="en">A Field Guide to Claude Design</span></a>
+        </div>
+        <nav>
+            <a href="../claude-design.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span lang="ru">RESEARCH PREVIEW</span><span lang="en">RESEARCH PREVIEW</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section class="etap-hero" data-num="03">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 03</span><span lang="en">Etape 03</span></span> &nbsp;·&nbsp; <span lang="ru">Brand system из&nbsp;кода и&nbsp;Figma</span><span lang="en">Brand System from Code &amp; Figma</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Загрузите бренд один раз.<br>Используйте его&nbsp;<em>везде</em>.</span>
+            <span lang="en">Upload the brand once.<br>Use it <em>everywhere</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Из&nbsp;основного курса вы&nbsp;знаете <code>CLAUDE.md</code> с&nbsp;<dfn class="term" tabindex="0" data-def="именованные значения дизайна (цвета, шрифты, отступы, размеры), вынесенные из конкретных компонентов. Один источник истины для всего продукта.">design tokens</dfn>&nbsp;&mdash; единым источником истины для проекта. В&nbsp;Claude Design этот&nbsp;же приём принимает форму <em>workspace-inheritance</em>: загружаете токены из&nbsp;кодбазы или Figma один раз, и&nbsp;<em>все будущие</em> проекты в&nbsp;этом workspace наследуют бренд автоматически. Никакого «опять подбираю шрифт».
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            From the main course you know <code>CLAUDE.md</code> with <dfn class="term" tabindex="0" data-def="named design values (colours, fonts, spacing, sizes) extracted from specific components. One source of truth for the whole product.">design tokens</dfn>&nbsp;&mdash; the single source of truth for a project. In Claude Design the same move takes the form of <em>workspace inheritance</em>: load the tokens from your codebase or Figma once, and <em>every future</em> project in that workspace inherits the brand automatically. No more &ldquo;picking the font again.&rdquo;
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div><dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt><dd><span lang="ru">4–5 дней · 1–2&nbsp;ч/день</span><span lang="en">4–5 days · 1–2&nbsp;hrs/day</span></dd></div>
+            <div><dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt><dd><span lang="ru">tokens из&nbsp;кода · Figma-импорт · workspace inheritance · эволюция бренда</span><span lang="en">tokens from code · Figma import · workspace inheritance · brand evolution</span></dd></div>
+            <div><dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt><dd><span lang="ru">бренд&nbsp;&mdash; один раз; артефакты&nbsp;&mdash; десять</span><span lang="en">brand once, artefacts ten</span></dd></div>
+            <div><dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt><dd><span lang="ru">brand system, применённая к&nbsp;3 форматам (лендинг, постер, social-post)</span><span lang="en">brand system applied to 3 formats (landing, poster, social post)</span></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Что мы&nbsp;пройдём по&nbsp;шагам</span><span lang="en">What we will walk through</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Что Claude Design извлекает из&nbsp;кодбазы</span><span lang="en">What Claude Design extracts from a codebase</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Дайте Claude Design ссылку на&nbsp;GitHub-репозиторий, прикрепите .zip с&nbsp;кодом или конкретные файлы&nbsp;&mdash; и&nbsp;он&nbsp;вытащит дизайн-сигналы автоматически. Что именно он&nbsp;ищет:</p>
+                    <ul>
+                        <li><strong>CSS-переменные</strong> в&nbsp;<code>:root</code> блоках (<code>--bg</code>, <code>--ink</code>, <code>--accent</code>...)&nbsp;&mdash; это «золотой стандарт» tokens, как в&nbsp;вашем основном курсе.</li>
+                        <li><strong>Tailwind-config</strong> (<code>tailwind.config.js</code>) с&nbsp;extended themes&nbsp;&mdash; цвета, шрифты, размеры.</li>
+                        <li><strong>JSON-токены</strong> (<code>tokens.json</code>, <code>design-tokens.json</code>)&nbsp;&mdash; формат W3C/Style Dictionary, очень популярный сейчас.</li>
+                        <li><strong>SCSS/Less variables</strong> (<code>$primary</code>, <code>$body-font</code>...).</li>
+                        <li><strong>Figma Tokens плагин-экспорт</strong>&nbsp;&mdash; если у&nbsp;вас есть.</li>
+                    </ul>
+                    <p>Промпт обычно такой:</p>
+                    <pre class="shell">&gt; вот наша кодбаза: https://github.com/yourorg/yourrepo
+&gt; (или: прикреплён styles.css)
+&gt; извлеки tokens: палитру, типографику, размерные шкалы, отступы.
+&gt; покажи мне, что нашёл, в виде сводной таблицы.
+&gt; не делай дизайн пока — мне нужна сверка.</pre>
+                    <p>Claude отвечает: «нашёл 12 цветов (--bg, --ink, --accent...), 3 шрифта (Fraunces, Newsreader, IBM Plex Mono), spacing scale 0.25/0.5/1/2/3 rem, breakpoints 640/1024/1280...». Вы&nbsp;<em>сверяете</em> и&nbsp;при необходимости поправляете. Только после этого&nbsp;&mdash; запускаете дизайн в&nbsp;этой системе.</p>
+                    <div class="note">Этот «сверочный шаг» критичен. Если Claude ошибся в&nbsp;палитре или типографике (например, не&nbsp;увидел dark-mode override), все 50 будущих ассетов унаследуют ошибку. Лучше потратить 5 минут на&nbsp;проверку, чем переделывать.</div>
+                </div>
+                <div lang="en">
+                    <p>Hand Claude Design a GitHub URL, a .zip, or specific files&nbsp;&mdash; and it pulls out design signals automatically. What it looks for:</p>
+                    <ul>
+                        <li><strong>CSS variables</strong> in <code>:root</code> blocks (<code>--bg</code>, <code>--ink</code>, <code>--accent</code>...)&nbsp;&mdash; the &ldquo;gold standard&rdquo; for tokens, as in your main course.</li>
+                        <li><strong>Tailwind config</strong> (<code>tailwind.config.js</code>) with extended themes&nbsp;&mdash; colours, fonts, sizes.</li>
+                        <li><strong>JSON tokens</strong> (<code>tokens.json</code>, <code>design-tokens.json</code>)&nbsp;&mdash; W3C / Style Dictionary format, very common now.</li>
+                        <li><strong>SCSS / Less variables</strong> (<code>$primary</code>, <code>$body-font</code>...).</li>
+                        <li><strong>Figma Tokens plugin export</strong>&nbsp;&mdash; if you have one.</li>
+                    </ul>
+                    <p>The prompt usually:</p>
+                    <pre class="shell">&gt; here is our codebase: https://github.com/yourorg/yourrepo
+&gt; (or: styles.css attached)
+&gt; extract tokens: palette, typography, size scales, spacing.
+&gt; show me what you found as a summary table.
+&gt; do not design yet — I want to verify.</pre>
+                    <p>Claude replies: &ldquo;found 12 colours (--bg, --ink, --accent...), 3 fonts (Fraunces, Newsreader, IBM Plex Mono), spacing scale 0.25/0.5/1/2/3 rem, breakpoints 640/1024/1280...&rdquo; You <em>verify</em> and patch if needed. Only then&nbsp;&mdash; run a design in that system.</p>
+                    <div class="note">The &ldquo;verify step&rdquo; is critical. If Claude misread the palette or typography (e.g. missed a dark-mode override), all 50 future assets inherit the error. Five minutes of verification beats redoing.</div>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Figma как источник: что вытаскивает Claude из&nbsp;файла</span><span lang="en">Figma as source: what Claude pulls from the file</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Если у&nbsp;вашей команды дизайн уже живёт в&nbsp;Figma, Claude Design умеет читать его напрямую: <em>connect Figma file</em> в&nbsp;интерфейсе или дайте share-URL в&nbsp;промпте. Что он&nbsp;вытащит:</p>
+                    <ul>
+                        <li><strong>Color styles</strong> (если они оформлены как <em>shared styles</em>, не&nbsp;просто HEX в&nbsp;слоях).</li>
+                        <li><strong>Text styles</strong>&nbsp;&mdash; пары «название → шрифт+размер+интерлиньяж».</li>
+                        <li><strong>Effect styles</strong>&nbsp;&mdash; тени, размытия.</li>
+                        <li><strong>Components</strong>&nbsp;&mdash; кнопки, карточки, поля ввода. Claude использует их&nbsp;как «строительные блоки» для новых проектов.</li>
+                        <li><strong>Variables</strong> (Figma 2024+)&nbsp;&mdash; современный аналог design tokens, читается напрямую.</li>
+                    </ul>
+                    <p>Главное условие: Figma-файл должен быть <em>аккуратно собран</em>. Если стили локальные, компоненты разбросаны, цвета захардкожены в&nbsp;слоях&nbsp;&mdash; Claude вытащит мусор. Перед загрузкой в&nbsp;Claude Design стоит:</p>
+                    <ol>
+                        <li>Запустить <em>Figma Variables Migrator</em> или хотя&nbsp;бы вынести цвета в&nbsp;color styles.</li>
+                        <li>Проверить, что компоненты называются осмысленно (не&nbsp;«Frame 1247», а&nbsp;«Button / Primary»).</li>
+                        <li>Удалить устаревшие/дубликаты стилей.</li>
+                    </ol>
+                    <p>Когда Figma-источник лучше кодбазы:</p>
+                    <ul>
+                        <li>Команда работает «design-first»&nbsp;&mdash; дизайн опережает код.</li>
+                        <li>В&nbsp;коде токенов нет, или они неполные.</li>
+                        <li>Нужны <em>визуальные компоненты</em>&nbsp;&mdash; иллюстрации, иконки в&nbsp;одном стиле.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>If your team&rsquo;s design already lives in Figma, Claude Design can read it directly: <em>connect Figma file</em> in the UI or give a share URL in the prompt. What it pulls:</p>
+                    <ul>
+                        <li><strong>Colour styles</strong> (if defined as shared styles, not HEXes scattered across layers).</li>
+                        <li><strong>Text styles</strong>&nbsp;&mdash; named &ldquo;font + size + leading&rdquo; pairs.</li>
+                        <li><strong>Effect styles</strong>&nbsp;&mdash; shadows, blurs.</li>
+                        <li><strong>Components</strong>&nbsp;&mdash; buttons, cards, inputs. Claude uses these as building blocks for new projects.</li>
+                        <li><strong>Variables</strong> (Figma 2024+)&nbsp;&mdash; modern equivalent of design tokens, read directly.</li>
+                    </ul>
+                    <p>Main precondition: the Figma file must be <em>tidy</em>. If styles are local, components scattered, colours hardcoded into layers&nbsp;&mdash; Claude pulls junk. Before loading into Claude Design:</p>
+                    <ol>
+                        <li>Run the <em>Figma Variables Migrator</em> or at least move colours into colour styles.</li>
+                        <li>Make sure components are named meaningfully (&ldquo;Button / Primary,&rdquo; not &ldquo;Frame 1247&rdquo;).</li>
+                        <li>Delete legacy/duplicate styles.</li>
+                    </ol>
+                    <p>When Figma-source beats the codebase:</p>
+                    <ul>
+                        <li>The team is &ldquo;design-first&rdquo;&nbsp;&mdash; design leads code.</li>
+                        <li>Tokens in code don&rsquo;t exist or are incomplete.</li>
+                        <li>You need <em>visual components</em>&nbsp;&mdash; illustrations, one-family icons.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Workspace inheritance: бренд один, проектов&nbsp;&mdash; десять</span><span lang="en">Workspace inheritance: one brand, ten projects</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Самая сильная возможность этапа: загруженный однажды бренд применяется ко&nbsp;<em>всем</em> будущим проектам в&nbsp;этом workspace, без&nbsp;повторной загрузки.</p>
+                    <p>Технически: workspace в&nbsp;Claude Design&nbsp;&mdash; это «папка», в&nbsp;которой живут связанные проекты. Загруженная brand-system привязывается к&nbsp;workspace, не&nbsp;к&nbsp;конкретному проекту. Создаёте новый проект в&nbsp;том&nbsp;же workspace&nbsp;&mdash; Claude по&nbsp;умолчанию использует tokens этого бренда.</p>
+                    <p>Практически:</p>
+                    <ol>
+                        <li>Создаёте workspace «Северный край&nbsp;&mdash; кофейня». Загружаете tokens (цвета, шрифты, логотип).</li>
+                        <li>В&nbsp;этом workspace делаете 10 проектов: меню, лендинг, постер открытия, серия Instagram, баннер email, оформление чашек, табличка на&nbsp;двери, sticker-pack, OG-image, дек для инвестора.</li>
+                        <li>Все 10 артефактов выглядят как один бренд. Не&nbsp;потому что вы&nbsp;старались, а&nbsp;потому что Claude применил tokens из&nbsp;workspace автоматически.</li>
+                    </ol>
+                    <p>Когда нужен новый workspace:</p>
+                    <ul>
+                        <li>Новый клиент / новый проект (другой бренд).</li>
+                        <li>Те&nbsp;же темы, но&nbsp;принципиально другая стилистика (например, кофейня vs&nbsp;её&nbsp;же чайный филиал, который позиционируется иначе).</li>
+                        <li>Эксперимент со&nbsp;стилем без риска перезаписать основной бренд.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>The most powerful capability of the etape: a brand uploaded once applies to <em>every</em> future project in that workspace, without re-uploading.</p>
+                    <p>Technically: a workspace in Claude Design is a &ldquo;folder&rdquo; where related projects live. The uploaded brand-system attaches to the workspace, not to a specific project. Make a new project in the same workspace&nbsp;&mdash; Claude uses the workspace tokens by default.</p>
+                    <p>In practice:</p>
+                    <ol>
+                        <li>Create workspace &ldquo;Northern Coast&nbsp;&mdash; café.&rdquo; Upload tokens (colours, fonts, logo).</li>
+                        <li>Inside that workspace ship 10 projects: menu, landing, opening poster, Instagram series, email banner, cup design, door sign, sticker pack, og-image, investor deck.</li>
+                        <li>All 10 look like one brand. Not because you tried, but because Claude applied the workspace tokens automatically.</li>
+                    </ol>
+                    <p>When you need a new workspace:</p>
+                    <ul>
+                        <li>New client / new project (different brand).</li>
+                        <li>Same theme but a fundamentally different style (e.g. a café vs. its tea spin-off positioned differently).</li>
+                        <li>An experiment with style without risk of overwriting the main brand.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Эволюция бренда: добавляем токены по&nbsp;ходу</span><span lang="en">Brand evolution: adding tokens as you go</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Реальный бренд редко стартует «полным». Чаще: загружаете базу (палитра + типографика + spacing), а&nbsp;дальше по&nbsp;ходу проектов нужны новые токены: «вторичный акцент для распродаж», «warm-mode палитра для зимних кампаний», «новый шрифт для презентаций».</p>
+                    <p>Claude Design позволяет <em>дотягивать</em> бренд:</p>
+                    <pre class="shell">&gt; добавь к нашей brand system второй акцент: тёплый горчичный
+&gt; для seasonal-кампаний. имя token: --accent-warm.
+&gt; покажи мне обновлённую сводную таблицу tokens.
+&gt; экспортируй обновление как tokens.json для backup.</pre>
+                    <p>Claude обновляет workspace-bound tokens, и&nbsp;все следующие проекты получают новый акцент. Старые проекты в&nbsp;этом&nbsp;же workspace остаются нетронутыми, но&nbsp;при следующей итерации могут использовать новый token.</p>
+                    <p>Хороший workflow для зрелого бренда:</p>
+                    <ol>
+                        <li>Каждый раз, когда добавляете новый токен&nbsp;&mdash; экспортируйте tokens.json.</li>
+                        <li>Храните этот&nbsp;json в&nbsp;своей кодбазе (или в&nbsp;Figma Variables).</li>
+                        <li>Раз в&nbsp;квартал синхронизируйте: загружаете обновлённый файл в&nbsp;workspace.</li>
+                    </ol>
+                    <p>Это закрывает цикл «дизайн обновляет систему → код подтягивает обновление → код снова кормит Claude Design». Brand system становится живым артефактом, а&nbsp;не&nbsp;статичным «я&nbsp;один раз настроил».</p>
+                </div>
+                <div lang="en">
+                    <p>A real brand rarely starts &ldquo;complete.&rdquo; More often: you load a base (palette + typography + spacing), and along the way new tokens come up&nbsp;&mdash; &ldquo;a secondary accent for sales,&rdquo; &ldquo;warm-mode palette for winter campaigns,&rdquo; &ldquo;a new font for slides.&rdquo;</p>
+                    <p>Claude Design lets you <em>extend</em> the brand:</p>
+                    <pre class="shell">&gt; add to our brand system a second accent: warm mustard
+&gt; for seasonal campaigns. token name: --accent-warm.
+&gt; show me the updated tokens summary table.
+&gt; export the update as tokens.json for backup.</pre>
+                    <p>Claude updates the workspace-bound tokens; every future project picks up the new accent. Older projects in the same workspace remain untouched but can use the new token on next iteration.</p>
+                    <p>A good workflow for a mature brand:</p>
+                    <ol>
+                        <li>Every time you add a token&nbsp;&mdash; export tokens.json.</li>
+                        <li>Store the json in your codebase (or Figma Variables).</li>
+                        <li>Sync quarterly: re-upload the refreshed file to the workspace.</li>
+                    </ol>
+                    <p>This closes the loop: &ldquo;design updates system → code pulls the update → code feeds Claude Design again.&rdquo; The brand system becomes a living artefact, not a static &ldquo;set up once.&rdquo;</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Когда design system нужен, а&nbsp;когда&nbsp;&mdash; излишество</span><span lang="en">When a design system is needed, when it is overkill</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Design system&nbsp;&mdash; это инвестиция, не&nbsp;бесплатная. Время на&nbsp;настройку, дисциплина в&nbsp;поддержке, риск over-engineering.</p>
+                    <p><strong>Нужен</strong>:</p>
+                    <ul>
+                        <li>3+ проекта будут в&nbsp;одной стилистике (бренд кофейни, серия презентаций фонда).</li>
+                        <li>Командная работа: дизайнер + разработчик + маркетолог должны видеть один и&nbsp;тот&nbsp;же набор tokens.</li>
+                        <li>Долгая жизнь продукта (1+ год).</li>
+                        <li>У&nbsp;вас уже есть код или Figma с&nbsp;tokens&nbsp;&mdash; глупо не&nbsp;использовать.</li>
+                    </ul>
+                    <p><strong>Излишество</strong>:</p>
+                    <ul>
+                        <li>Один артефакт (одна обложка плейлиста). Просто опишите стиль в&nbsp;промпте.</li>
+                        <li>Эксперимент со&nbsp;стилем&nbsp;&mdash; вы&nbsp;ещё не&nbsp;знаете, какой бренд хотите.</li>
+                        <li>Pet-project на&nbsp;вечер. Не&nbsp;надо строить design system для лендинга для&nbsp;себя.</li>
+                    </ul>
+                    <p>Простое правило: <strong>если вы&nbsp;собираетесь делать &lt;3 проектов в&nbsp;одной стилистике&nbsp;&mdash; design system не&nbsp;стройте</strong>. Описывайте стиль в&nbsp;каждом промпте отдельно. Это нормально.</p>
+                </div>
+                <div lang="en">
+                    <p>A design system is an investment, not free. Setup time, maintenance discipline, over-engineering risk.</p>
+                    <p><strong>Needed</strong>:</p>
+                    <ul>
+                        <li>3+ projects will share the style (a café brand, a fund deck series).</li>
+                        <li>Team work: designer + developer + marketer all need the same token set.</li>
+                        <li>Long product life (1+ year).</li>
+                        <li>You already have code or Figma with tokens&nbsp;&mdash; silly not to use them.</li>
+                    </ul>
+                    <p><strong>Overkill</strong>:</p>
+                    <ul>
+                        <li>One artefact (one playlist cover). Just describe style in the prompt.</li>
+                        <li>A style experiment&nbsp;&mdash; you don&rsquo;t yet know which brand you want.</li>
+                        <li>An evening pet project. No need for a design system for your own landing.</li>
+                    </ul>
+                    <p>Simple rule: <strong>if you&rsquo;re shipping &lt;3 projects in one style&nbsp;&mdash; skip the design system</strong>. Describe style per prompt. That&rsquo;s fine.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Минимальная brand system за&nbsp;15 минут</span><span lang="en">A minimal brand system in 15 minutes</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · 6 токенов в&nbsp;.css → workspace</span><span lang="en">Run · 6 tokens in .css → workspace</span></h4>
+            <ol lang="ru">
+                <li>Создайте локально файл <code>brand.css</code> с&nbsp;6 токенами:
+                    <pre class="shell">:root {
+  --bg: #fbf3d8;
+  --ink: #2a2e5c;
+  --accent: #e63a5e;
+  --rule: #e8b58c;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Newsreader', serif;
+}</pre>
+                </li>
+                <li>В&nbsp;Claude Design создайте <em>новый workspace</em> «Эксперимент-бренд». Прикрепите brand.css.</li>
+                <li>Промпт: <em>«извлеки tokens из&nbsp;этого файла, покажи сводку, не&nbsp;делай дизайн»</em>. Сверьтесь&nbsp;&mdash; Claude увидел все 6?</li>
+                <li>В&nbsp;том&nbsp;же workspace новый проект: <em>«обложка плейлиста &laquo;Утренние прогулки&raquo;, в&nbsp;токенах workspace»</em>. Дождитесь.</li>
+                <li>Ещё один новый проект в&nbsp;том&nbsp;же workspace: <em>«постер для домашнего концерта, в&nbsp;токенах workspace»</em>. Дождитесь.</li>
+                <li>Сравните оба артефакта&nbsp;&mdash; они должны выглядеть «как один бренд».</li>
+            </ol>
+            <ol lang="en">
+                <li>Create a local <code>brand.css</code> with 6 tokens (same as above, see Russian).</li>
+                <li>In Claude Design create a <em>new workspace</em> &ldquo;Brand experiment.&rdquo; Attach brand.css.</li>
+                <li>Prompt: <em>&ldquo;extract tokens from this file, show me the summary, do not design.&rdquo;</em> Verify&nbsp;&mdash; did Claude see all 6?</li>
+                <li>In the same workspace, new project: <em>&ldquo;a playlist cover &lsquo;Morning walks&rsquo; in the workspace tokens.&rdquo;</em> Wait.</li>
+                <li>One more project in the same workspace: <em>&ldquo;poster for a house concert, in the workspace tokens.&rdquo;</em> Wait.</li>
+                <li>Compare the two artefacts&nbsp;&mdash; they should look like &ldquo;one brand.&rdquo;</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>чувствовать workspace inheritance</strong>. Один загруженный файл → много согласованных артефактов.</p>
+            <p lang="en">What we are training: <strong>feeling workspace inheritance</strong>. One uploaded file → many consistent artefacts.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Бренд один, артефакты&nbsp;&mdash; разные форматы</span><span lang="en">One brand, multiple formats</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции · трек&nbsp;финансы</span><span lang="en">Project A · guided · finance track</span></span>
+            <h3><span lang="ru">Извлечь tokens из&nbsp;кодбазы курса и&nbsp;применить</span><span lang="en">Extract tokens from the course codebase, apply</span></h3>
+            <p class="goal" lang="ru">Цель: использовать <code>course-site/styles.css</code> этого&nbsp;же тьюториала как brand-источник, и&nbsp;собрать промо-страницу финансового продукта в&nbsp;этой стилистике.</p>
+            <p class="goal" lang="en">Goal: use this tutorial&rsquo;s own <code>course-site/styles.css</code> as a brand source, and assemble a finance-product promo page in that style.</p>
+
+            <ol class="steps" lang="ru">
+                <li>Скачайте <code>styles.css</code> из&nbsp;этого репозитория (или клонируйте репо).</li>
+                <li>Claude Design&nbsp;&mdash; новый workspace «Field-Guide-style». Прикрепите styles.css.</li>
+                <li>Промпт сверки:
+                    <pre class="shell">&gt; извлеки tokens из этого файла. покажи: палитру (с примерами цветов),
+&gt; типографические стили (display / h1 / h2 / body / mono), spacing scale.
+&gt; обрати внимание на light, dark и doodle темы — там разные палитры.
+&gt; не делай дизайн пока.</pre>
+                </li>
+                <li>Сверьтесь. Claude должен увидеть три темы и&nbsp;все основные tokens.</li>
+                <li>Новый проект в&nbsp;том&nbsp;же workspace:
+                    <pre class="shell">&gt; промо-страница для «Личного инвест-кабинета» (продукт из основного курса).
+&gt; формат 1280×800 десктоп. используй tokens workspace, тема light.
+&gt; структура: hero с заголовком и одним предложением; три блока (учёт / прогноз / отчёт); CTA-кнопка снизу. </pre>
+                </li>
+                <li>Сравните визуально с&nbsp;этой страницей этапа&nbsp;&mdash; они должны быть «семьёй».</li>
+                <li>Экспорт: HTML.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Download <code>styles.css</code> from this repository (or clone the repo).</li>
+                <li>Claude Design&nbsp;&mdash; new workspace &ldquo;Field-Guide-style.&rdquo; Attach styles.css.</li>
+                <li>Verification prompt: extract tokens, show palette + typography + spacing, note three themes (light/dark/doodle), do not design yet.</li>
+                <li>Verify. Claude should see all three themes and all key tokens.</li>
+                <li>New project in the same workspace: a promo page for &ldquo;Personal Investment Office&rdquo; (the main course product); 1280×800 desktop; use workspace tokens, light theme; hero, three blocks (tracking / forecast / report), CTA at the bottom.</li>
+                <li>Compare to this etape page visually&nbsp;&mdash; they should look &ldquo;family.&rdquo;</li>
+                <li>Export: HTML.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru"><li>извлекать tokens из&nbsp;живой кодбазы;</li><li>verify-step перед запуском дизайна;</li><li>использовать workspace inheritance для нового проекта.</li></ul>
+            <ul lang="en"><li>extracting tokens from a live codebase;</li><li>the verify step before designing;</li><li>workspace inheritance for a new project.</li></ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции · трек&nbsp;игра</span><span lang="en">Project B · guided · game track</span></span>
+            <h3><span lang="ru">Brand-system «с&nbsp;нуля» для инди-студии</span><span lang="en">A brand system &ldquo;from scratch&rdquo; for an indie studio</span></h3>
+            <p class="goal" lang="ru">Цель: построить brand-system новой инди-студии (имя, логотип, палитра, типографика) полностью через диалог с&nbsp;Claude. Затем экспортировать tokens.json и&nbsp;применить к&nbsp;трём форматам.</p>
+            <p class="goal" lang="en">Goal: build a brand system for a new indie studio (name, logo, palette, type) entirely through dialogue with Claude. Then export tokens.json and apply to three formats.</p>
+
+            <ol class="steps" lang="ru">
+                <li>Новый workspace «Aurora Pixel». Без&nbsp;прикреплённых файлов.</li>
+                <li>Промпт: <em>«я&nbsp;создаю брендинг для инди-студии Aurora Pixel. жанр: исследовательские платформеры в&nbsp;духе Inside и&nbsp;Hollow Knight. предложи 3 варианта brand system: палитра (5 цветов), типографика (display + body), один key-glyph для&nbsp;логотипа. дай для каждого варианта одно предложение почему он&nbsp;подходит студии»</em>.</li>
+                <li>Выберите вариант. Уточните: <em>«остановимся на&nbsp;варианте&nbsp;2. оформи его как design tokens (CSS-переменные с&nbsp;хорошими именами). покажи мне таблицу. экспорт в&nbsp;tokens.json и&nbsp;brand.css»</em>.</li>
+                <li>Сохраните оба файла локально&nbsp;&mdash; это ваш живой бренд.</li>
+                <li>Три проекта в&nbsp;том&nbsp;же workspace, в&nbsp;этих токенах:
+                    <ul>
+                        <li>Логотип студии (квадрат 1024×1024).</li>
+                        <li>Постер первой игры «Tide of Stars» (вертикальный 1080×1920).</li>
+                        <li>Steam-обложка (capsule 920×430).</li>
+                    </ul>
+                </li>
+                <li>Все три должны выглядеть как одна студия. Если что-то выпадает&nbsp;&mdash; правьте инлайн или добавляйте недостающие токены.</li>
+                <li>Экспортируйте каждый в&nbsp;PNG.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>New workspace &ldquo;Aurora Pixel.&rdquo; No file attachments.</li>
+                <li>Prompt: <em>&ldquo;I&rsquo;m branding an indie studio Aurora Pixel. Genre: exploration platformers à la Inside / Hollow Knight. Offer 3 brand system variants: palette (5 colours), typography (display + body), one key glyph for the logo. One sentence per variant on why it fits the studio.&rdquo;</em></li>
+                <li>Pick a variant. Refine: <em>&ldquo;variant 2. Format it as design tokens (CSS variables with good names). Show the table. Export tokens.json and brand.css.&rdquo;</em></li>
+                <li>Save both files locally&nbsp;&mdash; this is your live brand.</li>
+                <li>Three projects in the same workspace, in these tokens:
+                    <ul>
+                        <li>Studio logo (1024×1024 square).</li>
+                        <li>First-game poster &ldquo;Tide of Stars&rdquo; (1080×1920 vertical).</li>
+                        <li>Steam capsule (920×430).</li>
+                    </ul>
+                </li>
+                <li>All three should read as one studio. If something falls out&nbsp;&mdash; refine inline or add missing tokens.</li>
+                <li>Export each as PNG.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru"><li>строить brand-system через диалог, без&nbsp;готового кода;</li><li>экспортировать tokens в&nbsp;.json/.css для будущего использования;</li><li>применять единый бренд к&nbsp;3 разным форматам.</li></ul>
+            <ul lang="en"><li>building a brand system via dialogue, without existing code;</li><li>exporting tokens to .json/.css for future use;</li><li>applying one brand across 3 different formats.</li></ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваш бренд</span><span lang="en">Same moves, your brand</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно · трек кофейня или квартира</span><span lang="en">Project C · solo · café or apartment track</span></span>
+            <h3><span lang="ru">Бренд-расширение существующего проекта</span><span lang="en">Brand extension of an existing project</span></h3>
+            <p class="goal" lang="ru">Цель: возьмите brand-source <em>любого реального</em> сайта/проекта (своего или вдохновляющего), извлеките tokens, и&nbsp;примените к&nbsp;двум новым артефактам в&nbsp;другой нише.</p>
+            <p class="goal" lang="en">Goal: take a brand source from <em>any real</em> site/project (yours or aspirational), extract tokens, and apply to two new artefacts in another niche.</p>
+
+            <ul lang="ru">
+                <li>Источник может быть GitHub-репо, Figma-файл с&nbsp;public sharing, или CSS-файл скачанный с&nbsp;сайта (через DevTools).</li>
+                <li>Артефакты на&nbsp;ваш выбор: меню кофейни в&nbsp;стилистике apple.com; визитка дизайн-бюро в&nbsp;стилистике stripe.com; постер концерта в&nbsp;стилистике вашего инвест-кабинета.</li>
+                <li>Главное условие: «бренд-донор» и&nbsp;«артефакт-получатель»&nbsp;&mdash; разные ниши. Это проверка, что бренд переносим.</li>
+            </ul>
+            <ul lang="en">
+                <li>Source can be a GitHub repo, a Figma file with public sharing, or a CSS file pulled via DevTools.</li>
+                <li>Artefacts of your choice: a café menu in apple.com style; a design-bureau business card in stripe.com style; a concert poster in your investment-office style.</li>
+                <li>Key condition: brand donor and artefact recipient are in <em>different</em> niches. Tests whether the brand is portable.</li>
+            </ul>
+
+            <details class="verify">
+                <summary><span lang="ru">раскрыть после самостоятельной работы</span><span lang="en">open after you finish on your own</span></summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru"><li>есть workspace со&nbsp;своим brand-источником;</li><li>в&nbsp;нём 2&nbsp;артефакта в&nbsp;разных форматах;</li><li>оба артефакта явно «семья» по&nbsp;стилю;</li><li>вы&nbsp;можете назвать 3 конкретных tokens, которые перешли (например, основной цвет, заголовочный шрифт, корнер-радиус).</li></ul>
+                    <ul lang="en"><li>a workspace with your brand source;</li><li>2 artefacts in different formats inside it;</li><li>both clearly &ldquo;family&rdquo; in style;</li><li>you can name 3 concrete tokens that carried over (main colour, display font, corner radius).</li></ul>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно · трек на&nbsp;ваш выбор</span><span lang="en">Project D · solo · track of your choice</span></span>
+            <h3><span lang="ru">Эволюция бренда на&nbsp;5&nbsp;недель</span><span lang="en">A 5-week brand evolution</span></h3>
+            <p class="goal" lang="ru">Цель: сделать «дневник эволюции» бренда. Пятнадцатиминутное упражнение каждую неделю в&nbsp;течение 5&nbsp;недель: добавляете один новый токен, экспортируете обновлённый tokens.json. К&nbsp;концу&nbsp;&mdash; бренд из&nbsp;15+ tokens, эволюционировавший естественно, а&nbsp;не&nbsp;«всё&nbsp;сразу».</p>
+            <p class="goal" lang="en">Goal: a &ldquo;brand evolution diary.&rdquo; 15-minute exercise weekly for 5 weeks: add one new token, export updated tokens.json. By the end&nbsp;&mdash; a 15+-token brand grown naturally, not &ldquo;all at once.&rdquo;</p>
+
+            <ul lang="ru">
+                <li>Хорошие кандидаты на&nbsp;еженедельные дополнения: warm-mode палитра, второй акцент для распродаж, презентационный шрифт, иконки в&nbsp;одном стиле, моушен-токены (длительность анимаций).</li>
+                <li>Каждую неделю &mdash; коммитьте обновлённый tokens.json в&nbsp;любой git-репозиторий (даже личный). Через 5&nbsp;недель у&nbsp;вас будет история.</li>
+            </ul>
+            <ul lang="en">
+                <li>Good weekly additions: warm-mode palette, secondary accent for sales, slide-display font, one-family icons, motion tokens (animation durations).</li>
+                <li>Each week&nbsp;&mdash; commit the refreshed tokens.json to any git repo (personal works). After 5 weeks you have a history.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Новые слова</span><span lang="en">New words</span></h2>
+        </div>
+        <dl class="glossary">
+            <dt><span lang="ru">Design tokens</span><span lang="en">Design tokens</span></dt>
+            <dd>
+                <span lang="ru">Именованные значения дизайна (цвета, шрифты, отступы, размеры), вынесенные из&nbsp;конкретных компонентов. <code>--bg: #fbf3d8</code>&nbsp;&mdash; токен. Один источник истины для всего продукта. Выпускники основного курса видели их&nbsp;в&nbsp;<code>CLAUDE.md</code>; в&nbsp;Claude Design это&nbsp;же понятие, просто вынесенное в&nbsp;UI.</span>
+                <span lang="en">Named design values (colours, fonts, spacing, sizes) extracted from specific components. <code>--bg: #fbf3d8</code> is a token. One source of truth for the whole product. Main-course graduates saw them in <code>CLAUDE.md</code>; in Claude Design the same idea, lifted into the UI.</span>
+            </dd>
+            <dt><span lang="ru">Token extraction</span><span lang="en">Token extraction</span></dt>
+            <dd>
+                <span lang="ru">Процесс, которым Claude Design читает кодбазу или Figma и&nbsp;вытаскивает дизайн-сигналы (CSS-переменные, Tailwind-конфиг, JSON-tokens, SCSS-variables). Должен сопровождаться verify-шагом&nbsp;&mdash; сводной таблицей того, что Claude нашёл.</span>
+                <span lang="en">How Claude Design reads a codebase or Figma and pulls out design signals (CSS variables, Tailwind config, JSON tokens, SCSS variables). Should be followed by a verify step&nbsp;&mdash; a summary table of what Claude found.</span>
+            </dd>
+            <dt><span lang="ru">Workspace inheritance</span><span lang="en">Workspace inheritance</span></dt>
+            <dd>
+                <span lang="ru">Главная сила этапа: brand-system привязывается к&nbsp;workspace, а&nbsp;не&nbsp;к&nbsp;конкретному проекту. Все будущие проекты в&nbsp;этом workspace автоматически наследуют tokens. Один загруженный файл → десять согласованных артефактов.</span>
+                <span lang="en">The headline power: a brand system attaches to a workspace, not a specific project. All future projects in that workspace inherit tokens automatically. One uploaded file → ten consistent artefacts.</span>
+            </dd>
+            <dt><span lang="ru">Verify step</span><span lang="en">Verify step</span></dt>
+            <dd>
+                <span lang="ru">Промежуточный шаг между «Claude извлёк tokens» и&nbsp;«Claude делает дизайн». Просите вывести сводную таблицу того, что нашёл, чтобы вы&nbsp;могли поправить ошибки до&nbsp;того, как они унаследуются 50 артефактами.</span>
+                <span lang="en">The intermediate step between &ldquo;Claude extracted tokens&rdquo; and &ldquo;Claude designs.&rdquo; Ask for a summary table of what was found, so you can patch errors before they inherit into 50 artefacts.</span>
+            </dd>
+            <dt><span lang="ru">Brand evolution</span><span lang="en">Brand evolution</span></dt>
+            <dd>
+                <span lang="ru">Естественный процесс расширения brand system новыми токенами по&nbsp;мере роста проектов. Реальный бренд редко стартует «полным»; правильный workflow&nbsp;&mdash; экспорт tokens.json после каждого добавления, синхронизация с&nbsp;кодбазой раз в&nbsp;квартал.</span>
+                <span lang="en">The natural extension of a brand system with new tokens as projects grow. A real brand rarely starts &ldquo;complete&rdquo;; the right workflow is to export tokens.json after each addition and sync with the codebase quarterly.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов</span><span lang="en">Seven questions</span></h2>
+        </div>
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Какие 5 источников tokens читает Claude Design в&nbsp;кодбазе?</span><span lang="en">What 5 token sources does Claude Design read in a codebase?</span></p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary><div class="answer">
+                    <p lang="ru">CSS-переменные в&nbsp;<code>:root</code>, Tailwind-config (<code>tailwind.config.js</code>), JSON-tokens (<code>tokens.json</code>, формат W3C), SCSS/Less variables (<code>$primary</code>), Figma Tokens плагин-экспорт.</p>
+                    <p lang="en">CSS variables in <code>:root</code>, Tailwind config (<code>tailwind.config.js</code>), JSON tokens (<code>tokens.json</code>, W3C format), SCSS/Less variables (<code>$primary</code>), Figma Tokens plugin export.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем нужен «verify-шаг» перед запуском дизайна?</span><span lang="en">Why the &ldquo;verify step&rdquo; before designing?</span></p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary><div class="answer">
+                    <p lang="ru">Чтобы поймать ошибки извлечения до&nbsp;того, как они унаследуются всеми будущими артефактами в&nbsp;workspace. Если Claude не&nbsp;увидел dark-mode палитру или перепутал основной шрифт, лучше узнать это сейчас, чем после 30 экспортов.</p>
+                    <p lang="en">To catch extraction errors before they inherit into every future artefact in the workspace. If Claude missed a dark-mode palette or got the display font wrong, better find out now than after 30 exports.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Что такое workspace inheritance?</span><span lang="en">What is workspace inheritance?</span></p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary><div class="answer">
+                    <p lang="ru">Brand-system привязывается к&nbsp;workspace, не&nbsp;к&nbsp;конкретному проекту. Все будущие проекты в&nbsp;этом workspace автоматически используют те&nbsp;же tokens. Один загруженный файл → десять согласованных артефактов без повторной настройки.</p>
+                    <p lang="en">A brand system attaches to a workspace, not a specific project. All future projects in that workspace automatically use the same tokens. One uploaded file → ten consistent artefacts without re-setup.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Чем Figma-источник отличается от&nbsp;кодбазы?</span><span lang="en">How is a Figma source different from a codebase?</span></p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary><div class="answer">
+                    <p lang="ru">Figma даёт <em>визуальные компоненты</em> (иллюстрации, иконки, кнопки в&nbsp;конкретной графике), которых нет в&nbsp;tokens из&nbsp;кода. Зато требует аккуратности самого Figma-файла: shared styles, осмысленные названия компонентов, без&nbsp;дубликатов. Лучше для design-first команд.</p>
+                    <p lang="en">Figma offers <em>visual components</em> (illustrations, icons, button graphics) that code tokens don&rsquo;t carry. But requires a tidy Figma file: shared styles, meaningful component names, no duplicates. Better for design-first teams.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Как добавить новый цвет к&nbsp;существующей brand system?</span><span lang="en">How do you add a new colour to an existing brand system?</span></p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary><div class="answer">
+                    <p lang="ru">Промптом в&nbsp;workspace: «добавь токен <code>--accent-warm</code> такой-то, экспортируй обновлённый tokens.json». Claude дотягивает workspace-bound tokens; следующие проекты получают новый акцент. Старые проекты не&nbsp;трогаются, но&nbsp;при следующей итерации могут использовать.</p>
+                    <p lang="en">A prompt in the workspace: &ldquo;add token <code>--accent-warm</code>, export refreshed tokens.json.&rdquo; Claude extends the workspace-bound tokens; future projects pick up the new accent. Existing projects are untouched but can use it on next iteration.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Когда design system&nbsp;&mdash; это излишество?</span><span lang="en">When is a design system overkill?</span></p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary><div class="answer">
+                    <p lang="ru">Один артефакт; стилевой эксперимент, где вы&nbsp;ещё не&nbsp;знаете направления; pet-project на&nbsp;вечер. Простое правило: <strong>&lt;3 проектов в&nbsp;одной стилистике&nbsp;&mdash; brand system не&nbsp;стройте</strong>, описывайте стиль в&nbsp;промпте отдельно.</p>
+                    <p lang="en">One artefact; a style experiment where direction is unclear; an evening pet project. Simple rule: <strong>&lt;3 projects in one style&nbsp;&mdash; skip the brand system</strong>, describe per prompt.</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Как закрыть «дизайн ↔ код» цикл для живой brand system?</span><span lang="en">How do you close the &ldquo;design ↔ code&rdquo; loop for a live brand system?</span></p></div>
+                <details><summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary><div class="answer">
+                    <p lang="ru">После каждого добавления токена&nbsp;&mdash; экспорт tokens.json, коммит в&nbsp;кодбазу (или Figma Variables). Раз в&nbsp;квартал&nbsp;&mdash; синхронизация: загружаете обновлённый файл обратно в&nbsp;workspace. Brand system становится живым артефактом, а&nbsp;не&nbsp;статичной «настроил один раз» вещью.</p>
+                    <p lang="en">After each token addition&nbsp;&mdash; export tokens.json, commit to the codebase (or Figma Variables). Quarterly&nbsp;&mdash; sync: re-upload the refreshed file to the workspace. The brand system becomes a living artefact, not a static &ldquo;set up once.&rdquo;</p>
+                </div></details>
+                <div class="scoring"><button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button><button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button></div>
+            </li>
+        </ol>
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+        <ul class="checklist">
+            <li data-key="d3-extract"><span lang="ru">Извлекаю tokens из&nbsp;кодбазы (CSS, Tailwind, JSON, SCSS) или Figma-файла.</span><span lang="en">I extract tokens from a codebase (CSS, Tailwind, JSON, SCSS) or Figma file.</span></li>
+            <li data-key="d3-verify"><span lang="ru">Делаю verify-шаг сводной таблицей tokens до&nbsp;запуска дизайна.</span><span lang="en">I run a verify step with a token summary before designing.</span></li>
+            <li data-key="d3-workspace"><span lang="ru">Использую workspace inheritance: один загруженный бренд для всех проектов в&nbsp;workspace.</span><span lang="en">I use workspace inheritance: one uploaded brand for all projects in the workspace.</span></li>
+            <li data-key="d3-evolve"><span lang="ru">Дотягиваю brand system новыми токенами по&nbsp;ходу, экспортирую tokens.json.</span><span lang="en">I extend the brand system with new tokens, export tokens.json.</span></li>
+            <li data-key="d3-loop"><span lang="ru">Закрываю цикл дизайн&nbsp;↔ код квартальной синхронизацией.</span><span lang="en">I close the design ↔ code loop with quarterly syncs.</span></li>
+            <li data-key="d3-when"><span lang="ru">Знаю, когда design system нужен, а&nbsp;когда&nbsp;&mdash; излишество.</span><span lang="en">I know when a design system is needed and when it is overkill.</span></li>
+            <li data-key="d3-deliverables"><span lang="ru">Сделал артефакты этапа: 3 формата в&nbsp;единых tokens; brand-system с&nbsp;нуля для индистудии.</span><span lang="en">Etape artefacts done: 3 formats in shared tokens; an indie-studio brand system from scratch.</span></li>
+        </ul>
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап?</p><p lang="en">Ready to close the etape?</p>
+            <button class="btn-complete" data-id="design-03" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="claude-design-02.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">02 · Загрузка контекста</span><span lang="en">02 · Uploading Context</span></span>
+            </a>
+            <a class="next disabled" href="#" aria-disabled="true">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">04 · Интерактивный прототип <em>(скоро)</em></span><span lang="en">04 · Interactive Prototype <em>(soon)</em></span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Бренд&nbsp;&mdash; это не&nbsp;логотип. Это&nbsp;tokens, которые работают, пока вы&nbsp;спите».</p>
+            <p class="signature" lang="en">&ldquo;A brand is not a logo. It&rsquo;s tokens that keep working while you sleep.&rdquo;</p>
+            <p lang="ru">Этап&nbsp;03 пройден. Бренд работает на&nbsp;вас, не&nbsp;вы&nbsp;на&nbsp;него. Дальше&nbsp;&mdash; <strong>интерактивный прототип</strong>: переходим от&nbsp;статичных артефактов к&nbsp;кликабельным экранам для user-testing.</p>
+            <p lang="en">Etape 03 is behind you. The brand works for you, not you for it. Next&nbsp;&mdash; <strong>interactive prototypes</strong>: from static artefacts to clickable screens for user testing.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../claude-design.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="claude-design-02.html"><span lang="ru">← Этап&nbsp;02</span><span lang="en">← Etape 02</span></a></li>
+                <li><a href="../index.html"><span lang="ru">Основной курс</span><span lang="en">Main course</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

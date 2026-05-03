@@ -1,0 +1,1164 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 04 · Plan Mode, спецификации и крупные задачи — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 04 курса по Claude Code: Plan Mode, TodoWrite, spec-driven development, /compact, verification-before-completion. Анализ выписок и трёх-сценарный прогноз сбережений.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="04">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 04</span><span lang="en">Etape 04</span></span> &nbsp;·&nbsp; <span lang="ru">Plan Mode, спецификации и&nbsp;крупные задачи</span><span lang="en">Plan Mode, specs &amp; large tasks</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Сначала <em>план</em>. Потом действие.</span>
+            <span lang="en">Plan <em>first</em>. Then act.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Маленькие задачи делаются с&nbsp;первого промпта. Крупные&nbsp;&mdash; через <dfn class="term" tabindex="0" data-def="режим, в котором Claude только продумывает план, ничего не трогая. Вы утверждаете план — и только тогда он его выполняет. Незаменим для крупных задач.">Plan Mode</dfn>, <dfn class="term" tabindex="0" data-def="документ с описанием задачи: входы, выходы, шаги, критерии готовности. Claude по нему работает как по техническому заданию.">спецификации</dfn> и&nbsp;дисциплину чек-поинтов. На&nbsp;этом этапе анализируем годовые выписки и&nbsp;считаем, когда вы&nbsp;выйдете на&nbsp;финансовую независимость&nbsp;&mdash; в&nbsp;трёх сценариях.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Small tasks ship with one prompt. Big ones go through <dfn class="term" tabindex="0" data-def="a mode where Claude only drafts a plan, touching nothing. You approve — and only then it executes. Indispensable for large tasks.">Plan Mode</dfn>, <dfn class="term" tabindex="0" data-def="a document describing the task: inputs, outputs, steps, acceptance criteria. Claude treats it as a brief.">specifications</dfn> and the discipline of checkpoints. On this etape we parse a year of bank statements and compute when you reach financial independence&nbsp;&mdash; under three scenarios.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">5–7 дней · 2–4&nbsp;ч/день</span><span lang="en">5–7 days · 2–4&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">Plan Mode · TodoWrite · spec.md · /compact · verification</span><span lang="en">Plan Mode · TodoWrite · spec.md · /compact · verification</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">крупные задачи без&nbsp;потери цели</span><span lang="en">large tasks without losing the goal</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">отчёт «куда ушли деньги» и&nbsp;прогноз финансовой независимости в&nbsp;трёх сценариях</span><span lang="en">a “where the money went” report and a 3-scenario financial-independence forecast</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что устанавливаем перед началом</span><span lang="en">What to install before you start</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Главные инструменты этапа&nbsp;&mdash; Plan Mode, TodoWrite и&nbsp;<code>/compact</code>&nbsp;&mdash; уже встроены в&nbsp;Claude Code, ставить их&nbsp;не&nbsp;нужно. Опционально доустановим два skill из&nbsp;набора <code>superpowers</code> для&nbsp;дисциплины планов.</p>
+        <p class="reading" lang="en">The core tools — Plan Mode, TodoWrite, <code>/compact</code> — are already built into Claude Code. Optionally we add two <code>superpowers</code> skills for plan discipline.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
+            <h3><span lang="ru">Из этапов 00–03</span><span lang="en">From etapes 00–03</span></h3>
+            <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Claude Code, MCP <code>@playwright/mcp</code> и&nbsp;<code>@upstash/context7-mcp</code>&nbsp;&mdash; ставили в&nbsp;этапе&nbsp;03.</li>
+                <li>Skill <code>frontend-design</code>&nbsp;&mdash; для&nbsp;графиков прогноза.</li>
+                <li>Привычка работать через <code>CLAUDE.md</code> и&nbsp;итерации.</li>
+            </ul>
+            <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                <li>Claude Code, MCP <code>@playwright/mcp</code> and <code>@upstash/context7-mcp</code> — installed on etape 03.</li>
+                <li>Skill <code>frontend-design</code> — for the forecast charts.</li>
+                <li>The habit of working through <code>CLAUDE.md</code> and iterations.</li>
+            </ul>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3><span lang="ru">Skill <code>superpowers:writing-plans</code> и&nbsp;<code>superpowers:executing-plans</code></span><span lang="en">Skills <code>superpowers:writing-plans</code> and <code>superpowers:executing-plans</code></span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> два skill из&nbsp;пакета <code>superpowers</code>. Первый учит Claude составлять структурированный план перед крупной задачей; второй&nbsp;&mdash; исполнять план поэтапно, с&nbsp;чек-поинтами и&nbsp;остановками для&nbsp;вашего ревью.<br>
+            <strong>Зачем сейчас:</strong> для&nbsp;второго проекта (прогноз с&nbsp;тремя сценариями) полезно работать по&nbsp;дисциплине: написать spec → план → исполнение по&nbsp;плану. Без&nbsp;skills тоже можно, но&nbsp;со&nbsp;skills меньше «уплываний».<br>
+            <strong>Проверить, не&nbsp;стоят&nbsp;ли уже:</strong> в&nbsp;Claude напечатайте <code>/skills</code>. Если вы&nbsp;ставили пакет в&nbsp;этапе&nbsp;01, <code>superpowers:writing-plans</code> и&nbsp;<code>superpowers:executing-plans</code> уже&nbsp;в&nbsp;списке. Если нет&nbsp;&mdash; команда ниже поставит сразу весь пакет.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What they are:</strong> two skills from the <code>superpowers</code> package. The first teaches Claude to draft a structured plan before a big task; the second — to execute the plan step by step with checkpoints and review pauses.<br>
+            <strong>Why now:</strong> the second project (3-scenario forecast) benefits from the discipline: write spec → plan → execute against plan. Doable without the skills, but with them there’s less drift.<br>
+            <strong>Check first:</strong> <code>/skills</code> in Claude. If you installed the package on etape 01, <code>superpowers:writing-plans</code> and <code>superpowers:executing-plans</code> are already in the list. If not, the command below installs the whole package at once.</p>
+            <pre class="shell"><span class="cmt"># <span lang="ru">внутри claude (slash-команда, не shell)</span><span lang="en">inside claude (slash command, not shell)</span></span>
+/plugin install superpowers@claude-plugins-official</pre>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> встроенный маркетплейс Claude Code (<code>claude-plugins-official</code>); исходники&nbsp;&mdash; <a href="https://github.com/obra/superpowers">github.com/obra/superpowers</a>. Один пакет, внутри&nbsp;&mdash; набор связанных skills (planning, brainstorming, debugging, TDD, verification).<br>
+            <strong>Заметка:</strong> в&nbsp;отличие от&nbsp;MCP и&nbsp;skills из&nbsp;этапа&nbsp;03, этот пакет живёт не&nbsp;в&nbsp;Smithery, а&nbsp;во встроенном маркетплейсе Claude Code. Поэтому команда другая&nbsp;&mdash; slash-команда внутри <code>claude</code>, не shell. Магазинов несколько, это нормально.<br>
+            <strong>Проверка:</strong> попросите Claude <em>«напиши spec и&nbsp;план для&nbsp;трёх-сценарного прогноза сбережений»</em>&nbsp;&mdash; должен составить именно spec + план, а&nbsp;не&nbsp;броситься писать код.</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> Claude Code’s built-in plugin marketplace (<code>claude-plugins-official</code>); source on <a href="https://github.com/obra/superpowers">github.com/obra/superpowers</a>. One package, multiple linked skills inside (planning, brainstorming, debugging, TDD, verification).<br>
+            <strong>Note:</strong> unlike the MCPs and skills from etape 03, this package does not live on Smithery but in Claude Code’s built-in marketplace. That’s why the command is different — a slash command inside <code>claude</code>, not a shell command. Multiple stores is normal.<br>
+            <strong>Verify:</strong> ask <em>“write a spec and a plan for a 3-scenario savings forecast”</em> — Claude should produce a spec + plan, not start coding.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3><span lang="ru">Skill <code>superpowers:verification-before-completion</code></span><span lang="en">Skill <code>superpowers:verification-before-completion</code></span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill, который учит Claude <em>не&nbsp;объявлять задачу выполненной</em>, пока он&nbsp;не&nbsp;запустил проверку: открыл результат в&nbsp;браузере, проверил числа на&nbsp;тестовом сценарии, сверил с&nbsp;критериями готовности.<br>
+            <strong>Зачем сейчас:</strong> крупные задачи&nbsp;&mdash; идеальное место «соврать про готовность». Skill это блокирует.<br>
+            <strong>Где взять:</strong> входит в&nbsp;тот&nbsp;же пакет <code>superpowers</code>, ставится той&nbsp;же командой выше.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude <em>not to declare “done”</em> until it ran verification: opened the result in a browser, checked numbers on a test scenario, compared to acceptance criteria.<br>
+            <strong>Why now:</strong> big tasks are the perfect place to “lie about being done.” This skill blocks that.<br>
+            <strong>Where:</strong> part of the same <code>superpowers</code> package, installed by the command above.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">данные</span><span lang="en">data</span></span>
+            <h3><span lang="ru">Банковские выписки за&nbsp;12 месяцев (для&nbsp;проекта&nbsp;A)</span><span lang="en">12 months of bank statements (for project A)</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> CSV или PDF выписки от&nbsp;вашего банка за&nbsp;последние 12 месяцев.<br>
+            <strong>Зачем сейчас:</strong> на&nbsp;них строим отчёт «куда ушли деньги».<br>
+            <strong>Где взять:</strong> в&nbsp;кабинете банка обычно есть «выгрузить выписку за&nbsp;период». Если своих нет&nbsp;&mdash; в&nbsp;первом промпте попросим Claude сгенерировать тестовые на&nbsp;~600 операций.<br>
+            <strong>Куда положить:</strong> <code>data/statements/</code> в&nbsp;корне проекта. Никогда не&nbsp;коммитить в&nbsp;git.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> CSV or PDF statements from your bank for the last 12 months.<br>
+            <strong>Why now:</strong> we build the “where the money went” report on them.<br>
+            <strong>Where:</strong> bank portals usually have “export period statement.” If you have none — first prompt asks Claude to generate ~600 test ops.<br>
+            <strong>Where to put:</strong> <code>data/statements/</code> at the project root. Never commit to git.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Дисциплина больших задач</span><span lang="en">The discipline of large tasks</span></h2>
+        </div>
+
+        <details class="topic" open>
+            <summary><span lang="ru">Зачем нужен план перед действием</span><span lang="en">Why a plan before action</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>На&nbsp;этапах 00–03 мы&nbsp;работали короткими шагами: один промпт&nbsp;&mdash; одна правка&nbsp;&mdash; видим результат. Этого хватает на&nbsp;задачи в&nbsp;~5–10 шагов.</p>
+                    <p>Но&nbsp;есть задачи на&nbsp;30–50 шагов: «проанализировать 12 банковских выписок, категоризировать ~600 операций, сделать отчёт с&nbsp;графиками и&nbsp;тремя инсайтами». Если делать «одним промптом»&nbsp;&mdash; Claude быстро «уплывает»: забывает критерии, теряет цель, оставляет половину работы.</p>
+                    <p>Решение&nbsp;&mdash; <strong>двухфазная работа</strong>:</p>
+                    <ol>
+                        <li><strong>Фаза «продумай»</strong>&nbsp;&mdash; никаких изменений в&nbsp;файлах. Claude составляет план, перечисляет шаги, оценивает риски, спрашивает уточнения.</li>
+                        <li><strong>Фаза «сделай»</strong>&nbsp;&mdash; вы&nbsp;утверждаете план, Claude его исполняет, отмечая прогресс.</li>
+                    </ol>
+                    <p>Эта философия пронизывает весь этап. Plan Mode, spec.md, TodoWrite, verification&nbsp;&mdash; все они служат одному: <em>сначала договориться о&nbsp;том, что будет сделано, потом делать</em>.</p>
+                </div>
+                <div lang="en">
+                    <p>On etapes 00–03 we worked in short steps: one prompt — one edit — see the result. Enough for ~5–10-step tasks.</p>
+                    <p>But there are 30–50-step tasks: “parse 12 bank statements, categorise ~600 ops, make a report with charts and three insights.” Done “in one prompt,” Claude drifts fast: forgets criteria, loses goal, leaves half the work.</p>
+                    <p>The fix is <strong>two-phase work</strong>:</p>
+                    <ol>
+                        <li><strong>“Think it through”</strong> — no file changes. Claude drafts a plan, lists steps, weighs risks, asks for clarification.</li>
+                        <li><strong>“Do it”</strong> — you approve the plan, Claude executes, marking progress.</li>
+                    </ol>
+                    <p>This idea runs through the whole etape. Plan Mode, spec.md, TodoWrite, verification — all serve one goal: <em>agree on what will be done, then do it</em>.</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Plan Mode подробно: как и&nbsp;когда</span><span lang="en">Plan Mode in detail: how and when</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Plan Mode&nbsp;&mdash; это специальный режим Claude Code, в&nbsp;котором он&nbsp;<em>гарантированно</em> не&nbsp;трогает ваши файлы, пока вы&nbsp;не&nbsp;утвердите план. Включается через <code>Shift+Tab</code> (см. этап&nbsp;00).</p>
+                    <p>Что Claude делает в&nbsp;Plan Mode:</p>
+                    <ul>
+                        <li>Читает существующие файлы и&nbsp;<code>CLAUDE.md</code> (это разрешено);</li>
+                        <li>Изучает зависимости, структуру, ваши данные;</li>
+                        <li>Составляет план: фазы, шаги, риски, вопросы;</li>
+                        <li>Останавливается, ждёт вашего «да&nbsp;/ нет&nbsp;/ поправь&nbsp;X».</li>
+                    </ul>
+                    <p>После «да» план попадает в&nbsp;обычный режим, и&nbsp;Claude его выполняет. Если план слишком большой&nbsp;&mdash; Claude сам предложит разбить на&nbsp;несколько подзадач.</p>
+                    <p><strong>Когда обязательно использовать Plan Mode:</strong></p>
+                    <ul>
+                        <li>задача займёт больше 10 шагов;</li>
+                        <li>задача завязана на&nbsp;ваши данные и&nbsp;ошибка дорого стоит (бюджет, инвестиции, налоги);</li>
+                        <li>вы&nbsp;не&nbsp;уверены, что Claude правильно понял требования;</li>
+                        <li>задача затрагивает много файлов одновременно.</li>
+                    </ul>
+                    <p><strong>Когда не&nbsp;нужно:</strong> простые правки, мелкие итерации&nbsp;&mdash; они тратят время на&nbsp;«пустой план».</p>
+                </div>
+                <div lang="en">
+                    <p>Plan Mode is a special Claude Code mode in which it is <em>guaranteed</em> not to touch your files until you approve the plan. Toggled with <code>Shift+Tab</code> (etape 00).</p>
+                    <p>In Plan Mode Claude:</p>
+                    <ul>
+                        <li>reads existing files and <code>CLAUDE.md</code> (allowed);</li>
+                        <li>examines dependencies, structure, your data;</li>
+                        <li>drafts a plan: phases, steps, risks, questions;</li>
+                        <li>pauses, waits for your “yes / no / change X.”</li>
+                    </ul>
+                    <p>After “yes” the plan moves to normal mode and Claude executes it. If the plan is too big — Claude itself suggests splitting into sub-tasks.</p>
+                    <p><strong>Definitely use Plan Mode when:</strong></p>
+                    <ul>
+                        <li>the task takes more than 10 steps;</li>
+                        <li>the task uses your data and a mistake is expensive (budget, investing, taxes);</li>
+                        <li>you’re not sure Claude grasped the requirements;</li>
+                        <li>the task touches many files at once.</li>
+                    </ul>
+                    <p><strong>Skip when:</strong> simple edits, small iterations — they waste time on a “trivial plan.”</p>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="инструмент Claude Code, через который он ведёт список задач прямо в диалоге. Видите статус каждой подзадачи: pending, in_progress, completed.">TodoWrite</dfn>: видимый прогресс по&nbsp;шагам</span><span lang="en"><dfn class="term" tabindex="0" data-def="a Claude Code tool that maintains a task list inside the dialogue. You see status per sub-task: pending, in_progress, completed.">TodoWrite</dfn>: visible step-by-step progress</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p><code>TodoWrite</code>&nbsp;&mdash; встроенный инструмент Claude Code. Когда задача состоит из&nbsp;3+ шагов, Claude автоматически создаёт список задач и&nbsp;показывает его в&nbsp;диалоге. Каждая задача имеет статус:</p>
+                    <ul>
+                        <li><code>pending</code>&nbsp;&mdash; ещё не&nbsp;начата;</li>
+                        <li><code>in_progress</code>&nbsp;&mdash; делается прямо сейчас (только одна за&nbsp;раз);</li>
+                        <li><code>completed</code>&nbsp;&mdash; готова.</li>
+                    </ul>
+                    <p>Зачем это вам:</p>
+                    <ol>
+                        <li><strong>Видите, где Claude.</strong> «Сейчас в&nbsp;шаге 3 из&nbsp;7»&nbsp;&mdash; не&nbsp;нужно гадать.</li>
+                        <li><strong>Видите, что забыто.</strong> Если в&nbsp;конце все шаги <code>completed</code>, кроме одного <code>pending</code>&nbsp;&mdash; это явный сигнал.</li>
+                        <li><strong>Можете остановить и&nbsp;вернуться.</strong> Сессия запомнит todo-лист&nbsp;&mdash; через <code>--continue</code> вы&nbsp;возвращаетесь к&nbsp;тому&nbsp;же месту.</li>
+                    </ol>
+                    <p>Можно явно попросить Claude использовать TodoWrite:</p>
+                    <pre class="shell">&gt; разбей задачу «анализ выписок» на 5–8 фаз
+&gt; через TodoWrite. потом приступай.</pre>
+                </div>
+                <div lang="en">
+                    <p><code>TodoWrite</code> is a built-in Claude Code tool. When a task has 3+ steps, Claude creates a task list and shows it in the dialogue. Each task has a status:</p>
+                    <ul>
+                        <li><code>pending</code> — not started;</li>
+                        <li><code>in_progress</code> — happening right now (only one at a time);</li>
+                        <li><code>completed</code> — done.</li>
+                    </ul>
+                    <p>What it gives you:</p>
+                    <ol>
+                        <li><strong>Visible position.</strong> “Now on step 3 of 7” — no guessing.</li>
+                        <li><strong>Visible misses.</strong> If everything is <code>completed</code> but one <code>pending</code> at the end — that’s a clear signal.</li>
+                        <li><strong>You can stop and come back.</strong> The session remembers the todo list — <code>--continue</code> returns to the same place.</li>
+                    </ol>
+                    <p>You can explicitly ask Claude to use TodoWrite:</p>
+                    <pre class="shell">&gt; split the "statements analysis" task into 5–8 phases
+&gt; via TodoWrite. then proceed.</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="документ-ТЗ для крупной задачи. Описывает входы, выходы, шаги, критерии готовности. Claude по нему работает как стажёр по техзаданию.">Спецификация</dfn> (spec.md): техзадание для&nbsp;Claude</span><span lang="en"><dfn class="term" tabindex="0" data-def="a brief document for a large task. Describes inputs, outputs, steps, acceptance criteria. Claude treats it like an intern would treat a brief.">Spec</dfn> (spec.md): a brief for Claude</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Когда задача очень большая (десятки шагов, недели работы), даже Plan Mode мало. В&nbsp;таких случаях работает <strong>spec-driven development</strong>: вы&nbsp;вместе с&nbsp;Claude пишете <code>spec.md</code>&nbsp;&mdash; документ, который описывает задачу <em>до&nbsp;начала работы</em>.</p>
+                    <p>Что в&nbsp;spec обязательно:</p>
+                    <ol>
+                        <li><strong>Цель.</strong> «Что мы&nbsp;строим» в&nbsp;одном абзаце.</li>
+                        <li><strong>Входы.</strong> Какие данные на&nbsp;входе. Где они лежат, в&nbsp;каком формате.</li>
+                        <li><strong>Выходы.</strong> Что должно появиться. Файлы, страницы, отчёты, цифры.</li>
+                        <li><strong>Шаги.</strong> Высокоуровневые фазы работы (5–10 пунктов).</li>
+                        <li><strong>Критерии готовности.</strong> «Считаем готовым, когда&hellip;»&nbsp;&mdash; список измеримых условий.</li>
+                        <li><strong>Что вне scope.</strong> Что мы&nbsp;<em>не&nbsp;будем</em> делать (важно для&nbsp;Claude, чтобы он&nbsp;не&nbsp;уплывал).</li>
+                        <li><strong>Риски и&nbsp;вопросы.</strong> Открытые места, где нужно ваше решение.</li>
+                    </ol>
+                    <p>Spec живёт в&nbsp;<code>specs/</code> или прямо в&nbsp;корне проекта&nbsp;&mdash; рядом с&nbsp;<code>CLAUDE.md</code>. На&nbsp;него ссылаются через <code>@spec.md</code>:</p>
+                    <pre class="shell">&gt; работаем по @spec.md.
+&gt; начни с фазы 1, через TodoWrite веди прогресс.
+&gt; останавливайся в конце каждой фазы — я буду ревьюить.</pre>
+                </div>
+                <div lang="en">
+                    <p>When a task is very big (dozens of steps, weeks of work), even Plan Mode is not enough. <strong>Spec-driven development</strong> works there: together with Claude you write a <code>spec.md</code> — a document describing the task <em>before any work starts</em>.</p>
+                    <p>What a spec must include:</p>
+                    <ol>
+                        <li><strong>Goal.</strong> “What we’re building” in one paragraph.</li>
+                        <li><strong>Inputs.</strong> What data, where it lives, in what format.</li>
+                        <li><strong>Outputs.</strong> What should appear. Files, pages, reports, numbers.</li>
+                        <li><strong>Steps.</strong> High-level phases (5–10 items).</li>
+                        <li><strong>Acceptance criteria.</strong> “Done when…” — measurable conditions.</li>
+                        <li><strong>Out of scope.</strong> What we will <em>not</em> do (matters so Claude doesn’t drift).</li>
+                        <li><strong>Risks and questions.</strong> Open issues that need your decisions.</li>
+                    </ol>
+                    <p>The spec lives in <code>specs/</code> or in the project root next to <code>CLAUDE.md</code>. Reference it with <code>@spec.md</code>:</p>
+                    <pre class="shell">&gt; work to @spec.md.
+&gt; start with phase 1, track via TodoWrite.
+&gt; stop at the end of each phase — I’ll review.</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="команда /compact — «уплотнить сессию». Claude саммаризирует прошлый диалог, удаляет устаревшие детали, оставляет суть. Для длинных задач незаменимо.">Compaction</dfn> и&nbsp;управление длинными сессиями</span><span lang="en"><dfn class="term" tabindex="0" data-def="the /compact command — “compact the session.” Claude summarises the prior dialogue, drops stale details, keeps the gist. Indispensable for long tasks.">Compaction</dfn> and managing long sessions</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>В&nbsp;долгой сессии (часы работы, десятки промптов) у&nbsp;Claude накапливается «контекстный мусор»&nbsp;&mdash; старые ответы, отменённые попытки, тестовые запросы. Это <em>замедляет</em> Claude (больше текста на&nbsp;обработку) и&nbsp;<em>сбивает</em>: он&nbsp;может вспомнить отменённое решение и&nbsp;применить заново.</p>
+                    <p>Команда <code>/compact</code>&nbsp;&mdash; «уплотни сессию»:</p>
+                    <ol>
+                        <li>Claude саммаризирует всё, что было: цель, ключевые решения, текущее состояние;</li>
+                        <li>Удаляет промежуточные сообщения;</li>
+                        <li>Оставляет суммарный «отчёт о&nbsp;текущем положении» как первое сообщение в&nbsp;новом, чистом контексте.</li>
+                    </ol>
+                    <p>Когда уплотнять:</p>
+                    <ul>
+                        <li>после каждой большой фазы плана (например, «парсинг готов&nbsp;&mdash; <code>/compact</code>, дальше категоризация»);</li>
+                        <li>когда Claude начал «забывать» решения, принятые часом ранее;</li>
+                        <li>в&nbsp;конце рабочего дня&nbsp;&mdash; чтобы завтра <code>--continue</code> начался с&nbsp;чистого, но&nbsp;информированного контекста.</li>
+                    </ul>
+                    <p>Альтернативы:</p>
+                    <ul>
+                        <li><code>/clear</code>&nbsp;&mdash; полная очистка. Контекст теряется. Полезно, когда хотите начать «с&nbsp;нуля» в&nbsp;той&nbsp;же папке.</li>
+                        <li><code>--resume</code>&nbsp;&mdash; выбрать одну из&nbsp;недавних сессий, если случайно открыли новую.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>In a long session (hours, dozens of prompts) Claude collects “context litter” — old replies, abandoned attempts, test queries. That <em>slows</em> Claude (more text to process) and <em>misleads</em>: it may recall an abandoned decision and reapply it.</p>
+                    <p>The <code>/compact</code> command — “compact the session”:</p>
+                    <ol>
+                        <li>Claude summarises the whole thing: goal, key decisions, current state;</li>
+                        <li>removes intermediate messages;</li>
+                        <li>keeps the summary as the first message of a clean new context.</li>
+                    </ol>
+                    <p>When to compact:</p>
+                    <ul>
+                        <li>after each big plan phase (e.g., “parsing done — <code>/compact</code>, then categorisation”);</li>
+                        <li>when Claude starts “forgetting” decisions made an hour ago;</li>
+                        <li>end of day — so tomorrow’s <code>--continue</code> starts on a clean but informed context.</li>
+                    </ul>
+                    <p>Alternatives:</p>
+                    <ul>
+                        <li><code>/clear</code> — wipe completely. Context is lost. Useful when you want a fresh start in the same folder.</li>
+                        <li><code>--resume</code> — pick a recent session if you accidentally opened a new one.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="привычка проверять результат прежде чем сказать «готово»: запустить, сверить с критериями, прогнать тестовые сценарии. Skill superpowers:verification-before-completion.">Verification</dfn>: «готово» только после проверки</span><span lang="en"><dfn class="term" tabindex="0" data-def="the habit of verifying results before declaring “done”: run it, compare to criteria, walk test scenarios. Skill superpowers:verification-before-completion.">Verification</dfn>: “done” only after the check</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Самая частая ошибка крупных задач&nbsp;&mdash; «соврать про готовность». Claude может написать код, увидеть, что он&nbsp;<em>выглядит</em> правильно, и&nbsp;объявить задачу законченной. Запустите&nbsp;&mdash; не&nbsp;работает.</p>
+                    <p>Дисциплина <strong>verification-before-completion</strong> требует прежде чем сказать «готово»:</p>
+                    <ol>
+                        <li><strong>Запустить</strong>&nbsp;&mdash; программу, страницу, расчёт.</li>
+                        <li><strong>Прогнать тестовый сценарий</strong>&nbsp;&mdash; известный вход, ожидаемый выход.</li>
+                        <li><strong>Сверить с&nbsp;критериями готовности</strong> из&nbsp;<code>spec.md</code>.</li>
+                        <li><strong>Через Playwright</strong> сделать скриншот, посмотреть на&nbsp;UX.</li>
+                        <li><strong>Только потом</strong>&nbsp;&mdash; объявить задачу выполненной.</li>
+                    </ol>
+                    <p>Skill <code>superpowers:verification-before-completion</code> встраивает эту дисциплину в&nbsp;поведение Claude. Без&nbsp;skill можно делать вручную:</p>
+                    <pre class="shell">&gt; прежде чем сказать «готово», прогони такой тест:
+&gt; на входе X — должно получиться Y. сверь.
+&gt; через playwright открой страницу, сделай скриншот.
+&gt; покажи мне результат каждой проверки.</pre>
+                </div>
+                <div lang="en">
+                    <p>The most common big-task failure — “lying about being done.” Claude can write code, see it <em>looks</em> right, declare done. Run it — broken.</p>
+                    <p>The <strong>verification-before-completion</strong> discipline requires, before saying “done”:</p>
+                    <ol>
+                        <li><strong>Run</strong> — the program, page, calculation.</li>
+                        <li><strong>Walk a test scenario</strong> — a known input, expected output.</li>
+                        <li><strong>Compare to acceptance criteria</strong> in <code>spec.md</code>.</li>
+                        <li><strong>Through Playwright</strong>, screenshot and judge UX.</li>
+                        <li><strong>Only then</strong> — declare done.</li>
+                    </ol>
+                    <p>The <code>superpowers:verification-before-completion</code> skill bakes this into Claude’s behaviour. Without the skill — do it manually:</p>
+                    <pre class="shell">&gt; before saying "done", run this check:
+&gt; with input X — output should be Y. verify.
+&gt; through playwright open the page, screenshot.
+&gt; show me each check’s result.</pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">Декомпозиция: когда и&nbsp;как разбивать задачу</span><span lang="en">Decomposition: when and how to break tasks down</span></summary>
+            <div class="topic-body">
+                <div lang="ru">
+                    <p>Признаки, что задача слишком большая для&nbsp;одного промпта:</p>
+                    <ul>
+                        <li>больше 10 шагов;</li>
+                        <li>требует нескольких источников данных;</li>
+                        <li>содержит несколько независимых выходов (отчёт + дашборд + автоматизация);</li>
+                        <li>вы&nbsp;сами не&nbsp;уверены, что должен сделать Claude.</li>
+                    </ul>
+                    <p>Как разбивать:</p>
+                    <ol>
+                        <li><strong>На&nbsp;фазы по&nbsp;«данным».</strong> Парсинг → нормализация → агрегация → визуализация → отчёт.</li>
+                        <li><strong>На&nbsp;фазы по&nbsp;«артефактам».</strong> Сначала <code>data/operations.csv</code>, потом <code>dashboard.html</code>, потом <code>report.md</code>.</li>
+                        <li><strong>На&nbsp;фазы по&nbsp;«ревью».</strong> Каждая фаза заканчивается <code>/compact</code> и&nbsp;вашим утверждением.</li>
+                    </ol>
+                    <p>Каждая фаза должна быть:</p>
+                    <ul>
+                        <li>самостоятельно полезной (можно остановиться и&nbsp;использовать промежуточный результат);</li>
+                        <li>измеримой («готово, когда X существует и&nbsp;показывает Y»);</li>
+                        <li>укладываться в&nbsp;1–3 часа.</li>
+                    </ul>
+                </div>
+                <div lang="en">
+                    <p>Signs a task is too big for a single prompt:</p>
+                    <ul>
+                        <li>more than 10 steps;</li>
+                        <li>needs several data sources;</li>
+                        <li>has several independent outputs (report + dashboard + automation);</li>
+                        <li>you yourself aren’t sure what Claude must do.</li>
+                    </ul>
+                    <p>How to break it down:</p>
+                    <ol>
+                        <li><strong>Phases by “data.”</strong> Parse → normalise → aggregate → visualise → report.</li>
+                        <li><strong>Phases by “artefacts.”</strong> First <code>data/operations.csv</code>, then <code>dashboard.html</code>, then <code>report.md</code>.</li>
+                        <li><strong>Phases by “review.”</strong> Each phase ends with <code>/compact</code> and your approval.</li>
+                    </ol>
+                    <p>Every phase should be:</p>
+                    <ul>
+                        <li>independently useful (you can stop and use the partial result);</li>
+                        <li>measurable (“done when X exists and shows Y”);</li>
+                        <li>1–3 hours long.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== PRACTICE ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ II · <span lang="ru">Практика по&nbsp;ходу</span><span lang="en">Practice along the way</span></span>
+            <h2><span lang="ru">Спираль: spec → план → исполнение → ревизия</span><span lang="en">The spiral: spec → plan → execute → audit</span></h2>
+        </div>
+
+        <div class="practice">
+            <h4><span lang="ru">Прогон · Маленький spec на&nbsp;настоящей задаче</span><span lang="en">Run · A small spec on a real task</span></h4>
+            <ol lang="ru">
+                <li>Возвращаемся в&nbsp;<code>portfolio-journal</code> из&nbsp;этапа&nbsp;02. Задача: добавить страницу <code>monthly.html</code> с&nbsp;помесячной разбивкой по&nbsp;тикерам.</li>
+                <li>Войдите в&nbsp;Plan Mode (<code>Shift+Tab</code> до&nbsp;«plan»). Промпт:
+                    <pre class="shell">&gt; составь spec.md для новой страницы monthly.html.
+&gt; источник данных: @data/operations.csv.
+&gt; цель: помесячная разбивка операций по тикерам с трендами.
+&gt; в spec включи цель, входы, выходы, шаги, критерии готовности,
+&gt; что вне scope, открытые вопросы.</pre>
+                </li>
+                <li>Прочитайте получившийся <code>spec.md</code>. Поправьте, если что-то не&nbsp;так. Сохраните.</li>
+                <li>Скажите Claude утвердить план: <em>«план одобрен, исполняй фаза за&nbsp;фазой через&nbsp;TodoWrite»</em>. Выйдите из&nbsp;Plan Mode (<code>Shift+Tab</code> до&nbsp;«default»).</li>
+                <li>Наблюдайте, как Claude отмечает прогресс. После каждой фазы: «open monthly.html, screenshot via playwright, что вижу&nbsp;&mdash; рассказывай».</li>
+                <li>В&nbsp;конце&nbsp;&mdash; verification:
+                    <pre class="shell">&gt; прежде чем сказать «готово», прогони сверку:
+&gt; — все ли месяцы из CSV отображаются?
+&gt; — итоги по тикерам совпадают с dashboard.html?
+&gt; — на узком окне (телефон) ничего не ломается?
+&gt; покажи результат каждой проверки.</pre>
+                </li>
+                <li>После завершения&nbsp;&mdash; <code>/compact</code>. Сессия станет лёгкой&nbsp;&mdash; следующая задача начнётся с&nbsp;чистого, но&nbsp;информированного контекста.</li>
+            </ol>
+            <ol lang="en">
+                <li>Return to <code>portfolio-journal</code> from etape 02. Task: add a <code>monthly.html</code> with monthly per-ticker breakdown.</li>
+                <li>Enter Plan Mode (<code>Shift+Tab</code> to “plan”). Prompt:
+                    <pre class="shell">&gt; draft spec.md for a new monthly.html.
+&gt; data source: @data/operations.csv.
+&gt; goal: monthly breakdown of ops by ticker with trends.
+&gt; in spec include goal, inputs, outputs, steps, acceptance criteria,
+&gt; out of scope, open questions.</pre>
+                </li>
+                <li>Read the produced <code>spec.md</code>. Edit if needed. Save.</li>
+                <li>Tell Claude to approve and execute: <em>“plan approved, execute phase by phase via TodoWrite.”</em> Leave Plan Mode (<code>Shift+Tab</code> to “default”).</li>
+                <li>Watch Claude mark progress. After each phase: “open monthly.html, screenshot via playwright, tell me what you see.”</li>
+                <li>At the end — verification:
+                    <pre class="shell">&gt; before saying "done", walk the check:
+&gt; — are all months from the CSV shown?
+&gt; — do per-ticker totals match dashboard.html?
+&gt; — does anything break on a narrow window?
+&gt; show each check’s result.</pre>
+                </li>
+                <li>When done — <code>/compact</code>. The session becomes light — the next task starts on a clean but informed context.</li>
+            </ol>
+            <p lang="ru">Что мы&nbsp;тренируем: <strong>четырёхшаговый цикл&nbsp;&mdash; spec, план, исполнение, verification</strong>. Дальше его применяем на&nbsp;реальных проектах.</p>
+            <p lang="en">What we train: <strong>the four-step cycle — spec, plan, execute, verify</strong>. Next we apply it to real projects.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Анализ года и&nbsp;прогноз свободы</span><span lang="en">A year in review and a forecast of freedom</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">«Куда ушли деньги за&nbsp;год»</span><span lang="en">“Where the money went” yearly review</span></h3>
+            <p class="goal" lang="ru">Цель: 12 банковских выписок → парсинг → категоризация → отчёт <code>report.md</code> с&nbsp;графиками и&nbsp;тремя ключевыми инсайтами. Дисциплина: spec → Plan Mode → TodoWrite → verification.</p>
+            <p class="goal" lang="en">Goal: 12 bank statements → parse → categorise → <code>report.md</code> with charts and three key insights. Discipline: spec → Plan Mode → TodoWrite → verification.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Создайте папку <code>year-review</code>. Положите выписки в&nbsp;<code>data/statements/</code> (свои или попросите Claude сгенерировать ~600 операций).</li>
+                <li>Запустите Claude. Войдите в&nbsp;Plan Mode. Промпт:
+                    <pre class="shell">&gt; составь spec.md для проекта «куда ушли деньги за год».
+&gt; источник: @data/statements/ (12 csv-файлов, по одному на месяц).
+&gt; цель: report.md с пятью разделами:
+&gt;   — total spend / income за год;
+&gt;   — топ-10 категорий с долями;
+&gt;   — три «удивительных» инсайта (что бросилось в глаза);
+&gt;   — тренд «доход − расход» по месяцам;
+&gt;   — три «куда смотреть в следующем году».
+&gt; формат: markdown + графики (chart.js, через context7).
+&gt; критерии готовности — измеримые, перечисли.</pre>
+                </li>
+                <li>Утвердите <code>spec.md</code>. Скажите: <em>«работаем по&nbsp;@spec.md, через TodoWrite, фазами с&nbsp;ревью между ними»</em>.</li>
+                <li>Выйдите в&nbsp;default. Пройдите фазы (Claude сам разобьёт):
+                    <ol type="a">
+                        <li><strong>Парсинг</strong>: все 12 файлов → один <code>data/all-ops.csv</code> с&nbsp;нормализованными колонками.</li>
+                        <li><strong>Категоризация</strong>: каждой операции&nbsp;&mdash; категория. Используйте «правила» (ключевые слова в&nbsp;описании) + ручную проверку.</li>
+                        <li><strong>Агрегация</strong>: суммы по&nbsp;категориям, по&nbsp;месяцам.</li>
+                        <li><strong>Визуализация</strong>: круговая диаграмма категорий, столбчатая по&nbsp;месяцам, тренд «доход&nbsp;− расход».</li>
+                        <li><strong>Инсайты</strong>: Claude находит три неожиданных факта в&nbsp;данных.</li>
+                        <li><strong>Финал</strong>: сборка <code>report.md</code>.</li>
+                    </ol>
+                </li>
+                <li>После каждой фазы&nbsp;&mdash; <code>/compact</code> и&nbsp;ваше «давай дальше» или «поправь&nbsp;X».</li>
+                <li>Verification в&nbsp;конце:
+                    <pre class="shell">&gt; прогони sanity-check перед «готово»:
+&gt; — total operations в report.md == строк в data/all-ops.csv;
+&gt; — total spend == сумма всех «расход»-строк;
+&gt; — суммы категорий складываются в total;
+&gt; — все 12 месяцев присутствуют в графике тренда.
+&gt; покажи каждый чек как «✓» или «✗ + что не сходится».</pre>
+                </li>
+                <li>Откройте <code>report.md</code> в&nbsp;браузере (markdown viewer) или превратите в&nbsp;HTML через Claude. Прочитайте &mdash; должны узнать о&nbsp;себе что-то новое.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Create <code>year-review</code>. Drop statements into <code>data/statements/</code> (yours or ask Claude to generate ~600 ops).</li>
+                <li>Launch Claude. Enter Plan Mode. Prompt:
+                    <pre class="shell">&gt; draft spec.md for "where the money went, a year in review."
+&gt; source: @data/statements/ (12 csv files, one per month).
+&gt; goal: report.md with five sections:
+&gt;   — total spend / income for the year;
+&gt;   — top-10 categories with shares;
+&gt;   — three "surprising" insights;
+&gt;   — "income minus spend" monthly trend;
+&gt;   — three "where to look next year" pointers.
+&gt; format: markdown + charts (chart.js via context7).
+&gt; acceptance criteria — measurable, list them.</pre>
+                </li>
+                <li>Approve <code>spec.md</code>. Say: <em>“execute against @spec.md, through TodoWrite, phase by phase with review between.”</em></li>
+                <li>Leave to default. Walk the phases (Claude will split):
+                    <ol type="a">
+                        <li><strong>Parse</strong>: 12 files → one <code>data/all-ops.csv</code> with normalised columns.</li>
+                        <li><strong>Categorise</strong>: each op gets a category. Rules (keywords in memo) + manual check.</li>
+                        <li><strong>Aggregate</strong>: per-category and per-month sums.</li>
+                        <li><strong>Visualise</strong>: category pie, monthly bars, “income minus spend” trend.</li>
+                        <li><strong>Insights</strong>: Claude finds three surprises.</li>
+                        <li><strong>Final</strong>: assemble <code>report.md</code>.</li>
+                    </ol>
+                </li>
+                <li>After each phase — <code>/compact</code> and your “go on” or “fix X.”</li>
+                <li>Final verification:
+                    <pre class="shell">&gt; sanity-check before "done":
+&gt; — total ops in report.md == rows in data/all-ops.csv;
+&gt; — total spend == sum of all "spend" rows;
+&gt; — category sums total to overall;
+&gt; — all 12 months appear in the trend chart.
+&gt; show each check as "✓" or "✗ + what mismatches".</pre>
+                </li>
+                <li>Open <code>report.md</code> in a markdown viewer or have Claude render it as HTML. Read — you should learn something new about yourself.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>полный цикл spec → план → фазное исполнение → verification;</li>
+                <li>работу с&nbsp;большим объёмом данных (~600 операций) без&nbsp;«уплываний»;</li>
+                <li>дисциплину чек-поинтов и&nbsp;<code>/compact</code> между фазами;</li>
+                <li>выпуск читаемого аналитического отчёта в&nbsp;markdown.</li>
+            </ul>
+            <ul lang="en">
+                <li>the full cycle spec → plan → phased execution → verification;</li>
+                <li>handling a large data set (~600 ops) without drift;</li>
+                <li>checkpoint discipline and <code>/compact</code> between phases;</li>
+                <li>shipping a readable analytic report in markdown.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru">Прогноз финансовой независимости в&nbsp;трёх сценариях</span><span lang="en">Three-scenario forecast of financial independence</span></h3>
+            <p class="goal" lang="ru">Цель: интерактивная страница, которая отвечает на&nbsp;вопрос «когда я&nbsp;смогу не&nbsp;работать ради денег», в&nbsp;трёх сценариях: консервативный, реалистичный, агрессивный. Графики и&nbsp;«критическая дата» для&nbsp;каждого.</p>
+            <p class="goal" lang="en">Goal: an interactive page that answers “when can I stop working for money,” under three scenarios: conservative, realistic, aggressive. Charts and a “critical date” per scenario.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Папка <code>fi-forecast</code>. Запустите Claude в&nbsp;Plan Mode.</li>
+                <li>Spec:
+                    <pre class="shell">&gt; составь spec.md для «прогноза финансовой независимости».
+&gt; входы (поля формы):
+&gt;   — текущий капитал, ежемесячный доход, расход,
+&gt;   — горизонт (лет), целевой пассивный доход (₽/мес),
+&gt;   — три набора параметров (см. ниже).
+&gt; три сценария:
+&gt;   conservative: доходность 5%, инфляция 6%, рост дохода 0%
+&gt;   realistic:    доходность 8%, инфляция 5%, рост дохода 3%
+&gt;   aggressive:   доходность 12%, инфляция 4%, рост дохода 7%
+&gt; выходы:
+&gt;   — таблица «капитал по годам» для каждого сценария;
+&gt;   — общий график (три линии);
+&gt;   — три «критические даты» — год, когда пассивный доход
+&gt;     перекрывает целевой;
+&gt;   — текстовое summary в трёх предложениях.
+&gt; критерии готовности — измеримые.</pre>
+                </li>
+                <li>Утвердите spec. Дайте команду исполнять.</li>
+                <li>Фазы (Claude разобьёт):
+                    <ol type="a">
+                        <li>Скелет страницы (форма + пустые блоки результата);</li>
+                        <li>Чистая логика расчёта (сначала консольно, проверить на&nbsp;тестовых вводах);</li>
+                        <li>Подключить расчёт к&nbsp;форме;</li>
+                        <li>Графики (chart.js через context7);</li>
+                        <li>Интерпретация: «критические даты» и&nbsp;три-предложение саммари;</li>
+                        <li>UX-полировка через <code>frontend-design</code> + Playwright-ревизия.</li>
+                    </ol>
+                </li>
+                <li>Между фазами&nbsp;&mdash; <code>/compact</code> и&nbsp;ваше ревью.</li>
+                <li>Verification обязательна:
+                    <pre class="shell">&gt; sanity-check:
+&gt; — на тестовом вводе (капитал 1М, доход 100к, расход 70к,
+&gt;   горизонт 30 лет, цель 50к/мес) реалистичный сценарий
+&gt;   должен показывать критическую дату через 12–14 лет.
+&gt; — у консервативного дата позже, у агрессивного раньше.
+&gt; — графики стартуют с одной точки и расходятся.
+&gt; — форма работает на узком экране.
+&gt; покажи результаты каждой проверки.</pre>
+                </li>
+                <li>Финальный аудит-вопрос: <em>«какие три самых хрупких допущения в&nbsp;этой модели? что произойдёт, если инфляция в&nbsp;реальности будет в&nbsp;два раза выше?»</em></li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Folder <code>fi-forecast</code>. Launch Claude in Plan Mode.</li>
+                <li>Spec:
+                    <pre class="shell">&gt; draft spec.md for "financial independence forecast."
+&gt; inputs (form fields):
+&gt;   — current capital, monthly income, expenses,
+&gt;   — horizon (years), target passive income (per month),
+&gt;   — three parameter sets (see below).
+&gt; three scenarios:
+&gt;   conservative: return 5%, inflation 6%, income growth 0%
+&gt;   realistic:    return 8%, inflation 5%, income growth 3%
+&gt;   aggressive:   return 12%, inflation 4%, income growth 7%
+&gt; outputs:
+&gt;   — "capital by year" table per scenario;
+&gt;   — combined chart (three lines);
+&gt;   — three "critical dates" — when passive income covers target;
+&gt;   — three-sentence summary.
+&gt; acceptance criteria — measurable.</pre>
+                </li>
+                <li>Approve spec. Order execution.</li>
+                <li>Phases (Claude splits):
+                    <ol type="a">
+                        <li>Page skeleton (form + empty result blocks);</li>
+                        <li>Pure calc logic (console first, verify on test inputs);</li>
+                        <li>Hook calc to form;</li>
+                        <li>Charts (chart.js via context7);</li>
+                        <li>Interpretation: critical dates + three-sentence summary;</li>
+                        <li>UX polish via <code>frontend-design</code> + Playwright audit.</li>
+                    </ol>
+                </li>
+                <li>Between phases — <code>/compact</code> and your review.</li>
+                <li>Mandatory verification:
+                    <pre class="shell">&gt; sanity-check:
+&gt; — on test input (capital 1M, income 100k, spend 70k,
+&gt;   horizon 30y, target 50k/mo) the realistic scenario
+&gt;   must show a critical date in 12–14 years.
+&gt; — conservative later, aggressive earlier.
+&gt; — charts start from a single point and diverge.
+&gt; — the form works on narrow screens.
+&gt; show each check’s result.</pre>
+                </li>
+                <li>Final audit question: <em>“what are the three most fragile assumptions in this model? What happens if inflation turns out twice as high?”</em></li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>spec на&nbsp;многосценарную задачу с&nbsp;интерактивностью;</li>
+                <li>тестирование расчётной логики на&nbsp;известных входах перед UI;</li>
+                <li>верификация и&nbsp;через числа, и&nbsp;через UX (Playwright-скриншот);</li>
+                <li>аудит «хрупких допущений» модели.</li>
+            </ul>
+            <ul lang="en">
+                <li>a spec for a multi-scenario interactive task;</li>
+                <li>testing the calculation against known inputs before UI;</li>
+                <li>verification both numerically and through UX (Playwright screenshot);</li>
+                <li>auditing the “fragile assumptions” of a model.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те же приёмы, ваши гипотезы</span><span lang="en">Same moves, your hypotheses</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Симулятор пенсии в&nbsp;четырёх стратегиях</span><span lang="en">Retirement simulator across four strategies</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;B&nbsp;&mdash; страница, где вы&nbsp;сравниваете четыре стратегии накопления (ИИС / ETF / валюта / недвижимость) на&nbsp;30-летнем горизонте. Те&nbsp;же шаги: spec → план → фазы → verification.</p>
+            <p class="goal" lang="en">Goal: variation of B — a page comparing four saving strategies (IRA / ETF / FX / real estate) over a 30-year horizon. Same steps: spec → plan → phases → verification.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Структура та&nbsp;же&nbsp;&mdash; форма с&nbsp;общими параметрами (доход, отчисление в&nbsp;месяц), результаты по&nbsp;четырём стратегиям.</li>
+                <li>Параметры стратегий зашейте в&nbsp;<code>spec.md</code>: доходность, волатильность, ликвидность, налог.</li>
+                <li>Для&nbsp;каждой стратегии&nbsp;&mdash; отдельный график капитала + риск-метрика (например, max drawdown).</li>
+                <li>Финал&nbsp;&mdash; рекомендация: «при ваших параметрах подходит стратегия&nbsp;X, но&nbsp;учтите&nbsp;Y».</li>
+                <li>Verification обязательна: на&nbsp;тестовых параметрах должны получаться ожидаемые порядки величин.</li>
+            </ul>
+            <ul lang="en">
+                <li>Same structure — a form with common parameters (income, monthly contribution), results across four strategies.</li>
+                <li>Strategy parameters live in <code>spec.md</code>: return, volatility, liquidity, tax.</li>
+                <li>Each strategy — own capital chart + risk metric (e.g. max drawdown).</li>
+                <li>Final — recommendation: “for your inputs, X fits, but mind Y.”</li>
+                <li>Verification required: test inputs must produce expected orders of magnitude.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>есть <code>spec.md</code> в&nbsp;корне с&nbsp;явно перечисленными критериями готовности;</li>
+                        <li>работа велась по&nbsp;фазам (видно в&nbsp;логе TodoWrite);</li>
+                        <li>четыре стратегии видимо отличаются по&nbsp;графику и&nbsp;по&nbsp;метрикам;</li>
+                        <li>есть verification-блок, в&nbsp;котором Claude явно проверил числа на&nbsp;тестовом сценарии;</li>
+                        <li>финальная рекомендация &laquo;что подходит вам&raquo; зависит от&nbsp;параметров формы (попробуйте поменять&nbsp;&mdash; рекомендация должна меняться);</li>
+                        <li>Playwright скриншот UX зафиксирован (например, в&nbsp;<code>screenshots/</code>).</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>a <code>spec.md</code> at the root with explicit acceptance criteria;</li>
+                        <li>work was phased (visible in TodoWrite log);</li>
+                        <li>four strategies differ visibly in chart and metrics;</li>
+                        <li>a verification block where Claude explicitly checked numbers on a test scenario;</li>
+                        <li>the final “what fits you” recommendation depends on form inputs (toggle them — recommendation changes);</li>
+                        <li>a Playwright UX screenshot is recorded (e.g. in <code>screenshots/</code>).</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Прогони красную команду через мой симулятор: представь, что ты&nbsp;скептик-аналитик. Найди три места, где модель «лжёт» или сильно упрощает реальность. Что я&nbsp;должен помнить, показывая это другу?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Run a red-team through my simulator: pretend to be a sceptical analyst. Find three places where the model ‘lies’ or oversimplifies. What should I remember when showing this to a friend?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Глубокий анализ одной категории расходов</span><span lang="en">Deep dive into one expense category</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; те&nbsp;же выписки, но&nbsp;только одна категория (например, «еда вне&nbsp;дома», «транспорт» или «развлечения»). Глубокий разбор: где, когда, у&nbsp;кого, в&nbsp;какие дни недели.</p>
+            <p class="goal" lang="en">Goal: variation of A — same statements, but one category only (e.g. “eating out,” “transport,” “entertainment”). Deep dive: where, when, with whom, what days of the week.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Полный цикл spec → план → фазы → verification.</li>
+                <li>В&nbsp;spec явно укажите выбранную категорию и&nbsp;три-четыре «среза» (по&nbsp;дням недели, по&nbsp;поставщикам, по&nbsp;времени суток, по&nbsp;размеру операции).</li>
+                <li>Финал: краткий <code>category-report.md</code> с&nbsp;тремя «открытиями» и&nbsp;одной рекомендацией.</li>
+                <li>Используйте Playwright для&nbsp;ревизии&nbsp;UX отчёта.</li>
+            </ul>
+            <ul lang="en">
+                <li>Full cycle spec → plan → phases → verification.</li>
+                <li>The spec explicitly names the category and three-four “slices” (by weekday, by vendor, by time of day, by amount bucket).</li>
+                <li>Final: a short <code>category-report.md</code> with three “discoveries” and one recommendation.</li>
+                <li>Use Playwright for the UX audit.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>в&nbsp;<code>spec.md</code> явно указаны: выбранная категория, источник данных, четыре среза, критерии готовности;</li>
+                        <li>есть <code>category-report.md</code> со&nbsp;структурированным анализом и&nbsp;тремя открытиями;</li>
+                        <li>работа велась фазами&nbsp;&mdash; видно по&nbsp;TodoWrite-логу или коммитам;</li>
+                        <li>числа сверены: общая сумма по&nbsp;категории совпадает с&nbsp;data/all-ops.csv (или вашими исходными выписками);</li>
+                        <li>отчёт «не&nbsp;даёт советов из&nbsp;воздуха»&nbsp;&mdash; каждая рекомендация подкреплена конкретным наблюдением из&nbsp;данных.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li><code>spec.md</code> explicitly states: chosen category, data source, four slices, acceptance criteria;</li>
+                        <li>a <code>category-report.md</code> with structured analysis and three discoveries;</li>
+                        <li>work was phased — visible in the TodoWrite log or commits;</li>
+                        <li>numbers reconcile: category total matches data/all-ops.csv (or your source statements);</li>
+                        <li>the report does not give “advice out of thin air” — every recommendation links to a specific observation in the data.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Если бы&nbsp;тебе показали этот отчёт без&nbsp;знания обо&nbsp;мне, какие пять вопросов ты&nbsp;бы задал автору категории, чтобы понять контекст? Какие из&nbsp;этих вопросов я&nbsp;мог&nbsp;бы зашить в&nbsp;следующий отчёт сразу?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“If you saw this report without knowing me, what five questions would you ask the category’s author to grasp the context? Which of these could I bake into the next report up front?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что добавилось к&nbsp;словарю</span><span lang="en">New entries in the glossary</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>Plan Mode</dt>
+            <dd>
+                <span lang="ru">Режим Claude Code, в&nbsp;котором он&nbsp;<em>гарантированно</em> не&nbsp;трогает ваши файлы, пока вы&nbsp;не&nbsp;утвердите план. Включается через <code>Shift+Tab</code>. Незаменим для&nbsp;крупных задач.</span>
+                <span lang="en">A Claude Code mode in which it is <em>guaranteed</em> not to touch your files until you approve the plan. Toggle via <code>Shift+Tab</code>. Indispensable for large tasks.</span>
+            </dd>
+
+            <dt>TodoWrite</dt>
+            <dd>
+                <span lang="ru">Встроенный инструмент Claude Code для&nbsp;ведения списка подзадач прямо в&nbsp;диалоге. Каждая задача имеет статус: <code>pending</code>, <code>in_progress</code>, <code>completed</code>. Видно, где Claude и&nbsp;что забыто.</span>
+                <span lang="en">A Claude Code built-in for keeping a sub-task list inside the dialogue. Each task has status: <code>pending</code>, <code>in_progress</code>, <code>completed</code>. Shows where Claude is and what got missed.</span>
+            </dd>
+
+            <dt><span lang="ru">Спецификация (spec.md)</span><span lang="en">Specification (spec.md)</span></dt>
+            <dd>
+                <span lang="ru">Документ-ТЗ для&nbsp;крупной задачи. Содержит: цель, входы, выходы, шаги, критерии готовности, что вне scope, риски и&nbsp;вопросы. Claude работает по&nbsp;нему как стажёр по&nbsp;брифу.</span>
+                <span lang="en">A brief for a large task. Contains: goal, inputs, outputs, steps, acceptance criteria, out of scope, risks and questions. Claude treats it like an intern would treat a brief.</span>
+            </dd>
+
+            <dt>Compaction</dt>
+            <dd>
+                <span lang="ru">Команда <code>/compact</code>: «уплотнить сессию». Claude саммаризирует диалог и&nbsp;удаляет промежуточные сообщения. Используется между фазами крупной задачи и&nbsp;в&nbsp;конце дня.</span>
+                <span lang="en">The <code>/compact</code> command: “compact the session.” Claude summarises the dialogue and drops intermediate messages. Used between phases of a large task and at end of day.</span>
+            </dd>
+
+            <dt><code>/clear</code></dt>
+            <dd>
+                <span lang="ru">Полная очистка контекста. Используется реже&nbsp;&mdash; когда хотите начать «с&nbsp;нуля» в&nbsp;той&nbsp;же папке, без&nbsp;истории.</span>
+                <span lang="en">A full context wipe. Used less often — when you want a fresh start in the same folder, no history.</span>
+            </dd>
+
+            <dt>Verification</dt>
+            <dd>
+                <span lang="ru">Привычка проверять результат прежде чем сказать «готово». Запустить, прогнать тестовый сценарий, сверить с&nbsp;критериями, сделать Playwright-скриншот. Skill: <code>superpowers:verification-before-completion</code>.</span>
+                <span lang="en">The habit of verifying results before declaring “done.” Run, walk a test scenario, compare to criteria, take a Playwright screenshot. Skill: <code>superpowers:verification-before-completion</code>.</span>
+            </dd>
+
+            <dt><span lang="ru">Декомпозиция</span><span lang="en">Decomposition</span></dt>
+            <dd>
+                <span lang="ru">Разбиение крупной задачи на&nbsp;фазы&nbsp;&mdash; по&nbsp;данным, по&nbsp;артефактам или по&nbsp;ревью. Каждая фаза самостоятельно полезна, измерима, укладывается в&nbsp;1–3 часа.</span>
+                <span lang="en">Splitting a large task into phases — by data, by artefacts or by review. Each phase is independently useful, measurable, 1–3 hours long.</span>
+            </dd>
+
+            <dt><span lang="ru">Фаза</span><span lang="en">Phase</span></dt>
+            <dd>
+                <span lang="ru">Один логический блок крупной задачи. Например: «парсинг», «категоризация», «отчёт». Между фазами&nbsp;&mdash; ревью и&nbsp;<code>/compact</code>.</span>
+                <span lang="en">One logical block of a large task. E.g.: “parse,” “categorise,” “report.” Review and <code>/compact</code> between phases.</span>
+            </dd>
+
+            <dt><span lang="ru">Критерии готовности</span><span lang="en">Acceptance criteria</span></dt>
+            <dd>
+                <span lang="ru">Список измеримых условий, по&nbsp;которым задача считается готовой. Например: «график показывает все 12 месяцев», «total spend сходится с&nbsp;суммой по&nbsp;категориям». Записываются в&nbsp;<code>spec.md</code>.</span>
+                <span lang="en">A list of measurable conditions for “done.” E.g.: “chart shows all 12 months,” “total spend reconciles with category sums.” Recorded in <code>spec.md</code>.</span>
+            </dd>
+
+            <dt>Out of scope</dt>
+            <dd>
+                <span lang="ru">Раздел spec, в&nbsp;котором перечислено, что мы&nbsp;<em>не&nbsp;будем</em> делать в&nbsp;этой задаче. Важно, чтобы Claude не&nbsp;уплывал за&nbsp;границы.</span>
+                <span lang="en">A spec section listing what we will <em>not</em> do in this task. Important so Claude does not drift past the boundary.</span>
+            </dd>
+
+            <dt>Sanity-check</dt>
+            <dd>
+                <span lang="ru">Быстрая проверка результата на&nbsp;«разумность»: сходятся&nbsp;ли суммы, есть&nbsp;ли все ожидаемые поля, не&nbsp;показывает&nbsp;ли система абсурдных значений. Часть verification.</span>
+                <span lang="en">A quick result check for “reasonableness”: do sums add up, are all expected fields present, no absurd values? Part of verification.</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · Quiz</span>
+            <h2><span lang="ru">Семь вопросов на&nbsp;закрепление</span><span lang="en">Seven questions for reinforcement</span></h2>
+        </div>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <div class="q"><p class="q-text"><span lang="ru">Какие признаки говорят, что задача слишком большая для&nbsp;одного промпта?</span><span lang="en">Which signs tell a task is too big for a single prompt?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Больше 10 шагов; задача завязана на&nbsp;несколько источников данных; есть несколько независимых выходов (отчёт + дашборд + автоматизация); вы&nbsp;сами не&nbsp;уверены, что Claude должен сделать. В&nbsp;этих случаях&nbsp;&mdash; Plan Mode, spec, фазы.</p>
+                        <p lang="en">More than 10 steps; depends on several data sources; has several independent outputs (report + dashboard + automation); you yourself aren’t sure what Claude should do. In those cases — Plan Mode, spec, phases.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q2">
+                <div class="q"><p class="q-text"><span lang="ru">Чем Plan Mode отличается от&nbsp;обычного режима с&nbsp;точки зрения файлов?</span><span lang="en">How does Plan Mode differ from default in terms of files?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">В&nbsp;Plan Mode Claude <em>гарантированно</em> не&nbsp;изменяет ни&nbsp;одного файла. Только читает существующие, изучает структуру, составляет план. Файлы трогаются только после вашего «утверждено» и&nbsp;выхода в&nbsp;default.</p>
+                        <p lang="en">In Plan Mode Claude is <em>guaranteed</em> not to change any file. It only reads existing ones, examines structure, drafts a plan. Files get touched only after your “approved” and switch to default.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q3">
+                <div class="q"><p class="q-text"><span lang="ru">Что обязательно должно быть в&nbsp;<code>spec.md</code>?</span><span lang="en">What must be in <code>spec.md</code>?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Семь обязательных разделов: <strong>цель</strong>, <strong>входы</strong>, <strong>выходы</strong>, <strong>шаги (фазы)</strong>, <strong>критерии готовности</strong>, <strong>что вне scope</strong>, <strong>риски и&nbsp;вопросы</strong>. Без&nbsp;каждого из&nbsp;них Claude может «уплыть» по-своему.</p>
+                        <p lang="en">Seven required sections: <strong>goal</strong>, <strong>inputs</strong>, <strong>outputs</strong>, <strong>steps (phases)</strong>, <strong>acceptance criteria</strong>, <strong>out of scope</strong>, <strong>risks and questions</strong>. Without any of these Claude can drift its own way.</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q4">
+                <div class="q"><p class="q-text"><span lang="ru">Что делает <code>/compact</code> и&nbsp;чем отличается от&nbsp;<code>/clear</code>?</span><span lang="en">What does <code>/compact</code> do, and how does it differ from <code>/clear</code>?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><code>/compact</code> саммаризирует диалог: сохраняет цель, ключевые решения и&nbsp;текущее состояние, удаляет промежуточные сообщения. Контекст «лёгкий», но&nbsp;Claude помнит суть. <code>/clear</code>&nbsp;&mdash; полная очистка, контекст теряется. Compact используется чаще&nbsp;&mdash; между фазами; clear&nbsp;&mdash; редко, для&nbsp;«старта с&nbsp;нуля».</p>
+                        <p lang="en"><code>/compact</code> summarises the dialogue: keeps the goal, key decisions and current state, drops intermediate messages. Context is light, but Claude remembers the gist. <code>/clear</code> wipes everything. Compact is used often — between phases; clear is rare, for a “fresh start.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q5">
+                <div class="q"><p class="q-text"><span lang="ru">Зачем нужно verification-before-completion?</span><span lang="en">Why verification-before-completion?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Самая частая ошибка крупных задач&nbsp;&mdash; «соврать про готовность»: код выглядит правильным, объявляется «готово», но&nbsp;при запуске не&nbsp;работает. Verification требует прежде чем сказать «готово»: запустить, прогнать тестовый сценарий, сверить с&nbsp;критериями spec, сделать Playwright-скриншот. Только потом&nbsp;&mdash; «done».</p>
+                        <p lang="en">The most common big-task failure — “lying about being done”: code looks right, declared done, breaks at runtime. Verification requires, before saying “done”: run, walk a test scenario, compare to spec criteria, take a Playwright screenshot. Only then — “done.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q6">
+                <div class="q"><p class="q-text"><span lang="ru">Как разбивать крупную задачу на&nbsp;фазы&nbsp;&mdash; назовите три способа.</span><span lang="en">Three ways to phase a large task?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru"><strong>По&nbsp;данным</strong> (парсинг → нормализация → агрегация → визуализация); <strong>по&nbsp;артефактам</strong> (сначала data/operations.csv, потом dashboard.html, потом report.md); <strong>по&nbsp;ревью</strong> (каждая фаза заканчивается&nbsp;<code>/compact</code> и&nbsp;вашим утверждением).</p>
+                        <p lang="en"><strong>By data</strong> (parse → normalise → aggregate → visualise); <strong>by artefacts</strong> (first data/operations.csv, then dashboard.html, then report.md); <strong>by review</strong> (each phase ends with <code>/compact</code> and your approval).</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+
+            <li class="quiz-item" data-q="q7">
+                <div class="q"><p class="q-text"><span lang="ru">Какой простой sanity-check вы&nbsp;бы прогнали для&nbsp;«анализа выписок за&nbsp;год»?</span><span lang="en">What simple sanity-check would you run for a “year of statements” analysis?</span></p></div>
+                <details>
+                    <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
+                    <div class="answer">
+                        <p lang="ru">Минимум: число строк в&nbsp;<code>data/all-ops.csv</code> равно сумме строк во&nbsp;всех 12&nbsp;исходных файлах. Total spend в&nbsp;отчёте равна сумме всех «расход»-строк. Сумма по&nbsp;категориям равна total. Все 12 месяцев присутствуют в&nbsp;графике тренда. Если хоть один пункт «✗»&nbsp;&mdash; «готово» нельзя говорить.</p>
+                        <p lang="en">At minimum: row count in <code>data/all-ops.csv</code> equals the sum of rows across all 12 source files. Total spend in the report equals the sum of all “spend” rows. Per-category sums equal the overall total. All 12 months appear in the trend chart. If any of these is “✗” — you can’t say “done.”</p>
+                    </div>
+                </details>
+                <div class="scoring">
+                    <button class="score-btn" data-score="known"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button class="score-btn" data-score="unknown"><span lang="ru">не знал</span><span lang="en">did not know</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary">
+            <h4 class="quiz-heading"><span lang="ru">Куда дальше?</span><span lang="en">Where to next?</span></h4>
+            <div class="stats">
+                <span class="stat-known"><span class="num">0</span> <span data-i18n-stat="known">знал</span></span>
+                <span class="stat-unknown"><span class="num">0</span> <span data-i18n-stat="unknown">не знал</span></span>
+                <span class="stat-total"><span class="num">7</span> <span data-i18n-stat="total">всего</span></span>
+            </div>
+            <p class="advice"></p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></span>
+            <h2><span lang="ru">Что я&nbsp;теперь умею</span><span lang="en">What I can now do</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e4-plan-mode">
+                <span lang="ru">Уверенно переключаюсь в&nbsp;Plan Mode через <code>Shift+Tab</code> и&nbsp;понимаю, когда он&nbsp;нужен.</span>
+                <span lang="en">I switch to Plan Mode via <code>Shift+Tab</code> and know when it’s needed.</span>
+            </li>
+            <li data-key="e4-spec">
+                <span lang="ru">Пишу <code>spec.md</code> с&nbsp;семью разделами для&nbsp;крупной задачи.</span>
+                <span lang="en">I write <code>spec.md</code> with seven sections for a large task.</span>
+            </li>
+            <li data-key="e4-todowrite">
+                <span lang="ru">Использую TodoWrite, чтобы видеть прогресс по&nbsp;шагам.</span>
+                <span lang="en">I use TodoWrite to see step-by-step progress.</span>
+            </li>
+            <li data-key="e4-compact">
+                <span lang="ru">Применяю <code>/compact</code> между фазами и&nbsp;в&nbsp;конце дня.</span>
+                <span lang="en">I use <code>/compact</code> between phases and at end of day.</span>
+            </li>
+            <li data-key="e4-verification">
+                <span lang="ru">Делаю verification-before-completion: тестовый сценарий, сверка с&nbsp;критериями, Playwright-скриншот.</span>
+                <span lang="en">I run verification-before-completion: test scenario, criteria check, Playwright screenshot.</span>
+            </li>
+            <li data-key="e4-decomposition">
+                <span lang="ru">Декомпозирую крупные задачи на&nbsp;фазы (по&nbsp;данным, артефактам или ревью).</span>
+                <span lang="en">I decompose big tasks into phases (by data, artefacts or review).</span>
+            </li>
+            <li data-key="e4-delivery">
+                <span lang="ru">Сделал четыре проекта: анализ выписок, прогноз FI, симулятор пенсии, глубокий анализ категории.</span>
+                <span lang="en">I built four projects: statements review, FI forecast, retirement simulator, deep category dive.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-04" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-03.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">03 · Web, MCP и&nbsp;готовые Skills</span><span lang="en">03 · Web, MCP &amp; Skills</span></span>
+            </a>
+            <a class="next" href="etap-05.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">05 · Git, GitHub и&nbsp;worktrees</span><span lang="en">05 · Git, GitHub &amp; Worktrees</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«План&nbsp;&mdash; не&nbsp;замедление работы. План&nbsp;&mdash; страховка от&nbsp;того, чтобы делать неправильное быстро».</p>
+            <p class="signature" lang="en">“A plan is not slowing down. A plan is insurance against doing the wrong thing quickly.”</p>
+            <p lang="ru">Этап&nbsp;04 пройден&nbsp;&mdash; крупные задачи без&nbsp;потери цели стали возможны. Дальше учим Claude публиковать вашу работу в&nbsp;интернет&nbsp;&mdash; через git, GitHub и&nbsp;worktrees.</p>
+            <p lang="en">Etape 04 done — large tasks no longer lose their goal. Next we teach Claude to ship your work to the web — through git, GitHub and worktrees.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-03.html"><span lang="ru">← Этап&nbsp;03</span><span lang="en">← Etape 03</span></a></li>
+                <li><a href="etap-05.html"><span lang="ru">→ Этап&nbsp;05</span><span lang="en">→ Etape 05</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>
