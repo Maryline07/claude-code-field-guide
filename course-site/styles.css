@@ -596,7 +596,8 @@ section.tight { padding: clamp(2rem, 5vw, 4rem) 0; }
 }
 .topbar nav {
     display: flex;
-    gap: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
     align-items: center;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.78rem;
@@ -1064,8 +1065,9 @@ footer.colophon .signature {
 
 .section-head {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
-    gap: 1rem;
+    gap: 0.25rem 1rem;
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--rule);
     padding-bottom: 1rem;
@@ -1484,6 +1486,7 @@ details.verify .ask strong {
 }
 @media (max-width: 600px) {
     .term::after { max-width: min(22rem, 80vw); }
+    body { overflow-x: clip; }
 }
 
 /* ----------- LANGUAGE TOGGLE ----------- */
