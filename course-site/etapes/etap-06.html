@@ -26,7 +26,7 @@
             <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
         </nav>
         <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
-            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">14</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">15</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
             <div class="lang-toggle" role="group" aria-label="language">
                 <button type="button" data-lang="ru" aria-pressed="true">RU</button>
                 <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -774,27 +774,25 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 
         <article class="project solo">
             <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
-            <h3><span lang="ru">Telegram-бот для&nbsp;вашего инвест-кабинета</span><span lang="en">Telegram bot for your investment office</span></h3>
-            <p class="goal" lang="ru">Цель: бот, который ходит в&nbsp;ваш backend (из&nbsp;проекта&nbsp;A) и&nbsp;даёт быстрый доступ к&nbsp;функциям с&nbsp;телефона. Команды: <code>/login</code>, <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>, <code>/ask</code>.</p>
-            <p class="goal" lang="en">Goal: a bot that talks to your backend (from project A) and gives quick mobile access. Commands: <code>/login</code>, <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>, <code>/ask</code>.</p>
+            <h3><span lang="ru">AI-куратор для&nbsp;вашей коллекции</span><span lang="en">AI curator for your collection</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;B&nbsp;&mdash; добавить в&nbsp;сервис коллекции (проект&nbsp;C) вкладку «AI-куратор». Тот&nbsp;же стек, что в&nbsp;B (Claude API, prompt caching, multi-model), но&nbsp;вместо вопросов по&nbsp;портфелю&nbsp;&mdash; вопросы по&nbsp;коллекции: «найди книги похожие на&nbsp;мои любимые», «куда сходить вечером, если я&nbsp;уже был в&nbsp;этих местах», «какие пробелы в&nbsp;моей коллекции».</p>
+            <p class="goal" lang="en">Goal: variation of B — add an “AI curator” tab to your collection service (project C). Same stack as B (Claude API, prompt caching, multi-model), but instead of portfolio questions — collection questions: “find books similar to my favourites”, “where to go tonight if I’ve already been to these places”, “what’s missing in my collection”.</p>
 
             <h4 lang="ru">Подсказки</h4>
             <h4 lang="en">Hints</h4>
             <ul lang="ru">
-                <li>Бот&nbsp;&mdash; отдельный python-процесс на&nbsp;Railway. Использует библиотеку <code>aiogram</code> или <code>python-telegram-bot</code>.</li>
-                <li>Создайте бота через <a href="https://t.me/BotFather">@BotFather</a>, получите токен. Положите в&nbsp;Railway env vars.</li>
-                <li>Авторизация по&nbsp;Telegram: бот сохраняет связь telegram_id → user_id в&nbsp;базе. После <code>/login email password</code>&nbsp;&mdash; токен JWT хранится у&nbsp;бота на&nbsp;время.</li>
-                <li>Команды бот делает запросами к&nbsp;тому&nbsp;же backend, что использует frontend.</li>
-                <li>Команда <code>/ask</code>&nbsp;&mdash; передача в&nbsp;AI-консультант (проект&nbsp;B).</li>
-                <li>Тестовый сценарий: после <code>/login</code> и&nbsp;<code>/last</code>&nbsp;&mdash; бот отвечает 3&nbsp;последними операциями.</li>
+                <li>Эндпоинт <code>/api/curator/ask</code>&nbsp;&mdash; точная копия <code>/api/advisor/ask</code> из&nbsp;проекта&nbsp;B, но&nbsp;контекст: «ты&nbsp;помогаешь куратору личной коллекции» + список элементов пользователя (через <code>require_auth</code>) + теги.</li>
+                <li>Используйте <code>claude-sonnet-4-6</code> для&nbsp;развёрнутых ответов и&nbsp;<code>claude-haiku-4-5</code> для&nbsp;быстрых задач (например, авто-предложить теги для&nbsp;нового элемента&nbsp;&mdash; эндпоинт <code>/api/curator/suggest_tags</code>).</li>
+                <li>Prompt caching на&nbsp;системный промпт + список коллекции&nbsp;&mdash; третий вопрос подряд должен идти заметно быстрее и&nbsp;стоить меньше токенов.</li>
+                <li>На&nbsp;UI: те&nbsp;же три быстрых вопроса-кнопки сверху, что в&nbsp;B, но&nbsp;адаптированные под&nbsp;коллекцию&nbsp;&mdash; «что у&nbsp;меня в&nbsp;коллекции пробелы», «топ-5 любимых», «что&nbsp;бы добавить».</li>
+                <li>Безопасность: <code>ANTHROPIC_API_KEY</code> только в&nbsp;env Railway, никогда в&nbsp;логах.</li>
             </ul>
             <ul lang="en">
-                <li>The bot is a separate Python process on Railway. Uses <code>aiogram</code> or <code>python-telegram-bot</code>.</li>
-                <li>Create a bot via <a href="https://t.me/BotFather">@BotFather</a>, get a token. Put it in Railway env vars.</li>
-                <li>Telegram-side auth: the bot stores telegram_id → user_id in the DB. After <code>/login email password</code> — the JWT is kept by the bot for a session.</li>
-                <li>The bot’s commands hit the same backend the frontend uses.</li>
-                <li>The <code>/ask</code> command forwards to the AI advisor (project B).</li>
-                <li>Test: after <code>/login</code> and <code>/last</code> the bot replies with the 3 latest operations.</li>
+                <li>Endpoint <code>/api/curator/ask</code> — exact copy of <code>/api/advisor/ask</code> from project B, but context: “you help curate a personal collection” + user’s items (via <code>require_auth</code>) + tags.</li>
+                <li>Use <code>claude-sonnet-4-6</code> for long answers and <code>claude-haiku-4-5</code> for quick tasks (e.g. auto-suggest tags for a new item — endpoint <code>/api/curator/suggest_tags</code>).</li>
+                <li>Prompt caching on the system prompt + collection list — the third question in a row should be visibly faster and cheaper.</li>
+                <li>UI: same three quick-question buttons as in B, but adapted to the collection — “what gaps do I have”, “my top 5”, “what should I add”.</li>
+                <li>Security: <code>ANTHROPIC_API_KEY</code> in Railway env only, never in logs.</li>
             </ul>
 
             <details class="verify">
@@ -807,34 +805,40 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <div class="verify-body">
                     <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
                     <ul lang="ru">
-                        <li>бот живёт в&nbsp;Railway как отдельный сервис, токен в&nbsp;env, не&nbsp;в&nbsp;коде;</li>
-                        <li>после <code>/login</code> и&nbsp;<code>/portfolio</code> бот возвращает текущее состояние портфеля (как&nbsp;в&nbsp;вебе);</li>
-                        <li><code>/last</code> возвращает 3&nbsp;последние операции;</li>
-                        <li><code>/forecast</code> вызывает реальный эндпоинт прогноза;</li>
-                        <li><code>/ask что-то</code> идёт в&nbsp;AI-консультанта и&nbsp;возвращает ответ;</li>
-                        <li>другой telegram-аккаунт после <code>/login</code> другим email видит <em>только свой</em> портфель;</li>
-                        <li>в&nbsp;логах нет ни&nbsp;токенов, ни&nbsp;паролей.</li>
+                        <li>в&nbsp;сервисе коллекции (проект&nbsp;C) есть страница <code>/curator</code>;</li>
+                        <li>AI отвечает релевантно: упоминает <em>ваши</em> элементы и&nbsp;теги, не&nbsp;галлюцинирует;</li>
+                        <li>в&nbsp;ответе показываются модель и&nbsp;tokens_used (как в&nbsp;проекте&nbsp;B);</li>
+                        <li>третий подряд вопрос стоит меньше токенов первого (cache hit);</li>
+                        <li>эндпоинт <code>suggest_tags</code> использует haiku, а&nbsp;<code>ask</code>&nbsp;&mdash; sonnet;</li>
+                        <li>другой пользователь видит куратор только по&nbsp;<em>своей</em> коллекции;</li>
+                        <li>в&nbsp;логах backend нет ни&nbsp;ключа, ни&nbsp;текстов промптов.</li>
                     </ul>
                     <ul lang="en">
-                        <li>the bot lives on Railway as a separate service, token in env, not in code;</li>
-                        <li>after <code>/login</code> and <code>/portfolio</code> the bot returns the current portfolio state (as on the web);</li>
-                        <li><code>/last</code> returns the 3 latest operations;</li>
-                        <li><code>/forecast</code> hits the real forecast endpoint;</li>
-                        <li><code>/ask something</code> reaches the AI advisor and returns a reply;</li>
-                        <li>another Telegram account after <code>/login</code> with a different email sees <em>only their</em> portfolio;</li>
-                        <li>no tokens or passwords in logs.</li>
+                        <li>the collection service (project C) has a <code>/curator</code> page;</li>
+                        <li>the AI answers relevantly: it mentions <em>your</em> items and tags, doesn’t hallucinate;</li>
+                        <li>the reply shows the model and tokens_used (as in B);</li>
+                        <li>the third question in a row costs fewer tokens than the first (cache hit);</li>
+                        <li>the <code>suggest_tags</code> endpoint uses haiku, <code>ask</code> uses sonnet;</li>
+                        <li>another user sees a curator only over <em>their</em> collection;</li>
+                        <li>no API key or prompt text in backend logs.</li>
                     </ul>
                     <div class="ask" lang="ru">
                         <strong>Спросите Claude напоследок</strong>
-                        <em>«Если кто-то скомпрометирует мой Telegram-токен, что он&nbsp;сможет сделать с&nbsp;моими пользователями? Что нужно изменить, чтобы при компрометации токена бот &laquo;умер&raquo;, а&nbsp;не&nbsp;стал атакером?»</em>
+                        <em>«Сравни мой <code>/curator</code> и&nbsp;твой <code>/advisor</code>: какие промпты у&nbsp;них общие? Можно&nbsp;ли вынести единый «AI-слой» так, чтобы для&nbsp;нового сервиса достаточно было поменять только системный промпт и&nbsp;функцию сбора контекста?»</em>
                     </div>
                     <div class="ask" lang="en">
                         <strong>Ask Claude last</strong>
-                        <em>“If someone leaks my Telegram token, what can they do to my users? What should I change so that, on token compromise, the bot ‘dies’ rather than becomes an attacker?”</em>
+                        <em>“Compare my <code>/curator</code> and the <code>/advisor</code>: what prompts do they share? Could we extract a single ‘AI layer’ so that adding a new service only requires swapping the system prompt and the context-gathering function?”</em>
                     </div>
                 </div>
             </details>
         </article>
+
+        <div class="aside-card" style="margin-top:2rem; border-left:4px solid var(--accent);">
+            <span class="label"><span lang="ru">бонус · мост к&nbsp;06b</span><span lang="en">bonus · bridge to 06b</span></span>
+            <p lang="ru" style="margin:0.5rem 0;">Хотите тот&nbsp;же кабинет в&nbsp;кармане&nbsp;&mdash; через Telegram, чтобы спросить «как мой портфель?» в&nbsp;очереди в&nbsp;кофейне? Это отдельная учебная единица: новый стек (Telegram Bot API, async-фреймворк, worker-сервис), новая UX-модель (deep-link авторизация вместо <code>/login email password</code>), новая схема БД. Дальше&nbsp;&mdash; <a href="etap-06b.html"><strong>Этап&nbsp;06b · Telegram-бот для&nbsp;вашего инвест-кабинета</strong></a>.</p>
+            <p lang="en" style="margin:0.5rem 0;">Want the same office in your pocket — through Telegram, so you can ask “how’s my portfolio?” in the coffee-shop queue? That’s its own unit: new stack (Telegram Bot API, async framework, worker service), new UX model (deep-link auth instead of <code>/login email password</code>), new schema. Next — <a href="etap-06b.html"><strong>Etape 06b · Telegram bot for your investment office</strong></a>.</p>
+        </div>
     </div>
 </section>
 
@@ -1107,8 +1111,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <span lang="en">I pick a Claude model (Opus / Sonnet / Haiku) per task and apply prompt caching.</span>
             </li>
             <li data-key="e6-delivery">
-                <span lang="ru">Сделал четыре проекта: инвест-кабинет, AI-консультант, сервис коллекции, Telegram-бот.</span>
-                <span lang="en">Built four projects: investment office, AI advisor, collection service, Telegram bot.</span>
+                <span lang="ru">Сделал четыре проекта: инвест-кабинет, AI-консультант, сервис коллекции, AI-куратор коллекции.</span>
+                <span lang="en">Built four projects: investment office, AI advisor, collection service, AI collection curator.</span>
             </li>
         </ul>
 
@@ -1130,9 +1134,9 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
                 <span class="step-title"><span lang="ru">05 · Git, GitHub, worktrees</span><span lang="en">05 · Git, GitHub, Worktrees</span></span>
             </a>
-            <a class="next" href="etap-07.html">
+            <a class="next" href="etap-06b.html">
                 <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
-                <span class="step-title"><span lang="ru">07 · Subagents и&nbsp;команды агентов</span><span lang="en">07 · Subagents &amp; agent teams</span></span>
+                <span class="step-title"><span lang="ru">06b · Telegram-бот для&nbsp;инвест-кабинета</span><span lang="en">06b · Telegram bot for the investment office</span></span>
             </a>
         </div>
     </div>
@@ -1145,8 +1149,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
         <div>
             <p class="signature" lang="ru">«Сайт без&nbsp;регистрации&nbsp;&mdash; красивая открытка. Сайт с&nbsp;аккаунтами и&nbsp;живыми данными&nbsp;&mdash; продукт».</p>
             <p class="signature" lang="en">“A site without sign-up is a pretty card. A site with accounts and live data is a product.”</p>
-            <p lang="ru">Этап&nbsp;06 пройден&nbsp;&mdash; вы&nbsp;умеете собирать настоящие приложения. Дальше&nbsp;&mdash; самый интересный поворот: учим Claude нанимать собственную команду стажёров.</p>
-            <p lang="en">Etape 06 done — you can ship real applications. Next — the most exciting turn: teaching Claude to hire its own team of interns.</p>
+            <p lang="ru">Этап&nbsp;06 пройден&nbsp;&mdash; вы&nbsp;умеете собирать настоящие приложения. Дальше по&nbsp;вашему выбору: либо <strong>06b</strong>&nbsp;&mdash; Telegram-бот к&nbsp;этому кабинету (мобильный доступ из&nbsp;кармана), либо сразу <strong>07</strong>&nbsp;&mdash; команды агентов и&nbsp;subagents.</p>
+            <p lang="en">Etape 06 done — you can ship real applications. From here it’s your call: <strong>06b</strong> for a Telegram bot to that office (mobile access from your pocket), or jump to <strong>07</strong> for agent teams and subagents.</p>
         </div>
         <div>
             <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
@@ -1164,6 +1168,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
             <ul>
                 <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
                 <li><a href="etap-05.html"><span lang="ru">← Этап&nbsp;05</span><span lang="en">← Etape 05</span></a></li>
+                <li><a href="etap-06b.html"><span lang="ru">→ Этап&nbsp;06b</span><span lang="en">→ Etape 06b</span></a></li>
                 <li><a href="etap-07.html"><span lang="ru">→ Этап&nbsp;07</span><span lang="en">→ Etape 07</span></a></li>
             </ul>
         </div>

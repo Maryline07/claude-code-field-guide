@@ -139,18 +139,21 @@ body.doodle hr.ornament::after {
    Active only when body.doodle is set. Light & dark unaffected.
    ============================================================ */
 
-/* Wavy SVG underline — used for em / dfn / hover links */
+/* Decorative em: wavy ink-blue underline — same shape as .term, different
+   colour. Red wavy is reserved for INTERACTIVE markers (terms / hovered links);
+   navy-blue wavy reads as "underlined italic", not "click me". */
 body.doodle p em,
 body.doodle li em,
 body.doodle dd em {
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 4' width='12' height='4'><path d='M0 2 Q 3 0, 6 2 T 12 2' stroke='%23e63a5e' stroke-width='0.9' fill='none'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 4' width='12' height='4'><path d='M0 2 Q 3 0, 6 2 T 12 2' stroke='%231a2547' stroke-width='0.9' fill='none'/></svg>");
     background-repeat: repeat-x;
     background-size: 12px 4px;
     background-position: 0 100%;
     padding-bottom: 3px;
 }
 
-/* Squiggly underline replaces dotted on glossary terms */
+/* Wavy red underline reserved for INTERACTIVE markers: glossary terms
+   (clickable, show a tooltip) and link hover. */
 body.doodle .term {
     border-bottom: none;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 4' width='12' height='4'><path d='M0 2 Q 3 0, 6 2 T 12 2' stroke='%23e63a5e' stroke-width='0.9' fill='none'/></svg>");

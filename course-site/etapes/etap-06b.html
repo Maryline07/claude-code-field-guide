@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этап 06b · Telegram-бот для инвест-кабинета — Полевое руководство по Claude Code</title>
+<meta name="description" content="Этап 06b курса по Claude Code: Telegram Bot API, aiogram 3, deep-link авторизация, worker-сервис на Railway. Учим Claude собирать безопасный бот к вашему инвест-кабинету.">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="shell inner">
+        <div class="brand">
+            <span class="mark">§ I</span>
+            <a href="../index.html"><span lang="ru">Полевое руководство по Claude Code</span><span lang="en">A Field Guide to Claude Code</span></a>
+        </div>
+        <nav>
+            <a href="../index.html#contents"><span lang="ru">содержание</span><span lang="en">contents</span></a>
+            <a href="#setup"><span lang="ru">подготовка</span><span lang="en">setup</span></a>
+            <a href="#topics"><span lang="ru">темы</span><span lang="en">topics</span></a>
+            <a href="#projects"><span lang="ru">проекты</span><span lang="en">projects</span></a>
+            <a href="#glossary"><span lang="ru">словарь</span><span lang="en">glossary</span></a>
+            <a href="#quiz">quiz</a>
+            <a href="#checklist"><span lang="ru">чек-лист</span><span lang="en">checklist</span></a>
+        </nav>
+        <div style="display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap;">
+            <span class="progress-pill"><span class="num">0</span>&thinsp;/&thinsp;<span class="total">15</span> <span lang="ru">ЗАВЕРШЕНО</span><span lang="en">DONE</span></span>
+            <div class="lang-toggle" role="group" aria-label="language">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="theme-toggle" aria-pressed="false" type="button">
+                <span class="theme-glyph" aria-hidden="true">☼</span>
+                <span class="theme-label">DAY</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ===================== ETAPE HERO ===================== -->
+<section class="etap-hero" data-num="06b">
+    <div class="shell inner">
+        <p class="eyebrow rise d1"><span class="sect">§ <span lang="ru">Этап 06b</span><span lang="en">Etape 06b</span></span> &nbsp;·&nbsp; <span lang="ru">Telegram-бот для&nbsp;инвест-кабинета</span><span lang="en">Telegram bot for the investment office</span></p>
+        <h1 class="rise d2">
+            <span lang="ru">Кабинет в&nbsp;<em>кармане</em>.</span>
+            <span lang="en">Your office in your <em>pocket</em>.</span>
+        </h1>
+        <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            Веб-кабинет из&nbsp;этапа&nbsp;06 живёт по&nbsp;ссылке. Этого достаточно для&nbsp;ноутбука, но&nbsp;не&nbsp;для&nbsp;очереди в&nbsp;кофейне или беседы с&nbsp;другом за&nbsp;ужином, когда хочется быстро спросить «как мой портфель сегодня?». Сегодня учим Claude собрать <dfn class="term" tabindex="0" data-def="программа в Telegram, которая откликается на сообщения и команды. Технически — это long-running процесс, который опрашивает серверы Telegram и обрабатывает события.">Telegram-бота</dfn>, который ходит в&nbsp;ваш backend, отвечает на&nbsp;команды и&nbsp;знает каждого пользователя&nbsp;&mdash; и&nbsp;при&nbsp;этом не&nbsp;превращает Telegram в&nbsp;дыру в&nbsp;безопасности.
+        </p>
+        <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
+            The web office from etape 06 lives at a URL. Fine on a laptop, useless in a coffee-shop queue or over dinner with a friend, when you want to quickly ask “how’s my portfolio today?” Today we teach Claude to assemble a <dfn class="term" tabindex="0" data-def="a program inside Telegram that reacts to messages and commands. Technically — a long-running process that polls Telegram’s servers and handles events.">Telegram bot</dfn> that talks to your backend, answers commands and knows each user — without turning Telegram into a security hole.
+        </p>
+
+        <dl class="etap-meta rise d4">
+            <div>
+                <dt><span lang="ru">Длительность</span><span lang="en">Duration</span></dt>
+                <dd><span lang="ru">5–7 дней · 2–3&nbsp;ч/день</span><span lang="en">5–7 days · 2–3&nbsp;hrs/day</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Что вы освоите</span><span lang="en">What you master</span></dt>
+                <dd><span lang="ru">Telegram Bot API · aiogram&nbsp;3 · worker-сервис · deep-link auth · Alembic-миграции</span><span lang="en">Telegram Bot API · aiogram&nbsp;3 · worker service · deep-link auth · Alembic migrations</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Главный итог</span><span lang="en">Core outcome</span></dt>
+                <dd><span lang="ru">бот в&nbsp;Telegram, через&nbsp;который вы&nbsp;и&nbsp;ваши близкие получают доступ к&nbsp;своим данным&nbsp;&mdash; безопасно</span><span lang="en">a Telegram bot through which you and your friends get access to your data — securely</span></dd>
+            </div>
+            <div>
+                <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
+                <dd><span lang="ru">второй сервис на&nbsp;Railway: бот, который проксирует запросы в&nbsp;backend проекта&nbsp;06</span><span lang="en">a second Railway service: a bot that proxies requests to the project-06 backend</span></dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ 0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></span>
+            <h2><span lang="ru">Что нужно перед стартом</span><span lang="en">What you need first</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">Этап&nbsp;06b опирается на&nbsp;этап&nbsp;06: у&nbsp;вас уже должен быть задеплоен инвест-кабинет (проект&nbsp;A) и&nbsp;AI-консультант (проект&nbsp;B) на&nbsp;Railway. Если нет&nbsp;&mdash; вернитесь и&nbsp;закройте 06, иначе бот будет звонить в&nbsp;пустоту.</p>
+        <p class="reading" lang="en">Etape 06b stands on top of etape 06: the investment office (project A) and the AI advisor (project B) must already be deployed on Railway. If not — go back and finish 06, otherwise the bot will be calling into the void.</p>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · аккаунт</span><span lang="en">required · account</span></span>
+            <h3>Telegram</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> мессенджер. Если у&nbsp;вас ещё нет аккаунта&nbsp;&mdash; скачайте на&nbsp;телефон, привяжите номер.<br>
+            <strong>Зачем сейчас:</strong> на&nbsp;нём живёт ваш будущий бот, и&nbsp;через&nbsp;него вы&nbsp;будете его&nbsp;тестировать.<br>
+            <strong>Где взять:</strong> <a href="https://telegram.org">telegram.org</a>. Бесплатно. Есть также веб-клиент <a href="https://web.telegram.org">web.telegram.org</a>&nbsp;&mdash; удобно при&nbsp;разработке на&nbsp;ноутбуке.<br>
+            <strong>Проверить:</strong> вы&nbsp;можете отправлять и&nbsp;получать сообщения.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a messenger. If you don’t have an account yet — install on phone, attach a number.<br>
+            <strong>Why now:</strong> that’s where your future bot lives and where you’ll test it.<br>
+            <strong>Where:</strong> <a href="https://telegram.org">telegram.org</a>. Free. There’s also <a href="https://web.telegram.org">web.telegram.org</a> — handy when developing on a laptop.<br>
+            <strong>Verify:</strong> you can send and receive messages.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · бот</span><span lang="en">required · bot</span></span>
+            <h3>BotFather → токен бота</h3>
+            <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> <dfn class="term" tabindex="0" data-def="официальный «мастер ботов» Telegram. Это сам по себе бот, через диалог с которым создают и настраивают других ботов.">BotFather</dfn>&nbsp;&mdash; официальный сервис Telegram, через который создаются боты. Это сам бот, с&nbsp;которым вы&nbsp;общаетесь как с&nbsp;человеком.<br>
+            <strong>Зачем сейчас:</strong> чтобы получить <dfn class="term" tabindex="0" data-def="секретная строка вида 1234567890:AAH... Через неё ваш код подключается к Telegram и притворяется ботом. Утечёт — и кто угодно сможет писать вашим пользователям от вашего имени.">токен бота</dfn>&nbsp;&mdash; «пароль», по&nbsp;которому ваш код общается с&nbsp;Telegram.<br>
+            <strong>Где взять:</strong> в&nbsp;Telegram найдите <a href="https://t.me/BotFather">@BotFather</a>, отправьте <code>/newbot</code>, выберите имя («My Investing Office») и&nbsp;username (должен заканчиваться на&nbsp;<code>bot</code>, например <code>my_investing_bot</code>).<br>
+            <strong>Куда положить:</strong> в&nbsp;Railway env vars (<code>TELEGRAM_BOT_TOKEN</code>). <em>Никогда</em> не&nbsp;коммитьте в&nbsp;git и&nbsp;не&nbsp;показывайте на&nbsp;скриншотах.<br>
+            <strong>Проверить:</strong> BotFather прислал вам строку вида <code>1234567890:AAH...</code>&nbsp;&mdash; это и&nbsp;есть токен.</p>
+            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> <dfn class="term" tabindex="0" data-def="Telegram’s official “bot wizard”. It is itself a bot — you create and configure other bots via dialogue with it.">BotFather</dfn> — Telegram’s official service for creating bots. It is itself a bot you chat with.<br>
+            <strong>Why now:</strong> to get the <dfn class="term" tabindex="0" data-def="a secret string like 1234567890:AAH... Your code uses it to authenticate with Telegram as that bot. Leaks → anyone can DM your users impersonating you.">bot token</dfn> — the “password” your code uses to talk to Telegram.<br>
+            <strong>Where:</strong> in Telegram find <a href="https://t.me/BotFather">@BotFather</a>, send <code>/newbot</code>, pick a name (“My Investing Office”) and username (must end in <code>bot</code>, e.g. <code>my_investing_bot</code>).<br>
+            <strong>Where to keep:</strong> in Railway env vars (<code>TELEGRAM_BOT_TOKEN</code>). <em>Never</em> commit it or share screenshots.<br>
+            <strong>Verify:</strong> BotFather sent you a string like <code>1234567890:AAH...</code> — that’s the token.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">обязательно · backend</span><span lang="en">required · backend</span></span>
+            <h3><span lang="ru">Кабинет из&nbsp;этапа&nbsp;06 на&nbsp;Railway</span><span lang="en">Etape-06 office on Railway</span></h3>
+            <p lang="ru" style="margin:0.5rem 0;"><strong>Что это:</strong> ваш собственный backend проектов&nbsp;A и&nbsp;B этапа&nbsp;06. Бот не&nbsp;дублирует логику&nbsp;&mdash; он&nbsp;её&nbsp;<em>проксирует</em>. Каждая его команда&nbsp;&mdash; HTTP-запрос к&nbsp;вашему&nbsp;же эндпоинту.<br>
+            <strong>Проверить:</strong> URL вида <code>https://my-investing-backend.up.railway.app/api/auth/me</code> отвечает 401 (без токена), а&nbsp;с&nbsp;валидным JWT&nbsp;&mdash; данными пользователя.</p>
+            <p lang="en" style="margin:0.5rem 0;"><strong>What it is:</strong> your own backend from etape-06 projects A and B. The bot doesn’t duplicate logic — it <em>proxies</em>. Each command is an HTTP call to your endpoint.<br>
+            <strong>Verify:</strong> a URL like <code>https://my-investing-backend.up.railway.app/api/auth/me</code> returns 401 without a token, and the user’s data with a valid JWT.</p>
+        </div>
+
+        <div class="aside-card" style="margin-top:1.5rem;">
+            <span class="label"><span lang="ru">желательно · skill</span><span lang="en">recommended · skill</span></span>
+            <h3><code>claude-api</code></h3>
+            <p lang="ru" style="margin:0.5rem 0;"><strong>Что это:</strong> тот&nbsp;же skill, что в&nbsp;этапе&nbsp;06. Здесь не&nbsp;нужен напрямую: бот не&nbsp;вызывает Claude API, он&nbsp;ходит в&nbsp;<em>ваш</em> эндпоинт <code>/api/advisor/ask</code>, а&nbsp;тот&nbsp;уже зовёт Claude. Но&nbsp;skill пригодится для&nbsp;команды <code>/ask</code>, если захочется отдельную версию для&nbsp;бота.</p>
+            <p lang="en" style="margin:0.5rem 0;"><strong>What it is:</strong> the same skill as in etape 06. Not strictly needed here: the bot doesn’t call Claude itself — it hits <em>your</em> <code>/api/advisor/ask</code>, which calls Claude. But the skill is handy if you want a bot-specific advisor variant for <code>/ask</code>.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== TOPICS ===================== -->
+<section id="topics">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ I · <span lang="ru">Темы</span><span lang="en">Topics</span></span>
+            <h2><span lang="ru">Семь вещей, которые надо понять перед&nbsp;кодом</span><span lang="en">Seven things to grasp before code</span></h2>
+        </div>
+
+        <p class="reading" lang="ru">В&nbsp;Telegram-боте легко увязнуть в&nbsp;деталях библиотеки. Сначала&nbsp;&mdash; модель: что такое бот в&nbsp;голове Telegram, как он&nbsp;узнаёт пользователей, и&nbsp;где живёт. Потом инструменты.</p>
+        <p class="reading" lang="en">It’s easy to get lost in library details with a Telegram bot. First — the mental model: what a bot is in Telegram’s eyes, how it identifies users, where it lives. Then the tools.</p>
+
+        <details class="topic" open>
+            <summary><span lang="ru">1. Что такое Telegram Bot API: long polling vs webhook</span><span lang="en">1. What the Telegram Bot API is: long polling vs webhook</span></summary>
+            <div class="topic-body">
+                <p lang="ru">«Бот» на&nbsp;стороне Telegram&nbsp;&mdash; это просто аккаунт, к&nbsp;которому привязан токен и&nbsp;который умеет получать сообщения программно. Telegram <em>сам</em> ничего вашему коду не&nbsp;шлёт по&nbsp;умолчанию: вы&nbsp;выбираете один из&nbsp;двух режимов.</p>
+                <ul lang="ru">
+                    <li><strong>Long polling</strong>&nbsp;&mdash; ваш бот раз за&nbsp;разом спрашивает у&nbsp;Telegram «есть новые сообщения?» и&nbsp;ждёт ответа до&nbsp;30 секунд. Telegram отвечает либо «нет», либо отдаёт пачку обновлений. Удобно для&nbsp;учебного бота: ничего настраивать не&nbsp;надо, работает из&nbsp;коробки.</li>
+                    <li><strong>Webhook</strong>&nbsp;&mdash; вы&nbsp;даёте Telegram свой публичный URL, и&nbsp;Telegram сам присылает туда POST-запрос на&nbsp;каждое событие. Быстрее, экономит ресурсы, но&nbsp;требует HTTPS-эндпоинт. Подходит для&nbsp;production.</li>
+                </ul>
+                <p lang="ru"><strong>Что выбираем сейчас:</strong> <em>long polling</em>. На&nbsp;Railway бот будет жить как отдельный worker-сервис (см.&nbsp;тему&nbsp;3), который запускается командой <code>python bot.py</code>&nbsp;&mdash; и&nbsp;всё. Webhook добавим в&nbsp;этапе&nbsp;11, когда речь пойдёт об&nbsp;агентах и&nbsp;надёжности.</p>
+                <pre class="shell">&gt; объясни мне long polling простыми словами,
+&gt; сравни с webhook, и подскажи: для нашего учебного бота
+&gt; на Railway что выбрать и почему?</pre>
+                <p lang="en">A “bot” on Telegram’s side is just an account with an attached token, designed to receive messages programmatically. Telegram doesn’t push to you by default: you pick one of two modes.</p>
+                <ul lang="en">
+                    <li><strong>Long polling</strong> — your bot asks Telegram “any new messages?” over and over, waiting up to 30 seconds for an answer. Telegram replies either “none” or with a batch of updates. Convenient for a learning bot: nothing to configure, works out of the box.</li>
+                    <li><strong>Webhook</strong> — you give Telegram a public URL, and Telegram POSTs each event to it. Faster, cheaper on resources, but requires an HTTPS endpoint. Suits production.</li>
+                </ul>
+                <p lang="en"><strong>What we pick now:</strong> <em>long polling</em>. On Railway the bot lives as a worker service (see topic 3) launched with <code>python bot.py</code> — and that’s it. We’ll add webhooks in etape 11 when we cover agents and reliability.</p>
+                <pre class="shell">&gt; explain long polling in plain words,
+&gt; compare to webhook, and recommend: for our learning bot
+&gt; on Railway, which to pick and why?</pre>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">2. aiogram&nbsp;3: маршрутизатор, хендлеры, FSM</span><span lang="en">2. aiogram 3: router, handlers, FSM</span></summary>
+            <div class="topic-body">
+                <p lang="ru"><strong><dfn class="term" tabindex="0" data-def="Python-фреймворк для Telegram-ботов. Один из самых популярных в RU-комьюнити, основан на async/await. Версия 3.x — современная, с роутерной архитектурой.">aiogram</dfn></strong>&nbsp;&mdash; асинхронный python-фреймворк для&nbsp;Telegram-ботов. Архитектурно похож на&nbsp;FastAPI, который вы&nbsp;уже знаете: есть «приложение» (Dispatcher), есть «роутеры», на&nbsp;них регистрируются обработчики. Только вместо HTTP-эндпоинтов&nbsp;&mdash; обработчики команд и&nbsp;текстов.</p>
+                <pre class="shell"># bot.py — упрощённая структура
+import asyncio
+from aiogram import Bot, Dispatcher, Router
+from aiogram.filters import Command
+
+router = Router()
+
+@router.message(Command("start"))
+async def start(message):
+    await message.answer("Привет! Это ваш инвест-бот.")
+
+@router.message(Command("portfolio"))
+async def portfolio(message):
+    # сюда позже добавим запрос в backend
+    await message.answer("Портфель пока недоступен — войдите через /start")
+
+async def main():
+    bot = Bot(token=os.environ["TELEGRAM_BOT_TOKEN"])
+    dp = Dispatcher()
+    dp.include_router(router)
+    await dp.start_polling(bot)
+
+asyncio.run(main())</pre>
+                <p lang="ru">Три понятия, которые надо запомнить:</p>
+                <dl lang="ru">
+                    <dt><strong>Handler</strong></dt><dd>асинхронная функция, которая обрабатывает одно событие (команду <code>/start</code>, текст «привет», кнопку). Декоратор <code>@router.message(...)</code> привязывает её к&nbsp;фильтру.</dd>
+                    <dt><strong>Router</strong></dt><dd>группа handlers. У&nbsp;нас будет два: <code>auth_router</code> (логин, привязка) и&nbsp;<code>main_router</code> (команды кабинета).</dd>
+                    <dt><strong><dfn class="term" tabindex="0" data-def="Finite State Machine — конечный автомат. Способ запомнить, в каком «шаге» диалога находится конкретный пользователь: «жду email», «жду пароль», «всё ввёл — отправляю».">FSM</dfn></strong></dt><dd>конечный автомат. У&nbsp;нас понадобится только в&nbsp;одном месте&nbsp;&mdash; для&nbsp;команды <code>/login</code> с&nbsp;кодом подтверждения. Для&nbsp;большинства команд состояние не&nbsp;нужно: бот не&nbsp;помнит контекст, каждая команда самостоятельная.</dd>
+                </dl>
+                <pre class="shell">&gt; покажи минимальный пример aiogram 3:
+&gt; один handler на /start, один на /portfolio.
+&gt; не используй FSM пока. объясни каждую строку.</pre>
+                <p lang="en"><strong><dfn class="term" tabindex="0" data-def="A Python framework for Telegram bots. One of the most popular in the RU community, built on async/await. Version 3.x — modern, router-based architecture.">aiogram</dfn></strong> is an async Python framework for Telegram bots. Architecturally similar to FastAPI, which you already know: there’s an “app” (Dispatcher), routers, and handlers attached to them. Instead of HTTP endpoints — command and text handlers.</p>
+                <p lang="en">Three concepts to remember:</p>
+                <dl lang="en">
+                    <dt><strong>Handler</strong></dt><dd>an async function that handles one event (command <code>/start</code>, text “hi”, a button). The decorator <code>@router.message(...)</code> binds it to a filter.</dd>
+                    <dt><strong>Router</strong></dt><dd>a group of handlers. We’ll have two: <code>auth_router</code> (login, linking) and <code>main_router</code> (office commands).</dd>
+                    <dt><strong><dfn class="term" tabindex="0" data-def="Finite State Machine. A way to remember which step of a dialogue a user is at: 'waiting for email', 'waiting for password', 'all entered — sending'.">FSM</dfn></strong></dt><dd>finite state machine. We only need it in one place — the <code>/login</code> command with a confirmation code. Most commands don’t need state: each is self-contained.</dd>
+                </dl>
+                <pre class="shell">&gt; show the minimal aiogram 3 example:
+&gt; one handler on /start, one on /portfolio.
+&gt; no FSM yet. explain each line.</pre>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">3. Worker-сервис на&nbsp;Railway: бот&nbsp;&mdash; не&nbsp;web-сервер</span><span lang="en">3. Worker service on Railway: a bot is not a web server</span></summary>
+            <div class="topic-body">
+                <p lang="ru">Backend этапа&nbsp;06 был web-сервисом: Railway видел, что он&nbsp;слушает порт <code>$PORT</code>, посылал на&nbsp;него healthcheck, и&nbsp;при&nbsp;успехе считал сервис «живым». Бот&nbsp;же ничего не&nbsp;слушает&nbsp;&mdash; он&nbsp;просто крутит цикл polling. Это <dfn class="term" tabindex="0" data-def="долгоживущий процесс на сервере, который не отвечает по HTTP, а делает свою работу в фоне: опрашивает очередь, отправляет уведомления, считает что-то по расписанию. У worker нет URL.">worker-сервис</dfn>.</p>
+                <p lang="ru">На&nbsp;Railway это решается через файл <code>Procfile</code> или поле «Start Command» в&nbsp;настройках сервиса:</p>
+                <pre class="shell"># Procfile в корне репозитория бота:
+worker: python bot.py</pre>
+                <p lang="ru">Когда Claude будет деплоить, напомните ему:</p>
+                <pre class="shell">&gt; это worker-сервис, не web. на Railway:
+&gt; — не указывай PORT, healthcheck отключи;
+&gt; — Procfile должен быть с типом worker;
+&gt; — TELEGRAM_BOT_TOKEN и BACKEND_URL — через env vars в Railway dashboard;
+&gt; — добавь логирование: при старте печатай «бот запущен, опрашиваю Telegram»,
+&gt;   при ошибке — стектрейс через logging.exception().</pre>
+                <p lang="ru"><strong>Один backend, два сервиса.</strong> У&nbsp;вас в&nbsp;Railway появятся <em>два</em> отдельных сервиса: web (backend этапа&nbsp;06) и&nbsp;worker (этот бот). Они общаются через HTTP&nbsp;&mdash; бот ходит на&nbsp;<code>https://my-investing-backend.up.railway.app/api/...</code>. БД у&nbsp;них одна и&nbsp;та&nbsp;же.</p>
+                <p lang="en">The etape-06 backend was a web service: Railway saw it listening on <code>$PORT</code>, sent healthchecks, and treated it as alive on success. A bot listens to nothing — it just runs a polling loop. That’s a <dfn class="term" tabindex="0" data-def="a long-running process on a server that doesn’t answer HTTP — it does background work: poll a queue, send notifications, run something on a schedule. A worker has no URL.">worker service</dfn>.</p>
+                <p lang="en">On Railway you set this via a <code>Procfile</code> or the “Start Command” field:</p>
+                <pre class="shell"># Procfile at the bot repo root:
+worker: python bot.py</pre>
+                <p lang="en">When Claude deploys, remind it:</p>
+                <pre class="shell">&gt; this is a worker service, not web. on Railway:
+&gt; — no PORT, disable healthcheck;
+&gt; — Procfile must declare type 'worker';
+&gt; — TELEGRAM_BOT_TOKEN and BACKEND_URL — via env vars in Railway dashboard;
+&gt; — add logging: on start print "bot up, polling Telegram",
+&gt;   on error — stacktrace via logging.exception().</pre>
+                <p lang="en"><strong>One backend, two services.</strong> You’ll have <em>two</em> Railway services: web (etape-06 backend) and worker (this bot). They talk over HTTP — the bot calls <code>https://my-investing-backend.up.railway.app/api/...</code>. They share one DB.</p>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">4. Авторизация без&nbsp;паролей в&nbsp;чате: deep-link</span><span lang="en">4. Auth without passwords in chat: deep-link</span></summary>
+            <div class="topic-body">
+                <p lang="ru" class="note"><strong>Антипаттерн:</strong> команда <code>/login email password</code>. Пароль остаётся в&nbsp;истории чата у&nbsp;пользователя, в&nbsp;логах Telegram, в&nbsp;логах бота. Если телефон украдут&nbsp;&mdash; пароль найдут текстом. Этап&nbsp;06 учил «никогда не&nbsp;светить пароли в&nbsp;логах»&nbsp;&mdash; в&nbsp;Telegram это правило ещё строже.</p>
+                <p lang="en" class="note"><strong>Anti-pattern:</strong> a <code>/login email password</code> command. The password lives in the user’s chat history, in Telegram’s logs, in your bot’s logs. Steal the phone — find the password as plain text. Etape 06 taught “never log passwords” — in Telegram that rule is stricter.</p>
+
+                <p lang="ru"><strong>Правильный приём&nbsp;&mdash; deep-link с&nbsp;одноразовым токеном.</strong> Идея: настоящая авторизация остаётся в&nbsp;вебе, бот получает только короткий «ключ» с&nbsp;истекающим сроком жизни.</p>
+                <ol class="steps" lang="ru">
+                    <li>Пользователь логинится в&nbsp;вашем веб-кабинете (этап&nbsp;06, проект&nbsp;A) обычным образом.</li>
+                    <li>На&nbsp;странице <code>/profile</code> жмёт кнопку «Привязать Telegram». Backend генерирует одноразовый токен (например, 32&nbsp;случайных символа), сохраняет в&nbsp;таблице <code>TelegramLinkToken(token, user_id, expires_at)</code> со&nbsp;сроком жизни 5&nbsp;минут.</li>
+                    <li>Backend возвращает ссылку: <code>https://t.me/my_investing_bot?start=&lt;token&gt;</code>. Пользователь нажимает.</li>
+                    <li>Telegram открывает чат с&nbsp;ботом и&nbsp;шлёт ему специальное событие <code>/start &lt;token&gt;</code>.</li>
+                    <li>Бот в&nbsp;handler <code>/start</code> читает <code>command.args</code>, идёт в&nbsp;backend на&nbsp;<code>POST&nbsp;/api/telegram/link</code> с&nbsp;этим токеном и&nbsp;своим <code>telegram_id</code>.</li>
+                    <li>Backend проверяет токен, сохраняет связку <code>telegram_id ↔ user_id</code>, удаляет одноразовый токен. Возвращает боту JWT с&nbsp;коротким TTL (например, 24&nbsp;часа).</li>
+                    <li>Бот хранит JWT в&nbsp;<dfn class="term" tabindex="0" data-def="хранилище в памяти или в Redis, в котором aiogram держит состояние FSM и кэш по пользователю. Можно записать туда что угодно (JWT, временные данные).">aiogram-storage</dfn> по&nbsp;ключу <code>telegram_id</code>.</li>
+                </ol>
+                <ol class="steps" lang="en">
+                    <li>User logs into your web office (etape-06 project A) the regular way.</li>
+                    <li>On <code>/profile</code> they click “Link Telegram”. Backend generates a one-time token (32 random chars), stores it as <code>TelegramLinkToken(token, user_id, expires_at)</code> with a 5-minute TTL.</li>
+                    <li>Backend returns the link <code>https://t.me/my_investing_bot?start=&lt;token&gt;</code>. User taps it.</li>
+                    <li>Telegram opens the bot and sends a special <code>/start &lt;token&gt;</code> event.</li>
+                    <li>The bot reads <code>command.args</code> in the <code>/start</code> handler and calls <code>POST /api/telegram/link</code> with this token and its <code>telegram_id</code>.</li>
+                    <li>Backend validates the token, stores <code>telegram_id ↔ user_id</code>, deletes the one-time token. Returns a JWT to the bot with a short TTL (e.g. 24h).</li>
+                    <li>The bot stores the JWT in <dfn class="term" tabindex="0" data-def="in-memory or Redis storage where aiogram keeps FSM state and per-user cache. You can put anything in there (JWT, temporary data).">aiogram-storage</dfn> keyed by <code>telegram_id</code>.</li>
+                </ol>
+                <p lang="ru"><strong>Что мы&nbsp;выиграли:</strong> ни&nbsp;email, ни&nbsp;пароль никогда не&nbsp;идут через Telegram. Если кто-то завладеет вашим Telegram&nbsp;&mdash; он&nbsp;увидит JWT, но&nbsp;он&nbsp;истечёт через сутки. Веб-кабинет вы&nbsp;всегда можете «отключить от&nbsp;Telegram» одной кнопкой&nbsp;&mdash; backend удаляет связь.</p>
+                <pre class="shell">&gt; в проекте A добавь:
+&gt; — модель TelegramLinkToken (id, token, user_id, expires_at, used)
+&gt; — эндпоинт POST /api/telegram/link-init: генерит токен, возвращает t.me-URL
+&gt; — эндпоинт POST /api/telegram/link: принимает token + telegram_id, валидирует
+&gt;   срок и used=False, помечает used=True, привязывает telegram_id к User,
+&gt;   возвращает JWT (TTL 24 часа)
+&gt; — эндпоинт POST /api/telegram/unlink (под /profile): отвязка
+&gt; ВАЖНО: один раз использованный токен — мёртв. срок 5 минут. в логах не светим.</pre>
+                <p lang="en"><strong>The gain:</strong> no email or password ever passes through Telegram. If your Telegram gets hijacked, the attacker sees a JWT that expires in 24h. You can always “unlink Telegram” from the web with one click — the backend kills the binding.</p>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">5. Хранение состояния: MemoryStorage и&nbsp;что бывает при&nbsp;рестарте</span><span lang="en">5. State storage: MemoryStorage and what restarts do to it</span></summary>
+            <div class="topic-body">
+                <p lang="ru">aiogram даёт два варианта <code>storage</code> «из&nbsp;коробки»:</p>
+                <dl lang="ru">
+                    <dt><code>MemoryStorage</code></dt><dd>состояние и&nbsp;FSM в&nbsp;памяти процесса. <strong>Рестарт сервиса = всё пропало.</strong> На&nbsp;Railway worker может перезапуститься после деплоя, обновления окружения, OOM-kill. Все JWT-токены, которые бот «держал» для&nbsp;пользователей, обнулятся&nbsp;&mdash; им придётся снова жать «Привязать Telegram».</dd>
+                    <dt><code>RedisStorage</code></dt><dd>состояние в&nbsp;Redis. Переживает рестарт. Требует Redis-сервиса (Railway его&nbsp;умеет, $5/мес. на&nbsp;старте).</dd>
+                </dl>
+                <p lang="ru"><strong>Прагматичный выбор учебного этапа:</strong> начинаем с&nbsp;<code>MemoryStorage</code>, потому что просто, бесплатно и&nbsp;учит понимать, что такое «состояние». В&nbsp;projects A/B этого этапа явно описываем UX: «после долгого простоя, возможно, попросит снова привязать Telegram&nbsp;&mdash; это нормально». Если потом захочется production-надёжности&nbsp;&mdash; добавляете Redis. Это одна строка в&nbsp;коде:</p>
+                <pre class="shell">from aiogram.fsm.storage.redis import RedisStorage
+storage = RedisStorage.from_url(os.environ["REDIS_URL"])
+dp = Dispatcher(storage=storage)</pre>
+                <p lang="en">aiogram offers two storage options out of the box:</p>
+                <dl lang="en">
+                    <dt><code>MemoryStorage</code></dt><dd>state and FSM in process memory. <strong>Restart = everything gone.</strong> On Railway a worker can restart after deploy, env update, OOM-kill. All JWTs the bot held for users vanish — they’ll have to re-link.</dd>
+                    <dt><code>RedisStorage</code></dt><dd>state in Redis. Survives restarts. Requires a Redis service (Railway provides one, ~$5/month).</dd>
+                </dl>
+                <p lang="en"><strong>Pragmatic call for this etape:</strong> start with <code>MemoryStorage</code> — simple, free, and teaches “what is state”. In projects A/B we make the UX explicit: “after a long idle, you may be asked to re-link Telegram — that’s normal.” For production robustness — add Redis. One line:</p>
+                <pre class="shell">from aiogram.fsm.storage.redis import RedisStorage
+storage = RedisStorage.from_url(os.environ["REDIS_URL"])
+dp = Dispatcher(storage=storage)</pre>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">6. Миграция схемы: добавляем <code>telegram_id</code> в&nbsp;User</span><span lang="en">6. Schema migration: adding <code>telegram_id</code> to User</span></summary>
+            <div class="topic-body">
+                <p lang="ru">Backend этапа&nbsp;06 уже задеплоен на&nbsp;Railway, в&nbsp;PostgreSQL уже есть пользователи. Теперь нужно добавить колонку <code>telegram_id</code> к&nbsp;модели <code>User</code>&nbsp;&mdash; и&nbsp;применить это к&nbsp;живой БД, не&nbsp;потеряв данные. Это <dfn class="term" tabindex="0" data-def="изменение схемы базы данных, которое можно применить пошагово (миграция вперёд) или откатить (миграция назад). Хранится как версионируемый файл в репозитории.">миграция</dfn>.</p>
+                <p lang="ru"><strong>Инструмент</strong>&nbsp;&mdash; <a href="https://alembic.sqlalchemy.org">Alembic</a>, который вы&nbsp;уже видели в&nbsp;этапе&nbsp;06. Каждое изменение схемы&nbsp;&mdash; отдельный файл в&nbsp;<code>alembic/versions/</code>, у&nbsp;каждого свой ID и&nbsp;ссылка на&nbsp;«родителя».</p>
+                <pre class="shell">&gt; в backend проекта A создай alembic-миграцию add_telegram_id:
+&gt; — добавляет nullable колонку telegram_id (BigInteger, unique=True) в User;
+&gt; — добавляет таблицу TelegramLinkToken (id, token, user_id, expires_at, used);
+&gt; — индекс по telegram_id для быстрого поиска при логине из бота.
+&gt;
+&gt; покажи и upgrade(), и downgrade(). объясни, почему nullable, а не NOT NULL.</pre>
+                <p lang="ru"><strong>Почему nullable:</strong> старые пользователи ещё не&nbsp;привязали Telegram, у&nbsp;них колонка должна быть пустой. Если поставить NOT&nbsp;NULL без <code>default</code>&nbsp;&mdash; миграция упадёт.</p>
+                <p lang="ru"><strong>Накат на&nbsp;production.</strong> Локально: <code>alembic upgrade head</code>. На&nbsp;Railway: либо в&nbsp;Procfile добавляем pre-deploy <code>release: alembic upgrade head</code>, либо запускаем команду из&nbsp;Railway shell вручную. Для&nbsp;маленького проекта&nbsp;&mdash; вторая опция проще.</p>
+                <p lang="ru"><strong>Перед накатом&nbsp;&mdash; бэкап.</strong> Railway делает автоматические снапшоты БД, но&nbsp;учить руки лучше сразу: «<em>прежде чем накатить миграцию, сделай pg_dump через Railway shell, сохрани локально как <code>backup-before-tg.sql</code></em>».</p>
+                <p lang="en">The etape-06 backend is already deployed on Railway, with users in PostgreSQL. Now we add a <code>telegram_id</code> column to <code>User</code> and apply it to a live DB without data loss. That’s a <dfn class="term" tabindex="0" data-def="a versioned schema change that can be applied step-by-step (forward) or rolled back (backward). Stored as a file in the repo.">migration</dfn>.</p>
+                <p lang="en"><strong>Tool</strong> — <a href="https://alembic.sqlalchemy.org">Alembic</a>, which you saw in etape 06. Each schema change is a file in <code>alembic/versions/</code> with its own ID and a parent reference.</p>
+                <p lang="en"><strong>Why nullable:</strong> existing users haven’t linked Telegram, so the column must be empty. NOT NULL without a default would fail.</p>
+                <p lang="en"><strong>Applying on production.</strong> Locally: <code>alembic upgrade head</code>. On Railway: either add <code>release: alembic upgrade head</code> as a pre-deploy in Procfile, or run from the Railway shell manually. For a small project, option two is simpler.</p>
+                <p lang="en"><strong>Back up first.</strong> Railway snapshots automatically, but train the muscle: “<em>before applying the migration, run pg_dump via Railway shell, save locally as <code>backup-before-tg.sql</code></em>”.</p>
+            </div>
+        </details>
+
+        <details class="topic">
+            <summary><span lang="ru">7. Безопасность токена бота</span><span lang="en">7. Bot token security</span></summary>
+            <div class="topic-body">
+                <p lang="ru">Токен бота&nbsp;&mdash; это пароль, который даёт <em>полный</em> контроль над&nbsp;ботом. С&nbsp;ним можно отправлять сообщения от&nbsp;имени бота, читать всё, что ему пишут, узнать список всех привязанных пользователей. Если утечёт:</p>
+                <ul lang="ru">
+                    <li>злоумышленник напишет вашим пользователям от&nbsp;имени «вашего» бота с&nbsp;фейковой ссылкой «обнови привязку Telegram»;</li>
+                    <li>пользователь, привыкший доверять боту, нажмёт&nbsp;&mdash; и&nbsp;уедет на&nbsp;фишинг-страницу «инвест-кабинета»;</li>
+                    <li>введёт там настоящий пароль&nbsp;&mdash; и&nbsp;всё, аккаунт уведён.</li>
+                </ul>
+                <p lang="ru"><strong>Защита.</strong> Простое, но&nbsp;всё&nbsp;&mdash; правда:</p>
+                <ol class="steps" lang="ru">
+                    <li>Токен <em>только</em> в&nbsp;<code>TELEGRAM_BOT_TOKEN</code> в&nbsp;Railway env. Никогда в&nbsp;коде, в&nbsp;<code>.env.example</code>, в&nbsp;скриншотах, в&nbsp;коммитах.</li>
+                    <li><code>.gitignore</code> содержит <code>.env</code>. Перед каждым коммитом&nbsp;&mdash; <code>git diff --cached | grep -i token</code>, либо включите hook (этап&nbsp;08a).</li>
+                    <li>Если токен утёк (или подозреваете) &mdash; в&nbsp;BotFather: <code>/revoke</code>, выберите бота, <em>«Revoke current token»</em>. Telegram выдаст новый, старый умрёт сразу. Обновите Railway env.</li>
+                    <li>Внутри бота: при&nbsp;логировании сообщений <em>никогда</em> не&nbsp;печатайте <code>message.text</code> целиком, если это <code>/start &lt;token&gt;</code>&nbsp;&mdash; одноразовые токены тоже секрет.</li>
+                </ol>
+                <pre class="shell">&gt; пройдись по моему боту как security-эксперт. найди:
+&gt; — где может утечь TELEGRAM_BOT_TOKEN (логи, переменные, ошибки),
+&gt; — где может утечь одноразовый link-token (printf, exception),
+&gt; — где может утечь JWT пользователя.
+&gt; для каждого — конкретный фикс.</pre>
+                <p lang="en">A bot token is a password granting <em>full</em> control over the bot. With it you can send messages on the bot’s behalf, read everything sent to it, list every linked user. On leak:</p>
+                <ul lang="en">
+                    <li>attacker DMs your users from “your” bot with a fake “update your Telegram link” URL;</li>
+                    <li>a user who trusts the bot taps it — lands on a phishing page;</li>
+                    <li>enters their real password — account compromised.</li>
+                </ul>
+                <p lang="en"><strong>Defense.</strong> Boring but true:</p>
+                <ol class="steps" lang="en">
+                    <li>Token <em>only</em> in <code>TELEGRAM_BOT_TOKEN</code> in Railway env. Never in code, <code>.env.example</code>, screenshots, commits.</li>
+                    <li><code>.gitignore</code> contains <code>.env</code>. Before each commit: <code>git diff --cached | grep -i token</code>, or install a hook (etape 08a).</li>
+                    <li>On leak (or suspicion): in BotFather <code>/revoke</code>, pick the bot, <em>“Revoke current token”</em>. Telegram issues a new one, the old dies immediately. Update Railway env.</li>
+                    <li>Inside the bot: when logging messages, <em>never</em> print full <code>message.text</code> if it’s <code>/start &lt;token&gt;</code> — one-time tokens are secrets too.</li>
+                </ol>
+            </div>
+        </details>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== INSTRUCTED PROJECTS ===================== -->
+<section id="projects">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
+            <h2><span lang="ru">Подключаем Telegram к&nbsp;инвест-кабинету</span><span lang="en">Linking Telegram to the office</span></h2>
+        </div>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
+            <h3><span lang="ru">Бот-кабинет: привязка через&nbsp;deep-link и&nbsp;команды портфеля</span><span lang="en">Bot-office: deep-link linking and portfolio commands</span></h3>
+            <p class="goal" lang="ru">Цель: новый Railway-сервис&nbsp;&mdash; Telegram-бот, который умеет привязываться к&nbsp;вашему аккаунту через ссылку из&nbsp;<code>/profile</code>, и&nbsp;потом отвечает на&nbsp;команды <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>. Никакого <code>/login email password</code>&nbsp;&mdash; только deep-link.</p>
+            <p class="goal" lang="en">Goal: a new Railway service — a Telegram bot that binds to your account via a link on <code>/profile</code>, then handles <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>. No <code>/login email password</code> anywhere — only deep-link.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Фазы (через spec → Plan Mode → TodoWrite, как в&nbsp;этапе&nbsp;04)</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Phases (via spec → Plan Mode → TodoWrite, as in etape 04)</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Skeleton.</strong> Новая папка <code>bot/</code> рядом с&nbsp;<code>backend/</code> и&nbsp;<code>frontend/</code> этапа&nbsp;06. Свой <code>requirements.txt</code> (<code>aiogram&gt;=3.4</code>, <code>httpx</code>, <code>python-dotenv</code>), свой <code>Procfile</code> (<code>worker: python bot.py</code>), <code>.env.example</code> (без значений), <code>CLAUDE.md</code> с&nbsp;контекстом «это worker-сервис, не&nbsp;web».</li>
+                <li><strong>Backend: расширение схемы.</strong> Alembic-миграция из&nbsp;темы&nbsp;6: <code>telegram_id</code> в&nbsp;<code>User</code>, таблица <code>TelegramLinkToken</code>. Применить локально, потом на&nbsp;Railway после <code>pg_dump</code>.</li>
+                <li><strong>Backend: эндпоинты привязки.</strong> Три новых HTTP-эндпоинта: <code>POST /api/telegram/link-init</code> (под&nbsp;<code>require_auth</code>, возвращает <code>{ url: "https://t.me/...?start=..." }</code>), <code>POST /api/telegram/link</code> (без&nbsp;auth, принимает <code>{ token, telegram_id }</code>, возвращает <code>{ jwt, expires_at }</code>), <code>POST /api/telegram/unlink</code> (под&nbsp;auth).</li>
+                <li><strong>Frontend: кнопка «Привязать Telegram».</strong> На&nbsp;странице <code>/profile</code> кнопка зовёт <code>link-init</code>, открывает полученную ссылку в&nbsp;Telegram. После возврата&nbsp;&mdash; индикатор «привязан как @username».</li>
+                <li><strong>Bot: minimal skeleton.</strong> <code>bot.py</code> с&nbsp;двумя routers (<code>auth_router</code>, <code>main_router</code>), MemoryStorage, handler <code>/start</code>, который ловит <code>command.args</code> и&nbsp;ходит в&nbsp;<code>/api/telegram/link</code>. Логирует «бот запущен».</li>
+                <li><strong>Bot: команды кабинета.</strong> Handlers <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>. Каждый: достать JWT из&nbsp;storage по&nbsp;telegram_id; если нет&nbsp;&mdash; «зайдите через /start &lt;token&gt; из&nbsp;кабинета»; если есть&nbsp;&mdash; HTTP-запрос на&nbsp;backend с&nbsp;JWT в&nbsp;<code>Authorization: Bearer ...</code>; форматирование ответа в&nbsp;Markdown (Telegram умеет).</li>
+                <li><strong>Локальный тест.</strong> Запустить backend и&nbsp;бота на&nbsp;своей машине. Через свой реальный Telegram пройти полный сценарий: вход в&nbsp;кабинет → «Привязать» → открыть бота → <code>/portfolio</code> → проверить, что числа совпадают с&nbsp;вебом.</li>
+                <li><strong>Деплой.</strong> Новый Railway-сервис из&nbsp;папки <code>bot/</code>. <code>TELEGRAM_BOT_TOKEN</code> и&nbsp;<code>BACKEND_URL</code> через env vars. Healthcheck отключить.</li>
+                <li><strong>Verification.</strong>
+                    <pre class="shell">&gt; ручной чеклист (без playwright, потому что Telegram-клиент тестировать сложно):
+&gt; 1) реальный аккаунт A:
+&gt;    — войди в кабинет, нажми «Привязать Telegram»
+&gt;    — открой ссылку, нажми «Запустить бота»
+&gt;    — бот ответил «привязка успешна»
+&gt;    — отправь /portfolio — числа совпадают с вебом
+&gt; 2) второй реальный или тестовый аккаунт B:
+&gt;    — повтори те же шаги
+&gt;    — /portfolio показывает ДРУГИЕ числа (свои)
+&gt; 3) перезапусти бота на Railway (Settings → Restart)
+&gt;    — отправь /portfolio
+&gt;    — увидь сообщение «привязка истекла, зайдите снова»
+&gt;    — это ожидаемо при MemoryStorage, в чек-листе зафиксируй
+&gt; 4) в Railway dashboard → Logs у бота:
+&gt;    — нет ни TELEGRAM_BOT_TOKEN, ни link-токенов, ни JWT</pre>
+                </li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Skeleton.</strong> New <code>bot/</code> folder next to <code>backend/</code> and <code>frontend/</code>. Its own <code>requirements.txt</code> (<code>aiogram&gt;=3.4</code>, <code>httpx</code>, <code>python-dotenv</code>), its own <code>Procfile</code> (<code>worker: python bot.py</code>), <code>.env.example</code> (no values), <code>CLAUDE.md</code> stating “this is a worker service, not web”.</li>
+                <li><strong>Backend: schema extension.</strong> Alembic migration from topic 6: <code>telegram_id</code> on <code>User</code>, table <code>TelegramLinkToken</code>. Apply locally, then on Railway after <code>pg_dump</code>.</li>
+                <li><strong>Backend: linking endpoints.</strong> Three new HTTP endpoints: <code>POST /api/telegram/link-init</code> (under <code>require_auth</code>, returns <code>{ url: "https://t.me/...?start=..." }</code>), <code>POST /api/telegram/link</code> (no auth, takes <code>{ token, telegram_id }</code>, returns <code>{ jwt, expires_at }</code>), <code>POST /api/telegram/unlink</code> (auth).</li>
+                <li><strong>Frontend: “Link Telegram” button.</strong> On <code>/profile</code> a button calls <code>link-init</code>, opens the URL in Telegram. After return — indicator “linked as @username”.</li>
+                <li><strong>Bot: minimal skeleton.</strong> <code>bot.py</code> with two routers (<code>auth_router</code>, <code>main_router</code>), MemoryStorage, a <code>/start</code> handler that reads <code>command.args</code> and calls <code>/api/telegram/link</code>. Logs “bot up”.</li>
+                <li><strong>Bot: office commands.</strong> Handlers <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>. Each: fetch JWT from storage by telegram_id; if missing — “sign in via /start &lt;token&gt; from the office”; otherwise call backend with <code>Authorization: Bearer ...</code>; format reply in Markdown.</li>
+                <li><strong>Local test.</strong> Run backend and bot locally. Walk the full flow on your real Telegram: sign in → “Link” → open the bot → <code>/portfolio</code> → numbers match the web.</li>
+                <li><strong>Deploy.</strong> New Railway service from the <code>bot/</code> folder. <code>TELEGRAM_BOT_TOKEN</code> and <code>BACKEND_URL</code> via env vars. Disable healthcheck.</li>
+                <li><strong>Verification.</strong> Manual checklist (Playwright doesn’t test Telegram clients well):
+                    <pre class="shell">&gt; 1) real account A:
+&gt;    — sign into the office, click "Link Telegram"
+&gt;    — open the link, hit "Start bot"
+&gt;    — bot replies "link ok"
+&gt;    — send /portfolio — numbers match the web
+&gt; 2) second real or test account B:
+&gt;    — repeat the same flow
+&gt;    — /portfolio shows DIFFERENT numbers (their own)
+&gt; 3) restart the bot on Railway (Settings → Restart)
+&gt;    — send /portfolio
+&gt;    — see "link expired, sign in again"
+&gt;    — expected with MemoryStorage; record it in the checklist
+&gt; 4) Railway dashboard → bot Logs:
+&gt;    — no TELEGRAM_BOT_TOKEN, no link tokens, no JWTs in plain text</pre>
+                </li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>aiogram&nbsp;3: routers, handlers, MemoryStorage;</li>
+                <li>worker-сервис на&nbsp;Railway (отдельный Procfile, без healthcheck);</li>
+                <li>безопасный auth-флоу через одноразовый deep-link токен;</li>
+                <li>Alembic-миграцию на&nbsp;живой PostgreSQL без потери данных;</li>
+                <li>модель «один backend, два клиента» (web + бот) с&nbsp;общим JWT.</li>
+            </ul>
+            <ul lang="en">
+                <li>aiogram 3: routers, handlers, MemoryStorage;</li>
+                <li>a worker service on Railway (separate Procfile, no healthcheck);</li>
+                <li>secure auth via a one-time deep-link token;</li>
+                <li>Alembic migration on a live PostgreSQL with zero data loss;</li>
+                <li>“one backend, two clients” model (web + bot) sharing JWT.</li>
+            </ul>
+        </article>
+
+        <article class="project">
+            <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
+            <h3><span lang="ru"><code>/ask</code>: AI-консультант через&nbsp;Telegram</span><span lang="en"><code>/ask</code>: AI advisor through Telegram</span></h3>
+            <p class="goal" lang="ru">Цель: добавить в&nbsp;бота команду <code>/ask &lt;вопрос&gt;</code>, которая проксирует запрос в&nbsp;ваш эндпоинт <code>/api/advisor/ask</code> из&nbsp;этапа&nbsp;06 проект&nbsp;B. Тот&nbsp;же AI, та&nbsp;же модель, тот&nbsp;же контекст пользователя&nbsp;&mdash; теперь под&nbsp;рукой.</p>
+            <p class="goal" lang="en">Goal: add an <code>/ask &lt;question&gt;</code> command to the bot that proxies into your <code>/api/advisor/ask</code> from etape-06 project B. Same AI, same model, same user context — now in your pocket.</p>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li>Хендлер <code>/ask</code> в&nbsp;<code>main_router</code>:
+                    <pre class="shell">&gt; добавь handler /ask:
+&gt; — берёт всё после команды как вопрос (message.text без "/ask ")
+&gt; — если пусто — отвечает «использование: /ask &lt;ваш вопрос&gt;»
+&gt; — достаёт JWT, шлёт POST на BACKEND_URL/api/advisor/ask
+&gt;   с { question } и Authorization: Bearer JWT
+&gt; — пока ждёт ответа: сразу шлёт «думаю…» через bot.send_chat_action(action="typing")
+&gt;   в фоне через asyncio.create_task — каждые 4 секунды повторяй
+&gt; — получив ответ, шлёт answer + строку «модель: sonnet · ~123 токенов» курсивом</pre>
+                </li>
+                <li>Длинные ответы Telegram режет на&nbsp;4096 символов. Если ответ длиннее&nbsp;&mdash; разбейте на&nbsp;несколько сообщений (aiogram умеет, но&nbsp;надо явно):
+                    <pre class="shell">&gt; добавь функцию send_long(message, text, max=4000):
+&gt; — режет text на куски по абзацам
+&gt; — отправляет последовательно через message.answer
+&gt; — пометь parse_mode="Markdown" чтобы списки и **жирный** работали
+&gt; — экранируй спецсимволы Markdown в исходном ответе</pre>
+                </li>
+                <li>Rate limiting на&nbsp;стороне бота (бережём и&nbsp;Anthropic-кредиты, и&nbsp;Telegram-API):
+                    <pre class="shell">&gt; добавь middleware на main_router:
+&gt; — для команды /ask: не больше 5 вопросов в минуту от одного telegram_id
+&gt; — храни счётчики в storage с TTL 60 секунд
+&gt; — при превышении: «лимит /ask: 5 в минуту, попробуйте позже» и без вызова backend</pre>
+                </li>
+                <li>Кнопки быстрых вопросов после&nbsp;<code>/start</code>:
+                    <pre class="shell">&gt; после успешной привязки в /start добавь reply-keyboard:
+&gt; [📊 Портфель] [🕒 Последние] [🔮 Прогноз]
+&gt; [💬 Спросить AI]
+&gt; кнопка "Спросить AI" — превращается в forced reply «о чём спросить?»,
+&gt; а ответ пользователя обрабатывается как /ask &lt;ответ&gt;</pre>
+                </li>
+                <li>Деплой. Бот на&nbsp;Railway сам перезапустится после <code>git push</code>. Backend трогать не&nbsp;надо&nbsp;&mdash; <code>/api/advisor/ask</code> уже есть.</li>
+                <li>Verification:
+                    <pre class="shell">&gt; в Telegram:
+&gt; — отправь /ask «оцени риск моего портфеля»
+&gt; — увидь индикатор «typing…», потом ответ
+&gt; — в ответе упомянуты ТВОИ тикеры
+&gt; — ниже строка «модель: sonnet · ~XXX токенов»
+&gt; — отправь второй такой же вопрос — токенов меньше (cache hit)
+&gt; — отправь 6 вопросов подряд — на 6-м увидь «лимит»
+&gt; — кнопка «Спросить AI» работает</pre>
+                </li>
+                <li>Финальный аудит: <em>«посмотри логи backend и&nbsp;бота за&nbsp;последний час. найди следы текстов вопросов или ответов AI. это нормально (debug) или утечка (PII)? предложи политику логирования»</em>.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li>Handler <code>/ask</code> in <code>main_router</code>:
+                    <pre class="shell">&gt; add /ask handler:
+&gt; — take everything after the command as the question
+&gt; — if empty — reply "usage: /ask &lt;your question&gt;"
+&gt; — fetch JWT, POST to BACKEND_URL/api/advisor/ask
+&gt;   with { question } and Authorization: Bearer JWT
+&gt; — while waiting: send bot.send_chat_action("typing")
+&gt;   via asyncio.create_task, repeat every 4s
+&gt; — on reply, send answer + a small italic line "model: sonnet · ~123 tokens"</pre>
+                </li>
+                <li>Telegram trims at 4096 chars. Longer answers — split:
+                    <pre class="shell">&gt; add send_long(message, text, max=4000):
+&gt; — splits text on paragraph boundaries
+&gt; — sends sequentially via message.answer
+&gt; — parse_mode="Markdown" so lists and **bold** work
+&gt; — escape Markdown specials in the input</pre>
+                </li>
+                <li>Bot-side rate limiting (saves Anthropic credits and Telegram quota):
+                    <pre class="shell">&gt; add a middleware on main_router:
+&gt; — for /ask: max 5 questions per minute per telegram_id
+&gt; — counters in storage with 60-sec TTL
+&gt; — on overflow: "limit: 5/min, try later" and skip the backend call</pre>
+                </li>
+                <li>Quick-question buttons after <code>/start</code>:
+                    <pre class="shell">&gt; after a successful link in /start, add a reply keyboard:
+&gt; [📊 Portfolio] [🕒 Latest] [🔮 Forecast]
+&gt; [💬 Ask AI]
+&gt; "Ask AI" turns into a forced reply "what to ask?",
+&gt; the user's reply is treated as /ask &lt;reply&gt;</pre>
+                </li>
+                <li>Deploy. The bot redeploys on <code>git push</code>. Don’t touch backend — <code>/api/advisor/ask</code> already exists.</li>
+                <li>Verification:
+                    <pre class="shell">&gt; in Telegram:
+&gt; — send /ask "rate my portfolio's risk"
+&gt; — see "typing…" then the answer
+&gt; — answer mentions YOUR tickers
+&gt; — line below "model: sonnet · ~XXX tokens"
+&gt; — send the same question again — tokens drop (cache hit)
+&gt; — send 6 in a row — 6th hits the rate limit
+&gt; — "Ask AI" button works</pre>
+                </li>
+                <li>Final audit: <em>“scan backend and bot logs from the last hour. Find traces of question or answer texts. Is this debug noise or PII? Propose a logging policy”</em>.</li>
+            </ol>
+
+            <h4 lang="ru">Что вы здесь освоили</h4>
+            <h4 lang="en">What you mastered here</h4>
+            <ul lang="ru">
+                <li>проксирование между ботом и&nbsp;собственным backend (HTTP + JWT);</li>
+                <li>UX: «typing…», разбивка длинных ответов, reply-keyboard;</li>
+                <li>rate limiting на&nbsp;уровне middleware aiogram;</li>
+                <li>двойная экономия токенов: prompt caching на&nbsp;backend + лимит вызовов на&nbsp;боте;</li>
+                <li>политику логирования: debug-удобство vs PII-риск.</li>
+            </ul>
+            <ul lang="en">
+                <li>proxying between a bot and your own backend (HTTP + JWT);</li>
+                <li>UX: “typing…”, long-answer splitting, reply keyboard;</li>
+                <li>aiogram middleware-level rate limiting;</li>
+                <li>double token savings: prompt caching on backend + bot-side call limits;</li>
+                <li>a logging policy: debug ease vs PII risk.</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== SOLO PROJECTS ===================== -->
+<section>
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ IV · <span lang="ru">Самостоятельные проекты</span><span lang="en">Solo projects</span></span>
+            <h2><span lang="ru">Те&nbsp;же приёмы, ваши идеи</span><span lang="en">Same moves, your ideas</span></h2>
+        </div>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
+            <h3><span lang="ru">Бот для&nbsp;вашей коллекции</span><span lang="en">A bot for your collection</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; тот&nbsp;же deep-link auth, тот&nbsp;же worker-сервис, та&nbsp;же миграция схемы&nbsp;&mdash; но&nbsp;для&nbsp;сервиса коллекции (этап&nbsp;06, проект&nbsp;C). Команды: <code>/start &lt;token&gt;</code>, <code>/list</code>, <code>/random</code>, <code>/add &lt;название&gt;</code>.</p>
+            <p class="goal" lang="en">Goal: variation of A — same deep-link auth, same worker service, same schema migration — but for the collection service (etape-06 project C). Commands: <code>/start &lt;token&gt;</code>, <code>/list</code>, <code>/random</code>, <code>/add &lt;title&gt;</code>.</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Скелет тот&nbsp;же. Меняются только хендлеры и&nbsp;backend-эндпоинты, к&nbsp;которым ходим.</li>
+                <li>Отдельный бот в&nbsp;BotFather (<code>my_collection_bot</code>) и&nbsp;отдельный <code>TELEGRAM_BOT_TOKEN_COLLECTION</code> в&nbsp;env. <em>Не&nbsp;используйте один токен на&nbsp;двух ботов</em>.</li>
+                <li><code>/random</code>&nbsp;&mdash; backend возвращает один случайный элемент коллекции пользователя; формат с&nbsp;картинкой через <code>InputMediaPhoto</code>.</li>
+                <li><code>/add «Норвежский лес» Мураками</code>&nbsp;&mdash; парсит название после команды, шлёт <code>POST /api/items</code>; в&nbsp;ответ&nbsp;&mdash; «добавлено, всего у&nbsp;вас 27 элементов».</li>
+                <li>Опционально: голосовое сообщение с&nbsp;названием книги&nbsp;&mdash; распознаёте через ваш <code>/api/advisor</code> (или новый эндпоинт), это позже в&nbsp;этапе&nbsp;10.</li>
+            </ul>
+            <ul lang="en">
+                <li>Same skeleton. Only handlers and backend URLs change.</li>
+                <li>Separate bot in BotFather (<code>my_collection_bot</code>) and a separate <code>TELEGRAM_BOT_TOKEN_COLLECTION</code> env var. <em>Never share a token between two bots</em>.</li>
+                <li><code>/random</code> — backend returns a random item; format with image via <code>InputMediaPhoto</code>.</li>
+                <li><code>/add "Norwegian Wood" Murakami</code> — parse the title after the command, POST to <code>/api/items</code>; reply: “added, 27 items total”.</li>
+                <li>Optional: voice message with the book’s name — handled via your <code>/api/advisor</code> (or a new endpoint) — that’s etape 10 territory.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                    <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
+                    <span class="summary-hint" lang="en">— do it first, check after</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li>в&nbsp;коллекционном кабинете есть кнопка «Привязать Telegram»;</li>
+                        <li>после привязки бот возвращает 3&nbsp;последних элемента по&nbsp;<code>/list</code>;</li>
+                        <li><code>/random</code> возвращает разные элементы при&nbsp;повторных вызовах;</li>
+                        <li><code>/add</code> добавляет новый элемент, в&nbsp;вебе он&nbsp;тут&nbsp;же виден;</li>
+                        <li>другой telegram-аккаунт после&nbsp;<code>/start</code> своим токеном видит свою коллекцию;</li>
+                        <li>в&nbsp;логах нет ни&nbsp;токенов, ни&nbsp;названий элементов (приватные).</li>
+                    </ul>
+                    <ul lang="en">
+                        <li>the collection office has a “Link Telegram” button;</li>
+                        <li>after linking, the bot returns 3 latest items via <code>/list</code>;</li>
+                        <li><code>/random</code> returns different items on repeat calls;</li>
+                        <li><code>/add</code> adds a new item, visible on the web instantly;</li>
+                        <li>another Telegram account after their own <code>/start</code> sees their collection;</li>
+                        <li>no tokens or item titles in logs (private).</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Сравни мои bot/ из&nbsp;проекта&nbsp;A и&nbsp;этого C: 80% кода&nbsp;&mdash; одинаковое (auth, storage, error handling). Можно&nbsp;ли вынести в&nbsp;<code>shared_bot/</code>-пакет, чтобы каждый новый бот сводился к&nbsp;своим хендлерам и&nbsp;BACKEND_URL? Покажи структуру».</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“Compare my bot/ from project A and from this C: 80% of code is the same (auth, storage, error handling). Could we extract a <code>shared_bot/</code> package so each new bot collapses to its handlers and BACKEND_URL? Show the structure.”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+
+        <article class="project solo">
+            <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
+            <h3><span lang="ru">Бот-дайджест: новости в&nbsp;9:00</span><span lang="en">Digest bot: news at 9:00</span></h3>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; тот&nbsp;же deep-link, та&nbsp;же модель «бот&nbsp;+ backend»&nbsp;&mdash; но&nbsp;добавляется <strong>планировщик</strong>. Каждое утро в&nbsp;9:00 бот сам присылает вам отжатый дайджест ваших RSS-лент из&nbsp;этапа&nbsp;03 (или ваш AI-консультант про портфель). Команды: <code>/subscribe</code>, <code>/unsubscribe</code>, <code>/digest</code> (получить сейчас).</p>
+            <p class="goal" lang="en">Goal: variation of A — same deep-link, same “bot + backend” model — plus a <strong>scheduler</strong>. Every morning at 9:00 the bot pushes you a distilled digest of your RSS feeds from etape 03 (or your AI advisor on the portfolio). Commands: <code>/subscribe</code>, <code>/unsubscribe</code>, <code>/digest</code> (get one now).</p>
+
+            <h4 lang="ru">Подсказки</h4>
+            <h4 lang="en">Hints</h4>
+            <ul lang="ru">
+                <li>Планировщик: <a href="https://apscheduler.readthedocs.io">APScheduler</a> внутри того&nbsp;же worker-процесса бота. Один <code>AsyncIOScheduler</code>, одна задача с&nbsp;cron-триггером «9:00 МСК ежедневно».</li>
+                <li>В&nbsp;БД таблица <code>DigestSubscription(user_id, hour, timezone, sources)</code>. Бот при&nbsp;запуске читает все подписки и&nbsp;ставит задачи; команды <code>/subscribe</code> и&nbsp;<code>/unsubscribe</code> добавляют/удаляют.</li>
+                <li>Контент дайджеста: либо ваш RSS-парсер из&nbsp;этапа&nbsp;03, либо вызов <code>/api/advisor/ask</code> с&nbsp;вопросом «дай мне утренний обзор по&nbsp;портфелю».</li>
+                <li><strong>Часовой пояс</strong>&nbsp;&mdash; неочевидная ловушка. Хранить в&nbsp;БД offset (Europe/Moscow), а&nbsp;не «9:00» как локальное; иначе при&nbsp;деплое в&nbsp;другую зону всё съедет на&nbsp;3&nbsp;часа.</li>
+                <li>Рассылка: <code>bot.send_message(chat_id=user.telegram_id, ...)</code>&nbsp;&mdash; здесь не&nbsp;нужен JWT, потому что бот пишет <em>сам</em>, а&nbsp;не&nbsp;по&nbsp;запросу пользователя; но&nbsp;<code>telegram_id</code> уже сохранён в&nbsp;User.</li>
+            </ul>
+            <ul lang="en">
+                <li>Scheduler: <a href="https://apscheduler.readthedocs.io">APScheduler</a> in the same worker process. One <code>AsyncIOScheduler</code>, one cron task “9:00 daily”.</li>
+                <li>DB table <code>DigestSubscription(user_id, hour, timezone, sources)</code>. The bot reads subscriptions on start and registers tasks; <code>/subscribe</code>/<code>/unsubscribe</code> mutate.</li>
+                <li>Digest content: either your etape-03 RSS parser, or a call to <code>/api/advisor/ask</code> with “give me a morning portfolio summary”.</li>
+                <li><strong>Time zones</strong> — non-obvious trap. Store an IANA zone (Europe/Moscow), not local “9:00”; otherwise deploying elsewhere shifts everything by 3 hours.</li>
+                <li>Sending: <code>bot.send_message(chat_id=user.telegram_id, ...)</code> — JWT isn’t needed here because the bot pushes <em>by itself</em>, not on the user’s request; <code>telegram_id</code> is already in User.</li>
+            </ul>
+
+            <details class="verify">
+                <summary>
+                    <span lang="ru">раскрыть после самостоятельной работы</span>
+                    <span lang="en">open after you finish on your own</span>
+                </summary>
+                <div class="verify-body">
+                    <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
+                    <ul lang="ru">
+                        <li><code>/subscribe 9:00 Europe/Moscow</code> сохраняет подписку;</li>
+                        <li>ровно в&nbsp;9:00 ваш Telegram пиликает дайджестом;</li>
+                        <li><code>/digest</code> присылает ту&nbsp;же сборку прямо сейчас;</li>
+                        <li><code>/unsubscribe</code> отключает рассылку;</li>
+                        <li>после рестарта worker-сервиса подписки восстановлены из&nbsp;БД (не&nbsp;потерялись);</li>
+                        <li>другой пользователь подписан на&nbsp;другое время и&nbsp;получает свой дайджест.</li>
+                    </ul>
+                    <ul lang="en">
+                        <li><code>/subscribe 9:00 Europe/Moscow</code> saves it;</li>
+                        <li>exactly at 9:00 your Telegram dings with the digest;</li>
+                        <li><code>/digest</code> sends the same compilation right now;</li>
+                        <li><code>/unsubscribe</code> stops it;</li>
+                        <li>after a worker restart, subscriptions are rebuilt from DB (not lost);</li>
+                        <li>another user with a different time gets their own digest.</li>
+                    </ul>
+                    <div class="ask" lang="ru">
+                        <strong>Спросите Claude напоследок</strong>
+                        <em>«Что произойдёт, если бот упадёт ровно в&nbsp;9:00 и&nbsp;поднимется в&nbsp;9:01? Дайджесты отправятся? Если да&nbsp;&mdash; всем сразу, или только опоздавшим? Как сделать, чтобы при&nbsp;«опоздании» рассылка всё&nbsp;же прошла, но&nbsp;не&nbsp;дублировалась при&nbsp;нескольких рестартах?»</em>
+                    </div>
+                    <div class="ask" lang="en">
+                        <strong>Ask Claude last</strong>
+                        <em>“What if the bot crashes at exactly 9:00 and comes back at 9:01? Do digests fire? To all, or only to those missed? How do we make late-firing reliable but not duplicate across multiple restarts?”</em>
+                    </div>
+                </div>
+            </details>
+        </article>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ V · <span lang="ru">Словарь этапа</span><span lang="en">Etape glossary</span></span>
+            <h2><span lang="ru">Что новое всплыло</span><span lang="en">New terms that surfaced</span></h2>
+        </div>
+
+        <dl class="glossary">
+            <dt>BotFather</dt>
+            <dd>
+                <p lang="ru">Официальный сервис Telegram, через который создают и&nbsp;настраивают ботов. Это сам бот <code>@BotFather</code>, с&nbsp;которым вы&nbsp;общаетесь как с&nbsp;человеком: <code>/newbot</code>, <code>/setdescription</code>, <code>/revoke</code>.</p>
+                <p lang="en">Telegram’s official service for creating and configuring bots. It is itself the bot <code>@BotFather</code> you chat with like a human: <code>/newbot</code>, <code>/setdescription</code>, <code>/revoke</code>.</p>
+            </dd>
+            <dt><span lang="ru">Токен бота</span><span lang="en">Bot token</span></dt>
+            <dd>
+                <p lang="ru">Секретная строка вида <code>1234567890:AAH...</code>, через которую ваш код подключается к&nbsp;Telegram и&nbsp;«притворяется» ботом. Утечка = полный контроль над&nbsp;ботом. Хранится только в&nbsp;<code>TELEGRAM_BOT_TOKEN</code> в&nbsp;env, ротируется через BotFather <code>/revoke</code>.</p>
+                <p lang="en">A secret string like <code>1234567890:AAH...</code> your code uses to authenticate as the bot. Leak = full bot control. Lives only in <code>TELEGRAM_BOT_TOKEN</code> env, rotated via BotFather <code>/revoke</code>.</p>
+            </dd>
+            <dt>Long polling</dt>
+            <dd>
+                <p lang="ru">Режим работы, при&nbsp;котором ваш бот сам непрерывно спрашивает Telegram «есть новые события?». Простой, не&nbsp;требует HTTPS-эндпоинта, годится для&nbsp;учебных и&nbsp;маленьких ботов.</p>
+                <p lang="en">A mode where your bot continuously asks Telegram “any new events?”. Simple, no HTTPS endpoint required, fine for learning and small bots.</p>
+            </dd>
+            <dt>Webhook</dt>
+            <dd>
+                <p lang="ru">Альтернатива long polling: вы&nbsp;даёте Telegram свой публичный HTTPS-URL, и&nbsp;он&nbsp;сам присылает на&nbsp;него POST на&nbsp;каждое событие. Дешевле по&nbsp;ресурсам, нужен публичный домен с&nbsp;SSL.</p>
+                <p lang="en">Alternative to long polling: you give Telegram a public HTTPS URL, it POSTs each event to you. Cheaper on resources, needs a public domain with SSL.</p>
+            </dd>
+            <dt>aiogram</dt>
+            <dd>
+                <p lang="ru">Python-фреймворк для&nbsp;Telegram-ботов. Версия 3.x&nbsp;&mdash; современная, async, роутерная архитектура. Аналог FastAPI, но&nbsp;для&nbsp;Telegram-событий.</p>
+                <p lang="en">A Python framework for Telegram bots. Version 3.x — modern, async, router-based. Analogous to FastAPI but for Telegram events.</p>
+            </dd>
+            <dt><span lang="ru">Worker-сервис</span><span lang="en">Worker service</span></dt>
+            <dd>
+                <p lang="ru">Долгоживущий процесс на&nbsp;сервере, который не&nbsp;слушает HTTP, а&nbsp;делает свою работу: опрашивает очередь, шлёт уведомления, считает по&nbsp;расписанию. На&nbsp;Railway указывается через <code>Procfile</code> с&nbsp;типом <code>worker</code>.</p>
+                <p lang="en">A long-running server process that doesn’t answer HTTP — it does background work: polls queues, pushes notifications, runs scheduled jobs. On Railway: <code>Procfile</code> with type <code>worker</code>.</p>
+            </dd>
+            <dt>Deep-link</dt>
+            <dd>
+                <p lang="ru">Ссылка вида <code>https://t.me/&lt;bot&gt;?start=&lt;payload&gt;</code>: при&nbsp;клике Telegram открывает чат с&nbsp;ботом и&nbsp;передаёт ему <code>payload</code> как аргумент команды <code>/start</code>. Главный приём для&nbsp;безопасной авторизации&nbsp;&mdash; передаём одноразовый токен, не&nbsp;email/пароль.</p>
+                <p lang="en">A URL like <code>https://t.me/&lt;bot&gt;?start=&lt;payload&gt;</code>: tapping it opens the bot and passes <code>payload</code> as the <code>/start</code> argument. The key trick for secure auth — pass a one-time token, not email/password.</p>
+            </dd>
+            <dt><span lang="ru">FSM (конечный автомат)</span><span lang="en">FSM (finite state machine)</span></dt>
+            <dd>
+                <p lang="ru">Способ запомнить, в&nbsp;каком «шаге» диалога находится конкретный пользователь («жду email»&nbsp;→ «жду пароль»&nbsp;→ «всё ввёл»). aiogram даёт встроенный FSM-механизм поверх storage.</p>
+                <p lang="en">A way to remember which step a specific user is at (“waiting for email” → “waiting for password” → “done”). aiogram has an FSM built on top of storage.</p>
+            </dd>
+            <dt>MemoryStorage / RedisStorage</dt>
+            <dd>
+                <p lang="ru">Два варианта хранилища FSM в&nbsp;aiogram. Первое&nbsp;&mdash; в&nbsp;памяти процесса (исчезает при&nbsp;рестарте), второе&nbsp;&mdash; в&nbsp;Redis (переживает). Учебный этап на&nbsp;первом.</p>
+                <p lang="en">Two FSM storages in aiogram. First — in-process memory (lost on restart). Second — in Redis (survives). The learning etape uses the first.</p>
+            </dd>
+            <dt>Alembic</dt>
+            <dd>
+                <p lang="ru">Инструмент миграций для&nbsp;SQLAlchemy. Каждое изменение схемы&nbsp;&mdash; отдельный файл с&nbsp;функциями <code>upgrade()</code> и&nbsp;<code>downgrade()</code>. Применяется к&nbsp;живой БД командой <code>alembic upgrade head</code>.</p>
+                <p lang="en">Migration tool for SQLAlchemy. Each schema change is a file with <code>upgrade()</code> and <code>downgrade()</code> functions. Applied to a live DB via <code>alembic upgrade head</code>.</p>
+            </dd>
+            <dt>APScheduler</dt>
+            <dd>
+                <p lang="ru">Python-планировщик задач: cron-выражения, fixed-interval, one-shot. Подходит для&nbsp;«отправь дайджест в&nbsp;9:00» внутри того&nbsp;же процесса бота, без&nbsp;внешнего сервиса.</p>
+                <p lang="en">A Python task scheduler: cron, fixed-interval, one-shot. Good for “send a digest at 9:00” inside the same bot process, no external service.</p>
+            </dd>
+        </dl>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VI · <span lang="ru">Сам&nbsp;себе экзаменатор</span><span lang="en">Self-quiz</span></span>
+            <h2><span lang="ru">Семь вопросов</span><span lang="en">Seven questions</span></h2>
+        </div>
+        <p class="reading" lang="ru">Сначала ответьте про&nbsp;себя, потом раскройте&nbsp;&mdash; и&nbsp;нажмите «знал/не&nbsp;знал».</p>
+        <p class="reading" lang="en">Answer in your head first, then open and click “knew / didn’t”.</p>
+
+        <ol class="quiz">
+            <li class="quiz-item" data-q="q1">
+                <details>
+                    <summary lang="ru">Почему мы&nbsp;не&nbsp;используем команду <code>/login email password</code> в&nbsp;боте?</summary>
+                    <summary lang="en">Why don’t we use a <code>/login email password</code> command in the bot?</summary>
+                    <div class="answer" lang="ru">Пароль остаётся в&nbsp;истории чата у&nbsp;пользователя, в&nbsp;логах Telegram, в&nbsp;логах бота&nbsp;&mdash; всё равно, что записать его в&nbsp;блокнот. Правильно&nbsp;&mdash; deep-link с&nbsp;одноразовым токеном: пароль остаётся в&nbsp;вебе, бот получает только короткий «ключ» с&nbsp;истекающим сроком.</div>
+                    <div class="answer" lang="en">The password lives in the user’s chat history, Telegram logs, bot logs — basically written down. Use deep-link with a one-time token instead: the password stays in the web, the bot gets only a short, expiring “key”.</div>
+                </details>
+                <div class="quiz-buttons">
+                    <button data-result="known" type="button"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button data-result="unknown" type="button"><span lang="ru">не знал</span><span lang="en">didn’t</span></button>
+                </div>
+            </li>
+            <li class="quiz-item" data-q="q2">
+                <details>
+                    <summary lang="ru">Чем worker-сервис на&nbsp;Railway отличается от&nbsp;web-сервиса?</summary>
+                    <summary lang="en">How does a worker service on Railway differ from a web service?</summary>
+                    <div class="answer" lang="ru">Web слушает <code>$PORT</code> и&nbsp;проходит healthcheck. Worker не&nbsp;слушает порт, healthcheck отключён, в&nbsp;Procfile тип <code>worker</code>. Бот&nbsp;&mdash; worker, потому что он&nbsp;опрашивает Telegram, а&nbsp;не&nbsp;принимает HTTP-запросы.</div>
+                    <div class="answer" lang="en">Web listens on <code>$PORT</code> and passes healthcheck. Worker doesn’t listen, healthcheck off, Procfile type <code>worker</code>. The bot is a worker because it polls Telegram rather than receiving HTTP.</div>
+                </details>
+                <div class="quiz-buttons">
+                    <button data-result="known" type="button"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button data-result="unknown" type="button"><span lang="ru">не знал</span><span lang="en">didn’t</span></button>
+                </div>
+            </li>
+            <li class="quiz-item" data-q="q3">
+                <details>
+                    <summary lang="ru">Что произойдёт с&nbsp;JWT пользователей при&nbsp;рестарте бота, если использовать <code>MemoryStorage</code>?</summary>
+                    <summary lang="en">What happens to user JWTs on a bot restart with <code>MemoryStorage</code>?</summary>
+                    <div class="answer" lang="ru">Все JWT исчезнут&nbsp;&mdash; они жили в&nbsp;памяти процесса. При&nbsp;следующей команде пользователь увидит «привязка истекла, зайдите снова». Решение для&nbsp;production&nbsp;&mdash; <code>RedisStorage</code>: одна строка кода, переживает рестарт.</div>
+                    <div class="answer" lang="en">All JWTs disappear — they were in process memory. On the next command the user sees “link expired”. Production solution — <code>RedisStorage</code>: one line of code, survives restarts.</div>
+                </details>
+                <div class="quiz-buttons">
+                    <button data-result="known" type="button"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button data-result="unknown" type="button"><span lang="ru">не знал</span><span lang="en">didn’t</span></button>
+                </div>
+            </li>
+            <li class="quiz-item" data-q="q4">
+                <details>
+                    <summary lang="ru">Почему колонку <code>telegram_id</code> в&nbsp;<code>User</code> делаем nullable, а&nbsp;не&nbsp;NOT NULL?</summary>
+                    <summary lang="en">Why is the <code>telegram_id</code> column on <code>User</code> nullable, not NOT NULL?</summary>
+                    <div class="answer" lang="ru">У&nbsp;старых пользователей Telegram ещё не&nbsp;привязан, у&nbsp;них колонка должна быть пустой. Если поставить NOT&nbsp;NULL без <code>default</code>, миграция упадёт на&nbsp;первой&nbsp;же существующей строке. Nullable&nbsp;+ unique&nbsp;&mdash; правильный компромисс.</div>
+                    <div class="answer" lang="en">Existing users haven’t linked Telegram — the column must be empty for them. NOT NULL without a default would fail on the first existing row. Nullable + unique is the right compromise.</div>
+                </details>
+                <div class="quiz-buttons">
+                    <button data-result="known" type="button"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button data-result="unknown" type="button"><span lang="ru">не знал</span><span lang="en">didn’t</span></button>
+                </div>
+            </li>
+            <li class="quiz-item" data-q="q5">
+                <details>
+                    <summary lang="ru">Если кто-то завладел вашим <code>TELEGRAM_BOT_TOKEN</code>, что он&nbsp;может сделать прямо сейчас?</summary>
+                    <summary lang="en">If someone gets your <code>TELEGRAM_BOT_TOKEN</code>, what can they do right now?</summary>
+                    <div class="answer" lang="ru">Притвориться вашим ботом и&nbsp;писать вашим пользователям&nbsp;&mdash; например, фишинговую ссылку «обнови привязку». Это страшно потому, что пользователи доверяют боту. Защита: <code>/revoke</code> в&nbsp;BotFather&nbsp;&mdash; старый токен умирает мгновенно, новый ставите в&nbsp;Railway env. Всё.</div>
+                    <div class="answer" lang="en">Impersonate your bot and DM your users — e.g. a phishing “re-link” URL. Bad because users trust the bot. Defense: <code>/revoke</code> in BotFather — the old token dies instantly, set the new one in Railway env. Done.</div>
+                </details>
+                <div class="quiz-buttons">
+                    <button data-result="known" type="button"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button data-result="unknown" type="button"><span lang="ru">не знал</span><span lang="en">didn’t</span></button>
+                </div>
+            </li>
+            <li class="quiz-item" data-q="q6">
+                <details>
+                    <summary lang="ru">Зачем хранить часовой пояс отдельно от&nbsp;«часа отправки» в&nbsp;<code>DigestSubscription</code>?</summary>
+                    <summary lang="en">Why store time zone separately from “send hour” in <code>DigestSubscription</code>?</summary>
+                    <div class="answer" lang="ru">Сервер на&nbsp;Railway может работать в&nbsp;UTC, и&nbsp;«9:00» без&nbsp;зоны интерпретируется как 9:00 UTC&nbsp;&mdash; в&nbsp;Москве это будет 12:00. Храните IANA-зону (<code>Europe/Moscow</code>), и&nbsp;APScheduler сам пересчитает.</div>
+                    <div class="answer" lang="en">Railway runs in UTC, “9:00” without zone is 9:00 UTC — in Moscow that’s 12:00. Store an IANA zone (<code>Europe/Moscow</code>) and APScheduler does the math.</div>
+                </details>
+                <div class="quiz-buttons">
+                    <button data-result="known" type="button"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button data-result="unknown" type="button"><span lang="ru">не знал</span><span lang="en">didn’t</span></button>
+                </div>
+            </li>
+            <li class="quiz-item" data-q="q7">
+                <details>
+                    <summary lang="ru">Почему в&nbsp;проекте&nbsp;C мы&nbsp;завели <em>отдельного</em> бота через BotFather, а&nbsp;не&nbsp;использовали токен из&nbsp;проекта&nbsp;A?</summary>
+                    <summary lang="en">Why did project C use a <em>separate</em> bot via BotFather, not the project-A token?</summary>
+                    <div class="answer" lang="ru">Один токен&nbsp;&mdash; один бот. Если запустить два процесса с&nbsp;одним токеном, Telegram отдаст событие случайному из&nbsp;них (или одному, отключив другого). Каждое приложение&nbsp;&mdash; свой бот, свой токен, свой <code>@username</code>.</div>
+                    <div class="answer" lang="en">One token — one bot. Two processes with the same token: Telegram routes events to a random one (or kicks one off). Each app — its own bot, token, <code>@username</code>.</div>
+                </details>
+                <div class="quiz-buttons">
+                    <button data-result="known" type="button"><span lang="ru">знал</span><span lang="en">knew</span></button>
+                    <button data-result="unknown" type="button"><span lang="ru">не знал</span><span lang="en">didn’t</span></button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="quiz-summary"></div>
+    </div>
+</section>
+
+<hr class="ornament">
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+    <div class="shell">
+        <div class="section-head">
+            <span class="num">§ VII · <span lang="ru">Чек-лист завершения этапа</span><span lang="en">Etape completion checklist</span></span>
+            <h2><span lang="ru">Что должно быть в&nbsp;кармане</span><span lang="en">What you should have in your pocket</span></h2>
+        </div>
+
+        <ul class="checklist">
+            <li data-key="e6b-botfather">
+                <span lang="ru">Создал бота через BotFather, токен лежит только в&nbsp;<code>TELEGRAM_BOT_TOKEN</code> в&nbsp;Railway env.</span>
+                <span lang="en">Created a bot via BotFather, token only in <code>TELEGRAM_BOT_TOKEN</code> in Railway env.</span>
+            </li>
+            <li data-key="e6b-aiogram">
+                <span lang="ru">Понимаю структуру aiogram: routers, handlers, MemoryStorage. Могу объяснить отличие от&nbsp;FastAPI.</span>
+                <span lang="en">I understand aiogram: routers, handlers, MemoryStorage. I can explain how it differs from FastAPI.</span>
+            </li>
+            <li data-key="e6b-worker">
+                <span lang="ru">Запустил бота на&nbsp;Railway как worker-сервис: <code>Procfile worker:</code>, healthcheck отключён.</span>
+                <span lang="en">I ran the bot on Railway as a worker service: <code>Procfile worker:</code>, healthcheck off.</span>
+            </li>
+            <li data-key="e6b-deeplink">
+                <span lang="ru">Реализовал deep-link auth: одноразовый токен, 5&nbsp;минут срок, NO password в&nbsp;Telegram.</span>
+                <span lang="en">I implemented deep-link auth: one-time token, 5-minute TTL, NO password in Telegram.</span>
+            </li>
+            <li data-key="e6b-migration">
+                <span lang="ru">Накатил Alembic-миграцию на&nbsp;живой PostgreSQL после&nbsp;<code>pg_dump</code>, без&nbsp;потери данных.</span>
+                <span lang="en">I applied an Alembic migration to live PostgreSQL after <code>pg_dump</code>, no data loss.</span>
+            </li>
+            <li data-key="e6b-commands">
+                <span lang="ru">Команды <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>, <code>/ask</code> работают и&nbsp;возвращают <em>мои</em> данные.</span>
+                <span lang="en">Commands <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>, <code>/ask</code> work and return <em>my</em> data.</span>
+            </li>
+            <li data-key="e6b-multiuser">
+                <span lang="ru">Проверено на&nbsp;двух Telegram-аккаунтах: каждый видит только свои данные.</span>
+                <span lang="en">Verified on two Telegram accounts: each sees only their own data.</span>
+            </li>
+            <li data-key="e6b-revoke">
+                <span lang="ru">Знаю, как ротировать токен в&nbsp;BotFather через&nbsp;<code>/revoke</code>, и&nbsp;куда его&nbsp;потом ставить.</span>
+                <span lang="en">I know how to rotate the token via BotFather <code>/revoke</code> and where to put the new one.</span>
+            </li>
+            <li data-key="e6b-delivery">
+                <span lang="ru">Сделал минимум проекты&nbsp;A и&nbsp;B; один из&nbsp;соло-проектов (C или D) либо в&nbsp;работе, либо завершён.</span>
+                <span lang="en">Finished projects A and B; one solo (C or D) either in flight or done.</span>
+            </li>
+        </ul>
+
+        <div class="complete-bar">
+            <p lang="ru">Готовы закрыть этап? Нажатие фиксирует прогресс на&nbsp;главной&nbsp;странице.</p>
+            <p lang="en">Ready to close the etape? The button records progress on the home page.</p>
+            <button class="btn-complete" data-id="etap-06b" type="button">
+                <span lang="ru">Отметить этап завершённым</span><span lang="en">Mark etape complete</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== NAV ===================== -->
+<section class="tight">
+    <div class="shell">
+        <div class="etap-nav">
+            <a class="prev" href="etap-06.html">
+                <span class="step-label"><span lang="ru">← Предыдущий</span><span lang="en">← Previous</span></span>
+                <span class="step-title"><span lang="ru">06 · Полноценные веб-приложения</span><span lang="en">06 · Full web applications</span></span>
+            </a>
+            <a class="next" href="etap-07.html">
+                <span class="step-label"><span lang="ru">Следующий →</span><span lang="en">Next →</span></span>
+                <span class="step-title"><span lang="ru">07 · Subagents и&nbsp;команды агентов</span><span lang="en">07 · Subagents &amp; agent teams</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+    <div class="shell inner">
+        <div>
+            <p class="signature" lang="ru">«Безопасно&nbsp;&mdash; это&nbsp;значит, что даже если кто-то получит ключ, он&nbsp;не&nbsp;получит ваших людей».</p>
+            <p class="signature" lang="en">“Safe means: even if someone gets the key, they don’t get your users.”</p>
+            <p lang="ru">Этап&nbsp;06b пройден&nbsp;&mdash; ваш кабинет в&nbsp;кармане, и&nbsp;сделан он&nbsp;<em>правильно</em>: без&nbsp;паролей в&nbsp;Telegram, с&nbsp;коротко-живущими токенами, с&nbsp;возможностью отвязать. Дальше&nbsp;&mdash; этап&nbsp;07: учим Claude нанимать команду стажёров.</p>
+            <p lang="en">Etape 06b done — your office is in your pocket, and built <em>right</em>: no passwords in Telegram, short-lived tokens, unlink-anytime. Next — etape 07: teach Claude to hire interns.</p>
+        </div>
+        <div>
+            <h5><span lang="ru">Внутри этапа</span><span lang="en">Inside this etape</span></h5>
+            <ul>
+                <li><a href="#setup">§&nbsp;0 · <span lang="ru">Подготовка</span><span lang="en">Setup</span></a></li>
+                <li><a href="#topics">§&nbsp;I · <span lang="ru">Темы</span><span lang="en">Topics</span></a></li>
+                <li><a href="#projects">§&nbsp;III · <span lang="ru">Проекты</span><span lang="en">Projects</span></a></li>
+                <li><a href="#glossary">§&nbsp;V · <span lang="ru">Словарь</span><span lang="en">Glossary</span></a></li>
+                <li><a href="#quiz">§&nbsp;VI · Quiz</a></li>
+                <li><a href="#checklist">§&nbsp;VII · <span lang="ru">Чек-лист</span><span lang="en">Checklist</span></a></li>
+            </ul>
+        </div>
+        <div>
+            <h5><span lang="ru">Курс</span><span lang="en">Course</span></h5>
+            <ul>
+                <li><a href="../index.html"><span lang="ru">К&nbsp;оглавлению</span><span lang="en">Back to contents</span></a></li>
+                <li><a href="etap-06.html"><span lang="ru">← Этап&nbsp;06</span><span lang="en">← Etape 06</span></a></li>
+                <li><a href="etap-07.html"><span lang="ru">→ Этап&nbsp;07</span><span lang="en">→ Etape 07</span></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../progress.js" defer></script>
+</body>
+</html>

@@ -8,7 +8,7 @@
 
     const ETAPES = [
         'etap-00', 'etap-01', 'etap-02', 'etap-03', 'etap-04',
-        'etap-05', 'etap-06', 'etap-07', 'etap-08a', 'etap-08b',
+        'etap-05', 'etap-06', 'etap-06b', 'etap-07', 'etap-08a', 'etap-08b',
         'etap-09', 'etap-10', 'etap-11', 'capstone'
     ];
 
