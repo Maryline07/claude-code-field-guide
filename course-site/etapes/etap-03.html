@@ -162,7 +162,7 @@
                 <li>Создайте (если ещё нет) файл <code>.gitignore</code> в&nbsp;той&nbsp;же папке и&nbsp;допишите в&nbsp;него одну строку:
                     <pre class="shell">.env</pre>
                     Это говорит git: «никогда не&nbsp;трогай этот файл». Так ключ не&nbsp;уедет в&nbsp;GitHub при&nbsp;коммите.</li>
-                <li>Проверка: в&nbsp;Claude напечатайте <em>«покажи содержимое .env»</em>&nbsp;&mdash; он&nbsp;прочитает и&nbsp;покажет ключ. И&nbsp;<em>«проверь, что .env в&nbsp;.gitignore»</em>&nbsp;&mdash; он&nbsp;подтвердит.</li>
+                <li>Проверка: в&nbsp;Claude напечатайте <em>«проверь, что в&nbsp;.env есть строка ALPHAVANTAGE_KEY, но&nbsp;не&nbsp;показывай само значение»</em>&nbsp;&mdash; он&nbsp;убедится, что строка на&nbsp;месте, и&nbsp;подтвердит. Затем <em>«проверь, что .env в&nbsp;.gitignore»</em>&nbsp;&mdash; он&nbsp;подтвердит и&nbsp;это. <span style="opacity:0.75">(Так значение ключа не&nbsp;попадёт в&nbsp;историю сессии. Подробно&nbsp;&mdash; <a href="etap-05.html">этап&nbsp;05</a>.)</span></li>
             </ol>
             <ol class="steps" lang="en" style="margin-top:0.4rem;">
                 <li>Open <code>portfolio-journal</code> in your file manager. If <code>.env</code> isn’t next to <code>CLAUDE.md</code> yet — create it.<br>
@@ -174,7 +174,7 @@
                 <li>Create (if missing) a <code>.gitignore</code> in the same folder and add one line:
                     <pre class="shell">.env</pre>
                     This tells git: “never touch this file.” The key won’t end up on GitHub on commit.</li>
-                <li>Verify: in Claude type <em>“show the contents of .env”</em> — it’ll read it back and display the key. And <em>“check that .env is in .gitignore”</em> — it’ll confirm.</li>
+                <li>Verify: in Claude type <em>“check that .env contains an ALPHAVANTAGE_KEY line, but don’t show the value”</em> — it confirms the line is there without printing the key. Then <em>“check that .env is in .gitignore”</em> — it confirms that too. <span style="opacity:0.75">(This keeps the key value out of your session history. More on this — <a href="etap-05.html">etape 05</a>.)</span></li>
             </ol>
             <p lang="ru" style="margin:0.6rem 0 0;"><strong>Как Python будет читать ключ:</strong> через <code>os.environ.get("ALPHAVANTAGE_KEY")</code>, либо через библиотеку <code>python-dotenv</code> (Claude поставит её сам, если решит, что она нужна). Вам как пользователю об&nbsp;этом думать не&nbsp;надо&nbsp;&mdash; Claude сделает.</p>
             <p lang="en" style="margin:0.6rem 0 0;"><strong>How Python reads it:</strong> via <code>os.environ.get("ALPHAVANTAGE_KEY")</code>, or through the <code>python-dotenv</code> library (Claude installs it if it decides it’s needed). You don’t have to think about this — Claude does.</p>
