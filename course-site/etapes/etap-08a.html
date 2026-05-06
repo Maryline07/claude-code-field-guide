@@ -121,10 +121,10 @@
             <h3>update-config</h3>
             <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill для&nbsp;управления настройками Claude Code через <code>settings.json</code>. Учит Claude добавлять разрешения, переменные окружения, hooks без&nbsp;ручной правки JSON.<br>
             <strong>Зачем сейчас:</strong> когда настраиваете hooks или output styles, проще сказать Claude «добавь hook на&nbsp;PreToolUse для&nbsp;Bash», чем редактировать конфиг руками.<br>
-            <strong>Устанавливать не&nbsp;нужно:</strong> встроен в&nbsp;Claude Code (как <code>claude-api</code> в&nbsp;этапе&nbsp;06). Проверка&nbsp;&mdash; <code>/skills</code>.</p>
+            <strong>Устанавливать не&nbsp;нужно:</strong> встроен в&nbsp;Claude Code (как <code>claude-api</code> в&nbsp;этапе&nbsp;06). Проверка: напечатайте <code>/</code>&nbsp;&mdash; в&nbsp;меню должен быть <code>/update-config</code>.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that manages Claude Code settings via <code>settings.json</code>. Teaches Claude to add permissions, env vars, hooks without manual JSON editing.<br>
             <strong>Why now:</strong> when you tune hooks or output styles, it’s easier to say “add a PreToolUse hook for Bash” than to edit the config by hand.<br>
-            <strong>No install needed:</strong> built into Claude Code (like <code>claude-api</code> on etape 06). Verify with <code>/skills</code>.</p>
+            <strong>No install needed:</strong> built into Claude Code (like <code>claude-api</code> on etape 06). Verify: type <code>/</code> — the menu should include <code>/update-config</code>.</p>
         </div>
 
         <div class="aside-card" style="margin-top:1.5rem;">
@@ -132,10 +132,10 @@
             <h3>keybindings-help</h3>
             <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill для&nbsp;настройки клавиатурных сокращений в&nbsp;Claude Code (через <code>~/.claude/keybindings.json</code>).<br>
             <strong>Зачем сейчас:</strong> на&nbsp;этапе тренируется привычка «своё&nbsp;&mdash; быстрее»: свои сокращения для&nbsp;частых действий ускоряют работу.<br>
-            <strong>Устанавливать не&nbsp;нужно:</strong> встроен в&nbsp;Claude Code, как <code>update-config</code>. Проверка&nbsp;&mdash; <code>/skills</code>.</p>
+            <strong>Устанавливать не&nbsp;нужно:</strong> встроен в&nbsp;Claude Code, как <code>update-config</code>. Проверка: напечатайте <code>/</code>&nbsp;&mdash; в&nbsp;меню должен быть <code>/keybindings-help</code>.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill for tuning Claude Code keyboard shortcuts (via <code>~/.claude/keybindings.json</code>).<br>
             <strong>Why now:</strong> the etape trains the “your own = faster” habit: custom shortcuts for frequent actions speed you up.<br>
-            <strong>No install needed:</strong> built into Claude Code, like <code>update-config</code>. Verify with <code>/skills</code>.</p>
+            <strong>No install needed:</strong> built into Claude Code, like <code>update-config</code>. Verify: type <code>/</code> — the menu should include <code>/keybindings-help</code>.</p>
         </div>
 
         <div class="note" style="margin-top:1.5rem;">
@@ -583,7 +583,7 @@ Reply as a financial advisor:
                 <li>Перезапустите <code>claude</code>. В&nbsp;начале новой сессии должно появиться сообщение с&nbsp;датой и&nbsp;папкой.</li>
                 <li>Финал&nbsp;&mdash; чек-ин:
                     <pre class="shell">&gt; покажи мне:
-&gt; — список всех skills (&lt;/skills&gt;),
+&gt; — список всех установленных skills,
 &gt; — список slash-команд (/help или /commands),
 &gt; — содержимое моего settings.json.
 &gt; что появилось нового по сравнению с предыдущим этапом?</pre>
@@ -617,7 +617,7 @@ Reply as a financial advisor:
                 <li>Restart <code>claude</code>. A message with date and folder should appear at session start.</li>
                 <li>Final check-in:
                     <pre class="shell">&gt; show me:
-&gt; — the list of skills (/skills),
+&gt; — the list of installed skills,
 &gt; — the list of slash commands (/help or /commands),
 &gt; — the contents of my settings.json.
 &gt; what's new compared to the previous etape?</pre>
@@ -1063,8 +1063,8 @@ Reply as a financial advisor:
                 <details>
                     <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
                     <div class="answer">
-                        <p lang="ru"><strong>Description.</strong> Это «триггер» skill&nbsp;&mdash; Claude читает его и&nbsp;решает, когда применить skill. Чем точнее (5–7 примеров формулировок, ключевых слов, контекстов)&nbsp;&mdash; тем стабильнее работает. Name важен только для&nbsp;идентификации в&nbsp;<code>/skills</code>.</p>
-                        <p lang="en"><strong>Description.</strong> It’s the trigger — Claude reads it and decides when to apply the skill. The sharper (5–7 sample phrasings, keywords, contexts) — the more reliable. Name matters only for the <code>/skills</code> listing.</p>
+                        <p lang="ru"><strong>Description.</strong> Это «триггер» skill&nbsp;&mdash; Claude читает его и&nbsp;решает, когда применить skill. Чем точнее (5–7 примеров формулировок, ключевых слов, контекстов)&nbsp;&mdash; тем стабильнее работает. Name важен только для&nbsp;идентификации в&nbsp;общем <code>/</code>-меню.</p>
+                        <p lang="en"><strong>Description.</strong> It’s the trigger — Claude reads it and decides when to apply the skill. The sharper (5–7 sample phrasings, keywords, contexts) — the more reliable. Name matters only for how the skill shows up in the <code>/</code> menu.</p>
                     </div>
                 </details>
                 <div class="scoring">

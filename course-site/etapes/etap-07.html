@@ -109,10 +109,10 @@
             <h3><code>superpowers:dispatching-parallel-agents</code></h3>
             <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill, который учит Claude правильно <em>отправлять</em> несколько subagents параллельно: формулировать чёткие brief, ждать всех, обрабатывать ошибки одного, не&nbsp;валя весь конвейер.<br>
             <strong>Зачем сейчас:</strong> для&nbsp;Due Diligence нужно запустить четырёх аналитиков одновременно. Без&nbsp;skill Claude может запустить их&nbsp;по&nbsp;очереди&nbsp;&mdash; и&nbsp;время ответа вырастет в&nbsp;четыре раза.<br>
-            <strong>Проверить:</strong> <code>/skills</code>&nbsp;&mdash; skill в&nbsp;списке.</p>
+            <strong>Проверить:</strong> напечатайте <code>/</code>&nbsp;&mdash; skill виден в&nbsp;общем меню как slash-команда (<code>/superpowers:dispatching-parallel-agents</code>).</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude to <em>dispatch</em> several subagents in parallel: write clear briefs, wait for all, handle a single failure without breaking the pipeline.<br>
             <strong>Why now:</strong> Due Diligence needs four analysts at once. Without the skill Claude may run them sequentially — quadrupling the wait.<br>
-            <strong>Check:</strong> <code>/skills</code> — skill in the list.</p>
+            <strong>Check:</strong> type <code>/</code> — the skill shows up in the menu as a slash command (<code>/superpowers:dispatching-parallel-agents</code>).</p>
             <pre class="shell"><span class="cmt"># <span lang="ru">внутри claude (slash-команда, не shell). Пакет тот&nbsp;же, что в&nbsp;этапе&nbsp;04</span><span lang="en">inside claude (slash command, not shell). Same package as on etape 04</span></span>
 /plugin install superpowers@claude-plugins-official</pre>
         </div>

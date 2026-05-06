@@ -625,7 +625,7 @@ server.addTool("get_history", ...);</pre>
                 <li>Чистая установка: возьмите другую папку, в&nbsp;которой ничего нет:
                     <pre class="shell"><span class="prompt">$</span> npx smithery@latest mcp add @&lt;you&gt;/personal-office --client claude</pre>
                 </li>
-                <li>Тест: запустите <code>claude</code> в&nbsp;этой папке. <code>/mcp</code>, <code>/skills</code>, <code>/commands</code>&nbsp;&mdash; всё должно появиться. Прогоните <code>/прогноз</code>, <code>/cfo</code>&nbsp;&mdash; работает.</li>
+                <li>Тест: запустите <code>claude</code> в&nbsp;этой папке. <code>/mcp</code> должен показать <code>daily-trader</code>; в&nbsp;общем <code>/</code>-меню должны появиться скиллы и&nbsp;команды плагина. Прогоните <code>/прогноз</code>, <code>/cfo</code>&nbsp;&mdash; работает.</li>
                 <li>Финал: добавьте теги/категории в&nbsp;Smithery («finance», «investing», «course»), чтобы вас находили.</li>
             </ol>
             <ol class="steps" lang="en">
@@ -661,7 +661,7 @@ server.addTool("get_history", ...);</pre>
                 <li>Clean install: take another folder, totally empty:
                     <pre class="shell"><span class="prompt">$</span> npx smithery@latest mcp add @&lt;you&gt;/personal-office --client claude</pre>
                 </li>
-                <li>Test: launch <code>claude</code> there. <code>/mcp</code>, <code>/skills</code>, <code>/commands</code> — all should appear. Run <code>/forecast</code>, <code>/cfo</code> — works.</li>
+                <li>Test: launch <code>claude</code> there. <code>/mcp</code> should show <code>daily-trader</code>; the general <code>/</code> menu should include the plugin’s skills and commands. Run <code>/forecast</code>, <code>/cfo</code> — works.</li>
                 <li>Finally: add Smithery tags/categories (“finance,” “investing,” “course”) so others find you.</li>
             </ol>
         </article>
@@ -956,8 +956,8 @@ server.addTool("get_history", ...);</pre>
                 <details>
                     <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
                     <div class="answer">
-                        <p lang="ru">Поставить его в&nbsp;<em>чистом</em> окружении (другая папка, другой компьютер, другой&nbsp;OS) и&nbsp;пройти базовый сценарий: <code>/skills</code> и&nbsp;<code>/mcp</code>&nbsp;&mdash; всё на&nbsp;месте; вызвать каждую slash-команду и&nbsp;инструмент MCP&nbsp;&mdash; работает. Если у&nbsp;себя «у&nbsp;меня&nbsp;всё работало», а&nbsp;на&nbsp;чистой машине&nbsp;&mdash; нет, обычно проблема в&nbsp;неуказанной зависимости или невыставленной env-переменной.</p>
-                        <p lang="en">Install in a <em>clean</em> environment (another folder, another machine, another OS) and walk a baseline: <code>/skills</code> and <code>/mcp</code> — all there; call each slash command and MCP tool — works. If it “worked on my machine” but not on a clean one, it’s usually a missing dependency or unset env variable.</p>
+                        <p lang="ru">Поставить его в&nbsp;<em>чистом</em> окружении (другая папка, другой компьютер, другой&nbsp;OS) и&nbsp;пройти базовый сценарий: общее <code>/</code>-меню показывает установленные скиллы и&nbsp;команды; <code>/mcp</code> показывает MCP-серверы; вызвать каждую slash-команду и&nbsp;инструмент MCP&nbsp;&mdash; работает. Если у&nbsp;себя «у&nbsp;меня&nbsp;всё работало», а&nbsp;на&nbsp;чистой машине&nbsp;&mdash; нет, обычно проблема в&nbsp;неуказанной зависимости или невыставленной env-переменной.</p>
+                        <p lang="en">Install in a <em>clean</em> environment (another folder, another machine, another OS) and walk a baseline: the general <code>/</code> menu lists installed skills and commands; <code>/mcp</code> shows MCP servers; call each slash command and MCP tool — works. If it “worked on my machine” but not on a clean one, it’s usually a missing dependency or unset env variable.</p>
                     </div>
                 </details>
                 <div class="scoring">

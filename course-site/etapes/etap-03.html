@@ -132,10 +132,10 @@
             <h3><span lang="ru">Skill <code>excalidraw-diagram-generator</code>&nbsp;&mdash; диаграммы и&nbsp;схемы</span><span lang="en">Skill <code>excalidraw-diagram-generator</code> — diagrams and schemas</span></h3>
             <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> skill, который учит Claude генерировать <code>.excalidraw</code>-файлы&nbsp;&mdash; редактируемые «рукописные» диаграммы. Открываются в&nbsp;<a href="https://excalidraw.com">excalidraw.com</a>.<br>
             <strong>Зачем сейчас:</strong> когда вы&nbsp;вернётесь к&nbsp;проекту через месяц, проще понять архитектуру по&nbsp;диаграмме, чем по&nbsp;коду. Claude нарисует, как у&nbsp;вас связаны API → CSV → дашборд.<br>
-            <strong>Проверить, нет&nbsp;ли уже:</strong> <code>/skills</code> в&nbsp;Claude.</p>
+            <strong>Проверить, нет&nbsp;ли уже:</strong> в&nbsp;Claude напечатайте <code>/</code> и&nbsp;поищите в&nbsp;меню <code>/excalidraw-diagram-generator</code>&nbsp;&mdash; установленные skills появляются там как обычные slash-команды.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude to generate <code>.excalidraw</code> files — editable “sketchy” diagrams. Open in <a href="https://excalidraw.com">excalidraw.com</a>.<br>
             <strong>Why now:</strong> a month later it’s easier to grasp the architecture from a diagram than from code. Claude draws how your API → CSV → dashboard connect.<br>
-            <strong>Check first:</strong> <code>/skills</code> in Claude.</p>
+            <strong>Check first:</strong> in Claude type <code>/</code> and look for <code>/excalidraw-diagram-generator</code> in the menu — installed skills show up there as regular slash commands.</p>
             <pre class="shell"><span class="prompt">$</span> npx smithery@latest skill add github/excalidraw-diagram-generator --agent claude-code</pre>
             <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> <a href="https://smithery.ai/skills/github/excalidraw-diagram-generator">smithery.ai/skills/github/excalidraw-diagram-generator</a>.</p>
             <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> <a href="https://smithery.ai/skills/github/excalidraw-diagram-generator">smithery.ai/skills/github/excalidraw-diagram-generator</a>.</p>
@@ -457,7 +457,7 @@
             <h4><span lang="ru">Прогон №&nbsp;1 · Smoke test всех новых инструментов</span><span lang="en">Run №&nbsp;1 · Smoke test of every new tool</span></h4>
             <ol lang="ru">
                 <li>Запустите Claude в&nbsp;любой папке. Напечатайте <code>/mcp</code>&nbsp;&mdash; должны увидеть <code>playwright</code> и&nbsp;<code>context7</code>.</li>
-                <li>Напечатайте <code>/skills</code>&nbsp;&mdash; должны увидеть <code>frontend-design</code>, <code>excalidraw-diagram-generator</code>, остальные.</li>
+                <li>Напечатайте <code>/</code> и&nbsp;пролистайте меню&nbsp;&mdash; в&nbsp;списке должны быть <code>/frontend-design</code>, <code>/excalidraw-diagram-generator</code>, остальные. Скиллы&nbsp;&mdash; это обычные slash-команды, иногда с&nbsp;пометкой плагина в&nbsp;скобках (например, <code>(superpowers)</code>).</li>
                 <li>Тест WebSearch: <em>«погугли, какая текущая ставка ФРС, верни одной цифрой и&nbsp;ссылкой»</em>.</li>
                 <li>Тест WebFetch: <em>«открой <a href="https://en.wikipedia.org/wiki/Apple_Inc.">en.wikipedia.org/wiki/Apple_Inc.</a> и&nbsp;дай первый абзац»</em>.</li>
                 <li>Тест Playwright: <em>«через playwright открой <a href="https://example.com">example.com</a>, сделай скриншот в&nbsp;окне 1024×768, опиши, что видно»</em>.</li>
@@ -467,7 +467,7 @@
             </ol>
             <ol lang="en">
                 <li>Launch Claude in any folder. Type <code>/mcp</code> — you should see <code>playwright</code> and <code>context7</code>.</li>
-                <li>Type <code>/skills</code> — you should see <code>frontend-design</code>, <code>excalidraw-diagram-generator</code>, others.</li>
+                <li>Type <code>/</code> and scroll the menu — the list should include <code>/frontend-design</code>, <code>/excalidraw-diagram-generator</code>, and others. Skills appear as regular slash commands, sometimes tagged with the plugin name in brackets (e.g. <code>(superpowers)</code>).</li>
                 <li>WebSearch test: <em>“google the current Fed rate, give me one number and a link”</em>.</li>
                 <li>WebFetch test: <em>“open <a href="https://en.wikipedia.org/wiki/Apple_Inc.">en.wikipedia.org/wiki/Apple_Inc.</a> and give me the first paragraph”</em>.</li>
                 <li>Playwright test: <em>“through playwright open <a href="https://example.com">example.com</a>, screenshot at 1024×768, describe what you see”</em>.</li>
@@ -990,8 +990,8 @@
                 <details>
                     <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
                     <div class="answer">
-                        <p lang="ru"><code>/mcp</code> внутри Claude Code (slash-команда). Аналогично <code>/skills</code>&nbsp;&mdash; для&nbsp;skills.</p>
-                        <p lang="en"><code>/mcp</code> inside Claude Code (slash command). Likewise <code>/skills</code> for skills.</p>
+                        <p lang="ru"><code>/mcp</code> внутри Claude Code (slash-команда). А&nbsp;skills проверяются проще: напечатайте <code>/</code> и&nbsp;посмотрите в&nbsp;общем меню&nbsp;&mdash; установленные skills появляются там как обычные slash-команды.</p>
+                        <p lang="en"><code>/mcp</code> inside Claude Code (slash command). Skills are even simpler: type <code>/</code> and check the menu — installed skills appear there as regular slash commands.</p>
                     </div>
                 </details>
                 <div class="scoring">
@@ -1044,8 +1044,8 @@
                 <span lang="en">Installed MCP <code>@playwright/mcp</code> and <code>@upstash/context7-mcp</code>, verified via <code>/mcp</code>.</span>
             </li>
             <li data-key="e3-skills-installed">
-                <span lang="ru">Подтвердил наличие skills: <code>frontend-design</code>, <code>excalidraw-diagram-generator</code> через <code>/skills</code>.</span>
-                <span lang="en">Confirmed skills: <code>frontend-design</code>, <code>excalidraw-diagram-generator</code> via <code>/skills</code>.</span>
+                <span lang="ru">Подтвердил наличие skills: <code>/frontend-design</code>, <code>/excalidraw-diagram-generator</code> появляются в&nbsp;общем <code>/</code>-меню.</span>
+                <span lang="en">Confirmed skills: <code>/frontend-design</code>, <code>/excalidraw-diagram-generator</code> appear in the <code>/</code> menu.</span>
             </li>
             <li data-key="e3-web-tools">
                 <span lang="ru">Знаю разницу WebSearch / WebFetch / Playwright и&nbsp;когда что уместно.</span>
