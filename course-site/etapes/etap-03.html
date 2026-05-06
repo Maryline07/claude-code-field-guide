@@ -150,11 +150,36 @@
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a service with historical and current prices for stocks, FX, crypto. Free tier — up to 25 requests/day.<br>
             <strong>Why now:</strong> so the etape-02 dashboard shows not “last CSV price” but the <em>actual current</em> one.<br>
             <strong>Where:</strong> register at <a href="https://www.alphavantage.co/support/#api-key">alphavantage.co/support/#api-key</a> — one minute, you get an <dfn class="term" tabindex="0" data-def="a secret pass-string you put into requests to the API. The service identifies you by it. Never share or commit to git.">API key</dfn>.</p>
-            <p lang="ru" style="margin:0.5rem 0 0;"><strong>Куда положить ключ:</strong> создайте файл <code>.env</code> в&nbsp;корне проекта (рядом с&nbsp;<code>CLAUDE.md</code>):</p>
-            <p lang="en" style="margin:0.5rem 0 0;"><strong>Where to keep it:</strong> create a <code>.env</code> file at the project root (next to <code>CLAUDE.md</code>):</p>
-            <pre class="shell">ALPHAVANTAGE_KEY=ваш-ключ-сюда</pre>
-            <p lang="ru" style="margin:0.4rem 0 0;"><strong>Никогда не&nbsp;коммитьте <code>.env</code></strong>: добавьте его в&nbsp;<code>.gitignore</code>. Подробно про защиту секретов&nbsp;&mdash; этап&nbsp;05.</p>
-            <p lang="en" style="margin:0.4rem 0 0;"><strong>Never commit <code>.env</code></strong>: add it to <code>.gitignore</code>. We cover secret hygiene in detail on etape 05.</p>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Куда положить ключ.</strong> На&nbsp;этом этапе вы&nbsp;продолжаете работать в&nbsp;папке <code>portfolio-journal</code>, которую создали в&nbsp;<a href="etap-02.html#projects">этапе&nbsp;02</a> (там&nbsp;же вы&nbsp;первый раз создавали <code>CLAUDE.md</code>). «Корень проекта»&nbsp;&mdash; это и&nbsp;есть эта папка. Шаги:</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where to keep the key.</strong> On this etape you keep working inside the <code>portfolio-journal</code> folder you created on <a href="etap-02.html#projects">etape&nbsp;02</a> (where you first wrote a <code>CLAUDE.md</code>). “Project root” = that folder. Steps:</p>
+            <ol class="steps" lang="ru" style="margin-top:0.4rem;">
+                <li>Откройте папку <code>portfolio-journal</code> в&nbsp;файловом менеджере. Если рядом с&nbsp;<code>CLAUDE.md</code> ещё нет файла <code>.env</code>&nbsp;&mdash; создайте.<br>
+                <em>В&nbsp;Windows:</em> правой кнопкой → «Создать → Текстовый документ», переименовать в&nbsp;<code>.env</code> (Windows может ругаться на&nbsp;«файл без имени»&nbsp;&mdash; жмите «Да»).<br>
+                <em>Если работаете из&nbsp;Claude:</em> просто скажите <em>«создай файл .env в&nbsp;корне с&nbsp;строкой ALPHAVANTAGE_KEY=пусто»</em>.</li>
+                <li>Откройте <code>.env</code> в&nbsp;любом текстовом редакторе и&nbsp;впишите:
+                    <pre class="shell">ALPHAVANTAGE_KEY=ваш-ключ-сюда</pre>
+                    Без кавычек, без пробелов вокруг <code>=</code>. Замените <em>ваш-ключ-сюда</em> на&nbsp;то, что прислал alphavantage.co.</li>
+                <li>Создайте (если ещё нет) файл <code>.gitignore</code> в&nbsp;той&nbsp;же папке и&nbsp;допишите в&nbsp;него одну строку:
+                    <pre class="shell">.env</pre>
+                    Это говорит git: «никогда не&nbsp;трогай этот файл». Так ключ не&nbsp;уедет в&nbsp;GitHub при&nbsp;коммите.</li>
+                <li>Проверка: в&nbsp;Claude напечатайте <em>«покажи содержимое .env»</em>&nbsp;&mdash; он&nbsp;прочитает и&nbsp;покажет ключ. И&nbsp;<em>«проверь, что .env в&nbsp;.gitignore»</em>&nbsp;&mdash; он&nbsp;подтвердит.</li>
+            </ol>
+            <ol class="steps" lang="en" style="margin-top:0.4rem;">
+                <li>Open <code>portfolio-journal</code> in your file manager. If <code>.env</code> isn’t next to <code>CLAUDE.md</code> yet — create it.<br>
+                <em>On Windows:</em> right-click → “New → Text Document”, rename to <code>.env</code> (Windows may complain about “file without a name” — click Yes).<br>
+                <em>From Claude:</em> just say <em>“create a .env file at the root with line ALPHAVANTAGE_KEY=empty”</em>.</li>
+                <li>Open <code>.env</code> in any text editor and paste:
+                    <pre class="shell">ALPHAVANTAGE_KEY=your-key-here</pre>
+                    No quotes, no spaces around <code>=</code>. Replace <em>your-key-here</em> with what alphavantage.co sent you.</li>
+                <li>Create (if missing) a <code>.gitignore</code> in the same folder and add one line:
+                    <pre class="shell">.env</pre>
+                    This tells git: “never touch this file.” The key won’t end up on GitHub on commit.</li>
+                <li>Verify: in Claude type <em>“show the contents of .env”</em> — it’ll read it back and display the key. And <em>“check that .env is in .gitignore”</em> — it’ll confirm.</li>
+            </ol>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Как Python будет читать ключ:</strong> через <code>os.environ.get("ALPHAVANTAGE_KEY")</code>, либо через библиотеку <code>python-dotenv</code> (Claude поставит её сам, если решит, что она нужна). Вам как пользователю об&nbsp;этом думать не&nbsp;надо&nbsp;&mdash; Claude сделает.</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>How Python reads it:</strong> via <code>os.environ.get("ALPHAVANTAGE_KEY")</code>, or through the <code>python-dotenv</code> library (Claude installs it if it decides it’s needed). You don’t have to think about this — Claude does.</p>
+            <p lang="ru" style="margin:0.4rem 0 0;"><strong>Никогда не&nbsp;коммитьте <code>.env</code></strong>&nbsp;&mdash; именно для&nbsp;этого пункт&nbsp;3 выше. Подробно про защиту секретов&nbsp;&mdash; <a href="etap-05.html">этап&nbsp;05</a>.</p>
+            <p lang="en" style="margin:0.4rem 0 0;"><strong>Never commit <code>.env</code></strong> — that’s exactly what step 3 above is for. Secret hygiene in detail — <a href="etap-05.html">etape 05</a>.</p>
         </div>
 
         <div class="note" style="margin-top:1.5rem;">
@@ -374,14 +399,16 @@
             <summary><span lang="ru">Готовые skills, которые мы&nbsp;уже ставили</span><span lang="en">Ready-made skills we already installed</span></summary>
             <div class="topic-body">
                 <div lang="ru">
-                    <p>В&nbsp;курсе уже стоят (или встретятся вскоре):</p>
+                    <p>К&nbsp;концу <a href="#setup">§&nbsp;0</a> этого этапа у&nbsp;вас стоят:</p>
                     <ul>
-                        <li><code>frontend-design</code>&nbsp;&mdash; авторские UI без&nbsp;«AI-усреднённости».</li>
-                        <li><code>pdf</code>&nbsp;&mdash; парсинг и&nbsp;заполнение PDF (понадобится в&nbsp;этапе&nbsp;08b «AI Tax Assistant»).</li>
-                        <li><code>excalidraw-diagram-generator</code>&nbsp;&mdash; диаграммы.</li>
-                        <li><code>playground</code>&nbsp;&mdash; одностраничные интерактивные «исследователи» (понадобится позже).</li>
-                        <li><code>claude-api</code>&nbsp;&mdash; использование Claude как библиотеки внутри ваших скриптов (этап&nbsp;06 и&nbsp;этап&nbsp;11).</li>
-                        <li><code>superpowers:brainstorming</code> и&nbsp;другие из&nbsp;набора <code>superpowers</code>&nbsp;&mdash; брейншторм, debugging, TDD-привычки.</li>
+                        <li><code>superpowers</code> (и&nbsp;всё, что внутри: <code>brainstorming</code>, <code>writing-plans</code>, <code>executing-plans</code>, <code>verification-before-completion</code>, …)&nbsp;&mdash; ставили в&nbsp;<a href="etap-01.html#setup">этапе&nbsp;01 §&nbsp;0</a>;</li>
+                        <li><code>frontend-design</code>&nbsp;&mdash; авторские UI без&nbsp;«AI-усреднённости», ставили в&nbsp;<a href="etap-02.html#setup">этапе&nbsp;02 §&nbsp;0</a>;</li>
+                        <li><code>excalidraw-diagram-generator</code>&nbsp;&mdash; диаграммы, поставили только что в&nbsp;<a href="#setup">§&nbsp;0</a> этого этапа;</li>
+                        <li><code>claude-api</code>&nbsp;&mdash; <em>встроенный</em>, идёт вместе с&nbsp;Claude Code, не&nbsp;нужно ставить отдельно. Понадобится в&nbsp;<a href="etap-06.html">этапе&nbsp;06</a> и&nbsp;<a href="etap-11.html">этапе&nbsp;11</a>.</li>
+                    </ul>
+                    <p>Будут поставлены позже, по&nbsp;месту:</p>
+                    <ul>
+                        <li><code>pdf</code>&nbsp;&mdash; парсинг и&nbsp;заполнение PDF, поставим в&nbsp;<a href="etap-08b.html#setup">этапе&nbsp;08b «AI Tax Assistant» §&nbsp;0</a>.</li>
                     </ul>
                     <p><strong>Skill vs MCP&nbsp;&mdash; в&nbsp;чём разница:</strong></p>
                     <ul>
@@ -389,16 +416,19 @@
                         <li><strong>MCP</strong>&nbsp;&mdash; это работающий сервер с&nbsp;инструментами (открыть браузер, прочитать&nbsp;БД, и&nbsp;т.&nbsp;д.). У&nbsp;Claude появляются <em>новые навыки</em>.</li>
                     </ul>
                     <p>Когда что использовать&nbsp;&mdash; обычно понятно из&nbsp;задачи: «как написать?»&nbsp;&mdash; skill; «что-то сделать с&nbsp;внешним миром»&nbsp;&mdash; MCP.</p>
+                    <p class="note" style="margin-top:1rem;">Если забыли, как ставится skill&nbsp;&mdash; кликните по&nbsp;ссылке выше и&nbsp;вернётесь ровно к&nbsp;тому пункту, где ставили. Это паттерн на&nbsp;весь курс: каждый раз, когда вы&nbsp;используете уже знакомый инструмент, в&nbsp;этапе будет ссылка «ставили в&nbsp;…».</p>
                 </div>
                 <div lang="en">
-                    <p>Already installed (or coming soon) in this course:</p>
+                    <p>By the end of this etape’s <a href="#setup">§&nbsp;0</a> you have installed:</p>
                     <ul>
-                        <li><code>frontend-design</code> — distinctive UI, no AI-default look.</li>
-                        <li><code>pdf</code> — PDF parsing and filling (used on etape 08b “AI Tax Assistant”).</li>
-                        <li><code>excalidraw-diagram-generator</code> — diagrams.</li>
-                        <li><code>playground</code> — single-page interactive “explorers” (used later).</li>
-                        <li><code>claude-api</code> — Claude as a library inside your scripts (etape 06 and etape 11).</li>
-                        <li><code>superpowers:brainstorming</code> and other <code>superpowers</code> — brainstorm, debugging, TDD habits.</li>
+                        <li><code>superpowers</code> (and everything inside: <code>brainstorming</code>, <code>writing-plans</code>, <code>executing-plans</code>, <code>verification-before-completion</code>, …) — installed on <a href="etap-01.html#setup">etape 01 §&nbsp;0</a>;</li>
+                        <li><code>frontend-design</code> — distinctive UI, no AI-default look — installed on <a href="etap-02.html#setup">etape 02 §&nbsp;0</a>;</li>
+                        <li><code>excalidraw-diagram-generator</code> — diagrams — installed just now in <a href="#setup">§&nbsp;0</a> of this etape;</li>
+                        <li><code>claude-api</code> — <em>built-in</em>, ships with Claude Code, no install needed. Used on <a href="etap-06.html">etape 06</a> and <a href="etap-11.html">etape 11</a>.</li>
+                    </ul>
+                    <p>Will be installed later, in place:</p>
+                    <ul>
+                        <li><code>pdf</code> — PDF parsing and filling — installed on <a href="etap-08b.html#setup">etape 08b “AI Tax Assistant” §&nbsp;0</a>.</li>
                     </ul>
                     <p><strong>Skill vs MCP — the split:</strong></p>
                     <ul>
@@ -406,6 +436,7 @@
                         <li><strong>MCP</strong> — a running server with tools (open browser, read DB, etc.). Claude gains <em>new abilities</em>.</li>
                     </ul>
                     <p>Which to pick is usually obvious from the task: “how should I write?” — skill; “do something with the outside world” — MCP.</p>
+                    <p class="note" style="margin-top:1rem;">If you forget how a skill was installed — click the link above and you land exactly at the install step. This is a course-wide pattern: every time you reuse a familiar tool, the etape links back to “installed on …”.</p>
                 </div>
             </div>
         </details>
