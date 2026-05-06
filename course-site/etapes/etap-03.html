@@ -89,6 +89,11 @@
         <p class="reading" lang="ru">Здесь больше всего «инсталляций» из&nbsp;всего курса&nbsp;&mdash; зато после них Claude получает в&nbsp;руки полный набор инструментов. На&nbsp;следующих этапах ничего нового ставить почти не&nbsp;придётся.</p>
         <p class="reading" lang="en">This etape has the most installations of the whole course — after them Claude has its full toolset. On further etapes you’ll barely install anything new.</p>
 
+        <div class="note" style="margin-top:1rem;">
+            <span lang="ru"><strong>Команды актуальны на&nbsp;май 2026.</strong> Внешние реестры (Smithery, npm) иногда меняют синтаксис&nbsp;&mdash; и&nbsp;вы&nbsp;увидите ошибку вроде <code>'install' is deprecated</code> или <code>404 server not found</code>. В&nbsp;этом случае: (1) загляните в&nbsp;<a href="https://smithery.ai/docs/concepts/cli">smithery.ai/docs/concepts/cli</a> за&nbsp;свежим CLI; (2) для&nbsp;official-серверов вроде Playwright&nbsp;MCP&nbsp;&mdash; пробуйте нативную команду <code>claude mcp add &lt;имя&gt; -- npx '&lt;package&gt;@latest'</code>, она устойчивее к&nbsp;изменениям Smithery.</span>
+            <span lang="en"><strong>Commands current as of May 2026.</strong> External registries (Smithery, npm) occasionally change syntax — you might see <code>'install' is deprecated</code> or <code>404 server not found</code>. If so: (1) check <a href="https://smithery.ai/docs/concepts/cli">smithery.ai/docs/concepts/cli</a> for the current CLI; (2) for official servers like Playwright MCP, try the native <code>claude mcp add &lt;name&gt; -- npx '&lt;package&gt;@latest'</code> — it’s more resilient to Smithery changes.</span>
+        </div>
+
         <div class="aside-card" style="margin-top:1.5rem;">
             <span class="label"><span lang="ru">обязательно · MCP</span><span lang="en">required · MCP</span></span>
             <h3><span lang="ru">MCP <code>@playwright/mcp</code>&nbsp;&mdash; управление браузером</span><span lang="en">MCP <code>@playwright/mcp</code> — controlling the browser</span></h3>
@@ -96,11 +101,13 @@
             <strong>Зачем сейчас:</strong> для&nbsp;проверки своего же&nbsp;сайта&nbsp;&mdash; Claude открывает ваш дашборд в&nbsp;Chrome и&nbsp;даёт обратную связь. Также для&nbsp;парсинга страниц, на&nbsp;которые нет открытого&nbsp;API.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> <dfn class="term" tabindex="0" data-def="a browser-automation engine by Microsoft. Through MCP Claude controls a real Chrome — opens pages, clicks, takes screenshots, audits your site.">Playwright</dfn> is a browser-automation engine by Microsoft. The MCP wrapper gives Claude tools: <em>open page, click, type, screenshot, read DOM</em>.<br>
             <strong>Why now:</strong> to verify your own site — Claude opens your dashboard in Chrome and gives feedback. Also for parsing pages that have no open API.</p>
-            <pre class="shell"><span class="cmt"># <span lang="ru">установка через Smithery</span><span lang="en">install via Smithery</span></span>
-<span class="prompt">$</span> npx @smithery/cli@latest install @playwright/mcp --client claude</pre>
-            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> <a href="https://smithery.ai/server/@playwright/mcp">smithery.ai/server/@playwright/mcp</a>.<br>
+            <pre class="shell"><span class="cmt"># <span lang="ru">в обычном PowerShell/Terminal, ДО запуска claude:</span><span lang="en">in plain PowerShell/Terminal, BEFORE running claude:</span></span>
+<span class="prompt">$</span> claude mcp add playwright -- npx '@playwright/mcp@latest'</pre>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Что эта команда делает:</strong> регистрирует MCP-сервер с&nbsp;именем <code>playwright</code> в&nbsp;вашем <code>~/.claude.json</code>. Когда вы&nbsp;потом запустите <code>claude</code>, он&nbsp;сам подтянет MCP. Сам пакет <code>@playwright/mcp</code>&nbsp;&mdash; от&nbsp;Microsoft, ставится через <code>npx</code>, без&nbsp;глобальной установки.<br>
+            <strong>Где взять:</strong> npm-пакет <a href="https://www.npmjs.com/package/@playwright/mcp">@playwright/mcp</a>; репо <a href="https://github.com/microsoft/playwright-mcp">github.com/microsoft/playwright-mcp</a>.<br>
             <strong>Проверка:</strong> в&nbsp;Claude напечатайте <code>/mcp</code>&nbsp;&mdash; <code>playwright</code> в&nbsp;списке. Попросите <em>«открой через playwright страницу example.com и&nbsp;дай заголовок»</em>&nbsp;&mdash; Claude должен ответить «Example Domain».</p>
-            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> <a href="https://smithery.ai/server/@playwright/mcp">smithery.ai/server/@playwright/mcp</a>.<br>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>What this does:</strong> registers an MCP server named <code>playwright</code> in your <code>~/.claude.json</code>. Next time you run <code>claude</code>, it picks the MCP up. The <code>@playwright/mcp</code> package is from Microsoft, fetched via <code>npx</code>, no global install needed.<br>
+            <strong>Where:</strong> npm package <a href="https://www.npmjs.com/package/@playwright/mcp">@playwright/mcp</a>; repo <a href="https://github.com/microsoft/playwright-mcp">github.com/microsoft/playwright-mcp</a>.<br>
             <strong>Verify:</strong> in Claude type <code>/mcp</code> — <code>playwright</code> should be in the list. Ask <em>“through playwright open example.com and give me the title”</em> — should reply “Example Domain.”</p>
         </div>
 
@@ -111,11 +118,13 @@
             <strong>Зачем сейчас:</strong> модель Claude обучена на&nbsp;данных «до&nbsp;какого-то месяца». За&nbsp;это время библиотеки изменились&nbsp;&mdash; чтобы Claude не&nbsp;писал код по&nbsp;устаревшим версиям, мы&nbsp;даём ему живые доки.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> <dfn class="term" tabindex="0" data-def="An Upstash MCP server that gives Claude access to current docs for libraries and frameworks. Solves “trained on old versions.”">Context7</dfn> by Upstash gives Claude <em>current</em> docs for libraries (chart.js, react, fastapi — thousands).<br>
             <strong>Why now:</strong> Claude is trained up to a cut-off month. Libraries change since — so we feed it live docs to prevent stale code.</p>
-            <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest install @upstash/context7-mcp --client claude</pre>
-            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> <a href="https://smithery.ai/server/@upstash/context7-mcp">smithery.ai/server/@upstash/context7-mcp</a>.<br>
-            <strong>Проверка:</strong> попросите <em>«через context7 покажи свежий пример&nbsp;chart.js с&nbsp;тёмной темой»</em>&nbsp;&mdash; Claude должен подтянуть документацию и&nbsp;дать рабочий код.</p>
-            <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> <a href="https://smithery.ai/server/@upstash/context7-mcp">smithery.ai/server/@upstash/context7-mcp</a>.<br>
-            <strong>Verify:</strong> ask <em>“through context7 show a fresh chart.js example with a dark theme”</em> — Claude should pull docs and give working code.</p>
+            <pre class="shell"><span class="prompt">$</span> claude mcp add context7 -- npx -y @upstash/context7-mcp@latest</pre>
+            <p lang="ru" style="margin:0.6rem 0 0;"><strong>Что эта команда делает:</strong> регистрирует MCP <code>context7</code> в&nbsp;<code>~/.claude.json</code>. Флаг <code>-y</code> у&nbsp;<code>npx</code>&nbsp;&mdash; «не&nbsp;спрашивай разрешение скачать пакет», иначе при&nbsp;первом запуске Claude зависнет в&nbsp;ожидании ответа.<br>
+            <strong>Где взять:</strong> npm-пакет <a href="https://www.npmjs.com/package/@upstash/context7-mcp">@upstash/context7-mcp</a>; репо <a href="https://github.com/upstash/context7">github.com/upstash/context7</a>.<br>
+            <strong>Проверка:</strong> в&nbsp;Claude <code>/mcp</code>&nbsp;&mdash; <code>context7</code> в&nbsp;списке. Попросите <em>«через context7 покажи свежий пример&nbsp;chart.js с&nbsp;тёмной темой»</em>&nbsp;&mdash; Claude должен подтянуть документацию и&nbsp;дать рабочий код.</p>
+            <p lang="en" style="margin:0.6rem 0 0;"><strong>What this does:</strong> registers <code>context7</code> in <code>~/.claude.json</code>. The <code>-y</code> flag on <code>npx</code> auto-accepts package download — without it Claude hangs waiting for a Y/n prompt on first run.<br>
+            <strong>Where:</strong> npm package <a href="https://www.npmjs.com/package/@upstash/context7-mcp">@upstash/context7-mcp</a>; repo <a href="https://github.com/upstash/context7">github.com/upstash/context7</a>.<br>
+            <strong>Verify:</strong> in Claude <code>/mcp</code> — <code>context7</code> in the list. Ask <em>“through context7 show a fresh chart.js example with a dark theme”</em> — Claude should pull docs and give working code.</p>
         </div>
 
         <div class="aside-card" style="margin-top:1.5rem;">
@@ -127,7 +136,7 @@
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a skill that teaches Claude to generate <code>.excalidraw</code> files — editable “sketchy” diagrams. Open in <a href="https://excalidraw.com">excalidraw.com</a>.<br>
             <strong>Why now:</strong> a month later it’s easier to grasp the architecture from a diagram than from code. Claude draws how your API → CSV → dashboard connect.<br>
             <strong>Check first:</strong> <code>/skills</code> in Claude.</p>
-            <pre class="shell"><span class="prompt">$</span> npx @smithery/cli@latest skill add github/excalidraw-diagram-generator --agent claude-code</pre>
+            <pre class="shell"><span class="prompt">$</span> npx smithery@latest skill add github/excalidraw-diagram-generator --agent claude-code</pre>
             <p lang="ru" style="margin:0.6rem 0 0;"><strong>Где взять:</strong> <a href="https://smithery.ai/skills/github/excalidraw-diagram-generator">smithery.ai/skills/github/excalidraw-diagram-generator</a>.</p>
             <p lang="en" style="margin:0.6rem 0 0;"><strong>Where:</strong> <a href="https://smithery.ai/skills/github/excalidraw-diagram-generator">smithery.ai/skills/github/excalidraw-diagram-generator</a>.</p>
         </div>
@@ -786,8 +795,8 @@
 
             <dt>Smithery</dt>
             <dd>
-                <span lang="ru">Реестр MCP-серверов и&nbsp;skills. Тысячи готовых пакетов, ставятся одной командой <code>npx @smithery/cli@latest install/skill add ...</code>. Главное место «магазина AI-инструментов».</span>
-                <span lang="en">A registry of MCP servers and skills. Thousands of ready packages, one-command install via <code>npx @smithery/cli@latest install/skill add ...</code>. The main “AI tools store.”</span>
+                <span lang="ru">Реестр MCP-серверов и&nbsp;skills. Тысячи готовых пакетов. Skill ставится одной командой <code>npx smithery@latest skill add &lt;owner/skill&gt; --agent claude-code</code>; для&nbsp;MCP-серверов&nbsp;&mdash; <code>smithery mcp add &lt;url&gt; --client claude</code> (но&nbsp;для&nbsp;official-серверов вроде <code>@playwright/mcp</code> чище нативная <code>claude mcp add</code>).</span>
+                <span lang="en">A registry of MCP servers and skills. Thousands of ready packages. A skill installs via <code>npx smithery@latest skill add &lt;owner/skill&gt; --agent claude-code</code>; an MCP server via <code>smithery mcp add &lt;url&gt; --client claude</code> (but for official servers like <code>@playwright/mcp</code>, native <code>claude mcp add</code> is cleaner).</span>
             </dd>
 
             <dt>WebSearch</dt>
