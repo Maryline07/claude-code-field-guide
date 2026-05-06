@@ -20,7 +20,7 @@ Open `http://localhost:8765/index.html` for the main course or `http://localhost
 
 This repo contains **two** bilingual (RU/EN) static self-study courses sharing one stylesheet and one JS layer:
 
-- **«Полевое руководство по Claude Code» / "A Field Guide to Claude Code"** — the main course, 12 etapes + 1 optional + capstone, walking a non-programmer through Claude Code. Lives at [course-site/index.html](course-site/index.html) + [course-site/etapes/etap-00.html](course-site/etapes/etap-00.html) through `etap-11.html` + [capstone.html](course-site/etapes/capstone.html).
+- **«Полевое руководство по Claude Code» / "A Field Guide to Claude Code"** — the main course, walking a non-programmer through Claude Code. Lives at [course-site/index.html](course-site/index.html) + [course-site/etapes/etap-00.html](course-site/etapes/etap-00.html) through `etap-11.html` + [capstone.html](course-site/etapes/capstone.html). The main-course slugs are non-contiguous: `etap-00 … etap-06`, then `etap-06b` (an *extension etape* on Telegram bots that builds on the etape-06 web office), then `etap-07`, `etap-08a`/`etap-08b` (a/b split because etape 8 is too dense for one unit), then `etap-09 … etap-11`. **14 etape pages + capstone = 15 entries**, which is what the progress pill counter shows.
 - **«Полевое руководство по Claude Design» / "A Field Guide to Claude Design"** — a parallel tutorial designed *for graduates of the main course*, covering the Anthropic Labs product `claude.ai/design` (launched 17 Apr 2026). Ten etapes + capstone. Lives at [course-site/claude-design.html](course-site/claude-design.html) + `claude-design-00.html` through `claude-design-10.html` + [claude-design-capstone.html](course-site/etapes/claude-design-capstone.html). Skips basics the main course already taught (prompts, iteration, references) and focuses on design-specific topics (visual literacy with three reading layers, three refinement tools, workspace inheritance, handoff back into Claude Code).
 
 Authoritative source documents:
@@ -62,7 +62,7 @@ If a new "blank page" or "orphan heading" appears in the PDF, the suspect is alm
 
 Renaming any of these attributes silently wipes a reader's progress. Treat them like a database schema.
 
-The `ETAPES` array near the top of [progress.js](course-site/progress.js) **only lists main-course IDs** (`etap-00`, …, `capstone`). It drives `renderProgressPill` (top-bar `0/14 DONE` counter) and the home-page contents progress. Design-tutorial completions are stored under the same `state.done` key but **not** counted toward the main-course pill — by design. Each design page therefore declares its pill as a static `<span class="progress-pill">RESEARCH PREVIEW</span>` with no `.num` / `.total` spans, so `renderProgressPill` becomes a no-op there (defended by `if (numEl)` / `if (totEl)` guards).
+The `ETAPES` array near the top of [progress.js](course-site/progress.js) **only lists main-course IDs** (`etap-00`, …, `etap-06b`, …, `capstone`, currently 15 entries). It drives `renderProgressPill` (top-bar `0/15 DONE` counter) and the home-page contents progress. Design-tutorial completions are stored under the same `state.done` key but **not** counted toward the main-course pill — by design. Each design page therefore declares its pill as a static `<span class="progress-pill">RESEARCH PREVIEW</span>` with no `.num` / `.total` spans, so `renderProgressPill` becomes a no-op there (defended by `if (numEl)` / `if (totEl)` guards).
 
 `renderEtapeRowState` applies the `.done` class to **any** `.etap-row[data-id]` whose id is in `state.done` — so a click on a design-tutorial complete button visually marks the row in `claude-design.html`'s contents list, even though that id never enters the main pill counter. Same UX, two scoreboards.
 
@@ -113,19 +113,32 @@ The screen design has a per-theme `body::before` background:
 
 All `body::before` effects are force-disabled in `@media print` — see the PDF pipeline section.
 
-**Doodle decorations** are scoped strictly to `body.doodle` selectors at the bottom of `styles.css`: hand-drawn SVG checkboxes for `.checklist li`, wavy SVG underlines for `<em>` / `dfn.term` / `a:hover`, sticker-tilted labels (`.project .label`, `.aside-card .label`, `.practice h4`), sticky-note `.note`, highlighter-yellow `<strong>` in body paragraphs, hand-drawn ovals around `.etap-row .num`, washi-tape on `.aside-card`, sparkles around `.etap-hero h1`, wavy SVG `hr.rule`, triple-flower `hr.ornament`, ★ margin marks on `.quiz-item`. Light and dark themes are unaffected because every rule is prefixed with `body.doodle`. **When adding new decorations, follow the same scoping discipline** — accidentally-global rules will leak into the editorial light/dark aesthetics.
+**Doodle decorations** are scoped strictly to `body.doodle` selectors at the bottom of `styles.css`: hand-drawn SVG checkboxes for `.checklist li`, wavy SVG underlines (see below), sticker-tilted labels (`.project .label`, `.aside-card .label`, `.practice h4`), sticky-note `.note`, highlighter-yellow `<strong>` in body paragraphs, hand-drawn ovals around `.etap-row .num`, washi-tape on `.aside-card`, sparkles around `.etap-hero h1`, wavy SVG `hr.rule`, triple-flower `hr.ornament`, ★ margin marks on `.quiz-item`. Light and dark themes are unaffected because every rule is prefixed with `body.doodle`. **When adding new decorations, follow the same scoping discipline** — accidentally-global rules will leak into the editorial light/dark aesthetics.
+
+**The two wavy underlines mean different things.** In doodle the same SVG-wave shape is used for both `<em>` (decorative italics) and `dfn.term` / `a:hover` (interactive — opens a tooltip / is a link), but they carry **different colours by function**: red wavy (`#e63a5e`) is reserved for interactive markers, ink-blue wavy (`#1a2547`) is decorative `<em>`. Do not unify the two colours, and do not swap `<em>` to `dotted`/`dashed` — the colour-by-function pairing is intentional, so an italic emphasis no longer reads as "click me." Rules live at [styles.css:142-161](course-site/styles.css#L142-L161).
 
 ### Cross-course navigation
 
-The two courses are stitched together in three places in [course-site/index.html](course-site/index.html) and a mirror set in [course-site/claude-design.html](course-site/claude-design.html):
+The two courses are stitched together at **two layers**: the index pages and every etape's topbar.
+
+**Index-level (richer wiring):**
 
 - Main → Design: topbar `<nav>` `Claude Design` link · `<section id="design-cta">` callout after `#capstone` (with two buttons: primary `→ Open Claude Design` and secondary `Course Contents`) · footer "Navigation" column entry.
 - Design → Main: topbar `<nav>` `основной курс / main course` link · footer "Course" column entry.
 
-The CTA card uses inline-styled anchors (not the `.btn-complete` class) — the class triggers `progress.js`'s `renderCompleteButton`, which would overwrite the link text with "Mark etape complete." Use inline styles or a fresh class for any non-completion buttons.
+**Etape-level (single symmetric link):**
 
-When adding navigation, mirror both directions to keep the pair symmetric.
+- Every Claude Code etape (`etap-*.html` + `capstone.html`) has `<a href="../claude-design.html">Claude Design ↗</a>` as the last anchor in its topbar `<nav>`.
+- Every Claude Design etape (`claude-design-*.html` + `claude-design-capstone.html`) has `<a href="../index.html">основной курс ↗ / main course ↗</a>` in the same slot.
+
+The ↗ glyph distinguishes cross-course links from in-page anchors. On 1280px desktops the link wraps to a second nav line for Claude Code etapes (which already have 7 in-page anchors); on 375px mobile both courses wrap cleanly via `flex-wrap`.
+
+The CTA card on `index.html` uses inline-styled anchors (not the `.btn-complete` class) — the class triggers `progress.js`'s `renderCompleteButton`, which would overwrite the link text with "Mark etape complete." Use inline styles or a fresh class for any non-completion buttons.
+
+When adding navigation or new etapes, mirror both directions to keep the pair symmetric.
 
 ## Smithery-installed skills
 
 [skills-lock.json](skills-lock.json) records four well-known skills installed under [.claude/skills/](.claude/skills/): `excalidraw-diagram-generator`, `frontend-design`, `pdf`, `playground`. They are installed assets, not source — do not hand-edit. The main course teaches the user how to install/use these around etapes 03 and 09, so their presence in the repo is intentional pedagogical scaffolding. **`frontend-design` (the Claude Code skill) is distinct from `Claude Design` (the Anthropic Labs product covered in the design tutorial)** — do not conflate them. The design tutorial covers the latter; the former is a skill for generating frontend code from inside Claude Code.
+
+**Install commands inside the course are externally-versioned.** The Smithery CLI changed in 2026 (deprecated `install`, dropped the `@smithery/cli` npm name, added `mcp add` / `skill add` subcommands). For *MCP servers* the course now prefers the **native** `claude mcp add <name> -- npx '<package>@latest'` (writes `~/.claude.json`, survives Smithery API changes); for *skills* it uses `npx smithery@latest skill add <owner/skill> --agent claude-code`. A yellow note at the top of [etap-03 setup](course-site/etapes/etap-03.html) tells readers where to look when external syntax shifts again. If you update install commands, also update the Smithery glossary entry in etap-03 and the "where skills come from" `.note` in etap-06.
