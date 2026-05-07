@@ -600,13 +600,20 @@
             <ol class="steps" lang="ru">
                 <li>Зайдите в&nbsp;<code>portfolio-journal</code>, скопируйте туда <code>.env</code> с&nbsp;<code>ALPHAVANTAGE_KEY</code> и&nbsp;<code>.gitignore</code> (со&nbsp;строкой <code>.env</code>) из&nbsp;раздела «Подготовка».</li>
                 <li>Обновите <code>CLAUDE.md</code>: добавьте раздел про&nbsp;ALPHAVANTAGE_KEY и&nbsp;что цены теперь подгружаются с&nbsp;API.</li>
-                <li>Просите Claude доработать <code>dashboard.html</code>:
-                    <pre class="shell">&gt; в dashboard.html замени «последняя цена из CSV»
-&gt; на загрузку текущей цены через Alpha Vantage.
+                <li>Попросите Claude разделить задачу на&nbsp;<em>скрипт</em> и&nbsp;<em>страницу</em>&nbsp;&mdash; браузерный JS не&nbsp;умеет писать файлы на&nbsp;диск, поэтому кэш делает Python:
+                    <pre class="shell">&gt; создай fetch_prices.py: читает ALPHAVANTAGE_KEY из .env,
 &gt; для каждого уникального тикера из @data/operations.csv —
-&gt; один запрос. результаты кэшируй в data/prices-cache.json
-&gt; со временем жизни 15 минут (чтобы не упереться в rate limit).
-&gt; в KPI-плитках добавь маркер «обновлено N минут назад».</pre>
+&gt; один запрос в Alpha Vantage. результат пишет в
+&gt; data/prices-cache.json с полем "fetched_at": ISO-timestamp.
+&gt; если кэш моложе 15 минут — выйди без запроса (rate limit).
+&gt;
+&gt; в dashboard.html замени «последняя цена из CSV» на чтение
+&gt; data/prices-cache.json через fetch. в KPI-плитках добавь
+&gt; маркер «обновлено N минут назад» (по fetched_at). если
+&gt; кэша ещё нет — мягкое предупреждение + fallback на CSV.
+&gt;
+&gt; в CLAUDE.md допиши: «перед открытием дашборда — python fetch_prices.py».</pre>
+                    <p style="margin:0.4rem 0 0; font-size:0.92em; opacity:0.8;"><strong>Запустите <code>python fetch_prices.py</code></strong>&nbsp;&mdash; должен появиться <code>data/prices-cache.json</code>. Если его нет, значит Claude всё&nbsp;же попытался положить логику в&nbsp;HTML; перезапросите со&nbsp;ссылкой на&nbsp;первый абзац промпта.</p>
                 </li>
                 <li>Откройте дашборд. P&amp;L теперь живой&nbsp;&mdash; меняется при каждой перезагрузке.</li>
                 <li>Уточняйте:
@@ -628,13 +635,20 @@
             <ol class="steps" lang="en">
                 <li>Enter <code>portfolio-journal</code>, copy in <code>.env</code> with <code>ALPHAVANTAGE_KEY</code> and <code>.gitignore</code> (with the <code>.env</code> line) from the Setup section.</li>
                 <li>Update <code>CLAUDE.md</code>: add a section about ALPHAVANTAGE_KEY and that prices come from the API now.</li>
-                <li>Ask Claude to upgrade <code>dashboard.html</code>:
-                    <pre class="shell">&gt; in dashboard.html replace "last price from CSV"
-&gt; with current price via Alpha Vantage.
-&gt; for each unique ticker in @data/operations.csv — one request.
-&gt; cache results in data/prices-cache.json for 15 minutes
-&gt; (to stay within the rate limit).
-&gt; in KPI tiles add an "updated N minutes ago" marker.</pre>
+                <li>Ask Claude to split the task into a <em>script</em> and a <em>page</em> — browser JS can’t write files to disk, so caching is the Python script’s job:
+                    <pre class="shell">&gt; create fetch_prices.py: reads ALPHAVANTAGE_KEY from .env,
+&gt; for each unique ticker in @data/operations.csv — one request
+&gt; to Alpha Vantage. write the result into data/prices-cache.json
+&gt; with a "fetched_at": ISO timestamp field.
+&gt; if the cache is younger than 15 minutes — exit without a request (rate limit).
+&gt;
+&gt; in dashboard.html replace "last price from CSV" with reading
+&gt; data/prices-cache.json via fetch. in KPI tiles add an
+&gt; "updated N minutes ago" marker (from fetched_at). if the
+&gt; cache isn't there yet — soft warning + fallback to CSV.
+&gt;
+&gt; in CLAUDE.md add: "before opening the dashboard — python fetch_prices.py".</pre>
+                    <p style="margin:0.4rem 0 0; font-size:0.92em; opacity:0.8;"><strong>Run <code>python fetch_prices.py</code></strong> — <code>data/prices-cache.json</code> should appear. If it doesn’t, Claude likely put the logic in HTML anyway; reissue the prompt and point at the first paragraph.</p>
                 </li>
                 <li>Open the dashboard. P&amp;L is now live — changes on each reload.</li>
                 <li>Refine:
