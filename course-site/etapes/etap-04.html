@@ -533,10 +533,13 @@
 &gt;   — тренд «доход − расход» по месяцам;
 &gt;   — три «куда смотреть в следующем году».
 &gt; формат: markdown + графики (chart.js, через context7).
+&gt; план — шесть фаз: парсинг, категоризация, агрегация,
+&gt;   визуализация, инсайты, сборка report.md. в spec
+&gt;   пропиши, что выдаёт каждая фаза.
 &gt; критерии готовности — измеримые, перечисли.</pre>
                 </li>
                 <li>Утвердите <code>spec.md</code>. Скажите: <em>«работаем по&nbsp;@spec.md, через TodoWrite, фазами с&nbsp;ревью между ними»</em>.</li>
-                <li>Выйдите в&nbsp;default. Пройдите фазы (Claude сам разобьёт):
+                <li>Выйдите в&nbsp;default. Пройдите фазы&nbsp;&mdash; они теперь в&nbsp;<code>spec.md</code>, ниже&nbsp;&mdash; что каждая означает:
                     <ol type="a">
                         <li><strong>Парсинг</strong>: все 12 файлов → один <code>data/all-ops.csv</code> с&nbsp;нормализованными колонками.</li>
                         <li><strong>Категоризация</strong>: каждой операции&nbsp;&mdash; категория. Используйте «правила» (ключевые слова в&nbsp;описании) + ручную проверку.</li>
@@ -569,10 +572,13 @@
 &gt;   — "income minus spend" monthly trend;
 &gt;   — three "where to look next year" pointers.
 &gt; format: markdown + charts (chart.js via context7).
+&gt; plan — six phases: parse, categorise, aggregate,
+&gt;   visualise, insights, assemble report.md. in spec,
+&gt;   write what each phase delivers.
 &gt; acceptance criteria — measurable, list them.</pre>
                 </li>
                 <li>Approve <code>spec.md</code>. Say: <em>“execute against @spec.md, through TodoWrite, phase by phase with review between.”</em></li>
-                <li>Leave to default. Walk the phases (Claude will split):
+                <li>Leave to default. Walk the phases from <code>spec.md</code> — here’s what each means:
                     <ol type="a">
                         <li><strong>Parse</strong>: 12 files → one <code>data/all-ops.csv</code> with normalised columns.</li>
                         <li><strong>Categorise</strong>: each op gets a category. Rules (keywords in memo) + manual check.</li>
@@ -636,10 +642,13 @@
 &gt;   — три «критические даты» — год, когда пассивный доход
 &gt;     перекрывает целевой;
 &gt;   — текстовое summary в трёх предложениях.
+&gt; план — шесть фаз: скелет страницы, чистая логика
+&gt;   расчёта, подключение к форме, графики, интерпретация,
+&gt;   UX-полировка. в spec пропиши, что выдаёт каждая фаза.
 &gt; критерии готовности — измеримые.</pre>
                 </li>
                 <li>Утвердите spec. Дайте команду исполнять.</li>
-                <li>Фазы (Claude разобьёт):
+                <li>Фазы из <code>spec.md</code>&nbsp;&mdash; ниже, что каждая означает:
                     <ol type="a">
                         <li>Скелет страницы (форма + пустые блоки результата);</li>
                         <li>Чистая логика расчёта (сначала консольно, проверить на&nbsp;тестовых вводах);</li>
@@ -679,10 +688,13 @@
 &gt;   — combined chart (three lines);
 &gt;   — three "critical dates" — when passive income covers target;
 &gt;   — three-sentence summary.
+&gt; plan — six phases: page skeleton, pure calc logic,
+&gt;   wire to form, charts, interpretation, UX polish.
+&gt;   in spec, write what each phase delivers.
 &gt; acceptance criteria — measurable.</pre>
                 </li>
                 <li>Approve spec. Order execution.</li>
-                <li>Phases (Claude splits):
+                <li>Phases from <code>spec.md</code> — here’s what each means:
                     <ol type="a">
                         <li>Page skeleton (form + empty result blocks);</li>
                         <li>Pure calc logic (console first, verify on test inputs);</li>
