@@ -533,9 +533,14 @@
 &gt;   — тренд «доход − расход» по месяцам;
 &gt;   — три «куда смотреть в следующем году».
 &gt; формат: markdown + графики (chart.js, через context7).
-&gt; план — шесть фаз: парсинг, категоризация, агрегация,
-&gt;   визуализация, инсайты, сборка report.md. в spec
-&gt;   пропиши, что выдаёт каждая фаза.
+&gt; план — шесть фаз:
+&gt;   1) парсинг 12 csv → data/all-ops.csv;
+&gt;   2) категоризация → у каждой строки категория;
+&gt;   3) агрегация → суммы по категориям и по месяцам;
+&gt;   4) визуализация → три графика (chart.js): пирог, бары, тренд;
+&gt;   5) инсайты → три неожиданных факта;
+&gt;   6) сборка report.md.
+&gt; в spec пропиши, что выдаёт каждая фаза.
 &gt; критерии готовности — измеримые, перечисли.</pre>
                 </li>
                 <li>Утвердите <code>spec.md</code>. Скажите: <em>«работаем по&nbsp;@spec.md, через TodoWrite, фазами с&nbsp;ревью между ними»</em>.</li>
@@ -572,9 +577,14 @@
 &gt;   — "income minus spend" monthly trend;
 &gt;   — three "where to look next year" pointers.
 &gt; format: markdown + charts (chart.js via context7).
-&gt; plan — six phases: parse, categorise, aggregate,
-&gt;   visualise, insights, assemble report.md. in spec,
-&gt;   write what each phase delivers.
+&gt; plan — six phases:
+&gt;   1) parse 12 csv → data/all-ops.csv;
+&gt;   2) categorise → every row has a category;
+&gt;   3) aggregate → per-category and per-month sums;
+&gt;   4) visualise → three charts (chart.js): pie, bars, trend;
+&gt;   5) insights → three surprising facts;
+&gt;   6) assemble report.md.
+&gt; in spec, write what each phase delivers.
 &gt; acceptance criteria — measurable, list them.</pre>
                 </li>
                 <li>Approve <code>spec.md</code>. Say: <em>“execute against @spec.md, through TodoWrite, phase by phase with review between.”</em></li>
@@ -642,9 +652,14 @@
 &gt;   — три «критические даты» — год, когда пассивный доход
 &gt;     перекрывает целевой;
 &gt;   — текстовое summary в трёх предложениях.
-&gt; план — шесть фаз: скелет страницы, чистая логика
-&gt;   расчёта, подключение к форме, графики, интерпретация,
-&gt;   UX-полировка. в spec пропиши, что выдаёт каждая фаза.
+&gt; план — шесть фаз:
+&gt;   1) скелет страницы (форма + пустые блоки результата);
+&gt;   2) чистая логика расчёта (консоль, на тестовых вводах);
+&gt;   3) подключение расчёта к форме;
+&gt;   4) график (chart.js): три линии для трёх сценариев;
+&gt;   5) интерпретация → 3 критические даты + 3-предложение саммари;
+&gt;   6) UX-полировка (frontend-design + Playwright).
+&gt; в spec пропиши, что выдаёт каждая фаза.
 &gt; критерии готовности — измеримые.</pre>
                 </li>
                 <li>Утвердите spec. Дайте команду исполнять.</li>
@@ -688,9 +703,14 @@
 &gt;   — combined chart (three lines);
 &gt;   — three "critical dates" — when passive income covers target;
 &gt;   — three-sentence summary.
-&gt; plan — six phases: page skeleton, pure calc logic,
-&gt;   wire to form, charts, interpretation, UX polish.
-&gt;   in spec, write what each phase delivers.
+&gt; plan — six phases:
+&gt;   1) page skeleton (form + empty result blocks);
+&gt;   2) pure calc logic (console, on test inputs);
+&gt;   3) wire calc to form;
+&gt;   4) chart (chart.js): three lines for three scenarios;
+&gt;   5) interpretation → 3 critical dates + 3-sentence summary;
+&gt;   6) UX polish (frontend-design + Playwright).
+&gt; in spec, write what each phase delivers.
 &gt; acceptance criteria — measurable.</pre>
                 </li>
                 <li>Approve spec. Order execution.</li>
