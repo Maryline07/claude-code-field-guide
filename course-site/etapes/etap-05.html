@@ -643,14 +643,16 @@
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Создайте новую папку <code>budget-dashboard-demo</code>. Скопируйте туда <code>dashboard.html</code> и&nbsp;<code>CLAUDE.md</code> из&nbsp;<code>portfolio-journal</code>. Реальные данные не&nbsp;копируйте.</li>
+                <li>Создайте новую папку <code>budget-dashboard-demo</code>. Скопируйте туда <code>dashboard.html</code> из&nbsp;<code>portfolio-journal</code>. Реальные данные не&nbsp;копируйте — <code>CLAUDE.md</code> напишем в&nbsp;шаге&nbsp;4.</li>
                 <li>Промпт:
                     <pre class="shell">&gt; сгенерируй data/operations.csv с 80 реалистичными
 &gt; инвестиционными операциями за 18 месяцев.
 &gt; шесть тикеров, buy/sell/dividend смешаны. фейковые имена,
 &gt; никаких персональных данных, чтобы можно было публиковать.</pre>
                 </li>
-                <li>Откройте dashboard локально. Убедитесь, что работает на&nbsp;демо-данных.</li>
+                <li>Запустите локальный сервер из&nbsp;папки <code>budget-dashboard-demo</code>:
+                    <pre class="shell">python -m http.server 8847</pre>
+                    Откройте <code>http://localhost:8847/dashboard.html</code> в&nbsp;браузере. Убедитесь, что дашборд отображает данные — при открытии через <code>file://</code> <code>fetch()</code> заблокирован браузером.</li>
                 <li>Промпт:
                     <pre class="shell">&gt; составь CLAUDE.md и .gitignore.
 &gt; в .gitignore обязательно: .env, data/personal/, screenshots/.
@@ -675,14 +677,16 @@
                 <li>Поделитесь URL с&nbsp;другом и&nbsp;послушайте обратную связь.</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Create <code>budget-dashboard-demo</code>. Copy <code>dashboard.html</code> and <code>CLAUDE.md</code> from <code>portfolio-journal</code>. Don’t copy real data.</li>
+                <li>Create <code>budget-dashboard-demo</code>. Copy <code>dashboard.html</code> from <code>portfolio-journal</code>. Don’t copy real data — <code>CLAUDE.md</code> will be written in step&nbsp;4.</li>
                 <li>Prompt:
                     <pre class="shell">&gt; generate data/operations.csv with 80 realistic
 &gt; investing operations across 18 months.
 &gt; six tickers, buy/sell/dividend mixed. fake names,
 &gt; no personal data, safe to publish.</pre>
                 </li>
-                <li>Open the dashboard locally. Confirm it works on demo data.</li>
+                <li>Start a local server from the <code>budget-dashboard-demo</code> folder:
+                    <pre class="shell">python -m http.server 8847</pre>
+                    Open <code>http://localhost:8847/dashboard.html</code> in your browser. Confirm the dashboard shows data — opening via <code>file://</code> blocks <code>fetch()</code>.</li>
                 <li>Prompt:
                     <pre class="shell">&gt; draft CLAUDE.md and .gitignore.
 &gt; .gitignore must include: .env, data/personal/, screenshots/.
