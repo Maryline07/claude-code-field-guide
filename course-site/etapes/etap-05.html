@@ -648,7 +648,10 @@
                     <pre class="shell">&gt; сгенерируй data/operations.csv с 80 реалистичными
 &gt; инвестиционными операциями за 18 месяцев.
 &gt; шесть тикеров, buy/sell/dividend смешаны. фейковые имена,
-&gt; никаких персональных данных, чтобы можно было публиковать.</pre>
+&gt; никаких персональных данных, чтобы можно было публиковать.
+&gt; строго такая схема колонок (dashboard.html её ждёт):
+&gt; date,ticker,side,qty,price,currency,note
+&gt; side: только buy / sell / dividend.</pre>
                 </li>
                 <li>Запустите локальный сервер из&nbsp;папки <code>budget-dashboard-demo</code>:
                     <pre class="shell">python -m http.server 8847</pre>
@@ -682,7 +685,10 @@
                     <pre class="shell">&gt; generate data/operations.csv with 80 realistic
 &gt; investing operations across 18 months.
 &gt; six tickers, buy/sell/dividend mixed. fake names,
-&gt; no personal data, safe to publish.</pre>
+&gt; no personal data, safe to publish.
+&gt; use exactly this column schema (dashboard.html requires it):
+&gt; date,ticker,side,qty,price,currency,note
+&gt; side: only buy / sell / dividend.</pre>
                 </li>
                 <li>Start a local server from the <code>budget-dashboard-demo</code> folder:
                     <pre class="shell">python -m http.server 8847</pre>
