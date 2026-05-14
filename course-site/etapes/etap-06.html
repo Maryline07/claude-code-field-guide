@@ -524,6 +524,10 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   3) кнопка «обновить» получает новый timestamp.</pre>
                 </li>
                 <li>Утвердите spec, дайте исполнять.</li>
+                <li>Пока Claude реализует файлы, попросите его сразу заполнить <code>CLAUDE.md</code>:
+                    <pre class="shell">&gt; заполни CLAUDE.md: 2–3 строки о проекте, стек, команды запуска backend и frontend.</pre>
+                    Этот файл Claude читает в начале каждой новой сессии в этой папке&nbsp;&mdash; так он сразу вспомнит, что это за проект и как его запустить.
+                </li>
                 <li>Запустите backend. Claude должен был создать файл <code>backend/requirements.txt</code>&nbsp;&mdash; спросите его:
                     <pre class="shell">&gt; какой командой запустить backend локально?</pre>
                     Типичный ответ: сначала <code>pip install -r requirements.txt</code>, затем <code>uvicorn main:app --reload --port 8000</code> из папки <code>backend/</code>. Если в терминале появилось <code>Uvicorn running on http://127.0.0.1:8000</code>&nbsp;&mdash; backend жив.
@@ -582,6 +586,10 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   3) "refresh" button updates the timestamp.</pre>
                 </li>
                 <li>Approve the spec, execute.</li>
+                <li>While Claude implements the files, ask it to fill in <code>CLAUDE.md</code> right away:
+                    <pre class="shell">&gt; fill in CLAUDE.md: 2–3 lines about the project, stack, commands to start backend and frontend.</pre>
+                    Claude reads this file at the start of every new session in this folder — so it instantly remembers what the project is and how to run it.
+                </li>
                 <li>Start the backend. Claude should have created <code>backend/requirements.txt</code> — ask:
                     <pre class="shell">&gt; what command runs the backend locally?</pre>
                     Typical answer: first <code>pip install -r requirements.txt</code>, then <code>uvicorn main:app --reload --port 8000</code> from the <code>backend/</code> folder. If the terminal shows <code>Uvicorn running on http://127.0.0.1:8000</code> — the backend is alive.
@@ -656,7 +664,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; эндпоинты: /api/auth/signup, /api/auth/login, /api/auth/me, /api/operations (CRUD), /api/operations/import (CSV), /api/forecast.
 &gt; UX-флоу: лендинг → регистрация/вход → дашборд с операциями → страница прогноза.
 &gt; критерии готовности: живая ссылка на Vercel, backend на Render, каждый пользователь видит только свои данные.</pre>
-                    Утвердите spec, затем дайте исполнять фазу за&nbsp;фазой.</li>
+                    Утвердите spec, затем попросите Claude заполнить <code>CLAUDE.md</code> (стек, команды запуска) и дайте исполнять фазу за&nbsp;фазой.</li>
                 <li><strong>Backend: модели и&nbsp;база.</strong> FastAPI + SQLAlchemy + SQLite (локально). Модели: User, Operation, Forecast. Миграции через Alembic либо «создать таблицы при старте».</li>
                 <li><strong>Backend: авторизация.</strong> Регистрация, вход, JWT. Эндпоинты <code>/api/auth/signup</code>, <code>/api/auth/login</code>, <code>/api/auth/me</code>. Хеширование bcrypt. Декоратор <code>require_auth</code>.</li>
                 <li><strong>Backend: операции.</strong> CRUD&nbsp;<code>/api/operations</code> с&nbsp;фильтром «только мои». Импорт CSV через <code>/api/operations/import</code> (multipart upload).</li>
@@ -678,7 +686,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; endpoints: /api/auth/signup, /api/auth/login, /api/auth/me, /api/operations (CRUD), /api/operations/import (CSV), /api/forecast.
 &gt; UX flow: landing → sign-up/sign-in → dashboard with operations → forecast page.
 &gt; acceptance: live Vercel URL, backend on Render, each user sees only their data.</pre>
-                    Approve the spec, then execute phase by phase.</li>
+                    Approve the spec, then ask Claude to fill in <code>CLAUDE.md</code> (stack, start commands) and execute phase by phase.</li>
                 <li><strong>Backend: models and DB.</strong> FastAPI + SQLAlchemy + SQLite (local). Models: User, Operation, Forecast. Migrations via Alembic or "create tables on startup."</li>
                 <li><strong>Backend: auth.</strong> Sign-up, sign-in, JWT. Endpoints <code>/api/auth/signup</code>, <code>/api/auth/login</code>, <code>/api/auth/me</code>. bcrypt hashing. <code>require_auth</code> decorator.</li>
                 <li><strong>Backend: operations.</strong> CRUD on <code>/api/operations</code> with "mine only" filter. CSV import via <code>/api/operations/import</code> (multipart upload).</li>
