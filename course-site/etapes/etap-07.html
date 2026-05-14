@@ -488,7 +488,8 @@
             <ol lang="ru">
                 <li>Зайдите в&nbsp;ваш проект <code>portfolio-journal</code>. Запустите <code>claude</code>.</li>
                 <li><strong>Один subagent (foreground).</strong> Промпт:
-                    <pre class="shell">&gt; запусти subagent code-explorer на @data/operations.csv.
+                    <pre class="shell">&gt; запусти subagent code-explorer (или general-purpose с ролью code-explorer)
+&gt; на @data/operations.csv.
 &gt; brief: опиши, какие тикеры в файле, сколько уникальных,
 &gt; какой период покрывает, какие колонки — в формате 4-5 строк.
 &gt; ЖДИ результата.</pre>
@@ -530,7 +531,8 @@
             <ol lang="en">
                 <li>Enter your <code>portfolio-journal</code> project. Launch <code>claude</code>.</li>
                 <li><strong>One subagent (foreground).</strong> Prompt:
-                    <pre class="shell">&gt; run a code-explorer subagent on @data/operations.csv.
+                    <pre class="shell">&gt; run a code-explorer subagent (or general-purpose with a code-explorer role)
+&gt; on @data/operations.csv.
 &gt; brief: describe which tickers are in the file, how many unique,
 &gt; what period it covers, which columns — in 4-5 lines.
 &gt; WAIT for the result.</pre>

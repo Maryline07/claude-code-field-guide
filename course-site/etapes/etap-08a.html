@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Этап 08a · Кастомизация Claude Code — Полевое руководство по Claude Code</title>
-<meta name="description" content="Этап 08a курса по Claude Code: свои skills, slash-команды, hooks, output styles, settings.json. Skill «персональный CFO» и slash-команда /прогноз.">
+<meta name="description" content="Этап 08a курса по Claude Code: свои skills, slash-команды, hooks, output styles, settings.json. Skill «персональный CFO» и slash-команда /forecast.">
 <link rel="stylesheet" href="../styles.css">
 <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
 </head>
@@ -51,7 +51,7 @@
             <span lang="en">Claude Code shaped <em>to you</em>.</span>
         </h1>
         <p class="standfirst rise d3" lang="ru" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
-            До&nbsp;этого мы&nbsp;ставили чужие skills и&nbsp;MCP. Сегодня делаем <em>свои</em>: skill «персональный CFO», который по&nbsp;одной команде приносит финансовый отчёт; slash-команду <code>/прогноз</code>; hook, считающий рабочее время; и&nbsp;настраиваем поведение Claude через <code>settings.json</code> и&nbsp;output styles.
+            До&nbsp;этого мы&nbsp;ставили чужие skills и&nbsp;MCP. Сегодня делаем <em>свои</em>: skill «персональный CFO», который по&nbsp;одной команде приносит финансовый отчёт; slash-команду <code>/forecast</code>; hook, считающий рабочее время; и&nbsp;настраиваем поведение Claude через <code>settings.json</code> и&nbsp;output styles.
         </p>
         <p class="standfirst rise d3" lang="en" style="font-family:'Newsreader',serif; font-style:italic; color:var(--ink-muted); max-width:38em;">
             Until now we installed others’ skills and MCPs. Today we build <em>our own</em>: a “personal CFO” skill that returns a monthly finance report on one command; a <code>/forecast</code> slash command; a hook tracking work hours; and we tune Claude’s behaviour via <code>settings.json</code> and output styles.
@@ -72,7 +72,7 @@
             </div>
             <div>
                 <dt><span lang="ru">Артефакт</span><span lang="en">Artefact</span></dt>
-                <dd><span lang="ru">skill «персональный CFO», команда <code>/прогноз</code>, hook рабочего времени, свой output&nbsp;style</span><span lang="en">a “personal CFO” skill, a <code>/forecast</code> command, a worktime hook, a custom output style</span></dd>
+                <dd><span lang="ru">skill «персональный CFO», команда <code>/forecast</code>, hook рабочего времени, свой output&nbsp;style</span><span lang="en">a “personal CFO” skill, a <code>/forecast</code> command, a worktime hook, a custom output style</span></dd>
             </div>
         </dl>
     </div>
@@ -224,11 +224,11 @@ description: Use when the user asks for a financial report.
         </details>
 
         <details class="topic">
-            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="команды вида /cfo, /прогноз, /отчёт — пользовательские шорткаты, которые вы пишете себе сами. Хранятся в .claude/commands/ как .md-файлы.">Slash-команды</dfn>: шорткаты для&nbsp;частых задач</span><span lang="en"><dfn class="term" tabindex="0" data-def="commands like /cfo, /forecast, /report — user shortcuts you write yourself. Stored in .claude/commands/ as .md files.">Slash commands</dfn>: shortcuts for frequent tasks</span></summary>
+            <summary><span lang="ru"><dfn class="term" tabindex="0" data-def="команды вида /cfo, /forecast, /отчёт — пользовательские шорткаты, которые вы пишете себе сами. Хранятся в .claude/commands/ как .md-файлы.">Slash-команды</dfn>: шорткаты для&nbsp;частых задач</span><span lang="en"><dfn class="term" tabindex="0" data-def="commands like /cfo, /forecast, /report — user shortcuts you write yourself. Stored in .claude/commands/ as .md files.">Slash commands</dfn>: shortcuts for frequent tasks</span></summary>
             <div class="topic-body">
                 <div lang="ru">
                     <p>Slash-команды&nbsp;&mdash; это просто файлы в&nbsp;<code>.claude/commands/</code> (для&nbsp;проекта) или <code>~/.claude/commands/</code> (глобально). Один файл&nbsp;&mdash; одна команда.</p>
-                    <p>Файл <code>.claude/commands/прогноз.md</code>:</p>
+                    <p>Файл <code>.claude/commands/forecast.md</code>:</p>
                     <pre class="shell">---
 description: Прогноз сбережений с тремя сценариями
 allowed-tools:
@@ -248,10 +248,10 @@ allowed-tools:
 3. Проиграй три сценария (consrv 5%, real 8%, agg 12%);
 4. Запиши результат в reports/forecast-$(date +%Y-%m-%d).md;
 5. Открой через playwright и сделай скриншот.</pre>
-                    <p>После этого в&nbsp;диалоге работает <code>/прогноз 30 лет</code>&nbsp;&mdash; Claude применит инструкцию из&nbsp;файла, подставив <code>30 лет</code> вместо <code>$ARGUMENTS</code>.</p>
+                    <p>После этого в&nbsp;диалоге работает <code>/forecast 30 лет</code>&nbsp;&mdash; Claude применит инструкцию из&nbsp;файла, подставив <code>30 лет</code> вместо <code>$ARGUMENTS</code>.</p>
                     <p>Что важно:</p>
                     <ul>
-                        <li><strong>Slash-команда&nbsp;&mdash; это не&nbsp;skill.</strong> Команда выполняется только когда вы&nbsp;её&nbsp;вызвали (<code>/прогноз</code>). Skill вызывается <em>автоматически</em> по&nbsp;triggers в&nbsp;description.</li>
+                        <li><strong>Slash-команда&nbsp;&mdash; это не&nbsp;skill.</strong> Команда выполняется только когда вы&nbsp;её&nbsp;вызвали (<code>/forecast</code>). Skill вызывается <em>автоматически</em> по&nbsp;triggers в&nbsp;description.</li>
                         <li><strong>Slash-команды для&nbsp;проектных рутин</strong> кладут в&nbsp;<code>.claude/commands/</code> и&nbsp;коммитят в&nbsp;git. Команды для&nbsp;всех ваших проектов&nbsp;&mdash; в&nbsp;<code>~/.claude/commands/</code>.</li>
                         <li><strong>allowed-tools</strong>&nbsp;&mdash; список инструментов, которыми команда может пользоваться. Полезно для&nbsp;безопасности: команда «отчёт» не&nbsp;должна иметь право удалять файлы.</li>
                     </ul>
@@ -452,7 +452,7 @@ Reply as a financial advisor:
             <div class="topic-body">
                 <div lang="ru">
                     <p><strong>Status line</strong>&nbsp;&mdash; нижняя строка интерфейса. По&nbsp;умолчанию там показано базовое. Можно сделать свою&nbsp;&mdash; например, отображать использованные токены, время сессии, текущую ветку git. Настраивается в&nbsp;<code>statusLine</code>-блоке <code>settings.json</code>.</p>
-                    <p><strong>Keybindings</strong>&nbsp;&mdash; клавиатурные сокращения. Например, чтобы <code>Ctrl+L</code> делал <code>/clear</code>, или <code>Ctrl+P</code> вызывал ваш <code>/прогноз</code>. Настраиваются в&nbsp;<code>~/.claude/keybindings.json</code>. Skill <code>keybindings-help</code> поможет составить.</p>
+                    <p><strong>Keybindings</strong>&nbsp;&mdash; клавиатурные сокращения. Например, чтобы <code>Ctrl+L</code> делал <code>/clear</code>, или <code>Ctrl+P</code> вызывал ваш <code>/forecast</code>. Настраиваются в&nbsp;<code>~/.claude/keybindings.json</code>. Skill <code>keybindings-help</code> поможет составить.</p>
                     <p><strong>Memory</strong>&nbsp;&mdash; auto-memory из&nbsp;этапа&nbsp;02. Можно явно указать в&nbsp;<code>settings.json</code>, какие типы записей использовать, какие игнорировать. Полезно, если хотите более «приватный» режим.</p>
                     <p><strong>Permissions</strong>&nbsp;&mdash; ваш «список белого». Чем больше операций разрешено без&nbsp;спроса, тем быстрее работа, но&nbsp;тем выше риск. Хороший компромисс: <em>разрешить чтение всего и&nbsp;запись в&nbsp;текущую папку, но&nbsp;запросить разрешение на&nbsp;удаление, push и&nbsp;деплой</em>.</p>
                     <pre class="shell">{
@@ -636,7 +636,7 @@ Reply as a financial advisor:
     <div class="shell">
         <div class="section-head">
             <span class="num">§ III · <span lang="ru">Проекты по&nbsp;инструкции</span><span lang="en">Guided projects</span></span>
-            <h2><span lang="ru">Свой инвест-аналитик и&nbsp;<code>/прогноз</code></span><span lang="en">Your own investing analyst and <code>/forecast</code></span></h2>
+            <h2><span lang="ru">Свой инвест-аналитик и&nbsp;<code>/forecast</code></span><span lang="en">Your own investing analyst and <code>/forecast</code></span></h2>
         </div>
 
         <article class="project">
@@ -718,16 +718,16 @@ Reply as a financial advisor:
 
         <article class="project">
             <span class="label"><span lang="ru">Проект B · по&nbsp;инструкции</span><span lang="en">Project B · guided</span></span>
-            <h3><span lang="ru">Slash-команда <code>/прогноз</code></span><span lang="en">Slash command <code>/forecast</code></span></h3>
+            <h3><span lang="ru">Slash-команда <code>/forecast</code></span><span lang="en">Slash command <code>/forecast</code></span></h3>
             <p class="goal" lang="ru">Цель: команда, которая принимает горизонт (например, «10&nbsp;лет») и&nbsp;выдаёт трёх-сценарный прогноз сбережений (как в&nbsp;этапе&nbsp;04), сохраняя результат в&nbsp;<code>reports/forecast-YYYY-MM-DD.md</code> и&nbsp;HTML-вариант для&nbsp;браузера.</p>
             <p class="goal" lang="en">Goal: a command that takes a horizon (e.g. “10 years”) and produces a three-scenario savings forecast (etape 04), saving the result to <code>reports/forecast-YYYY-MM-DD.md</code> plus an HTML for the browser.</p>
 
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>В&nbsp;корне <code>portfolio-journal</code> создайте <code>.claude/commands/прогноз.md</code>.</li>
+                <li>В&nbsp;корне <code>portfolio-journal</code> создайте <code>.claude/commands/forecast.md</code> (имя команды&nbsp;&mdash; латиницей: Claude Code распознаёт slash-команды по&nbsp;имени файла, и&nbsp;надёжнее держать его в&nbsp;ASCII).</li>
                 <li>Промпт:
-                    <pre class="shell">&gt; составь slash-команду /прогноз:
+                    <pre class="shell">&gt; составь slash-команду /forecast:
 &gt;   description: трёх-сценарный прогноз сбережений с горизонтом
 &gt;     из аргументов (по умолчанию 10 лет).
 &gt;   allowed-tools: Read, Write, Bash, WebFetch.
@@ -746,7 +746,7 @@ Reply as a financial advisor:
 &gt;
 &gt; arguments: $ARGUMENTS — горизонт прогноза (например "10 лет").</pre>
                 </li>
-                <li>Тест: <code>/прогноз 10 лет</code>. Файлы должны появиться в&nbsp;<code>reports/</code>.</li>
+                <li>Тест: <code>/forecast 10 лет</code>. Файлы должны появиться в&nbsp;<code>reports/</code>.</li>
                 <li>Уточните:
                     <ul>
                         <li><em>«Если ARGUMENTS пустые&nbsp;&mdash; используй 10 лет по&nbsp;умолчанию»</em>;</li>
@@ -920,7 +920,6 @@ Reply as a financial advisor:
                     <span lang="en">open after you finish on your own</span>
                     <span class="summary-hint" lang="ru">— сначала сделайте, потом проверяйте</span>
                     <span class="summary-hint" lang="en">— do it first, check after</span>
-                </weight>
                 </summary>
                 <div class="verify-body">
                     <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
@@ -1197,7 +1196,7 @@ Reply as a financial advisor:
                 <span lang="en">I tell apart when to use a skill, a slash command, a hook or an output style.</span>
             </li>
             <li data-key="e8a-delivery">
-                <span lang="ru">Сделал четыре проекта: skill «инвест-аналитик», команду <code>/прогноз</code>, skill «авто-публикатор», hook+команду «timesheet».</span>
+                <span lang="ru">Сделал четыре проекта: skill «инвест-аналитик», команду <code>/forecast</code>, skill «авто-публикатор», hook+команду «timesheet».</span>
                 <span lang="en">I built four projects: investing-analyst skill, <code>/forecast</code> command, auto-publisher skill, timesheet hook+command.</span>
             </li>
         </ul>

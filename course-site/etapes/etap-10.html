@@ -90,12 +90,12 @@
             <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> ваш собственный Telegram-бот, через которого Claude будет писать вам сообщения и&nbsp;получать ответы.<br>
             <strong>Зачем сейчас:</strong> push-канал для&nbsp;всех автоматизаций.<br>
             <strong>Как получить:</strong> в&nbsp;Telegram найдите <a href="https://t.me/BotFather">@BotFather</a>, нажмите <code>/newbot</code>, дайте имя и&nbsp;username. В&nbsp;ответ&nbsp;&mdash; <code>token</code> вида <code>123456:ABC-DEF...</code>. <strong>Никому не&nbsp;показывайте</strong>: с&nbsp;ним любой может писать от&nbsp;имени бота.<br>
-            <strong>Куда положить:</strong> в&nbsp;<code>.env</code>: <code>TELEGRAM_BOT_TOKEN=&lt;token&gt;</code>. На&nbsp;Railway/сервере&nbsp;&mdash; через env vars dashboard.<br>
+            <strong>Куда положить:</strong> в&nbsp;<code>.env</code>: <code>TELEGRAM_BOT_TOKEN=&lt;token&gt;</code>. На&nbsp;сервере&nbsp;&mdash; через env vars вашего хостинга (например, Render).<br>
             <strong>Свой <code>chat_id</code>:</strong> напишите боту любое сообщение, потом откройте <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code>&nbsp;&mdash; в&nbsp;JSON будет <code>chat.id</code>. Запишите в&nbsp;<code>.env</code> как <code>TELEGRAM_CHAT_ID</code>.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> your own Telegram bot through which Claude pushes messages and gets replies.<br>
             <strong>Why now:</strong> the push channel for all automations.<br>
             <strong>How to get:</strong> in Telegram find <a href="https://t.me/BotFather">@BotFather</a>, send <code>/newbot</code>, pick a name and username. You receive a <code>token</code> like <code>123456:ABC-DEF...</code>. <strong>Never share</strong>: anyone can post as your bot.<br>
-            <strong>Where to put:</strong> in <code>.env</code>: <code>TELEGRAM_BOT_TOKEN=&lt;token&gt;</code>. On Railway/server — via env vars dashboard.<br>
+            <strong>Where to put:</strong> in <code>.env</code>: <code>TELEGRAM_BOT_TOKEN=&lt;token&gt;</code>. On a server — via your host’s env vars UI (e.g. Render).<br>
             <strong>Your <code>chat_id</code>:</strong> message the bot anything, then open <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> — JSON contains <code>chat.id</code>. Save to <code>.env</code> as <code>TELEGRAM_CHAT_ID</code>.</p>
         </div>
 
@@ -118,11 +118,11 @@
             <h3><span lang="ru">Планировщик задач: cron или Task Scheduler</span><span lang="en">Task scheduler: cron or Task Scheduler</span></h3>
             <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> встроенный планировщик ОС, запускающий программы по&nbsp;расписанию. <em>Linux/macOS</em>&nbsp;&mdash; <code>cron</code> через <code>crontab -e</code>. <em>Windows</em>&nbsp;&mdash; Task Scheduler через <code>taskschd.msc</code> или <code>schtasks</code>.<br>
             <strong>Зачем сейчас:</strong> чтобы скрипт «утренний отчёт» запускался каждый день в&nbsp;8:30 без&nbsp;вашего участия.<br>
-            <strong>Альтернатива&nbsp;&mdash; Railway Cron:</strong> если ваш бот живёт на&nbsp;Railway (этап&nbsp;06), там есть встроенный cron в&nbsp;настройках сервиса.<br>
+            <strong>Облачная альтернатива:</strong> у&nbsp;некоторых хостингов есть встроенный планировщик (например, Render Cron Jobs), но&nbsp;на&nbsp;бесплатных тарифах его обычно нет. Бесплатные пути в&nbsp;курсе&nbsp;&mdash; системный cron и&nbsp;skill <code>schedule</code> (см. ниже).<br>
             <strong>Проверить:</strong> на&nbsp;Linux/macOS <code>crontab -l</code> покажет ваш текущий список. На&nbsp;Windows <code>schtasks /query</code>.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> the built-in OS scheduler that runs programs on a clock. <em>Linux/macOS</em> — <code>cron</code> via <code>crontab -e</code>. <em>Windows</em> — Task Scheduler via <code>taskschd.msc</code> or <code>schtasks</code>.<br>
             <strong>Why now:</strong> so a “morning report” script fires daily at 8:30 unattended.<br>
-            <strong>Alternative — Railway Cron:</strong> if your bot lives on Railway (etape 06), there’s a built-in cron in the service settings.<br>
+            <strong>Cloud alternative:</strong> some hosts have a built-in scheduler (e.g. Render Cron Jobs), but free tiers usually don’t. The free paths in this course are system cron and the <code>schedule</code> skill (below).<br>
             <strong>Verify:</strong> on Linux/macOS <code>crontab -l</code> shows your list. On Windows <code>schtasks /query</code>.</p>
         </div>
 
@@ -141,13 +141,13 @@
             <span class="label"><span lang="ru">обязательно</span><span lang="en">required</span></span>
             <h3><span lang="ru">Из&nbsp;этапов 06–09</span><span lang="en">From etapes 06–09</span></h3>
             <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
-                <li>Backend на&nbsp;Railway (этап&nbsp;06) или другой сервер, где будут жить cron-задачи;</li>
+                <li>место, где будут жить cron-задачи: ваш компьютер (системный cron) либо skill <code>schedule</code> (облако Anthropic);</li>
                 <li>MCP «Daily Trader» из&nbsp;этапа&nbsp;09 (для&nbsp;<code>get_price</code> в&nbsp;скриптах);</li>
                 <li>ANTHROPIC_API_KEY из&nbsp;этапа&nbsp;06 (для&nbsp;Claude API в&nbsp;ваших скриптах);</li>
                 <li>ALPHAVANTAGE_KEY из&nbsp;этапа&nbsp;03.</li>
             </ul>
             <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
-                <li>A backend on Railway (etape 06) or another server hosting your cron tasks;</li>
+                <li>somewhere for the cron tasks to live: your own computer (system cron) or the <code>schedule</code> skill (Anthropic’s cloud);</li>
                 <li>The Daily Trader MCP from etape 09 (for <code>get_price</code> in your scripts);</li>
                 <li>ANTHROPIC_API_KEY from etape 06 (for Claude API inside your scripts);</li>
                 <li>ALPHAVANTAGE_KEY from etape 03.</li>
@@ -181,7 +181,7 @@
  0 9 1 * *     <span class="cmt"># <span lang="ru">первое число месяца в 9:00</span><span lang="en">1st of month at 9:00</span></span>
  */15 * * * *  <span class="cmt"># <span lang="ru">каждые 15 минут</span><span lang="en">every 15 minutes</span></span></pre>
                     <p>Запоминать не&nbsp;нужно. Скажите Claude <em>«каждый рабочий день в&nbsp;8:30»</em>&nbsp;&mdash; он&nbsp;сам построит выражение. Ваше дело&nbsp;&mdash; понимать, что эти пять цифр означают «когда».</p>
-                    <p><strong>Часовые пояса.</strong> Cron на&nbsp;сервере живёт в&nbsp;часовом поясе сервера. Если ваш Railway-сервер в&nbsp;UTC, а&nbsp;вам нужно «в&nbsp;8:30 по&nbsp;Москве»&nbsp;&mdash; ставите <code>30 5 * * *</code>. Лучшая практика&nbsp;&mdash; задать TZ в&nbsp;конфиге cron.</p>
+                    <p><strong>Часовые пояса.</strong> Cron на&nbsp;сервере живёт в&nbsp;часовом поясе сервера. Если сервер в&nbsp;UTC, а&nbsp;вам нужно «в&nbsp;8:30 по&nbsp;Москве»&nbsp;&mdash; ставите <code>30 5 * * *</code>. Лучшая практика&nbsp;&mdash; задать TZ в&nbsp;конфиге cron.</p>
                 </div>
                 <div lang="en">
                     <p>A <dfn class="term" tabindex="0" data-def="a 5-field string: minute, hour, day of month, month, day of week. Tells when to run a program. “30 8 * * *” — every day at 8:30.">cron expression</dfn> is five space-separated fields:</p>
@@ -196,19 +196,19 @@
  0 9 1 * *     <span class="cmt"># 1st of month at 9:00</span>
  */15 * * * *  <span class="cmt"># every 15 minutes</span></pre>
                     <p>You don’t need to memorise it. Tell Claude <em>“every weekday at 8:30”</em> — it builds the expression. Your job is to know those five digits mean “when.”</p>
-                    <p><strong>Timezones.</strong> Cron on a server lives in the server’s TZ. Railway in UTC, you want “8:30 Moscow time” — set <code>30 5 * * *</code>. Best practice — set TZ in the cron config.</p>
+                    <p><strong>Timezones.</strong> Cron on a server lives in the server’s TZ. A server in UTC, you want “8:30 Moscow time” — set <code>30 5 * * *</code>. Best practice — set TZ in the cron config.</p>
                 </div>
             </div>
         </details>
 
         <details class="topic">
-            <summary><span lang="ru">Где живёт расписание: cron, Railway, schedule-skill</span><span lang="en">Where schedules live: cron, Railway, schedule skill</span></summary>
+            <summary><span lang="ru">Где живёт расписание: cron, облачный хостинг, schedule-skill</span><span lang="en">Where schedules live: cron, a cloud host, the schedule skill</span></summary>
             <div class="topic-body">
                 <div lang="ru">
                     <p>Три варианта запустить «каждый день в&nbsp;8:30»:</p>
                     <ol>
                         <li><strong>Системный cron</strong> на&nbsp;вашем компьютере. Подходит, если компьютер всегда включён. Минус&nbsp;&mdash; если ноутбук закрыт, расписание не&nbsp;сработает.</li>
-                        <li><strong>Railway Cron</strong> (или другой облачный хост). Сервис всегда поднят, расписание в&nbsp;настройках. Лучше всего для&nbsp;долгоживущих автоматизаций.</li>
+                        <li><strong>Облачный cron</strong> (Render Cron Jobs и&nbsp;т.&nbsp;п.). Сервис всегда поднят, расписание в&nbsp;настройках. Лучше всего для&nbsp;долгоживущих автоматизаций, но&nbsp;на&nbsp;бесплатных тарифах обычно недоступен.</li>
                         <li><strong>Skill <code>schedule</code></strong> от&nbsp;Anthropic. Создаёт «remote agent», работающий в&nbsp;облаке Anthropic. Без&nbsp;вашего сервера. Идеально для&nbsp;учебных и&nbsp;личных задач.</li>
                     </ol>
                     <p>Сравнение:</p>
@@ -218,17 +218,17 @@
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Системный cron</td><td>средне</td><td>бесплатно</td><td>сервер всегда включён</td></tr>
-                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Railway Cron</td><td>легко</td><td>$5/мес</td><td>уже есть бэкенд</td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Облачный cron</td><td>легко</td><td>платно</td><td>есть платный хостинг</td></tr>
                             <tr><td style="padding: 0.4rem 0;">schedule skill</td><td>проще всего</td><td>токены Claude</td><td>лёгкие задачи без&nbsp;своего сервера</td></tr>
                         </tbody>
                     </table>
-                    <p>В&nbsp;курсе используем все три. «Финансовый дворецкий» с&nbsp;тяжёлой логикой&nbsp;&mdash; на&nbsp;Railway. Лёгкие напоминалки и&nbsp;«дневник»&nbsp;&mdash; через <code>schedule</code> skill.</p>
+                    <p>В&nbsp;курсе используем бесплатные пути: «Финансовый дворецкий» и&nbsp;«дневник»&nbsp;&mdash; через системный cron или skill <code>schedule</code>. Облачный cron упоминаем для&nbsp;полноты&nbsp;&mdash; он&nbsp;пригодится, когда у&nbsp;вас появится платный хостинг.</p>
                 </div>
                 <div lang="en">
                     <p>Three places to run “every day at 8:30”:</p>
                     <ol>
                         <li><strong>System cron</strong> on your computer. Good if your machine is always on. Downside — laptop closed, schedule misses.</li>
-                        <li><strong>Railway Cron</strong> (or another cloud host). The service is always up, schedule is in settings. Best for long-lived automations.</li>
+                        <li><strong>Cloud cron</strong> (Render Cron Jobs, etc.). The service is always up, schedule is in settings. Best for long-lived automations, but usually not on free tiers.</li>
                         <li><strong>The <code>schedule</code> skill</strong> from Anthropic. Creates a “remote agent” running in Anthropic’s cloud. No server of yours. Perfect for learning and personal tasks.</li>
                     </ol>
                     <p>Comparison:</p>
@@ -238,11 +238,11 @@
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">System cron</td><td>medium</td><td>free</td><td>always-on server</td></tr>
-                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Railway Cron</td><td>easy</td><td>$5/mo</td><td>backend already exists</td></tr>
+                            <tr style="border-bottom: 1px solid var(--rule-soft);"><td style="padding: 0.4rem 0;">Cloud cron</td><td>easy</td><td>paid</td><td>you have a paid host</td></tr>
                             <tr><td style="padding: 0.4rem 0;">schedule skill</td><td>easiest</td><td>Claude tokens</td><td>light tasks, no server</td></tr>
                         </tbody>
                     </table>
-                    <p>We use all three. The “Financial Butler” with heavy logic on Railway. Light reminders and the “diary” — via the <code>schedule</code> skill.</p>
+                    <p>We use the free paths: the “Financial Butler” and the “diary” via system cron or the <code>schedule</code> skill. Cloud cron is mentioned for completeness — handy once you have a paid host.</p>
                 </div>
             </div>
         </details>
@@ -517,7 +517,7 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
                 <li>В&nbsp;Plan Mode (этап&nbsp;04) попросите Claude составить <code>spec.md</code> для&nbsp;«Финансового дворецкого»: четыре расписания, источники данных (portfolio-journal CSV, Daily Trader MCP), формат каждого сообщения.</li>
-                <li>Создайте папку <code>financial-butler/</code> на&nbsp;Railway-репо. Структура:
+                <li>Создайте папку <code>financial-butler/</code>. Структура:
                     <pre class="shell">financial-butler/
 ├── scripts/
 │   ├── morning_digest.py     # 8:30 каждый день
@@ -529,34 +529,33 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 │   ├── posthog.py            # запись телеметрии
 │   └── lock.py               # идемпотентность через файл-флаг
 ├── .env.example              # шаблон без значений
-└── railway.json              # описание cron-задач</pre>
+└── crontab.txt               # строки расписания (см. шаг ниже)</pre>
                 </li>
                 <li><strong>morning_digest.py.</strong> Считает текущие позиции (через Daily Trader MCP <code>get_price</code>), вчерашние изменения, новости по&nbsp;holdings (через WebSearch + summarisation Claude API). Шлёт markdown-сводку в&nbsp;Telegram. Цена&nbsp;&mdash; кэшируется на&nbsp;15&nbsp;минут.</li>
                 <li><strong>friday_review.py.</strong> За&nbsp;неделю: общий рост, лучший и&nbsp;худший тикер, прогноз на&nbsp;неделю через ваш skill «инвест-аналитик». Использует Claude API с&nbsp;Sonnet и&nbsp;prompt caching (этап&nbsp;06).</li>
                 <li><strong>price_alert.py.</strong> Каждые 15 минут проверяет: упала&nbsp;ли цена больше 1% за&nbsp;сутки? Если да&nbsp;&mdash; шлёт алерт. <strong>Идемпотентность</strong>: ведёт <code>data/alerts-sent.json</code>, чтобы не&nbsp;слать одно и&nbsp;то&nbsp;же дважды.</li>
                 <li><strong>monthly_audit.py.</strong> 1-го числа считает: куда ушли деньги в&nbsp;прошлом месяце (по&nbsp;дашборду из&nbsp;этапа&nbsp;04), три самых неожиданных факта.</li>
                 <li>Подключите PostHog: используя skill <code>posthog:llma-cc-setup</code>, добавьте телеметрию во&nbsp;все четыре скрипта. Каждый запуск пишет: модель, токены, длительность, успех/ошибка.</li>
-                <li>Настройте Railway Cron в&nbsp;<code>railway.json</code>:
-                    <pre class="shell">{
-  "$schema": "https://railway.app/railway.schema.json",
-  "deploy": {
-    "cronJobs": [
-      { "schedule": "30 5 * * *",  "command": "python scripts/morning_digest.py" },
-      { "schedule": "0 16 * * 5",  "command": "python scripts/friday_review.py" },
-      { "schedule": "*/15 * * * *","command": "python scripts/price_alert.py" },
-      { "schedule": "0 6 1 * *",   "command": "python scripts/monthly_audit.py" }
-    ]
-  }
-}</pre>
-                    <p>(Все времена&nbsp;&mdash; в&nbsp;UTC, привычные московские часы пересчитайте.)</p>
+                <li>Настройте расписание&nbsp;&mdash; бесплатно, двумя способами на&nbsp;выбор:
+                    <ul style="margin-top:0.3rem;">
+                        <li><strong>Системный cron</strong> (если компьютер часто включён)&nbsp;&mdash; <code>crontab -e</code>, по&nbsp;строке на&nbsp;скрипт:</li>
+                    </ul>
+                    <pre class="shell"># crontab — времена в UTC, привычные московские пересчитайте
+30 5 * * *   cd ~/financial-butler && python scripts/morning_digest.py
+0 16 * * 5   cd ~/financial-butler && python scripts/friday_review.py
+*/15 * * * * cd ~/financial-butler && python scripts/price_alert.py
+0 6 1 * *    cd ~/financial-butler && python scripts/monthly_audit.py</pre>
+                    <ul>
+                        <li><strong>Skill <code>schedule</code></strong> (если не&nbsp;хотите держать компьютер включённым)&nbsp;&mdash; попросите Claude: <em>«через skill schedule поставь morning_digest на&nbsp;8:30 МСК ежедневно»</em>. Расписание живёт в&nbsp;облаке Anthropic, ваш компьютер не&nbsp;нужен.</li>
+                    </ul>
                 </li>
-                <li>Задеплойте на&nbsp;Railway. Дождитесь первого срабатывания каждой задачи (для&nbsp;real-time alert&nbsp;&mdash; 15&nbsp;минут, для&nbsp;morning digest&nbsp;&mdash; следующее утро). Если что-то не&nbsp;пришло&nbsp;&mdash; смотрите Railway logs.</li>
+                <li>Запустите по&nbsp;расписанию. Дождитесь первого срабатывания каждой задачи (для&nbsp;real-time alert&nbsp;&mdash; 15&nbsp;минут, для&nbsp;morning digest&nbsp;&mdash; следующее утро). Если что-то не&nbsp;пришло&nbsp;&mdash; смотрите вывод cron (лог-файл скрипта) либо историю запусков skill <code>schedule</code>.</li>
                 <li>Дисциплина «кнопка стоп»: добавьте отдельную команду <code>/pause</code> в&nbsp;вашем Telegram-боте&nbsp;&mdash; она ставит флаг-файл, и&nbsp;все четыре скрипта при старте проверяют этот флаг. Удобно, когда вы&nbsp;в&nbsp;отпуске и&nbsp;не&nbsp;хотите пушей.</li>
                 <li>Verification через subagent: <em>«запусти red-team subagent. brief: представь, что один из&nbsp;скриптов завис. что произойдёт за&nbsp;неделю? где бы&nbsp;ты&nbsp;добавил защиту?»</em></li>
             </ol>
             <ol class="steps" lang="en">
                 <li>In Plan Mode (etape 04) have Claude draft <code>spec.md</code> for the “Financial Butler”: four schedules, data sources (portfolio-journal CSV, Daily Trader MCP), message format per schedule.</li>
-                <li>Create <code>financial-butler/</code> in your Railway repo. Layout:
+                <li>Create <code>financial-butler/</code>. Layout:
                     <pre class="shell">financial-butler/
 ├── scripts/
 │   ├── morning_digest.py     # 8:30 daily
@@ -568,28 +567,27 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 │   ├── posthog.py            # telemetry write
 │   └── lock.py               # idempotency via flag file
 ├── .env.example              # template without values
-└── railway.json              # cron-job declarations</pre>
+└── crontab.txt               # schedule lines (see step below)</pre>
                 </li>
                 <li><strong>morning_digest.py.</strong> Computes current positions (Daily Trader MCP <code>get_price</code>), yesterday’s deltas, news on holdings (WebSearch + Claude API summarisation). Sends a markdown digest to Telegram. Prices cached for 15 minutes.</li>
                 <li><strong>friday_review.py.</strong> Weekly: total return, best/worst ticker, weekly outlook through your “investing analyst” skill. Uses Claude API with Sonnet and prompt caching (etape 06).</li>
                 <li><strong>price_alert.py.</strong> Every 15 minutes checks: did price drop more than 1% in 24h? If so — push the alert. <strong>Idempotency</strong>: maintains <code>data/alerts-sent.json</code> so the same alert isn’t sent twice.</li>
                 <li><strong>monthly_audit.py.</strong> On the 1st: where did money go last month (the etape-04 dashboard), three biggest surprises.</li>
                 <li>Wire PostHog: with the <code>posthog:llma-cc-setup</code> skill add telemetry to all four scripts. Each run logs model, tokens, latency, success/error.</li>
-                <li>Configure Railway Cron in <code>railway.json</code>:
-                    <pre class="shell">{
-  "$schema": "https://railway.app/railway.schema.json",
-  "deploy": {
-    "cronJobs": [
-      { "schedule": "30 5 * * *",  "command": "python scripts/morning_digest.py" },
-      { "schedule": "0 16 * * 5",  "command": "python scripts/friday_review.py" },
-      { "schedule": "*/15 * * * *","command": "python scripts/price_alert.py" },
-      { "schedule": "0 6 1 * *",   "command": "python scripts/monthly_audit.py" }
-    ]
-  }
-}</pre>
-                    <p>(Times in UTC; convert to your local TZ.)</p>
+                <li>Set up the schedule — free, two ways to choose from:
+                    <ul style="margin-top:0.3rem;">
+                        <li><strong>System cron</strong> (if your computer is often on) — <code>crontab -e</code>, one line per script:</li>
+                    </ul>
+                    <pre class="shell"># crontab — times in UTC; convert to your local TZ
+30 5 * * *   cd ~/financial-butler && python scripts/morning_digest.py
+0 16 * * 5   cd ~/financial-butler && python scripts/friday_review.py
+*/15 * * * * cd ~/financial-butler && python scripts/price_alert.py
+0 6 1 * *    cd ~/financial-butler && python scripts/monthly_audit.py</pre>
+                    <ul>
+                        <li><strong>The <code>schedule</code> skill</strong> (if you don’t want to keep a computer on) — ask Claude: <em>“via the schedule skill, run morning_digest at 8:30 Moscow time daily”</em>. The schedule lives in Anthropic’s cloud — no machine of yours.</li>
+                    </ul>
                 </li>
-                <li>Deploy to Railway. Wait for the first hit of each task (15 minutes for the alert, next morning for the digest). Anything missing — check Railway logs.</li>
+                <li>Run on schedule. Wait for the first hit of each task (15 minutes for the alert, next morning for the digest). Anything missing — check the cron output (the script’s log file) or the <code>schedule</code> skill’s run history.</li>
                 <li>“Stop button” discipline: add a <code>/pause</code> command to your Telegram bot — sets a flag file, and all four scripts check it on start. Useful for vacations.</li>
                 <li>Verification via subagent: <em>“spawn a red-team subagent. brief: pretend one script froze. what happens in a week? where would you add protection?”</em></li>
             </ol>
@@ -606,7 +604,7 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
             <ol class="steps" lang="ru">
                 <li>Создайте репо <code>diary-bot/</code>. Используйте опыт этапа&nbsp;06 (FastAPI + PostgreSQL) или просто SQLite-файл.</li>
                 <li>Модель данных: <code>entries(date, q1, q2, q3, q4, q5, raw_chat)</code>.</li>
-                <li>Расписание (cron / Railway):
+                <li>Расписание (системный cron или skill <code>schedule</code>):
                     <ul>
                         <li><code>0 19 * * *</code>&nbsp;&mdash; 22:00 по&nbsp;Москве (UTC+3): бот шлёт первый вопрос;</li>
                         <li><code>0 11 * * 0</code>&nbsp;&mdash; 14:00 воскресенье: бот шлёт еженедельный отчёт.</li>
@@ -623,6 +621,7 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 &gt;   5) одна благодарность дню.
 &gt; ждёт ответ на каждый (через polling api telegram).
 &gt; сохраняет в БД entries.</pre>
+                    <p style="margin-top:0.5rem;">Важная деталь ментальной модели: cron только <em>запускает</em> скрипт. После отправки вопросов скрипт не&nbsp;завершается сразу&nbsp;&mdash; он&nbsp;несколько минут опрашивает Telegram, дожидаясь ваших ответов, и&nbsp;закрывается только когда все пять собраны (или вышел тайм-аут). То&nbsp;есть «ждёт ответы» не&nbsp;cron, а&nbsp;сам скрипт, пока живёт.</p>
                 </li>
                 <li>Скрипт «еженедельный отчёт»:
                     <pre class="shell">&gt; составь weekly_report.py:
@@ -635,14 +634,14 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 &gt; шлёт markdown-отчёт в telegram.</pre>
                 </li>
                 <li>Сделайте <code>/skip</code> в&nbsp;боте&nbsp;&mdash; пользователь может пропустить вечерний опрос. <code>/replay 2024-04-15</code>&nbsp;&mdash; повторно показать пять вопросов того дня (если вы&nbsp;забыли). <code>/last</code>&nbsp;&mdash; последний еженедельный отчёт.</li>
-                <li>Privacy. Записи чувствительные. Зашифруйте <code>raw_chat</code> в&nbsp;БД (например, через <code>cryptography.fernet</code>) и&nbsp;ключ держите в&nbsp;Railway env vars. <em>Если ключ потеряется&nbsp;&mdash; данные не&nbsp;восстановить</em>; это намеренно.</li>
+                <li>Privacy. Записи чувствительные. Зашифруйте <code>raw_chat</code> в&nbsp;БД (например, через <code>cryptography.fernet</code>) и&nbsp;ключ держите в&nbsp;env vars (локально&nbsp;&mdash; в&nbsp;<code>.env</code>, на&nbsp;сервере&nbsp;&mdash; в&nbsp;env vars хостинга). <em>Если ключ потеряется&nbsp;&mdash; данные не&nbsp;восстановить</em>; это намеренно.</li>
                 <li>Подключите PostHog только для&nbsp;<em>метрик</em>: количество ответов, длительность, ошибки. <strong>Никаких содержательных полей</strong>&nbsp;&mdash; чтобы дневник не&nbsp;утекал в&nbsp;PostHog.</li>
                 <li>Verification: запустите <code>/replay</code> на&nbsp;вчерашних вопросах, проверьте что неделя ещё не&nbsp;собралась (если вы&nbsp;только что начали). На&nbsp;следующий понедельник&nbsp;&mdash; должен прийти первый еженедельный отчёт.</li>
             </ol>
             <ol class="steps" lang="en">
                 <li>Create a <code>diary-bot/</code> repo. Use the etape-06 muscle (FastAPI + PostgreSQL) or just SQLite.</li>
                 <li>Data model: <code>entries(date, q1, q2, q3, q4, q5, raw_chat)</code>.</li>
-                <li>Schedule (cron / Railway):
+                <li>Schedule (system cron or the <code>schedule</code> skill):
                     <ul>
                         <li><code>0 19 * * *</code> — 22:00 Moscow (UTC+3): bot fires the first question;</li>
                         <li><code>0 11 * * 0</code> — 14:00 Sunday: bot fires the weekly report.</li>
@@ -659,6 +658,7 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 &gt;   5) one gratitude for the day.
 &gt; waits for each answer (via telegram polling api).
 &gt; saves to DB entries.</pre>
+                    <p style="margin-top:0.5rem;">A key mental-model detail: cron only <em>launches</em> the script. After sending the questions the script doesn’t exit right away — it polls Telegram for several minutes, waiting for your answers, and closes only once all five are in (or a timeout fires). So it’s the script, while it’s alive, that “waits for answers” — not cron.</p>
                 </li>
                 <li>“Weekly report” script:
                     <pre class="shell">&gt; build weekly_report.py:
@@ -671,7 +671,7 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 &gt; sends a markdown report to telegram.</pre>
                 </li>
                 <li>Add <code>/skip</code> — user skips today’s prompt. <code>/replay 2024-04-15</code> — re-shows that day’s five questions if you forgot. <code>/last</code> — last weekly report.</li>
-                <li>Privacy. Entries are sensitive. Encrypt <code>raw_chat</code> in the DB (e.g., <code>cryptography.fernet</code>); keep the key in Railway env vars. <em>If the key is lost — data is unrecoverable</em>; intentional.</li>
+                <li>Privacy. Entries are sensitive. Encrypt <code>raw_chat</code> in the DB (e.g., <code>cryptography.fernet</code>); keep the key in env vars (locally in <code>.env</code>, on a server in your host’s env vars). <em>If the key is lost — data is unrecoverable</em>; intentional.</li>
                 <li>Connect PostHog for <em>metrics only</em>: response counts, latencies, errors. <strong>No content fields</strong> — diary must not leak to PostHog.</li>
                 <li>Verification: run <code>/replay</code> on yesterday’s questions, check the week hasn’t aggregated (if you just started). Next Monday — the first weekly report should land.</li>
             </ol>
@@ -697,14 +697,14 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
             <h4 lang="ru">Подсказки</h4>
             <h4 lang="en">Hints</h4>
             <ul lang="ru">
-                <li>Структура та&nbsp;же, что в&nbsp;A&nbsp;&mdash; Railway cron + python-скрипт + telegram api + Daily Trader MCP. Меняется содержание брифа.</li>
+                <li>Структура та&nbsp;же, что в&nbsp;A&nbsp;&mdash; cron (системный или skill <code>schedule</code>) + python-скрипт + telegram api + Daily Trader MCP. Меняется содержание брифа.</li>
                 <li>Источники: Alpha Vantage (overnight closes), economic calendar (через WebFetch с&nbsp;Forex Factory или похожего), ваш Daily Trader MCP для&nbsp;<code>compute_signal</code>.</li>
                 <li>Длина ограничьте: 90&nbsp;секунд чтения = ~250 слов, 5–7 буллетов max. Краткость&nbsp;&mdash; ключ.</li>
                 <li>Идемпотентность: записывайте дату последнего успешного пуша, не&nbsp;шлите дважды за&nbsp;утро.</li>
                 <li>Стиль: попросите Claude использовать ваш output style <code>cfo</code> (этап&nbsp;08a) или сделайте новый <code>strategist</code>: сухо, факты, никаких «возможно».</li>
             </ul>
             <ul lang="en">
-                <li>Same structure as A — Railway cron + python script + telegram api + Daily Trader MCP. Different content.</li>
+                <li>Same structure as A — cron (system or the <code>schedule</code> skill) + python script + telegram api + Daily Trader MCP. Different content.</li>
                 <li>Sources: Alpha Vantage (overnight closes), an economic calendar (via WebFetch on Forex Factory or similar), your Daily Trader MCP for <code>compute_signal</code>.</li>
                 <li>Cap the length: 90 seconds of reading ≈ 250 words, 5–7 bullets max. Brevity wins.</li>
                 <li>Idempotency: store the last successful send date, don’t double-fire in a morning.</li>
@@ -830,10 +830,10 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
                 <span lang="en">A 5-field string: minute, hour, day of month, month, day of week. <code>30 8 * * *</code> — “every day at 8:30.”</span>
             </dd>
 
-            <dt>Railway Cron</dt>
+            <dt><span lang="ru">Облачный cron</span><span lang="en">Cloud cron</span></dt>
             <dd>
-                <span lang="ru">Облачный cron внутри Railway. Расписания задаются в&nbsp;<code>railway.json</code>. Удобно, когда ваш бэкенд уже там живёт.</span>
-                <span lang="en">A cloud cron inside Railway. Schedules in <code>railway.json</code>. Convenient when your backend already lives there.</span>
+                <span lang="ru">Планировщик внутри облачного хостинга (например, Render Cron Jobs). Сервис всегда поднят, но&nbsp;на&nbsp;бесплатных тарифах такой cron обычно недоступен. В&nbsp;курсе вместо него&nbsp;&mdash; системный cron и&nbsp;skill <code>schedule</code>.</span>
+                <span lang="en">A scheduler inside a cloud host (e.g. Render Cron Jobs). The service is always up, but this cron is usually not on free tiers. The course uses system cron and the <code>schedule</code> skill instead.</span>
             </dd>
 
             <dt>schedule (skill)</dt>
@@ -919,12 +919,12 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
             </li>
 
             <li class="quiz-item" data-q="q2">
-                <div class="q"><p class="q-text"><span lang="ru">Где лучше держать cron-задачи: на&nbsp;своём ноутбуке, на&nbsp;Railway или через skill <code>schedule</code>? Почему?</span><span lang="en">Where to keep cron tasks: on your laptop, on Railway, or via the <code>schedule</code> skill? Why?</span></p></div>
+                <div class="q"><p class="q-text"><span lang="ru">Где лучше держать cron-задачи: на&nbsp;своём ноутбуке, в&nbsp;облачном cron или через skill <code>schedule</code>? Почему?</span><span lang="en">Where to keep cron tasks: on your laptop, in a cloud cron, or via the <code>schedule</code> skill? Why?</span></p></div>
                 <details>
                     <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
                     <div class="answer">
-                        <p lang="ru">Зависит. Ноутбук&nbsp;&mdash; только если он&nbsp;всегда включён (редко). Railway&nbsp;&mdash; если у&nbsp;вас уже там бэкенд, удобно держать всё в&nbsp;одном месте. <code>schedule</code> skill&nbsp;&mdash; самое простое для&nbsp;учебных и&nbsp;личных задач, не&nbsp;нужен свой сервер. Все три используем в&nbsp;курсе под разные сценарии.</p>
-                        <p lang="en">Depends. Laptop — only if always-on (rarely). Railway — if your backend is already there, nice to keep everything together. <code>schedule</code> skill — simplest for learning and personal tasks, no server. All three are used in the course for different scenarios.</p>
+                        <p lang="ru">Зависит. Ноутбук&nbsp;&mdash; только если он&nbsp;всегда включён (редко). Облачный cron (например, Render Cron Jobs)&nbsp;&mdash; надёжно, но&nbsp;обычно платно. <code>schedule</code> skill&nbsp;&mdash; самое простое для&nbsp;учебных и&nbsp;личных задач, не&nbsp;нужен свой сервер и&nbsp;бесплатно. В&nbsp;курсе бесплатные пути&nbsp;&mdash; системный cron и&nbsp;<code>schedule</code>.</p>
+                        <p lang="en">Depends. Laptop — only if always-on (rarely). Cloud cron (e.g. Render Cron Jobs) — reliable but usually paid. The <code>schedule</code> skill — simplest for learning and personal tasks, no server, free. The free paths in this course are system cron and <code>schedule</code>.</p>
                     </div>
                 </details>
                 <div class="scoring">
@@ -1032,7 +1032,7 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 
         <ul class="checklist">
             <li data-key="e10-cron"><span lang="ru">Понимаю cron-выражения и&nbsp;умею описывать любое расписание словами.</span><span lang="en">I understand cron expressions and can describe any schedule in words.</span></li>
-            <li data-key="e10-channels"><span lang="ru">Знаю три канала расписания: системный cron, Railway Cron, skill <code>schedule</code>.</span><span lang="en">I know three schedule channels: system cron, Railway Cron, the <code>schedule</code> skill.</span></li>
+            <li data-key="e10-channels"><span lang="ru">Знаю три канала расписания: системный cron, облачный cron, skill <code>schedule</code>.</span><span lang="en">I know three schedule channels: system cron, cloud cron, the <code>schedule</code> skill.</span></li>
             <li data-key="e10-telegram"><span lang="ru">Создал Telegram-бота, отправляю и&nbsp;принимаю сообщения через Bot API.</span><span lang="en">I created a Telegram bot and send/receive messages via the Bot API.</span></li>
             <li data-key="e10-idempotent"><span lang="ru">Делаю cron-задачи идемпотентными (флаг-файл, проверка «уже было»).</span><span lang="en">I make cron tasks idempotent (flag files, “already done” checks).</span></li>
             <li data-key="e10-monitoring"><span lang="ru">Подключил PostHog LLM Analytics и&nbsp;вижу токены/стоимость каждого запуска.</span><span lang="en">I wired PostHog LLM Analytics and see tokens/cost per run.</span></li>

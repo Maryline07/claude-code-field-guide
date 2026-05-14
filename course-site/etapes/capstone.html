@@ -87,10 +87,10 @@
 
         <ol class="checklist" style="counter-reset:none;">
             <li data-key="rule-spec"><span lang="ru"><strong>Spec.md обязательный.</strong> До&nbsp;первой строки кода&nbsp;&mdash; написанный спек на&nbsp;~1 страницу: цель, целевой пользователь, входы, выходы, фазы, критерии готовности, что вне scope.</span><span lang="en"><strong>spec.md mandatory.</strong> Before the first line of code — a one-page spec: goal, target user, inputs, outputs, phases, acceptance, out of scope.</span></li>
-            <li data-key="rule-public"><span lang="ru"><strong>Публичный URL.</strong> Ваш продукт должен открываться по&nbsp;ссылке, доступной любому. Vercel/Railway/GitHub Pages&nbsp;&mdash; на&nbsp;ваш выбор, в&nbsp;зависимости от&nbsp;стека.</span><span lang="en"><strong>Public URL.</strong> Your product opens at a URL anyone can hit. Vercel/Railway/GitHub Pages — your call by stack.</span></li>
+            <li data-key="rule-public"><span lang="ru"><strong>Публичный URL.</strong> Ваш продукт должен открываться по&nbsp;ссылке, доступной любому. Vercel/Render/GitHub Pages&nbsp;&mdash; на&nbsp;ваш выбор, в&nbsp;зависимости от&nbsp;стека.</span><span lang="en"><strong>Public URL.</strong> Your product opens at a URL anyone can hit. Vercel/Render/GitHub Pages — your call by stack.</span></li>
             <li data-key="rule-readme"><span lang="ru"><strong>Двуязычный README.</strong> ru + en, с&nbsp;демо-ссылкой, скриншотами или asciinema, лицензией, дисклеймером.</span><span lang="en"><strong>Bilingual README.</strong> ru + en, with demo URL, screenshots or asciinema, licence, disclaimer.</span></li>
             <li data-key="rule-arsenal"><span lang="ru"><strong>Минимум 6 техник курса.</strong> В&nbsp;продукте должны явно использоваться: spec → Plan Mode → CLAUDE.md, MCP или skill из&nbsp;этапа&nbsp;03, frontend-design (если есть UI), верификация через Playwright, авто-расписание (cron или schedule&nbsp;skill), push в&nbsp;Telegram.</span><span lang="en"><strong>At least 6 course techniques.</strong> The product must visibly use: spec → Plan Mode → CLAUDE.md, an MCP or skill from etape 03, frontend-design (if there’s UI), Playwright verification, auto-schedule (cron or the schedule skill), Telegram push.</span></li>
-            <li data-key="rule-secrets"><span lang="ru"><strong>Безопасность.</strong> Никаких секретов в&nbsp;коммитах, <code>.env</code> в&nbsp;<code>.gitignore</code>, env vars через интерфейсы Vercel/Railway. На&nbsp;каждом коммите&nbsp;&mdash; <code>git diff --staged | grep -iE "key|secret|token"</code> в&nbsp;hook'е.</span><span lang="en"><strong>Security.</strong> No secrets in commits, <code>.env</code> in <code>.gitignore</code>, env vars via Vercel/Railway UIs. On each commit — <code>git diff --staged | grep -iE "key|secret|token"</code> in a hook.</span></li>
+            <li data-key="rule-secrets"><span lang="ru"><strong>Безопасность.</strong> Никаких секретов в&nbsp;коммитах, <code>.env</code> в&nbsp;<code>.gitignore</code>, env vars через интерфейсы Vercel/Render. На&nbsp;каждом коммите&nbsp;&mdash; <code>git diff --staged | grep -iE "key|secret|token"</code> в&nbsp;hook'е.</span><span lang="en"><strong>Security.</strong> No secrets in commits, <code>.env</code> in <code>.gitignore</code>, env vars via Vercel/Render UIs. On each commit — <code>git diff --staged | grep -iE "key|secret|token"</code> in a hook.</span></li>
             <li data-key="rule-monitoring"><span lang="ru"><strong>Мониторинг.</strong> PostHog LLM Analytics включён. На&nbsp;дашборде вы&nbsp;видите токены, стоимость, ошибки в&nbsp;реальном времени.</span><span lang="en"><strong>Monitoring.</strong> PostHog LLM Analytics on. The dashboard shows tokens, cost, errors in real time.</span></li>
             <li data-key="rule-friend"><span lang="ru"><strong>Реальный пользователь.</strong> Покажите продукт минимум одному человеку (другу, родственнику, коллеге), послушайте 30-секундный отзыв, зафиксируйте в&nbsp;<code>FEEDBACK.md</code>.</span><span lang="en"><strong>Real user.</strong> Show the product to at least one person (friend, family, colleague), capture a 30-second piece of feedback, save to <code>FEEDBACK.md</code>.</span></li>
             <li data-key="rule-retro"><span lang="ru"><strong>Ретроспектива.</strong> В&nbsp;конце&nbsp;&mdash; короткий <code>retro.md</code>: 3 что получилось, 3 что нет, 3 что бы&nbsp;сделали по-другому в&nbsp;следующий раз.</span><span lang="en"><strong>Retrospective.</strong> At the end — a short <code>retro.md</code>: 3 wins, 3 misses, 3 things you would do differently next time.</span></li>
@@ -155,19 +155,19 @@
             <h4 lang="ru">Стек</h4>
             <h4 lang="en">Stack</h4>
             <ul lang="ru">
-                <li>FastAPI + PostgreSQL на&nbsp;Railway.</li>
+                <li>FastAPI на&nbsp;Render + PostgreSQL на&nbsp;Neon.</li>
                 <li>Next.js на&nbsp;Vercel.</li>
                 <li>Claude API для&nbsp;AI-консультанта (Sonnet) и&nbsp;DD (Opus для&nbsp;вердикта, Haiku для&nbsp;парсинга твитов).</li>
                 <li>Daily Trader MCP&nbsp;&mdash; для&nbsp;цен.</li>
-                <li>Railway Cron для&nbsp;ежедневных и&nbsp;еженедельных задач.</li>
+                <li>Системный cron или skill <code>schedule</code> для&nbsp;ежедневных и&nbsp;еженедельных задач.</li>
                 <li>PostHog для&nbsp;мониторинга.</li>
             </ul>
             <ul lang="en">
-                <li>FastAPI + PostgreSQL on Railway.</li>
+                <li>FastAPI on Render + PostgreSQL on Neon.</li>
                 <li>Next.js on Vercel.</li>
                 <li>Claude API for the advisor (Sonnet) and DD (Opus for verdict, Haiku for tweet parsing).</li>
                 <li>Daily Trader MCP for prices.</li>
-                <li>Railway Cron for daily and weekly tasks.</li>
+                <li>System cron or the <code>schedule</code> skill for daily and weekly tasks.</li>
                 <li>PostHog for monitoring.</li>
             </ul>
 
@@ -216,7 +216,7 @@
             <h4 lang="en">Core features</h4>
             <ul lang="ru">
                 <li>Регистрация + JWT (этап&nbsp;06).</li>
-                <li>Загрузка ZIP с&nbsp;первичкой; очередь Celery/RQ + worker на&nbsp;Railway.</li>
+                <li>Загрузка ZIP с&nbsp;первичкой; обработка в&nbsp;фоновой задаче внутри web-сервиса (приём из&nbsp;этапа&nbsp;06b) либо через очередь Celery/RQ.</li>
                 <li>Парсинг через параллельные subagents (этап&nbsp;07).</li>
                 <li>Расчёт через ваш скилл «налоговый аналитик»&nbsp;&mdash; адаптация скилла из&nbsp;этапа&nbsp;08a.</li>
                 <li>Заполнение fillable-1040 через skill <code>pdf</code> (этап&nbsp;08b).</li>
@@ -226,7 +226,7 @@
             </ul>
             <ul lang="en">
                 <li>Signup + JWT (etape 06).</li>
-                <li>ZIP upload of primary docs; Celery/RQ queue + worker on Railway.</li>
+                <li>ZIP upload of primary docs; processing as a background task inside the web service (the etape-06b trick) or via a Celery/RQ queue.</li>
                 <li>Parsing via parallel subagents (etape 07).</li>
                 <li>Calculation through your “tax analyst” skill — adapted from etape 08a.</li>
                 <li>Filling fillable-1040 via the <code>pdf</code> skill (etape 08b).</li>
@@ -337,7 +337,7 @@
             <h4 lang="ru">Главные фичи</h4>
             <h4 lang="en">Core features</h4>
             <ul lang="ru">
-                <li>Multi-user сервис на&nbsp;Vercel + Railway.</li>
+                <li>Multi-user сервис: frontend на&nbsp;Vercel, backend на&nbsp;Render, БД на&nbsp;Neon.</li>
                 <li>Telegram-бот: <code>/propose AAPL because ...</code>&nbsp;&mdash; идея уходит в&nbsp;очередь.</li>
                 <li>AI-команда (4 subagents этапа&nbsp;07) автоматически делает DD по&nbsp;каждой идее, отчёт виден всем.</li>
                 <li>Голосование: каждый член ставит +1/0/-1 на&nbsp;идею; агрегация решает «принимаем&nbsp;/ нет».</li>
@@ -346,7 +346,7 @@
                 <li>Полный «red-team» в&nbsp;конце каждого DD (этап&nbsp;07).</li>
             </ul>
             <ul lang="en">
-                <li>A multi-user service on Vercel + Railway.</li>
+                <li>A multi-user service: frontend on Vercel, backend on Render, DB on Neon.</li>
                 <li>Telegram bot: <code>/propose AAPL because ...</code> — the idea enters the queue.</li>
                 <li>The AI team (4 etape-07 subagents) auto-DDs each idea, the report visible to all.</li>
                 <li>Voting: each member casts +1/0/-1; aggregation decides accept/reject.</li>

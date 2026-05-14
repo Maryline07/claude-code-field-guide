@@ -123,11 +123,11 @@
             <h3><span lang="ru">X (Twitter) Developer + ключи API</span><span lang="en">X (Twitter) Developer + API keys</span></h3>
             <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> доступ к&nbsp;X&nbsp;API для&nbsp;первого проекта (Twitter-сигналы).<br>
             <strong>Зачем сейчас:</strong> чтобы стрим твитов попадал в&nbsp;ваш демон.<br>
-            <strong>Где взять:</strong> <a href="https://developer.x.com/">developer.x.com</a>. Бесплатный тариф ограничен; для&nbsp;учебного проекта может хватить либо «basic» паблик стрим. Если не&nbsp;хочется регистрироваться&nbsp;&mdash; в&nbsp;проекте есть «офлайн-демо» из&nbsp;готового файла твитов.<br>
+            <strong>Где взять:</strong> <a href="https://developer.x.com/">developer.x.com</a>. <strong>Важно:</strong> бесплатный тариф X&nbsp;API для&nbsp;чтения и&nbsp;стрима твитов практически непригоден, а&nbsp;платный («Basic») стоит порядка $200/мес. Поэтому в&nbsp;курсе по&nbsp;умолчанию работаем через «офлайн-демо» из&nbsp;готового файла твитов&nbsp;&mdash; регистрация в&nbsp;X&nbsp;API не&nbsp;нужна. Реальный стрим&nbsp;&mdash; опционально, только если у&nbsp;вас уже есть платный доступ.<br>
             <strong>Куда положить:</strong> <code>X_BEARER_TOKEN</code> в&nbsp;<code>.env</code>.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> X API access for the first project (Twitter signals).<br>
             <strong>Why now:</strong> so a tweet stream lands in your daemon.<br>
-            <strong>Where:</strong> <a href="https://developer.x.com/">developer.x.com</a>. The free tier is limited; for a learning project the “basic” public stream may do. Skip the signup — the project has an “offline demo” from a tweets file.<br>
+            <strong>Where:</strong> <a href="https://developer.x.com/">developer.x.com</a>. <strong>Note:</strong> the free X API tier is practically unusable for reading or streaming tweets, and the paid “Basic” tier runs ~$200/month. So by default the course uses an “offline demo” from a tweets file — no X API signup needed. The real stream is optional, only if you already have paid access.<br>
             <strong>Place:</strong> <code>X_BEARER_TOKEN</code> in <code>.env</code>.</p>
         </div>
 
@@ -136,11 +136,11 @@
             <h3><span lang="ru">Из&nbsp;этапов 06 и&nbsp;10</span><span lang="en">From etapes 06 and 10</span></h3>
             <ul lang="ru" style="margin:0.5rem 0 0; padding-left:1.2rem;">
                 <li>Telegram-бот из&nbsp;этапа&nbsp;10 (для&nbsp;push-уведомлений и&nbsp;консьержа);</li>
-                <li>Backend на&nbsp;Railway (этап&nbsp;06)&nbsp;&mdash; будем туда деплоить демон.</li>
+                <li>место для&nbsp;запуска демона: ваш компьютер (<code>python daemon.py</code>) либо Render как web-сервис с&nbsp;фоновым циклом (тот&nbsp;же приём, что у&nbsp;бота в&nbsp;этапе&nbsp;06b).</li>
             </ul>
             <ul lang="en" style="margin:0.5rem 0 0; padding-left:1.2rem;">
                 <li>The Telegram bot from etape 10 (for push and the concierge);</li>
-                <li>A backend on Railway (etape 06) — for deploying the daemon.</li>
+                <li>somewhere to run the daemon: your own computer (<code>python daemon.py</code>) or Render as a web service with a background loop (the same trick as the bot in etape 06b).</li>
             </ul>
         </div>
     </div>
@@ -576,8 +576,8 @@ jobs:
         <article class="project">
             <span class="label"><span lang="ru">Проект A · по&nbsp;инструкции</span><span lang="en">Project A · guided</span></span>
             <h3><span lang="ru">Twitter-сигналы в&nbsp;реальном времени</span><span lang="en">Twitter signals in real time</span></h3>
-            <p class="goal" lang="ru">Цель: Python-демон на&nbsp;Railway, ловит твиты по&nbsp;вашим тикерам через X&nbsp;API. Через Claude Agent SDK&nbsp;&mdash; sentiment + влияние на&nbsp;цену. При срабатывании порога&nbsp;&mdash; push в&nbsp;Telegram. Идея «trading signals», но&nbsp;используем для&nbsp;<em>обучения</em>, не&nbsp;для&nbsp;реальных сделок.</p>
-            <p class="goal" lang="en">Goal: a Python daemon on Railway that catches tweets on your tickers via the X API. Through the Claude Agent SDK — sentiment + price-impact score. On threshold — push to Telegram. The idea is “trading signals,” but for <em>learning</em>, not real trades.</p>
+            <p class="goal" lang="ru">Цель: Python-демон (запускаете локально или на&nbsp;Render), читает твиты по&nbsp;вашим тикерам&nbsp;&mdash; по&nbsp;умолчанию из&nbsp;офлайн-демо-файла, при&nbsp;наличии платного X&nbsp;API из&nbsp;стрима. Через Claude Agent SDK&nbsp;&mdash; sentiment + влияние на&nbsp;цену. При срабатывании порога&nbsp;&mdash; push в&nbsp;Telegram. Идея «trading signals», но&nbsp;используем для&nbsp;<em>обучения</em>, не&nbsp;для&nbsp;реальных сделок.</p>
+            <p class="goal" lang="en">Goal: a Python daemon (run locally or on Render) that reads tweets on your tickers — by default from the offline demo file, or from the stream if you have paid X API access. Through the Claude Agent SDK — sentiment + price-impact score. On threshold — push to Telegram. The idea is “trading signals,” but for <em>learning</em>, not real trades.</p>
 
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
@@ -591,8 +591,7 @@ jobs:
 │   └── telegram.py      # post_telegram
 ├── data/
 │   └── tickers.json     # тикеры для слежки
-├── .env.example
-└── railway.json</pre>
+└── .env.example</pre>
                 </li>
                 <li>Если у&nbsp;вас есть X&nbsp;API&nbsp;&mdash; <code>daemon.py</code> подключается к&nbsp;streaming-эндпоинту и&nbsp;ловит твиты. Если нет&nbsp;&mdash; demo-режим, читает <code>data/sample-tweets.json</code> по&nbsp;одному в&nbsp;5&nbsp;секунд.</li>
                 <li><code>agent.py</code>&nbsp;&mdash; Claude Agent SDK с&nbsp;тремя tools:
@@ -626,15 +625,7 @@ jobs:
                         <li>идемпотентность: <code>data/sent-alerts.json</code>&nbsp;&mdash; не&nbsp;шлём один и&nbsp;тот&nbsp;же сигнал дважды.</li>
                     </ul>
                 </li>
-                <li>Деплой на&nbsp;Railway как «worker»-сервис (не&nbsp;cron, а&nbsp;всегда работающий процесс):
-                    <pre class="shell">{
-  "deploy": {
-    "startCommand": "python daemon.py",
-    "restartPolicyType": "ON_FAILURE",
-    "numReplicas": 1
-  }
-}</pre>
-                </li>
+                <li>Запуск. Для&nbsp;учёбы достаточно локального: <code>python daemon.py</code> в&nbsp;отдельном окне терминала. Если хотите, чтобы демон жил в&nbsp;интернете&nbsp;&mdash; оберните его&nbsp;в&nbsp;минимальный web-сервис (FastAPI с&nbsp;эндпоинтом <code>/health</code>), а&nbsp;цикл демона запустите фоновой задачей в&nbsp;lifespan-обработчике (<code>asyncio.create_task</code>)&nbsp;&mdash; тот&nbsp;же приём, что у&nbsp;бота в&nbsp;этапе&nbsp;06b. Деплой&nbsp;&mdash; бесплатный web-сервис на&nbsp;Render. Чтобы сервис не&nbsp;засыпал, добавьте keep-alive пинг каждые 10&nbsp;минут (системный cron или skill <code>schedule</code> из&nbsp;этапа&nbsp;10).</li>
                 <li>Verification:
                     <pre class="shell">&gt; запусти red-team subagent. brief:
 &gt; представь, что я случайно скачал tweet-flood
@@ -653,8 +644,7 @@ jobs:
 │   └── telegram.py      # post_telegram
 ├── data/
 │   └── tickers.json     # watched tickers
-├── .env.example
-└── railway.json</pre>
+└── .env.example</pre>
                 </li>
                 <li>If you have X API access — <code>daemon.py</code> connects to a streaming endpoint and catches tweets. If not — demo mode reads <code>data/sample-tweets.json</code> one every 5 seconds.</li>
                 <li><code>agent.py</code> — Claude Agent SDK with three tools:
@@ -688,15 +678,7 @@ No "buy/sell" advice. Observation only.</pre>
                         <li>idempotency: <code>data/sent-alerts.json</code> — never push the same signal twice.</li>
                     </ul>
                 </li>
-                <li>Deploy to Railway as a “worker” service (not cron, an always-on process):
-                    <pre class="shell">{
-  "deploy": {
-    "startCommand": "python daemon.py",
-    "restartPolicyType": "ON_FAILURE",
-    "numReplicas": 1
-  }
-}</pre>
-                </li>
+                <li>Running it. For learning, local is enough: <code>python daemon.py</code> in a separate terminal window. If you want the daemon to live on the internet — wrap it in a minimal web service (FastAPI with a <code>/health</code> endpoint) and launch the daemon loop as a background task in a lifespan handler (<code>asyncio.create_task</code>) — the same trick as the bot in etape 06b. Deploy as a free Render web service. To keep it from sleeping, add a keep-alive ping every 10 minutes (system cron or the <code>schedule</code> skill from etape 10).</li>
                 <li>Verification:
                     <pre class="shell">&gt; run a red-team subagent. brief:
 &gt; pretend I accidentally pulled a tweet-flood
@@ -716,7 +698,7 @@ No "buy/sell" advice. Observation only.</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Репо <code>concierge-bot/</code>. На&nbsp;Railway worker-сервис.</li>
+                <li>Репо <code>concierge-bot/</code>. Запуск локально или на&nbsp;Render как web-сервис с&nbsp;фоновым циклом (как бот в&nbsp;этапе&nbsp;06b).</li>
                 <li>Память: PostgreSQL-таблица <code>memory(user_id, key, value, updated_at)</code>. Хранит «факты» о&nbsp;пользователе: предпочтения, города, бюджет по&nbsp;умолчанию, история запросов.</li>
                 <li>Tools для&nbsp;агента:
                     <ul>
@@ -762,7 +744,7 @@ No "buy/sell" advice. Observation only.</pre>
                 <li>Verification: запустите subagent с&nbsp;ролью «privacy-аудит». Brief: представь, что бот утёк через дамп БД. Что увидит атакующий? Что нельзя восстановить?</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Repo <code>concierge-bot/</code>. Railway worker service.</li>
+                <li>Repo <code>concierge-bot/</code>. Run locally or on Render as a web service with a background loop (like the bot in etape 06b).</li>
                 <li>Memory: a PostgreSQL <code>memory(user_id, key, value, updated_at)</code> table. Stores “facts” about the user: preferences, cities, default budget, request history.</li>
                 <li>Agent tools:
                     <ul>
@@ -980,8 +962,8 @@ DO NOT invent facts. If you don't know — ask via send_message.</pre>
 
             <dt>Daemon</dt>
             <dd>
-                <span lang="ru">Долгоживущий процесс, постоянно работающий в&nbsp;фоне. На&nbsp;Railway&nbsp;&mdash; «worker»-сервис. Используется для&nbsp;стримов (Twitter), ботов (Telegram), мониторов.</span>
-                <span lang="en">A long-running process always alive in the background. On Railway — a “worker” service. Used for streams (Twitter), bots (Telegram), monitors.</span>
+                <span lang="ru">Долгоживущий процесс, постоянно работающий в&nbsp;фоне. Запускается локально или, на&nbsp;бесплатном хостинге, как web-сервис с&nbsp;фоновым циклом. Используется для&nbsp;стримов (Twitter), ботов (Telegram), мониторов.</span>
+                <span lang="en">A long-running process always alive in the background. Run locally or, on a free host, as a web service with a background loop. Used for streams (Twitter), bots (Telegram), monitors.</span>
             </dd>
 
             <dt>Batch API</dt>

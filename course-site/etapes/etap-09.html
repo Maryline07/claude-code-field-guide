@@ -183,7 +183,7 @@
                         <li><strong>sse</strong>&nbsp;&mdash; Server-Sent Events. Тоже по&nbsp;HTTP, но&nbsp;со&nbsp;стримингом.</li>
                         <li><strong>websocket</strong>&nbsp;&mdash; двусторонний канал по&nbsp;WebSocket.</li>
                     </ul>
-                    <p>Для&nbsp;учебного MCP, который ходит к&nbsp;Alpha Vantage, выбираем <strong>stdio</strong>: процесс запускается локально, никаких серверов поднимать не&nbsp;надо. Sublime для&nbsp;старта.</p>
+                    <p>Для&nbsp;учебного MCP, который ходит к&nbsp;Alpha Vantage, выбираем <strong>stdio</strong>: процесс запускается локально, никаких серверов поднимать не&nbsp;надо. Идеально для&nbsp;старта.</p>
                     <p>Когда понадобится http/sse: если ваш MCP делится между несколькими пользователями (например, корпоративный) или его нужно вызывать из&nbsp;web-интерфейса. Это уже второй проект для&nbsp;вашей команды&nbsp;&mdash; не&nbsp;этого этапа.</p>
                 </div>
                 <div lang="en">
@@ -287,7 +287,7 @@ server.addTool("get_history", ...);</pre>
 │   ├── personal-cfo/
 │   └── auto-publisher/
 ├── commands/
-│   ├── прогноз.md
+│   ├── forecast.md
 │   ├── timesheet.md
 │   └── cfo.md
 ├── hooks/
@@ -306,7 +306,7 @@ server.addTool("get_history", ...);</pre>
   "skills": ["./skills/investing-analyst",
              "./skills/personal-cfo",
              "./skills/auto-publisher"],
-  "commands": ["./commands/прогноз.md",
+  "commands": ["./commands/forecast.md",
                "./commands/timesheet.md",
                "./commands/cfo.md"],
   "mcp_servers": [{
@@ -475,9 +475,9 @@ server.addTool("get_history", ...);</pre>
 &gt; package.json + server.ts + README.md.
 &gt; собери (npm install + npx tsc).</pre>
                 </li>
-                <li>Подключите локально:
-                    <pre class="shell">&gt; добавь mcp в ~/.claude/settings.json как локальный stdio-сервер,
-&gt; имя hello-local, command: node, args: [абс_путь_к_dist/server.js].</pre>
+                <li>Подключите локально командой <code>claude mcp add</code> (MCP-серверы регистрируются именно так, не&nbsp;через <code>settings.json</code>):
+                    <pre class="shell">&gt; подключи мой stdio-сервер: выполни
+&gt; claude mcp add hello-local --scope user -- node &lt;абс_путь к dist/server.js&gt;</pre>
                 </li>
                 <li>Перезапустите Claude. <code>/mcp</code>&nbsp;&mdash; в&nbsp;списке должен появиться <code>hello-local</code>. Тест:
                     <pre class="shell">&gt; через hello-local вызови hello с именем "Claude".</pre>
@@ -495,9 +495,9 @@ server.addTool("get_history", ...);</pre>
 &gt; package.json + server.ts + README.md.
 &gt; build it (npm install + npx tsc).</pre>
                 </li>
-                <li>Wire it locally:
-                    <pre class="shell">&gt; add the mcp to ~/.claude/settings.json as a local stdio server,
-&gt; name hello-local, command: node, args: [abs_path_to_dist/server.js].</pre>
+                <li>Wire it locally with <code>claude mcp add</code> (MCP servers are registered this way, not via <code>settings.json</code>):
+                    <pre class="shell">&gt; wire up my stdio server: run
+&gt; claude mcp add hello-local --scope user -- node &lt;abs_path to dist/server.js&gt;</pre>
                 </li>
                 <li>Restart Claude. <code>/mcp</code> — <code>hello-local</code> should appear. Test:
                     <pre class="shell">&gt; via hello-local call hello with name "Claude".</pre>
@@ -546,7 +546,7 @@ server.addTool("get_history", ...);</pre>
                 </li>
                 <li>Кэширование цен: <code>~/.claude/.daily-trader-cache/</code> с&nbsp;TTL 15&nbsp;мин (как в&nbsp;этапе&nbsp;03).</li>
                 <li>Обработка ошибок: rate limit, отсутствие ключа, недоступная сеть&nbsp;&mdash; везде дружелюбные сообщения.</li>
-                <li>Сборка: <code>npm install</code> + <code>npx tsc</code>. Подключение в&nbsp;<code>~/.claude/settings.json</code> как stdio-сервер.</li>
+                <li>Сборка: <code>npm install</code> + <code>npx tsc</code>. Подключение командой <code>claude mcp add daily-trader --scope user -- node &lt;путь к dist/server.js&gt;</code>.</li>
                 <li>Тесты:
                     <pre class="shell">&gt; через daily-trader вызови get_price для AAPL.
 &gt; через daily-trader вызови compute_signal для NVDA.
@@ -573,7 +573,7 @@ server.addTool("get_history", ...);</pre>
                 </li>
                 <li>Price cache: <code>~/.claude/.daily-trader-cache/</code> with 15-min TTL (etape 03 trick).</li>
                 <li>Error handling: rate limit, missing key, no network — friendly messages everywhere.</li>
-                <li>Build: <code>npm install</code> + <code>npx tsc</code>. Wire into <code>~/.claude/settings.json</code> as a stdio server.</li>
+                <li>Build: <code>npm install</code> + <code>npx tsc</code>. Wire it in with <code>claude mcp add daily-trader --scope user -- node &lt;path to dist/server.js&gt;</code>.</li>
                 <li>Tests:
                     <pre class="shell">&gt; via daily-trader call get_price for AAPL.
 &gt; via daily-trader call compute_signal for NVDA.
@@ -597,7 +597,7 @@ server.addTool("get_history", ...);</pre>
                 <li>Скопируйте туда:
                     <ul>
                         <li>skills (этап&nbsp;08a): <code>investing-analyst</code>, <code>personal-cfo</code>, <code>auto-publisher</code>;</li>
-                        <li>commands (этап&nbsp;08a): <code>прогноз.md</code>, <code>cfo.md</code>, <code>timesheet.md</code>;</li>
+                        <li>commands (этап&nbsp;08a): <code>forecast.md</code>, <code>cfo.md</code>, <code>timesheet.md</code>;</li>
                         <li>hooks: <code>settings.json</code> с&nbsp;timesheet-хуком;</li>
                         <li>MCP: проект&nbsp;A (<code>daily-trader-mcp</code>).</li>
                     </ul>
@@ -625,7 +625,7 @@ server.addTool("get_history", ...);</pre>
                 <li>Чистая установка: возьмите другую папку, в&nbsp;которой ничего нет:
                     <pre class="shell"><span class="prompt">$</span> npx smithery@latest mcp add @&lt;you&gt;/personal-office --client claude</pre>
                 </li>
-                <li>Тест: запустите <code>claude</code> в&nbsp;этой папке. <code>/mcp</code> должен показать <code>daily-trader</code>; в&nbsp;общем <code>/</code>-меню должны появиться скиллы и&nbsp;команды плагина. Прогоните <code>/прогноз</code>, <code>/cfo</code>&nbsp;&mdash; работает.</li>
+                <li>Тест: запустите <code>claude</code> в&nbsp;этой папке. <code>/mcp</code> должен показать <code>daily-trader</code>; в&nbsp;общем <code>/</code>-меню должны появиться скиллы и&nbsp;команды плагина. Прогоните <code>/forecast</code>, <code>/cfo</code>&nbsp;&mdash; работает.</li>
                 <li>Финал: добавьте теги/категории в&nbsp;Smithery («finance», «investing», «course»), чтобы вас находили.</li>
             </ol>
             <ol class="steps" lang="en">
