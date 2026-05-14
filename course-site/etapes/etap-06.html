@@ -462,23 +462,46 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   3) кнопка «обновить» получает новый timestamp.</pre>
                 </li>
                 <li>Утвердите spec, дайте исполнять.</li>
-                <li>Локально проверьте: backend запущен на&nbsp;<code>:8000</code>, frontend&nbsp;&mdash; через <code>python -m http.server 5000</code>. Должно работать.</li>
+                <li>Запустите backend. Claude должен был создать файл <code>backend/requirements.txt</code>&nbsp;&mdash; спросите его:
+                    <pre class="shell">&gt; какой командой запустить backend локально?</pre>
+                    Типичный ответ: сначала <code>pip install -r requirements.txt</code>, затем <code>uvicorn main:app --reload --port 8000</code> из папки <code>backend/</code>. Если в терминале появилось <code>Uvicorn running on http://127.0.0.1:8000</code>&nbsp;&mdash; backend жив.
+                </li>
+                <li>Запустите frontend в <em>отдельном</em> окне терминала:
+                    <pre class="shell">python -m http.server 5000</pre>
+                    из папки <code>frontend/</code>. Откройте <a href="http://localhost:5000">http://localhost:5000</a>&nbsp;&mdash; должно работать.</li>
                 <li>Через playwright&nbsp;&mdash; ревизия:
                     <pre class="shell">&gt; через playwright открой http://localhost:5000.
 &gt; нажми «обновить» три раза. timestamp каждый раз меняется?
 &gt; есть ли ошибки в console?</pre>
                 </li>
-                <li>Деплой:
-                    <pre class="shell">&gt; запушь backend на github как hello-fullstack-backend (публичный).
-&gt; деплой на Render: новый Web Service из этого репо.
-&gt; запушь frontend как hello-fullstack-frontend.
-&gt; деплой на Vercel: импорт из репо.
-&gt; в обоих платформах загрузи нужные env vars.
-&gt; замени в frontend URL backend-а на render-ссылку.
+                <li>Деплой&nbsp;&mdash; делаете это руками, Claude подсказывает:
+                    <ol style="margin-top:0.5rem;">
+                        <li><strong>Backend → GitHub.</strong> Попросите Claude:
+                            <pre class="shell">&gt; запушь папку backend/ на GitHub как новый публичный репо hello-fullstack-backend.</pre>
+                        </li>
+                        <li><strong>Backend → Render.</strong> Зайдите на <a href="https://render.com">render.com</a> → <strong>New → Web Service</strong> → подключите репо <code>hello-fullstack-backend</code>.<br>
+                            Обязательные поля:
+                            <ul style="margin-top:0.3rem;">
+                                <li><strong>Runtime:</strong> Python</li>
+                                <li><strong>Build command:</strong> <code>pip install -r requirements.txt</code></li>
+                                <li><strong>Start command:</strong> <code>uvicorn main:app --host 0.0.0.0 --port $PORT</code></li>
+                            </ul>
+                            Нажмите <strong>Create Web Service</strong>. Через 2–3 минуты появится ссылка вида <code>hello-fullstack-backend.onrender.com</code>.
+                        </li>
+                        <li><strong>Frontend → GitHub.</strong>
+                            <pre class="shell">&gt; запушь папку frontend/ на GitHub как новый публичный репо hello-fullstack-frontend.</pre>
+                        </li>
+                        <li><strong>Frontend → Vercel.</strong> На <a href="https://vercel.com">vercel.com</a> → <strong>Add New → Project</strong> → выберите репо <code>hello-fullstack-frontend</code>. Vercel сам всё поймёт и задеплоит.</li>
+                        <li><strong>Подменить URL backend-а.</strong> Попросите Claude:
+                            <pre class="shell">&gt; замени в frontend URL backend-а (localhost:8000) на https://hello-fullstack-backend.onrender.com
 &gt; запушь обновление.</pre>
+                            Vercel автоматически пересоберёт сайт через 30 секунд.
+                        </li>
+                    </ol>
+                    <p class="note" style="margin-top:0.5rem;">Для <em>этого</em> учебного проекта env vars не нужны&nbsp;&mdash; секретов нет. В следующих проектах с&nbsp;API-ключами раздел «Environment» в&nbsp;Render-дашборде пригодится.</p>
                 </li>
-                <li>Откройте Vercel-ссылку. Убедитесь, что работает по&nbsp;живому&nbsp;URL.</li>
-                <li>Если что-то не&nbsp;работает: смотрите логи Render и&nbsp;DevTools во&nbsp;Vercel-странице. Сообщите Claude точное сообщение об&nbsp;ошибке&nbsp;&mdash; обычно решает за&nbsp;1–2 итерации.</li>
+                <li>Откройте Vercel-ссылку. Убедитесь, что timestamp обновляется по&nbsp;живому&nbsp;URL.</li>
+                <li>Если что-то не&nbsp;работает: смотрите вкладку <strong>Logs</strong> в&nbsp;Render-дашборде и&nbsp;DevTools → Console в&nbsp;браузере. Сообщите Claude точное сообщение об&nbsp;ошибке&nbsp;&mdash; обычно решает за&nbsp;1–2 итерации.</li>
             </ol>
             <ol lang="en">
                 <li>Create a <code>hello-fullstack</code> folder, two subfolders: <code>backend/</code> and <code>frontend/</code>. At the root — <code>CLAUDE.md</code> and <code>.gitignore</code>.</li>
@@ -497,23 +520,46 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   3) "refresh" button updates the timestamp.</pre>
                 </li>
                 <li>Approve the spec, execute.</li>
-                <li>Local check: backend on <code>:8000</code>, frontend via <code>python -m http.server 5000</code>. Should work.</li>
+                <li>Start the backend. Claude should have created <code>backend/requirements.txt</code> — ask:
+                    <pre class="shell">&gt; what command runs the backend locally?</pre>
+                    Typical answer: first <code>pip install -r requirements.txt</code>, then <code>uvicorn main:app --reload --port 8000</code> from the <code>backend/</code> folder. If the terminal shows <code>Uvicorn running on http://127.0.0.1:8000</code> — the backend is alive.
+                </li>
+                <li>Start the frontend in a <em>separate</em> terminal window:
+                    <pre class="shell">python -m http.server 5000</pre>
+                    from the <code>frontend/</code> folder. Open <a href="http://localhost:5000">http://localhost:5000</a> — it should work.</li>
                 <li>Playwright audit:
                     <pre class="shell">&gt; through playwright open http://localhost:5000.
 &gt; click "refresh" three times. does the timestamp change each time?
 &gt; any console errors?</pre>
                 </li>
-                <li>Deploy:
-                    <pre class="shell">&gt; push backend to github as hello-fullstack-backend (public).
-&gt; deploy to Render: new Web Service from this repo.
-&gt; push frontend as hello-fullstack-frontend.
-&gt; deploy to Vercel: import from repo.
-&gt; on both platforms add the env vars.
-&gt; in frontend replace the backend URL with the Render one.
+                <li>Deploy — you do this manually, Claude advises:
+                    <ol style="margin-top:0.5rem;">
+                        <li><strong>Backend → GitHub.</strong> Ask Claude:
+                            <pre class="shell">&gt; push the backend/ folder to GitHub as a new public repo hello-fullstack-backend.</pre>
+                        </li>
+                        <li><strong>Backend → Render.</strong> Go to <a href="https://render.com">render.com</a> → <strong>New → Web Service</strong> → connect the <code>hello-fullstack-backend</code> repo.<br>
+                            Required fields:
+                            <ul style="margin-top:0.3rem;">
+                                <li><strong>Runtime:</strong> Python</li>
+                                <li><strong>Build command:</strong> <code>pip install -r requirements.txt</code></li>
+                                <li><strong>Start command:</strong> <code>uvicorn main:app --host 0.0.0.0 --port $PORT</code></li>
+                            </ul>
+                            Click <strong>Create Web Service</strong>. In 2–3 minutes a URL like <code>hello-fullstack-backend.onrender.com</code> appears.
+                        </li>
+                        <li><strong>Frontend → GitHub.</strong>
+                            <pre class="shell">&gt; push the frontend/ folder to GitHub as a new public repo hello-fullstack-frontend.</pre>
+                        </li>
+                        <li><strong>Frontend → Vercel.</strong> On <a href="https://vercel.com">vercel.com</a> → <strong>Add New → Project</strong> → pick the <code>hello-fullstack-frontend</code> repo. Vercel figures it out and deploys.</li>
+                        <li><strong>Swap the backend URL.</strong> Ask Claude:
+                            <pre class="shell">&gt; replace the backend URL in frontend (localhost:8000) with https://hello-fullstack-backend.onrender.com
 &gt; push the update.</pre>
+                            Vercel automatically rebuilds the site in 30 seconds.
+                        </li>
+                    </ol>
+                    <p class="note" style="margin-top:0.5rem;">For <em>this</em> learning project there are no env vars to add — no secrets. In the next projects with API keys the "Environment" section in the Render dashboard will be useful.</p>
                 </li>
-                <li>Open the Vercel URL. Confirm it works on the live URL.</li>
-                <li>If something fails: check Render logs and the Vercel page DevTools. Tell Claude the exact error — usually 1–2 iterations.</li>
+                <li>Open the Vercel URL. Confirm the timestamp updates on the live URL.</li>
+                <li>If something fails: check the <strong>Logs</strong> tab in the Render dashboard and DevTools → Console in the browser. Tell Claude the exact error — usually 1–2 iterations.</li>
             </ol>
             <p lang="ru">Что мы&nbsp;тренируем: <strong>минимальный, но&nbsp;настоящий full-stack&nbsp;&mdash; от&nbsp;пустой папки до&nbsp;живой ссылки</strong>. Дальше&nbsp;&mdash; на&nbsp;этом фундаменте делаем серьёзные приложения.</p>
             <p lang="en">What we train: <strong>a minimal but real full-stack — from empty folder to live URL</strong>. Then we build serious apps on this foundation.</p>
@@ -540,29 +586,45 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Фазы (через spec → Plan Mode → TodoWrite, как в&nbsp;этапе&nbsp;04)</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Phases (via spec → Plan Mode → TodoWrite, as in etape 04)</h4>
             <ol class="steps" lang="ru">
-                <li><strong>Spec и&nbsp;скелет.</strong> Папки <code>backend/</code> и&nbsp;<code>frontend/</code>, <code>CLAUDE.md</code>, <code>.gitignore</code>. spec.md с&nbsp;разделами «модели данных» (User, Operation, Forecast), «эндпоинты», «UX-флоу».</li>
+                <li><strong>Spec и&nbsp;скелет.</strong> Создайте папки <code>backend/</code> и&nbsp;<code>frontend/</code>, <code>CLAUDE.md</code>, <code>.gitignore</code>. Войдите в&nbsp;Plan Mode и&nbsp;попросите Claude составить spec:
+                    <pre class="shell">&gt; составь spec.md для личного инвестиционного кабинета.
+&gt; стек: FastAPI + SQLAlchemy + SQLite (локально) / PostgreSQL (Render).
+&gt; frontend: простые HTML-страницы с JavaScript (без React/Next.js — проще деплоить на Vercel как статику).
+&gt; модели данных: User (email, password_hash), Operation (user_id, date, ticker, amount, type), Forecast (user_id, created_at, scenario_low, scenario_mid, scenario_high).
+&gt; эндпоинты: /api/auth/signup, /api/auth/login, /api/auth/me, /api/operations (CRUD), /api/operations/import (CSV), /api/forecast.
+&gt; UX-флоу: лендинг → регистрация/вход → дашборд с операциями → страница прогноза.
+&gt; критерии готовности: живая ссылка на Vercel, backend на Render, каждый пользователь видит только свои данные.</pre>
+                    Утвердите spec, затем дайте исполнять фазу за&nbsp;фазой.</li>
                 <li><strong>Backend: модели и&nbsp;база.</strong> FastAPI + SQLAlchemy + SQLite (локально). Модели: User, Operation, Forecast. Миграции через Alembic либо «создать таблицы при старте».</li>
                 <li><strong>Backend: авторизация.</strong> Регистрация, вход, JWT. Эндпоинты <code>/api/auth/signup</code>, <code>/api/auth/login</code>, <code>/api/auth/me</code>. Хеширование bcrypt. Декоратор <code>require_auth</code>.</li>
                 <li><strong>Backend: операции.</strong> CRUD&nbsp;<code>/api/operations</code> с&nbsp;фильтром «только мои». Импорт CSV через <code>/api/operations/import</code> (multipart upload).</li>
                 <li><strong>Backend: прогноз.</strong> Эндпоинт <code>/api/forecast</code>: входы (как в&nbsp;этапе&nbsp;04), выходы&nbsp;&mdash; три сценария.</li>
-                <li><strong>Frontend: каркас.</strong> Next.js или просто React-страницы. Маршруты: <code>/</code> (лендинг), <code>/signup</code>, <code>/login</code>, <code>/dashboard</code>, <code>/forecast</code>.</li>
+                <li><strong>Frontend: каркас.</strong> Если в&nbsp;spec выбрали HTML+JS (рекомендуется для&nbsp;первого раза)&nbsp;&mdash; это обычные файлы, деплоятся на&nbsp;Vercel как статика без&nbsp;лишних настроек. Если хотите React или&nbsp;Next.js&nbsp;&mdash; скажите Claude заранее, он&nbsp;настроит <code>package.json</code> и&nbsp;Node.js-окружение. Маршруты: <code>/</code> (лендинг), <code>/signup</code>, <code>/login</code>, <code>/dashboard</code>, <code>/forecast</code>.</li>
                 <li><strong>Frontend: формы и&nbsp;дашборд.</strong> Используем skill <code>frontend-design</code> для&nbsp;вёрстки. Внутри&nbsp;&mdash; графики из&nbsp;этапов&nbsp;02–04.</li>
                 <li><strong>Frontend: интеграция с&nbsp;backend.</strong> Хранение JWT в&nbsp;<code>localStorage</code>. Авто-добавление токена в&nbsp;каждый запрос.</li>
-                <li><strong>Деплой backend на&nbsp;Render.</strong> Создание PostgreSQL-сервиса. Миграция SQLite → PostgreSQL через переменную <code>DATABASE_URL</code>.</li>
-                <li><strong>Деплой frontend на&nbsp;Vercel.</strong> Подмена URL backend на&nbsp;production. CORS настроен.</li>
+                <li><strong>Деплой backend на&nbsp;Render.</strong> На&nbsp;render.com создайте <strong>PostgreSQL</strong> сервис (New → PostgreSQL) — получите строку подключения. Затем создайте <strong>Web Service</strong> из&nbsp;репо backend. В&nbsp;разделе «Environment» добавьте переменную <code>DATABASE_URL</code> (строка от&nbsp;PostgreSQL-сервиса). Start command: <code>uvicorn main:app --host 0.0.0.0 --port $PORT</code>. После деплоя попросите Claude: <em>«выполни миграцию SQLite → PostgreSQL через DATABASE_URL»</em>.</li>
+                <li><strong>Деплой frontend на&nbsp;Vercel.</strong> На&nbsp;vercel.com — Add New → Project → репо frontend. Перед деплоем попросите Claude: <em>«замени все localhost:8000 в&nbsp;frontend на&nbsp;URL моего Render-backend»</em>. Запушьте изменения&nbsp;&mdash; Vercel пересоберёт автоматически.</li>
                 <li><strong>Verification.</strong> Через playwright: регистрация, вход, импорт CSV, прогноз. Сверка чисел с&nbsp;этапом&nbsp;02 (на&nbsp;тех&nbsp;же данных).</li>
             </ol>
-            <ol class="steps" lang="en">
-                <li><strong>Spec and skeleton.</strong> Folders <code>backend/</code> and <code>frontend/</code>, <code>CLAUDE.md</code>, <code>.gitignore</code>. spec.md with sections “data models” (User, Operation, Forecast), “endpoints,” “UX flow.”</li>
+            <ol class=”steps” lang=”en”>
+                <li><strong>Spec and skeleton.</strong> Create folders <code>backend/</code> and <code>frontend/</code>, <code>CLAUDE.md</code>, <code>.gitignore</code>. Enter Plan Mode and ask Claude to draft the spec:
+                    <pre class=”shell”>&gt; draft spec.md for a personal investment office.
+&gt; stack: FastAPI + SQLAlchemy + SQLite (local) / PostgreSQL (Render).
+&gt; frontend: plain HTML pages with JavaScript (no React/Next.js — simpler to deploy on Vercel as static).
+&gt; data models: User (email, password_hash), Operation (user_id, date, ticker, amount, type), Forecast (user_id, created_at, scenario_low, scenario_mid, scenario_high).
+&gt; endpoints: /api/auth/signup, /api/auth/login, /api/auth/me, /api/operations (CRUD), /api/operations/import (CSV), /api/forecast.
+&gt; UX flow: landing → sign-up/sign-in → dashboard with operations → forecast page.
+&gt; acceptance: live Vercel URL, backend on Render, each user sees only their data.</pre>
+                    Approve the spec, then execute phase by phase.</li>
                 <li><strong>Backend: models and DB.</strong> FastAPI + SQLAlchemy + SQLite (local). Models: User, Operation, Forecast. Migrations via Alembic or “create tables on startup.”</li>
                 <li><strong>Backend: auth.</strong> Sign-up, sign-in, JWT. Endpoints <code>/api/auth/signup</code>, <code>/api/auth/login</code>, <code>/api/auth/me</code>. bcrypt hashing. <code>require_auth</code> decorator.</li>
                 <li><strong>Backend: operations.</strong> CRUD on <code>/api/operations</code> with “mine only” filter. CSV import via <code>/api/operations/import</code> (multipart upload).</li>
                 <li><strong>Backend: forecast.</strong> Endpoint <code>/api/forecast</code>: inputs (as in etape 04), outputs — three scenarios.</li>
-                <li><strong>Frontend: skeleton.</strong> Next.js or plain React pages. Routes: <code>/</code> (landing), <code>/signup</code>, <code>/login</code>, <code>/dashboard</code>, <code>/forecast</code>.</li>
+                <li><strong>Frontend: skeleton.</strong> If the spec chose HTML+JS (recommended for your first time) — these are plain files, deployed to Vercel as static with no extra setup. If you want React or Next.js — tell Claude upfront, it will set up <code>package.json</code> and the Node.js environment. Routes: <code>/</code> (landing), <code>/signup</code>, <code>/login</code>, <code>/dashboard</code>, <code>/forecast</code>.</li>
                 <li><strong>Frontend: forms and dashboard.</strong> Use the <code>frontend-design</code> skill for layout. Inside — etapes 02–04 charts.</li>
                 <li><strong>Frontend: backend integration.</strong> JWT in <code>localStorage</code>. Auto-attach token on each request.</li>
-                <li><strong>Backend deploy on Render.</strong> Create a PostgreSQL service. Migrate SQLite → PostgreSQL via the <code>DATABASE_URL</code> variable.</li>
-                <li><strong>Frontend deploy on Vercel.</strong> Swap backend URL to production. CORS configured.</li>
+                <li><strong>Backend deploy on Render.</strong> On render.com create a <strong>PostgreSQL</strong> service (New → PostgreSQL) — get the connection string. Then create a <strong>Web Service</strong> from the backend repo. In “Environment” add <code>DATABASE_URL</code> (string from the PostgreSQL service). Start command: <code>uvicorn main:app --host 0.0.0.0 --port $PORT</code>. After deploy ask Claude: <em>”run the SQLite → PostgreSQL migration via DATABASE_URL.”</em></li>
+                <li><strong>Frontend deploy on Vercel.</strong> On vercel.com — Add New → Project → frontend repo. Before deploying ask Claude: <em>”replace all localhost:8000 in frontend with my Render backend URL.”</em> Push the changes — Vercel rebuilds automatically.</li>
                 <li><strong>Verification.</strong> Through Playwright: sign-up, sign-in, CSV import, forecast. Reconcile numbers with etape 02 (on the same data).</li>
             </ol>
 
@@ -603,7 +665,12 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; возвращает { answer: string, model: string, tokens_used: int }.
 &gt; ВАЖНО: ANTHROPIC_API_KEY — только из env, никогда не светится в логах.</pre>
                 </li>
-                <li>В&nbsp;<code>frontend/</code> добавьте страницу <code>/advisor</code> с&nbsp;чатом. История сообщений в&nbsp;state, ответы streaming-ом.</li>
+                <li>В&nbsp;<code>frontend/</code> добавьте страницу <code>/advisor</code> с&nbsp;чатом. История сообщений в&nbsp;state. Ответы можно делать двумя способами&nbsp;&mdash; скажите Claude, какой хотите:
+                    <ul style="margin-top:0.3rem;">
+                        <li><strong>Обычный запрос-ответ</strong> (проще): кнопка «Спросить» → ждёте → появляется полный ответ. Начните с&nbsp;этого.</li>
+                        <li><strong>Streaming</strong> (красиво): ответ появляется по&nbsp;словам, как в&nbsp;самом Claude. Сложнее в&nbsp;реализации&nbsp;&mdash; переходите, когда базовый вариант уже работает.</li>
+                    </ul>
+                </li>
                 <li>Уточните UI:
                     <ul>
                         <li><em>«сделай вид «классической переписки», узкая колонка, тёплая палитра»</em>;</li>
@@ -648,7 +715,12 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; returns { answer: string, model: string, tokens_used: int }.
 &gt; IMPORTANT: ANTHROPIC_API_KEY only from env, never logged.</pre>
                 </li>
-                <li>In <code>frontend/</code> add an <code>/advisor</code> page with a chat. Message history in state, replies streamed.</li>
+                <li>In <code>frontend/</code> add an <code>/advisor</code> page with a chat. Message history in state. Pick how replies arrive — tell Claude which you want:
+                    <ul style="margin-top:0.3rem;">
+                        <li><strong>Regular request-response</strong> (simpler): "Ask" button → wait → full reply appears. Start here.</li>
+                        <li><strong>Streaming</strong> (polished): reply appears word by word, like Claude itself. Harder to implement — switch to this once the basic version works.</li>
+                    </ul>
+                </li>
                 <li>Refine UI:
                     <ul>
                         <li><em>“go for ‘classic correspondence’ look — narrow column, warm palette”</em>;</li>
