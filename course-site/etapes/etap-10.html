@@ -529,7 +529,9 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 │   ├── posthog.py            # запись телеметрии
 │   └── lock.py               # идемпотентность через файл-флаг
 ├── .env.example              # шаблон без значений
-└── crontab.txt               # строки расписания (см. шаг ниже)</pre>
+├── crontab.txt               # строки расписания (см. шаг ниже)
+└── CLAUDE.md</pre>
+                    Попросите Claude сразу заполнить <code>CLAUDE.md</code>: назначение четырёх скриптов, расписание каждого, ключи из <code>.env</code> (<code>TELEGRAM_TOKEN</code>, <code>ANTHROPIC_API_KEY</code>, <code>ALPHAVANTAGE_KEY</code>), как запустить скрипт вручную для теста.
                 </li>
                 <li><strong>morning_digest.py.</strong> Считает текущие позиции (через Daily Trader MCP <code>get_price</code>), вчерашние изменения, новости по&nbsp;holdings (через WebSearch + summarisation Claude API). Шлёт markdown-сводку в&nbsp;Telegram. Цена&nbsp;&mdash; кэшируется на&nbsp;15&nbsp;минут.</li>
                 <li><strong>friday_review.py.</strong> За&nbsp;неделю: общий рост, лучший и&nbsp;худший тикер, прогноз на&nbsp;неделю через ваш skill «инвест-аналитик». Использует Claude API с&nbsp;Sonnet и&nbsp;prompt caching (этап&nbsp;06).</li>
@@ -567,7 +569,9 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 │   ├── posthog.py            # telemetry write
 │   └── lock.py               # idempotency via flag file
 ├── .env.example              # template without values
-└── crontab.txt               # schedule lines (see step below)</pre>
+├── crontab.txt               # schedule lines (see step below)
+└── CLAUDE.md</pre>
+                    Ask Claude to fill <code>CLAUDE.md</code> right away: what each script does, its schedule, which keys come from <code>.env</code> (<code>TELEGRAM_TOKEN</code>, <code>ANTHROPIC_API_KEY</code>, <code>ALPHAVANTAGE_KEY</code>), and how to run a script manually for testing.
                 </li>
                 <li><strong>morning_digest.py.</strong> Computes current positions (Daily Trader MCP <code>get_price</code>), yesterday’s deltas, news on holdings (WebSearch + Claude API summarisation). Sends a markdown digest to Telegram. Prices cached for 15 minutes.</li>
                 <li><strong>friday_review.py.</strong> Weekly: total return, best/worst ticker, weekly outlook through your “investing analyst” skill. Uses Claude API with Sonnet and prompt caching (etape 06).</li>

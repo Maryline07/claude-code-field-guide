@@ -591,7 +591,9 @@ jobs:
 │   └── telegram.py      # post_telegram
 ├── data/
 │   └── tickers.json     # тикеры для слежки
-└── .env.example</pre>
+├── .env.example
+└── CLAUDE.md</pre>
+                    Попросите Claude заполнить <code>CLAUDE.md</code>: стек (Python, Claude Agent SDK, Alpha Vantage), команда запуска <code>python daemon.py</code>, бюджетный лимит $0.50/день, модель haiku, ключи из <code>.env</code>.
                 </li>
                 <li>Если у&nbsp;вас есть X&nbsp;API&nbsp;&mdash; <code>daemon.py</code> подключается к&nbsp;streaming-эндпоинту и&nbsp;ловит твиты. Если нет&nbsp;&mdash; demo-режим, читает <code>data/sample-tweets.json</code> по&nbsp;одному в&nbsp;5&nbsp;секунд.</li>
                 <li><code>agent.py</code>&nbsp;&mdash; Claude Agent SDK с&nbsp;тремя tools:
@@ -644,7 +646,9 @@ jobs:
 │   └── telegram.py      # post_telegram
 ├── data/
 │   └── tickers.json     # watched tickers
-└── .env.example</pre>
+├── .env.example
+└── CLAUDE.md</pre>
+                    Ask Claude to fill <code>CLAUDE.md</code>: stack (Python, Claude Agent SDK, Alpha Vantage), start command <code>python daemon.py</code>, budget cap $0.50/day, model haiku, keys from <code>.env</code>.
                 </li>
                 <li>If you have X API access — <code>daemon.py</code> connects to a streaming endpoint and catches tweets. If not — demo mode reads <code>data/sample-tweets.json</code> one every 5 seconds.</li>
                 <li><code>agent.py</code> — Claude Agent SDK with three tools:
@@ -698,7 +702,7 @@ No "buy/sell" advice. Observation only.</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Репо <code>concierge-bot/</code>. Запуск локально или на&nbsp;Render как web-сервис с&nbsp;фоновым циклом (как бот в&nbsp;этапе&nbsp;06b).</li>
+                <li>Репо <code>concierge-bot/</code>. Запуск локально или на&nbsp;Render как web-сервис с&nbsp;фоновым циклом (как бот в&nbsp;этапе&nbsp;06b). Попросите Claude заполнить <code>CLAUDE.md</code>: стек (Python, Claude Agent SDK, aiogram, Neon PostgreSQL), команды запуска локально и&nbsp;на&nbsp;Render, ключи из <code>.env</code>.</li>
                 <li>Память: PostgreSQL-таблица <code>memory(user_id, key, value, updated_at)</code>. Хранит «факты» о&nbsp;пользователе: предпочтения, города, бюджет по&nbsp;умолчанию, история запросов.</li>
                 <li>Tools для&nbsp;агента:
                     <ul>
@@ -744,7 +748,7 @@ No "buy/sell" advice. Observation only.</pre>
                 <li>Verification: запустите subagent с&nbsp;ролью «privacy-аудит». Brief: представь, что бот утёк через дамп БД. Что увидит атакующий? Что нельзя восстановить?</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Repo <code>concierge-bot/</code>. Run locally or on Render as a web service with a background loop (like the bot in etape 06b).</li>
+                <li>Repo <code>concierge-bot/</code>. Run locally or on Render as a web service with a background loop (like the bot in etape 06b). Ask Claude to fill <code>CLAUDE.md</code>: stack (Python, Claude Agent SDK, aiogram, Neon PostgreSQL), local and Render start commands, keys from <code>.env</code>.</li>
                 <li>Memory: a PostgreSQL <code>memory(user_id, key, value, updated_at)</code> table. Stores “facts” about the user: preferences, cities, default budget, request history.</li>
                 <li>Agent tools:
                     <ul>

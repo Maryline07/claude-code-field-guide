@@ -529,7 +529,7 @@ server.addTool("get_history", ...);</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Создайте папку <code>daily-trader-mcp</code>. Через Plan Mode попросите spec и&nbsp;план реализации.</li>
+                <li>Создайте папку <code>daily-trader-mcp</code>. Попросите Claude заполнить <code>CLAUDE.md</code>: стек (Node.js + TypeScript, MCP SDK), сборка&nbsp;&mdash; <code>npm install</code> + <code>npx tsc</code>, запуск&nbsp;&mdash; <code>node dist/server.js</code>, ключ <code>ALPHAVANTAGE_KEY</code> из <code>.env</code>. Через Plan Mode попросите spec и&nbsp;план реализации.</li>
                 <li>Реализация четырёх tool'ов:
                     <ul>
                         <li><code>get_price(ticker)</code>&nbsp;&mdash; вызывает Alpha Vantage GLOBAL_QUOTE, возвращает <code>{ ticker, price, change_pct, currency, as_of }</code>;</li>
@@ -556,7 +556,7 @@ server.addTool("get_history", ...);</pre>
                 <li>Verification: <em>«запусти red-team subagent. brief: пройди по&nbsp;моему server.ts как security-reviewer. найди три места, где можно ошибиться: rate limit, утечка ключа, неполная валидация»</em>.</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Create <code>daily-trader-mcp</code>. Via Plan Mode draft a spec and a plan.</li>
+                <li>Create <code>daily-trader-mcp</code>. Ask Claude to fill <code>CLAUDE.md</code>: stack (Node.js + TypeScript, MCP SDK), build — <code>npm install</code> + <code>npx tsc</code>, run — <code>node dist/server.js</code>, key <code>ALPHAVANTAGE_KEY</code> from <code>.env</code>. Via Plan Mode draft a spec and a plan.</li>
                 <li>Implement four tools:
                     <ul>
                         <li><code>get_price(ticker)</code> — calls Alpha Vantage GLOBAL_QUOTE, returns <code>{ ticker, price, change_pct, currency, as_of }</code>;</li>
