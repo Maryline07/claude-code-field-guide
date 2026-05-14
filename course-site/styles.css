@@ -767,6 +767,86 @@ section.tight { padding: clamp(2rem, 5vw, 4rem) 0; }
     margin-bottom: 0.4rem;
 }
 
+/* ----------- FLOW DIAGRAM (restaurant metaphor) ----------- */
+.flow {
+    margin: 1.8rem 0;
+    padding: 1.5rem 1.25rem 1.25rem;
+    border: 1px solid var(--rule);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow);
+    break-inside: avoid;
+}
+.flow-rail {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+.flow-node {
+    flex: 1 1 0;
+    min-width: 0;
+    border: 1.5px solid var(--ink);
+    background: var(--bg);
+    padding: 0.85rem 0.7rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.flow-node.is-guest {
+    border-style: dashed;
+    border-color: var(--ink-muted);
+}
+.flow-role {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--accent);
+}
+.flow-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.flow-tech {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    line-height: 1.4;
+}
+.flow-link {
+    flex: 0 0 auto;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    padding: 0 0.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-muted);
+}
+.flow-link .arrow {
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--accent);
+}
+.flow-link .arrow.back { color: var(--ink-soft); }
+.flow-caption {
+    margin: 1rem 0 0;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    line-height: 1.55;
+}
+.flow-caption strong { color: var(--ink); }
+
+@media (max-width: 600px) {
+    .flow-rail { flex-direction: column; }
+    .flow-link { flex-direction: row; gap: 0.4rem; padding: 0.4rem 0; }
+    .flow-link .arrow { transform: rotate(90deg); }
+}
+
 /* ----------- TOC / ETAPES TABLE ----------- */
 .toc-head {
     display: flex;
