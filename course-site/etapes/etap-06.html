@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Этап 06 · Полноценные веб-приложения и деплой — Полевое руководство по Claude Code</title>
-<meta name="description" content="Этап 06 курса по Claude Code: frontend + backend + БД + авторизация + деплой через Vercel/Railway. Личный инвестиционный кабинет и AI-консультант на Claude API.">
+<meta name="description" content="Этап 06 курса по Claude Code: frontend + backend + БД + авторизация + деплой через Vercel/Render. Личный инвестиционный кабинет и AI-консультант на Claude API.">
 <link rel="stylesheet" href="../styles.css">
 <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f1e9d2'/><text x='50%25' y='62%25' font-family='Georgia, serif' font-size='52' text-anchor='middle' fill='%23aa3a17' font-weight='700' font-style='italic'>§</text></svg>">
 </head>
@@ -104,14 +104,14 @@
 
         <div class="aside-card" style="margin-top:1.5rem;">
             <span class="label"><span lang="ru">обязательно · аккаунт</span><span lang="en">required · account</span></span>
-            <h3>Railway</h3>
+            <h3>Render</h3>
             <p lang="ru" style="margin:0.5rem 0 0.6rem;"><strong>Что это:</strong> платформа для&nbsp;деплоя <em>backend</em>-частей: серверов, баз данных, фоновых задач. То, что не&nbsp;умеет Vercel.<br>
             <strong>Зачем сейчас:</strong> на&nbsp;нём запускаем сервер инвест-кабинета и&nbsp;PostgreSQL-базу&nbsp;&mdash; всё в&nbsp;одном месте.<br>
-            <strong>Где взять:</strong> <a href="https://railway.app">railway.app</a>. Регистрация через GitHub. Бесплатный тариф: $5 кредитов в&nbsp;месяц&nbsp;&mdash; для&nbsp;учебного проекта более чем достаточно.<br>
+            <strong>Где взять:</strong> <a href="https://render.com">render.com</a>. Регистрация через GitHub, кредитная карта не&nbsp;нужна. Бесплатный тариф: веб-сервис (750&nbsp;ч/мес) + PostgreSQL 90&nbsp;дней&nbsp;&mdash; для&nbsp;учебного проекта более чем достаточно. Минус: backend засыпает после 15&nbsp;минут неактивности, первый запрос после сна занимает 30–60 сек&nbsp;&mdash; для&nbsp;учёбы это нормально.<br>
             <strong>Проверить:</strong> dashboard открывается, в&nbsp;нём пусто.</p>
             <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a deployment platform for <em>backend</em> parts: servers, databases, background jobs. What Vercel can’t do.<br>
             <strong>Why now:</strong> we run the investment-office server and a PostgreSQL database there — all in one place.<br>
-            <strong>Where:</strong> <a href="https://railway.app">railway.app</a>. Sign in with GitHub. Free tier: $5 credits/month — more than enough for a learning project.<br>
+            <strong>Where:</strong> <a href="https://render.com">render.com</a>. Sign in with GitHub — no credit card required. Free tier: web service (750 hrs/month) + PostgreSQL for 90 days — more than enough for a learning project. Caveat: the backend sleeps after 15 min of inactivity; first request after sleep takes 30–60 s — fine for learning.<br>
             <strong>Verify:</strong> the dashboard opens, empty.</p>
         </div>
 
@@ -122,12 +122,12 @@
             <strong>Зачем сейчас:</strong> для&nbsp;второго проекта&nbsp;&mdash; AI-консультанта по&nbsp;финансам.<br>
             <strong>Где взять:</strong> <a href="https://console.anthropic.com/settings/keys">console.anthropic.com/settings/keys</a>. Регистрация бесплатная, при создании ключа получите $5 кредитов на&nbsp;старт.<br>
             <strong>Куда положить:</strong> в&nbsp;<code>.env</code> в&nbsp;корне проекта (<code>ANTHROPIC_API_KEY=sk-ant-...</code>) и&nbsp;<em>ОБЯЗАТЕЛЬНО</em> в&nbsp;<code>.gitignore</code>.<br>
-            <strong>На&nbsp;Vercel/Railway:</strong> ключ загружается через интерфейс «Environment Variables», а&nbsp;не&nbsp;через файл&nbsp;&mdash; разберём в&nbsp;§&nbsp;I.</p>
-            <p lang="en" style="margin:0.5rem 0 0.6rem;"><strong>What it is:</strong> a key for the <dfn class="term" tabindex="0" data-def="a programmatic interface to Anthropic’s Claude models. Through it your app calls Claude itself — for chat, analysis, generation.">Claude API</dfn> — the same Claude, but invoked from programs, not just Claude Code. We use it to embed AI right in our app.<br>
+            <strong>На&nbsp;Vercel/Render:</strong> ключ загружается через интерфейс «Environment Variables», а&nbsp;не&nbsp;через файл&nbsp;&mdash; разберём в&nbsp;§&nbsp;I.</p>
+            <p lang=”en” style=”margin:0.5rem 0 0.6rem;”><strong>What it is:</strong> a key for the <dfn class=”term” tabindex=”0” data-def=”a programmatic interface to Anthropic’s Claude models. Through it your app calls Claude itself — for chat, analysis, generation.”>Claude API</dfn> — the same Claude, but invoked from programs, not just Claude Code. We use it to embed AI right in our app.<br>
             <strong>Why now:</strong> for the second project — an AI financial advisor.<br>
-            <strong>Where:</strong> <a href="https://console.anthropic.com/settings/keys">console.anthropic.com/settings/keys</a>. Free signup, $5 starter credits when you create a key.<br>
+            <strong>Where:</strong> <a href=”https://console.anthropic.com/settings/keys”>console.anthropic.com/settings/keys</a>. Free signup, $5 starter credits when you create a key.<br>
             <strong>Where to keep:</strong> in <code>.env</code> at the project root (<code>ANTHROPIC_API_KEY=sk-ant-...</code>) and <em>MANDATORILY</em> in <code>.gitignore</code>.<br>
-            <strong>On Vercel/Railway:</strong> the key is loaded via the “Environment Variables” UI, not a file — covered in § I.</p>
+            <strong>On Vercel/Render:</strong> the key is loaded via the “Environment Variables” UI, not a file — covered in § I.</p>
         </div>
 
         <div class="aside-card" style="margin-top:1.5rem;">
@@ -244,23 +244,23 @@ POST /api/login              → takes email + password, returns a token</pre>
             <div class="topic-body">
                 <div lang="ru">
                     <p><strong><dfn class="term" tabindex="0" data-def="база данных, которая живёт в одном файле .db рядом с вашим кодом. Идеальна для разработки и маленьких проектов. Не подходит для одновременной работы многих пользователей.">SQLite</dfn></strong>&nbsp;&mdash; это «база в&nbsp;файле». Один файл <code>app.db</code>&nbsp;&mdash; и&nbsp;там вся ваша информация. Идеальна для&nbsp;разработки и&nbsp;учебных проектов: нечего настраивать, всё работает.</p>
-                    <p><strong><dfn class="term" tabindex="0" data-def="полноценная база данных, работающая как отдельный сервис. Поддерживает много пользователей одновременно, надёжна, бесплатна. Стандарт для веб-приложений.">PostgreSQL</dfn></strong>&nbsp;&mdash; это «настоящая» база. Отдельный процесс, к&nbsp;которому подключается ваш backend. Поддерживает множество пользователей одновременно. На&nbsp;Railway она ставится в&nbsp;один клик.</p>
+                    <p><strong><dfn class="term" tabindex="0" data-def="полноценная база данных, работающая как отдельный сервис. Поддерживает много пользователей одновременно, надёжна, бесплатна. Стандарт для веб-приложений.">PostgreSQL</dfn></strong>&nbsp;&mdash; это «настоящая» база. Отдельный процесс, к&nbsp;которому подключается ваш backend. Поддерживает множество пользователей одновременно. На&nbsp;Render она ставится в&nbsp;один клик.</p>
                     <p>Стратегия в&nbsp;курсе:</p>
                     <ul>
                         <li>На&nbsp;вашем компьютере (разработка)&nbsp;&mdash; SQLite. Просто файл.</li>
-                        <li>В&nbsp;интернете (Railway)&nbsp;&mdash; PostgreSQL.</li>
-                        <li>Между ними переключаемся одной строкой в&nbsp;<code>.env</code>: <code>DATABASE_URL=sqlite:///./app.db</code> локально и&nbsp;<code>DATABASE_URL=postgres://...</code> на&nbsp;Railway. Код один и&nbsp;тот&nbsp;же&nbsp;&mdash; меняется только переменная окружения.</li>
+                        <li>В&nbsp;интернете (Render)&nbsp;&mdash; PostgreSQL.</li>
+                        <li>Между ними переключаемся одной строкой в&nbsp;<code>.env</code>: <code>DATABASE_URL=sqlite:///./app.db</code> локально и&nbsp;<code>DATABASE_URL=postgres://...</code> на&nbsp;Render. Код один и&nbsp;тот&nbsp;же&nbsp;&mdash; меняется только переменная окружения.</li>
                     </ul>
                     <p>Базой управляет ORM (например, SQLAlchemy)&nbsp;&mdash; библиотека, которая превращает Python-объекты в&nbsp;запросы&nbsp;SQL. Вам не&nbsp;нужно знать SQL: вы&nbsp;говорите Claude «создай модель User с&nbsp;email, password_hash, created_at», и&nbsp;он&nbsp;делает всё остальное.</p>
                 </div>
                 <div lang="en">
                     <p><strong><dfn class="term" tabindex="0" data-def="a database that lives in one .db file next to your code. Perfect for dev and small projects. Not suitable for many concurrent users.">SQLite</dfn></strong> is a “database in a file.” One <code>app.db</code> file — all your info inside. Ideal for development and learning projects: nothing to set up.</p>
-                    <p><strong><dfn class="term" tabindex="0" data-def="a full database running as its own service. Handles many concurrent users, reliable, free. The standard for web apps.">PostgreSQL</dfn></strong> is a “real” database. A separate process the backend connects to. Handles many concurrent users. On Railway it’s a one-click install.</p>
+                    <p><strong><dfn class=”term” tabindex=”0” data-def=”a full database running as its own service. Handles many concurrent users, reliable, free. The standard for web apps.”>PostgreSQL</dfn></strong> is a “real” database. A separate process the backend connects to. Handles many concurrent users. On Render it’s a one-click install.</p>
                     <p>Strategy in this course:</p>
                     <ul>
                         <li>On your machine (dev) — SQLite. Just a file.</li>
-                        <li>On the internet (Railway) — PostgreSQL.</li>
-                        <li>Switch by one line in <code>.env</code>: <code>DATABASE_URL=sqlite:///./app.db</code> locally and <code>DATABASE_URL=postgres://...</code> on Railway. Same code — only the env var changes.</li>
+                        <li>On the internet (Render) — PostgreSQL.</li>
+                        <li>Switch by one line in <code>.env</code>: <code>DATABASE_URL=sqlite:///./app.db</code> locally and <code>DATABASE_URL=postgres://...</code> on Render. Same code — only the env var changes.</li>
                     </ul>
                     <p>The database is managed by an ORM (e.g. SQLAlchemy) — a library that turns Python objects into SQL. You don’t need SQL: you say to Claude “create a User model with email, password_hash, created_at,” and it does the rest.</p>
                 </div>
@@ -290,7 +290,7 @@ POST /api/login              → takes email + password, returns a token</pre>
                     <ul>
                         <li>пароли в&nbsp;базе&nbsp;&mdash; <em>только в&nbsp;виде хеша</em>. Если кто-то украдёт базу, ваши пароли всё равно не&nbsp;видны;</li>
                         <li>JWT-секрет (ключ для&nbsp;подписи токенов) живёт <em>только в&nbsp;backend</em>, в&nbsp;<code>.env</code>;</li>
-                        <li>HTTPS обязателен для&nbsp;любых страниц с&nbsp;вводом пароля&nbsp;&mdash; и&nbsp;Vercel/Railway включают его автоматически.</li>
+                        <li>HTTPS обязателен для&nbsp;любых страниц с&nbsp;вводом пароля&nbsp;&mdash; и&nbsp;Vercel/Render включают его автоматически.</li>
                     </ul>
                 </div>
                 <div lang="en">
@@ -313,47 +313,47 @@ POST /api/login              → takes email + password, returns a token</pre>
                     <ul>
                         <li>passwords in the database — <em>hash only</em>. If the DB leaks, passwords are still not readable;</li>
                         <li>the JWT secret (token signing key) lives <em>only in the backend</em>, in <code>.env</code>;</li>
-                        <li>HTTPS is required on any page with password input — Vercel/Railway enable it automatically.</li>
+                        <li>HTTPS is required on any page with password input — Vercel/Render enable it automatically.</li>
                     </ul>
                 </div>
             </div>
         </details>
 
         <details class="topic">
-            <summary><span lang="ru">Деплой одной кнопкой: Vercel + Railway</span><span lang="en">One-click deploy: Vercel + Railway</span></summary>
-            <div class="topic-body">
-                <div lang="ru">
+            <summary><span lang=”ru”>Деплой одной кнопкой: Vercel + Render</span><span lang=”en”>One-click deploy: Vercel + Render</span></summary>
+            <div class=”topic-body”>
+                <div lang=”ru”>
                     <p>«Деплой» больше не&nbsp;значит «арендовать сервер, настраивать nginx, ставить SSL». Современный подход:</p>
                     <ol>
                         <li>Связали аккаунт <strong>Vercel</strong> с&nbsp;вашим GitHub.</li>
                         <li>В&nbsp;Vercel «Import Project»&nbsp;&mdash; выбираете репозиторий с&nbsp;frontend.</li>
                         <li>Vercel сам понимает, что это Next.js (или React, или Vue), собирает и&nbsp;публикует. Через 30 секунд&nbsp;&mdash; живая ссылка <code>my-app.vercel.app</code>.</li>
-                        <li>Аналогично в&nbsp;<strong>Railway</strong>: «New Project» → ваш backend-репозиторий + добавить «PostgreSQL» сервис.</li>
+                        <li>Аналогично в&nbsp;<strong>Render</strong>: «New Web Service» → ваш backend-репозиторий + добавить «PostgreSQL» сервис.</li>
                         <li>В&nbsp;настройках добавляете environment variables (например, <code>ANTHROPIC_API_KEY</code>, <code>DATABASE_URL</code>).</li>
                         <li>Каждый <code>git push</code>&nbsp;&mdash; новый деплой. На&nbsp;каждый PR&nbsp;&mdash; своя preview-ссылка для&nbsp;ревью.</li>
                     </ol>
                     <p>Что важно:</p>
                     <ul>
                         <li><strong>Никогда не&nbsp;кладите секреты в&nbsp;код.</strong> Только Environment Variables через интерфейс платформы.</li>
-                        <li><strong>Настройте CORS</strong>&nbsp;&mdash; чтобы ваш Vercel-frontend имел право обращаться к&nbsp;Railway-backend. Claude настроит, но&nbsp;знать про&nbsp;это надо.</li>
-                        <li><strong>Бесплатные тарифы засыпают.</strong> Если приложение не&nbsp;использовали несколько часов, первый запрос будет долгий (контейнер просыпается). Это нормально для&nbsp;учебных проектов.</li>
+                        <li><strong>Настройте CORS</strong>&nbsp;&mdash; чтобы ваш Vercel-frontend имел право обращаться к&nbsp;Render-backend. Claude настроит, но&nbsp;знать про&nbsp;это надо.</li>
+                        <li><strong>Render-backend засыпает</strong> после 15&nbsp;минут неактивности&nbsp;&mdash; первый запрос после сна занимает 30–60 сек. Это нормально для&nbsp;учебных проектов.</li>
                     </ul>
                 </div>
-                <div lang="en">
-                    <p>“Deploy” no longer means “rent a server, configure nginx, install SSL.” The modern flow:</p>
+                <div lang=”en”>
+                    <p>”Deploy” no longer means “rent a server, configure nginx, install SSL.” The modern flow:</p>
                     <ol>
                         <li>Link <strong>Vercel</strong> to your GitHub.</li>
                         <li>In Vercel “Import Project” — pick the frontend repo.</li>
                         <li>Vercel detects Next.js (or React, or Vue), builds and publishes. 30 seconds later — a live URL <code>my-app.vercel.app</code>.</li>
-                        <li>Same in <strong>Railway</strong>: “New Project” → your backend repo + add a “PostgreSQL” service.</li>
+                        <li>Same in <strong>Render</strong>: “New Web Service” → your backend repo + add a “PostgreSQL” service.</li>
                         <li>Add environment variables (e.g. <code>ANTHROPIC_API_KEY</code>, <code>DATABASE_URL</code>).</li>
                         <li>Every <code>git push</code> — a new deploy. Each PR gets its own preview URL for review.</li>
                     </ol>
                     <p>What matters:</p>
                     <ul>
                         <li><strong>Never put secrets in code.</strong> Only environment variables via the platform UI.</li>
-                        <li><strong>Configure CORS</strong> so your Vercel frontend can call your Railway backend. Claude sets it, but you should know it’s a thing.</li>
-                        <li><strong>Free tiers nap.</strong> If unused for hours, the first request is slow (container wakes up). Fine for learning projects.</li>
+                        <li><strong>Configure CORS</strong> so your Vercel frontend can call your Render backend. Claude sets it, but you should know it’s a thing.</li>
+                        <li><strong>The Render backend sleeps</strong> after 15 min of inactivity — first request after sleep takes 30–60 s. Fine for learning projects.</li>
                     </ul>
                 </div>
             </div>
@@ -411,8 +411,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <div lang="ru">
                     <p>На&nbsp;этом этапе впервые «настоящая» сложность. Не&nbsp;всё работает с&nbsp;первого раза. Что чаще всего ломается:</p>
                     <ul>
-                        <li><strong>CORS-ошибки.</strong> Frontend на&nbsp;Vercel не&nbsp;может позвонить Railway-backend, потому что серверы разные. Claude всё настроит, но&nbsp;первый раз скорее всего получите ошибку «blocked by CORS policy». Решение&nbsp;&mdash; <em>«добавь cors middleware с&nbsp;allowed origins из&nbsp;.env»</em>.</li>
-                        <li><strong>Секреты не&nbsp;подгрузились.</strong> Локально работает, на&nbsp;Vercel/Railway&nbsp;&mdash; нет. Проверьте, что переменные окружения добавлены в&nbsp;dashboard платформы (не&nbsp;только в&nbsp;<code>.env</code> на&nbsp;вашем компьютере).</li>
+                        <li><strong>CORS-ошибки.</strong> Frontend на&nbsp;Vercel не&nbsp;может позвонить Render-backend, потому что серверы разные. Claude всё настроит, но&nbsp;первый раз скорее всего получите ошибку «blocked by CORS policy». Решение&nbsp;&mdash; <em>«добавь cors middleware с&nbsp;allowed origins из&nbsp;.env»</em>.</li>
+                        <li><strong>Секреты не&nbsp;подгрузились.</strong> Локально работает, на&nbsp;Vercel/Render&nbsp;&mdash; нет. Проверьте, что переменные окружения добавлены в&nbsp;dashboard платформы (не&nbsp;только в&nbsp;<code>.env</code> на&nbsp;вашем компьютере).</li>
                         <li><strong>Миграции базы.</strong> При первом деплое таблиц ещё нет. Claude обычно делает это автоматически, но&nbsp;иногда нужно явно: <em>«добавь startup-хук, который создаёт таблицы при старте сервера»</em>.</li>
                         <li><strong>Спящий бэкенд.</strong> Первый запрос после паузы&nbsp;&mdash; долгий. Это нормально на&nbsp;бесплатных тарифах. Решение для&nbsp;демо&nbsp;&mdash; пинговать backend каждые 5&nbsp;минут (например, через cron-задачу&nbsp;&mdash; этап&nbsp;10).</li>
                     </ul>
@@ -421,8 +421,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <div lang="en">
                     <p>This is the first etape with “real” complexity. Not everything works first try. The usual culprits:</p>
                     <ul>
-                        <li><strong>CORS errors.</strong> The Vercel frontend can’t call the Railway backend because servers differ. Claude sets it up, but the first time you’ll usually see “blocked by CORS policy.” Fix: <em>“add cors middleware with allowed origins from .env.”</em></li>
-                        <li><strong>Secrets didn’t load.</strong> Works locally, breaks on Vercel/Railway. Confirm env vars are set in the platform dashboard (not just in your local <code>.env</code>).</li>
+                        <li><strong>CORS errors.</strong> The Vercel frontend can’t call the Render backend because servers differ. Claude sets it up, but the first time you’ll usually see “blocked by CORS policy.” Fix: <em>”add cors middleware with allowed origins from .env.”</em></li>
+                        <li><strong>Secrets didn’t load.</strong> Works locally, breaks on Vercel/Render. Confirm env vars are set in the platform dashboard (not just in your local <code>.env</code>).</li>
                         <li><strong>Database migrations.</strong> On first deploy the tables are not there yet. Claude usually handles this, but sometimes ask explicitly: <em>“add a startup hook that creates tables on server boot.”</em></li>
                         <li><strong>Sleeping backend.</strong> First request after a pause is slow. Normal on free tiers. Fix for demos — ping the backend every 5 minutes (e.g., via cron — etape 10).</li>
                     </ul>
@@ -454,7 +454,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   локально: uvicorn на 8000.
 &gt; — frontend: одна html-страница, fetch на /api/hello,
 &gt;   рендерит сообщение в крупный заголовок.
-&gt; — оба готовы к деплою на Railway (backend) и Vercel (frontend).
+&gt; — оба готовы к деплою на Render (backend) и Vercel (frontend).
 &gt; — CORS настроен для localhost и для будущих vercel.app.
 &gt; критерии готовности:
 &gt;   1) backend стартует одной командой;
@@ -470,15 +470,15 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 </li>
                 <li>Деплой:
                     <pre class="shell">&gt; запушь backend на github как hello-fullstack-backend (публичный).
-&gt; деплой на Railway: новый проект из этого репо.
+&gt; деплой на Render: новый Web Service из этого репо.
 &gt; запушь frontend как hello-fullstack-frontend.
 &gt; деплой на Vercel: импорт из репо.
 &gt; в обоих платформах загрузи нужные env vars.
-&gt; замени в frontend URL backend-а на railway-ссылку.
+&gt; замени в frontend URL backend-а на render-ссылку.
 &gt; запушь обновление.</pre>
                 </li>
                 <li>Откройте Vercel-ссылку. Убедитесь, что работает по&nbsp;живому&nbsp;URL.</li>
-                <li>Если что-то не&nbsp;работает: смотрите логи Railway и&nbsp;DevTools во&nbsp;Vercel-странице. Сообщите Claude точное сообщение об&nbsp;ошибке&nbsp;&mdash; обычно решает за&nbsp;1–2 итерации.</li>
+                <li>Если что-то не&nbsp;работает: смотрите логи Render и&nbsp;DevTools во&nbsp;Vercel-странице. Сообщите Claude точное сообщение об&nbsp;ошибке&nbsp;&mdash; обычно решает за&nbsp;1–2 итерации.</li>
             </ol>
             <ol lang="en">
                 <li>Create a <code>hello-fullstack</code> folder, two subfolders: <code>backend/</code> and <code>frontend/</code>. At the root — <code>CLAUDE.md</code> and <code>.gitignore</code>.</li>
@@ -489,7 +489,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   local: uvicorn on 8000.
 &gt; — frontend: one html page, fetch /api/hello,
 &gt;   renders the message as a big heading.
-&gt; — both ready to deploy: Railway (backend) and Vercel (frontend).
+&gt; — both ready to deploy: Render (backend) and Vercel (frontend).
 &gt; — CORS configured for localhost and future vercel.app.
 &gt; acceptance:
 &gt;   1) backend starts with one command;
@@ -505,15 +505,15 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 </li>
                 <li>Deploy:
                     <pre class="shell">&gt; push backend to github as hello-fullstack-backend (public).
-&gt; deploy to Railway: new project from this repo.
+&gt; deploy to Render: new Web Service from this repo.
 &gt; push frontend as hello-fullstack-frontend.
 &gt; deploy to Vercel: import from repo.
 &gt; on both platforms add the env vars.
-&gt; in frontend replace the backend URL with the Railway one.
+&gt; in frontend replace the backend URL with the Render one.
 &gt; push the update.</pre>
                 </li>
                 <li>Open the Vercel URL. Confirm it works on the live URL.</li>
-                <li>If something fails: check Railway logs and the Vercel page DevTools. Tell Claude the exact error — usually 1–2 iterations.</li>
+                <li>If something fails: check Render logs and the Vercel page DevTools. Tell Claude the exact error — usually 1–2 iterations.</li>
             </ol>
             <p lang="ru">Что мы&nbsp;тренируем: <strong>минимальный, но&nbsp;настоящий full-stack&nbsp;&mdash; от&nbsp;пустой папки до&nbsp;живой ссылки</strong>. Дальше&nbsp;&mdash; на&nbsp;этом фундаменте делаем серьёзные приложения.</p>
             <p lang="en">What we train: <strong>a minimal but real full-stack — from empty folder to live URL</strong>. Then we build serious apps on this foundation.</p>
@@ -548,7 +548,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <li><strong>Frontend: каркас.</strong> Next.js или просто React-страницы. Маршруты: <code>/</code> (лендинг), <code>/signup</code>, <code>/login</code>, <code>/dashboard</code>, <code>/forecast</code>.</li>
                 <li><strong>Frontend: формы и&nbsp;дашборд.</strong> Используем skill <code>frontend-design</code> для&nbsp;вёрстки. Внутри&nbsp;&mdash; графики из&nbsp;этапов&nbsp;02–04.</li>
                 <li><strong>Frontend: интеграция с&nbsp;backend.</strong> Хранение JWT в&nbsp;<code>localStorage</code>. Авто-добавление токена в&nbsp;каждый запрос.</li>
-                <li><strong>Деплой backend на&nbsp;Railway.</strong> Создание PostgreSQL-сервиса. Миграция SQLite → PostgreSQL через переменную <code>DATABASE_URL</code>.</li>
+                <li><strong>Деплой backend на&nbsp;Render.</strong> Создание PostgreSQL-сервиса. Миграция SQLite → PostgreSQL через переменную <code>DATABASE_URL</code>.</li>
                 <li><strong>Деплой frontend на&nbsp;Vercel.</strong> Подмена URL backend на&nbsp;production. CORS настроен.</li>
                 <li><strong>Verification.</strong> Через playwright: регистрация, вход, импорт CSV, прогноз. Сверка чисел с&nbsp;этапом&nbsp;02 (на&nbsp;тех&nbsp;же данных).</li>
             </ol>
@@ -561,7 +561,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <li><strong>Frontend: skeleton.</strong> Next.js or plain React pages. Routes: <code>/</code> (landing), <code>/signup</code>, <code>/login</code>, <code>/dashboard</code>, <code>/forecast</code>.</li>
                 <li><strong>Frontend: forms and dashboard.</strong> Use the <code>frontend-design</code> skill for layout. Inside — etapes 02–04 charts.</li>
                 <li><strong>Frontend: backend integration.</strong> JWT in <code>localStorage</code>. Auto-attach token on each request.</li>
-                <li><strong>Backend deploy on Railway.</strong> Create a PostgreSQL service. Migrate SQLite → PostgreSQL via the <code>DATABASE_URL</code> variable.</li>
+                <li><strong>Backend deploy on Render.</strong> Create a PostgreSQL service. Migrate SQLite → PostgreSQL via the <code>DATABASE_URL</code> variable.</li>
                 <li><strong>Frontend deploy on Vercel.</strong> Swap backend URL to production. CORS configured.</li>
                 <li><strong>Verification.</strong> Through Playwright: sign-up, sign-in, CSV import, forecast. Reconcile numbers with etape 02 (on the same data).</li>
             </ol>
@@ -572,14 +572,14 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <li>двух-репозиторный full-stack: backend и&nbsp;frontend как отдельные проекты;</li>
                 <li>работу с&nbsp;двумя БД одновременно (SQLite локально, PostgreSQL в&nbsp;production);</li>
                 <li>авторизацию пользователей с&nbsp;хешированием паролей и&nbsp;JWT;</li>
-                <li>деплой через Vercel + Railway, переменные окружения, CORS;</li>
+                <li>деплой через Vercel + Render, переменные окружения, CORS;</li>
                 <li>сборку приложения, которым реально могут пользоваться люди.</li>
             </ul>
             <ul lang="en">
                 <li>a two-repo full-stack: backend and frontend as separate projects;</li>
                 <li>two-DB workflow (SQLite local, PostgreSQL production);</li>
                 <li>user auth with password hashing and JWT;</li>
-                <li>deploy via Vercel + Railway, env vars, CORS;</li>
+                <li>deploy via Vercel + Render, env vars, CORS;</li>
                 <li>shipping an app real people can use.</li>
             </ul>
         </article>
@@ -623,7 +623,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; (классификация транзакций — простая задача, экономим деньги).
 &gt; покажи в advisor.html, как переключаются модели.</pre>
                 </li>
-                <li>Деплой backend на&nbsp;Railway, frontend на&nbsp;Vercel. <strong>В&nbsp;Railway</strong> добавьте <code>ANTHROPIC_API_KEY</code> через интерфейс (НЕ&nbsp;коммитьте в&nbsp;<code>.env</code>).</li>
+                <li>Деплой backend на&nbsp;Render, frontend на&nbsp;Vercel. <strong>В&nbsp;Render</strong> добавьте <code>ANTHROPIC_API_KEY</code> через интерфейс (НЕ&nbsp;коммитьте в&nbsp;<code>.env</code>).</li>
                 <li>Verification:
                     <pre class="shell">&gt; через playwright прогон:
 &gt; — войди как тестовый user;
@@ -668,7 +668,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; (transaction classification — simple, save money).
 &gt; show on advisor.html how models switch.</pre>
                 </li>
-                <li>Deploy backend on Railway, frontend on Vercel. <strong>In Railway</strong> add <code>ANTHROPIC_API_KEY</code> via the UI (DO NOT commit to <code>.env</code>).</li>
+                <li>Deploy backend on Render, frontend on Vercel. <strong>In Render</strong> add <code>ANTHROPIC_API_KEY</code> via the UI (DO NOT commit to <code>.env</code>).</li>
                 <li>Verification:
                     <pre class="shell">&gt; via playwright:
 &gt; — sign in as a test user;
@@ -697,7 +697,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <li>prompt caching for cost savings and faster chat;</li>
                 <li>model choice per task (Sonnet for analytics, Haiku for classification);</li>
                 <li>API error handling and graceful fallback;</li>
-                <li>security: keys in env only, never in logs.</li>
+                <li>Security: <code>ANTHROPIC_API_KEY</code> in Render env only, never in logs.</li>
             </ul>
         </article>
     </div>
@@ -716,8 +716,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
         <article class="project solo">
             <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
             <h3><span lang="ru">Сервис коллекции с&nbsp;регистрацией</span><span lang="en">A collection service with sign-up</span></h3>
-            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; тот&nbsp;же full-stack стек (FastAPI + PostgreSQL + Vercel-frontend + JWT-auth), но&nbsp;для&nbsp;вашей коллекции: книг, настольных игр, кофеен, мест города. Каждый пользователь ведёт свою.</p>
-            <p class="goal" lang="en">Goal: variation of A — same full-stack (FastAPI + PostgreSQL + Vercel frontend + JWT auth), but for your collection: books, board games, coffee shops, places in town. Each user runs their own.</p>
+            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; тот&nbsp;же full-stack стек (FastAPI + PostgreSQL + Render-backend + Vercel-frontend + JWT-auth), но&nbsp;для&nbsp;вашей коллекции: книг, настольных игр, кофеен, мест города. Каждый пользователь ведёт свою.</p>
+            <p class="goal" lang="en">Goal: variation of A — same full-stack (FastAPI + PostgreSQL + Render backend + Vercel frontend + JWT auth), but for your collection: books, board games, coffee shops, places in town. Each user runs their own.</p>
 
             <h4 lang="ru">Подсказки</h4>
             <h4 lang="en">Hints</h4>
@@ -746,19 +746,19 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <div class="verify-body">
                     <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
                     <ul lang="ru">
-                        <li>есть две публичные ссылки: backend на&nbsp;Railway и&nbsp;frontend на&nbsp;Vercel;</li>
+                        <li>есть две публичные ссылки: backend на&nbsp;Render и&nbsp;frontend на&nbsp;Vercel;</li>
                         <li>можно зарегистрироваться, войти, добавить минимум 5&nbsp;элементов;</li>
                         <li>другой человек регистрируется и&nbsp;видит <em>только свою</em> коллекцию (проверьте&nbsp;&mdash; зарегистрируйтесь дважды разным email);</li>
                         <li>работает поиск или фильтры;</li>
-                        <li>в&nbsp;логах backend нет API-ключей и&nbsp;паролей (проверьте через Railway dashboard);</li>
+                        <li>в&nbsp;логах backend нет API-ключей и&nbsp;паролей (проверьте через Render dashboard);</li>
                         <li>через playwright прогнан полный сценарий «новый пользователь → регистрация → 3 элемента → выход → вход».</li>
                     </ul>
                     <ul lang="en">
-                        <li>two public URLs: backend on Railway, frontend on Vercel;</li>
+                        <li>two public URLs: backend on Render, frontend on Vercel;</li>
                         <li>users can sign up, sign in, add at least 5 items;</li>
                         <li>another user registers and sees <em>only their</em> collection (verify — sign up twice with different emails);</li>
                         <li>search or filters work;</li>
-                        <li>no API keys or passwords in backend logs (check via Railway dashboard);</li>
+                        <li>no API keys or passwords in backend logs (check via Render dashboard);</li>
                         <li>Playwright walked the full “new user → sign-up → 3 items → sign-out → sign-in” scenario.</li>
                     </ul>
                     <div class="ask" lang="ru">
@@ -786,14 +786,14 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <li>Используйте <code>claude-sonnet-4-6</code> для&nbsp;развёрнутых ответов и&nbsp;<code>claude-haiku-4-5</code> для&nbsp;быстрых задач (например, авто-предложить теги для&nbsp;нового элемента&nbsp;&mdash; эндпоинт <code>/api/curator/suggest_tags</code>).</li>
                 <li>Prompt caching на&nbsp;системный промпт + список коллекции&nbsp;&mdash; третий вопрос подряд должен идти заметно быстрее и&nbsp;стоить меньше токенов.</li>
                 <li>На&nbsp;UI: те&nbsp;же три быстрых вопроса-кнопки сверху, что в&nbsp;B, но&nbsp;адаптированные под&nbsp;коллекцию&nbsp;&mdash; «что у&nbsp;меня в&nbsp;коллекции пробелы», «топ-5 любимых», «что&nbsp;бы добавить».</li>
-                <li>Безопасность: <code>ANTHROPIC_API_KEY</code> только в&nbsp;env Railway, никогда в&nbsp;логах.</li>
+                <li>Безопасность: <code>ANTHROPIC_API_KEY</code> только в&nbsp;env Render, никогда в&nbsp;логах.</li>
             </ul>
             <ul lang="en">
                 <li>Endpoint <code>/api/curator/ask</code> — exact copy of <code>/api/advisor/ask</code> from project B, but context: “you help curate a personal collection” + user’s items (via <code>require_auth</code>) + tags.</li>
                 <li>Use <code>claude-sonnet-4-6</code> for long answers and <code>claude-haiku-4-5</code> for quick tasks (e.g. auto-suggest tags for a new item — endpoint <code>/api/curator/suggest_tags</code>).</li>
                 <li>Prompt caching on the system prompt + collection list — the third question in a row should be visibly faster and cheaper.</li>
                 <li>UI: same three quick-question buttons as in B, but adapted to the collection — “what gaps do I have”, “my top 5”, “what should I add”.</li>
-                <li>Security: <code>ANTHROPIC_API_KEY</code> in Railway env only, never in logs.</li>
+                <li>Security: <code>ANTHROPIC_API_KEY</code> in Render env only, never in logs.</li>
             </ul>
 
             <details class="verify">
@@ -880,8 +880,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 
             <dt>PostgreSQL</dt>
             <dd>
-                <span lang="ru">Полноценная база как отдельный сервис. Для&nbsp;production. На&nbsp;Railway ставится в&nbsp;один клик.</span>
-                <span lang="en">A full database as its own service. For production. One-click on Railway.</span>
+                <span lang="ru">Полноценная база как отдельный сервис. Для&nbsp;production. На&nbsp;Render ставится в&nbsp;один клик.</span>
+                <span lang="en">A full database as its own service. For production. One-click on Render.</span>
             </dd>
 
             <dt>FastAPI</dt>
@@ -904,14 +904,14 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 
             <dt>CORS</dt>
             <dd>
-                <span lang="ru">Cross-Origin Resource Sharing&nbsp;&mdash; защита браузера: страница с&nbsp;одного домена по&nbsp;умолчанию не&nbsp;может звонить серверу с&nbsp;другого. Настраивается в&nbsp;backend, чтобы Vercel-frontend мог обращаться к&nbsp;Railway-backend.</span>
-                <span lang="en">Cross-Origin Resource Sharing — a browser safety: a page on one domain can’t call a server on another by default. Configured in the backend so the Vercel frontend can reach the Railway backend.</span>
+                <span lang="ru">Cross-Origin Resource Sharing&nbsp;&mdash; защита браузера: страница с&nbsp;одного домена по&nbsp;умолчанию не&nbsp;может звонить серверу с&nbsp;другого. Настраивается в&nbsp;backend, чтобы Vercel-frontend мог обращаться к&nbsp;Render-backend.</span>
+                <span lang="en">Cross-Origin Resource Sharing — a browser safety: a page on one domain can’t call a server on another by default. Configured in the backend so the Vercel frontend can reach the Render backend.</span>
             </dd>
 
             <dt><span lang="ru">Деплой</span><span lang="en">Deploy</span></dt>
             <dd>
-                <span lang="ru">Процесс «отправить ваше приложение на&nbsp;сервер в&nbsp;интернете». Современный подход&nbsp;&mdash; в&nbsp;один <code>git push</code> через Vercel или Railway.</span>
-                <span lang="en">The process of “sending your app to a server on the internet.” Modern way — one <code>git push</code> via Vercel or Railway.</span>
+                <span lang=”ru”>Процесс «отправить ваше приложение на&nbsp;сервер в&nbsp;интернете». Современный подход&nbsp;&mdash; в&nbsp;один <code>git push</code> через Vercel или Render.</span>
+                <span lang=”en”>The process of “sending your app to a server on the internet.” Modern way — one <code>git push</code> via Vercel or Render.</span>
             </dd>
 
             <dt>Vercel</dt>
@@ -920,10 +920,10 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <span lang="en">A frontend-deploy platform. Connect a GitHub repo — each push publishes a new version. Generous free tier.</span>
             </dd>
 
-            <dt>Railway</dt>
+            <dt>Render</dt>
             <dd>
-                <span lang="ru">Платформа для&nbsp;деплоя backend и&nbsp;баз. Один сервис&nbsp;&mdash; и&nbsp;backend, и&nbsp;PostgreSQL рядом. $5 кредитов в&nbsp;месяц бесплатно.</span>
-                <span lang="en">A backend and database deploy platform. One service — backend plus PostgreSQL together. $5/month free.</span>
+                <span lang="ru">Платформа для&nbsp;деплоя backend и&nbsp;баз. Один сервис&nbsp;&mdash; и&nbsp;backend, и&nbsp;PostgreSQL рядом. Бесплатно без&nbsp;кредитной карты (веб-сервис 750&nbsp;ч/мес, база 90&nbsp;дней).</span>
+                <span lang="en">A backend and database deploy platform. One service — backend plus PostgreSQL together. Free, no credit card required (web service 750 hrs/month, database 90 days).</span>
             </dd>
 
             <dt>Claude API</dt>
@@ -993,8 +993,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <details>
                     <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
                     <div class="answer">
-                        <p lang="ru">Браузер блокирует запросы от&nbsp;страницы на&nbsp;одном домене (Vercel) к&nbsp;серверу на&nbsp;другом (Railway), если backend явно не&nbsp;разрешил это. Чинится в&nbsp;backend: добавляется CORS middleware с&nbsp;разрешённым origin (вашим Vercel-доменом).</p>
-                        <p lang="en">The browser blocks requests from a page on one domain (Vercel) to a server on another (Railway) unless the backend explicitly allows it. Fixed in the backend: add CORS middleware with the allowed origin (your Vercel domain).</p>
+                        <p lang="ru">Браузер блокирует запросы от&nbsp;страницы на&nbsp;одном домене (Vercel) к&nbsp;серверу на&nbsp;другом (Render), если backend явно не&nbsp;разрешил это. Чинится в&nbsp;backend: добавляется CORS middleware с&nbsp;разрешённым origin (вашим Vercel-доменом).</p>
+                        <p lang="en">The browser blocks requests from a page on one domain (Vercel) to a server on another (Render) unless the backend explicitly allows it. Fixed in the backend: add CORS middleware with the allowed origin (your Vercel domain).</p>
                     </div>
                 </details>
                 <div class="scoring">
@@ -1008,8 +1008,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <details>
                     <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
                     <div class="answer">
-                        <p lang="ru">Frontend живёт в&nbsp;браузере пользователя. Любой откроет DevTools и&nbsp;увидит ваш ключ. Через минуту его украдут&nbsp;&mdash; и&nbsp;будут жечь ваши деньги через ваш аккаунт. Ключ должен быть только в&nbsp;backend, в&nbsp;env vars Railway. Frontend обращается к&nbsp;вашему backend-у, backend&nbsp;&mdash; к&nbsp;Anthropic.</p>
-                        <p lang="en">Frontend lives in the user’s browser. Anyone opens DevTools and sees your key. A minute later it’s stolen — and your money burns through your account. The key must live only in the backend, in Railway env vars. Frontend calls your backend, backend calls Anthropic.</p>
+                        <p lang="ru">Frontend живёт в&nbsp;браузере пользователя. Любой откроет DevTools и&nbsp;увидит ваш ключ. Через минуту его украдут&nbsp;&mdash; и&nbsp;будут жечь ваши деньги через ваш аккаунт. Ключ должен быть только в&nbsp;backend, в&nbsp;env vars Render. Frontend обращается к&nbsp;вашему backend-у, backend&nbsp;&mdash; к&nbsp;Anthropic.</p>
+                        <p lang="en">Frontend lives in the user’s browser. Anyone opens DevTools and sees your key. A minute later it’s stolen — and your money burns through your account. The key must live only in the backend, in Render env vars. Frontend calls your backend, backend calls Anthropic.</p>
                     </div>
                 </details>
                 <div class="scoring">
@@ -1053,8 +1053,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <details>
                     <summary><span lang="ru">показать ответ</span><span lang="en">show answer</span></summary>
                     <div class="answer">
-                        <p lang="ru">SQLite&nbsp;&mdash; для&nbsp;разработки и&nbsp;учебных проектов: один файл, ничего настраивать. PostgreSQL&nbsp;&mdash; для&nbsp;production, особенно когда несколько пользователей одновременно. Хорошая практика&nbsp;&mdash; код один и&nbsp;тот&nbsp;же, разница только в&nbsp;<code>DATABASE_URL</code> в&nbsp;<code>.env</code>: <code>sqlite:///./app.db</code> локально, <code>postgres://...</code> на&nbsp;Railway.</p>
-                        <p lang="en">SQLite — for dev and learning: one file, no setup. PostgreSQL — for production, especially with concurrent users. Good practice — same code, only <code>DATABASE_URL</code> differs in <code>.env</code>: <code>sqlite:///./app.db</code> locally, <code>postgres://...</code> on Railway.</p>
+                        <p lang="ru">SQLite&nbsp;&mdash; для&nbsp;разработки и&nbsp;учебных проектов: один файл, ничего настраивать. PostgreSQL&nbsp;&mdash; для&nbsp;production, особенно когда несколько пользователей одновременно. Хорошая практика&nbsp;&mdash; код один и&nbsp;тот&nbsp;же, разница только в&nbsp;<code>DATABASE_URL</code> в&nbsp;<code>.env</code>: <code>sqlite:///./app.db</code> локально, <code>postgres://...</code> на&nbsp;Render.</p>
+                        <p lang="en">SQLite — for dev and learning: one file, no setup. PostgreSQL — for production, especially with concurrent users. Good practice — same code, only <code>DATABASE_URL</code> differs in <code>.env</code>: <code>sqlite:///./app.db</code> locally, <code>postgres://...</code> on Render.</p>
                     </div>
                 </details>
                 <div class="scoring">
@@ -1100,8 +1100,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <span lang="en">I understand auth: password hashing, JWT, endpoint protection.</span>
             </li>
             <li data-key="e6-deploy">
-                <span lang="ru">Опубликовал backend на&nbsp;Railway и&nbsp;frontend на&nbsp;Vercel, с&nbsp;env vars.</span>
-                <span lang="en">I deployed backend to Railway and frontend to Vercel, with env vars.</span>
+                <span lang="ru">Опубликовал backend на&nbsp;Render и&nbsp;frontend на&nbsp;Vercel, с&nbsp;env vars.</span>
+                <span lang="en">I deployed backend to Render and frontend to Vercel, with env vars.</span>
             </li>
             <li data-key="e6-claude-api">
                 <span lang="ru">Встроил Claude API в&nbsp;своё приложение через skill <code>claude-api</code>.</span>
