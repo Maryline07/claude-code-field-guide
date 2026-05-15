@@ -376,6 +376,99 @@ POST /api/login              → takes email + password, returns a token</pre>
                         <li>HTTPS is required on any page with password input — Vercel/Render enable it automatically.</li>
                     </ul>
                 </div>
+
+                <figure class="flow">
+                    <div class="flow-phase">
+                        <h4 class="flow-phase-label"><span class="num">1.</span><span lang="ru">Регистрация&nbsp;&mdash; один раз</span><span lang="en">Sign-up&nbsp;&mdash; once</span></h4>
+                        <div class="flow-rail">
+                            <div class="flow-node is-guest">
+                                <span class="flow-role">Browser</span>
+                                <span class="flow-tech"><span lang="ru">email&nbsp;+ пароль</span><span lang="en">email&nbsp;+ password</span></span>
+                            </div>
+                            <div class="flow-link" aria-hidden="true">
+                                <span class="lbl">POST&nbsp;/signup</span>
+                                <span class="arrow">&rarr;</span>
+                            </div>
+                            <div class="flow-node">
+                                <span class="flow-role">Backend</span>
+                                <span class="flow-tech"><span lang="ru">хеширует пароль (bcrypt)</span><span lang="en">hashes the password (bcrypt)</span></span>
+                            </div>
+                            <div class="flow-link" aria-hidden="true">
+                                <span class="lbl">INSERT</span>
+                                <span class="arrow">&rarr;</span>
+                            </div>
+                            <div class="flow-node">
+                                <span class="flow-role">DB</span>
+                                <span class="flow-tech"><span lang="ru">email&nbsp;+ <em>хеш</em></span><span lang="en">email&nbsp;+ <em>hash</em></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flow-phase">
+                        <h4 class="flow-phase-label"><span class="num">2.</span><span lang="ru">Вход&nbsp;&mdash; каждый раз, когда заходите</span><span lang="en">Sign-in&nbsp;&mdash; every time you come back</span></h4>
+                        <div class="flow-rail">
+                            <div class="flow-node is-guest">
+                                <span class="flow-role">Browser</span>
+                                <span class="flow-tech"><span lang="ru">email&nbsp;+ пароль</span><span lang="en">email&nbsp;+ password</span></span>
+                            </div>
+                            <div class="flow-link" aria-hidden="true">
+                                <span class="lbl">POST&nbsp;/login</span>
+                                <span class="arrow">&rarr;</span>
+                                <span class="arrow back">&larr;</span>
+                                <span class="lbl">JWT</span>
+                            </div>
+                            <div class="flow-node">
+                                <span class="flow-role">Backend</span>
+                                <span class="flow-tech"><span lang="ru">сверяет хеш, подписывает JWT</span><span lang="en">checks hash, signs a JWT</span></span>
+                            </div>
+                            <div class="flow-link" aria-hidden="true">
+                                <span class="lbl">SELECT</span>
+                                <span class="arrow">&rarr;</span>
+                                <span class="arrow back">&larr;</span>
+                                <span class="lbl"><span lang="ru">хеш</span><span lang="en">hash</span></span>
+                            </div>
+                            <div class="flow-node">
+                                <span class="flow-role">DB</span>
+                                <span class="flow-tech"><span lang="ru">отдаёт сохранённый хеш</span><span lang="en">returns the stored hash</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flow-phase">
+                        <h4 class="flow-phase-label"><span class="num">3.</span><span lang="ru">Защищённый запрос&nbsp;&mdash; на&nbsp;каждый клик</span><span lang="en">Protected request&nbsp;&mdash; on every click</span></h4>
+                        <div class="flow-rail">
+                            <div class="flow-node is-guest">
+                                <span class="flow-role">Browser</span>
+                                <span class="flow-tech"><span lang="ru">+ JWT в&nbsp;заголовке</span><span lang="en">+ JWT in the header</span></span>
+                            </div>
+                            <div class="flow-link" aria-hidden="true">
+                                <span class="lbl">GET&nbsp;/api/operations</span>
+                                <span class="arrow">&rarr;</span>
+                                <span class="arrow back">&larr;</span>
+                                <span class="lbl"><span lang="ru">ваши данные</span><span lang="en">your data</span></span>
+                            </div>
+                            <div class="flow-node">
+                                <span class="flow-role">Backend</span>
+                                <span class="flow-tech"><span lang="ru">декодирует JWT&nbsp;&rarr; знает <code>user_id</code></span><span lang="en">decodes JWT&nbsp;&rarr; knows <code>user_id</code></span></span>
+                            </div>
+                            <div class="flow-link" aria-hidden="true">
+                                <span class="lbl">SELECT&nbsp;WHERE&nbsp;user_id&hellip;</span>
+                                <span class="arrow">&rarr;</span>
+                                <span class="arrow back">&larr;</span>
+                                <span class="lbl"><span lang="ru">только ваши строки</span><span lang="en">only your rows</span></span>
+                            </div>
+                            <div class="flow-node">
+                                <span class="flow-role">DB</span>
+                                <span class="flow-tech"><span lang="ru">фильтрует по <code>user_id</code></span><span lang="en">filters by <code>user_id</code></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <figcaption class="flow-caption">
+                        <span lang="ru"><strong>Главное:</strong> пароль уходит в&nbsp;backend всего <em>дважды</em>&nbsp;&mdash; при&nbsp;регистрации и&nbsp;при&nbsp;каждом входе. Дальше «пропуском» работает JWT-токен. Backend никогда не&nbsp;шлёт пароль или&nbsp;его хеш обратно в&nbsp;браузер, а&nbsp;база отдаёт <em>только строки этого <code>user_id</code></em>.</span>
+                        <span lang="en"><strong>Key idea:</strong> the password reaches the backend only <em>twice</em>&nbsp;&mdash; once on sign-up, once on each sign-in. After that the JWT token acts as the badge. The backend never sends the password or its hash back to the browser, and the DB returns <em>only rows for this <code>user_id</code></em>.</span>
+                    </figcaption>
+                </figure>
             </div>
         </details>
 

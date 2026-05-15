@@ -841,6 +841,24 @@ section.tight { padding: clamp(2rem, 5vw, 4rem) 0; }
 }
 .flow-caption strong { color: var(--ink); }
 
+.flow-phase + .flow-phase { margin-top: 1.4rem; }
+.flow-phase-label {
+    margin: 0 0 0.55rem;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.005em;
+}
+.flow-phase-label .num {
+    display: inline-block;
+    min-width: 1.4em;
+    margin-right: 0.35em;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+}
+
 @media (max-width: 600px) {
     .flow-rail { flex-direction: column; }
     .flow-link { flex-direction: row; gap: 0.4rem; padding: 0.4rem 0; }
