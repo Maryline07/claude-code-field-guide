@@ -256,6 +256,7 @@
                     </ul>
                     <p>Берём <em>больший из&nbsp;двух</em>. Большинство берёт standard&nbsp;&mdash; itemized оправдан, когда есть крупные mortgage payments или большие пожертвования.</p>
                     <p>Логика для&nbsp;Claude: считаем обе суммы, сравниваем, выбираем большую, фиксируем выбор в&nbsp;<code>memo.md</code>:</p>
+                    <p lang="ru" class="note">Блок ниже&nbsp;&mdash; <em>пример того, как раздел Deductions будет выглядеть в&nbsp;вашем итоговом <code>memo.md</code></em>, который Claude соберёт в&nbsp;фазе&nbsp;10 главного проекта. Сами писать не&nbsp;нужно.</p>
                     <pre class="shell">## Deductions
 - Standard: $14,600 (Single 2024)
 - Itemized:
@@ -273,6 +274,7 @@
                     </ul>
                     <p>Take the <em>larger of the two</em>. Most filers go standard — itemized pays off with big mortgage payments or large donations.</p>
                     <p>Claude’s logic: compute both, compare, pick the larger, record the choice in <code>memo.md</code>:</p>
+                    <p lang="en" class="note">The block below is <em>an example of how the Deductions section will look in your final <code>memo.md</code></em>, which Claude assembles in phase 10 of the main project. No need to write it by hand.</p>
                     <pre class="shell">## Deductions
 - Standard: $14,600 (Single 2024)
 - Itemized:
@@ -416,11 +418,38 @@ filled-1040.pdf      (filled)</pre>
             <p class="goal" lang="ru">Цель: на&nbsp;входе&nbsp;&mdash; папка <code>inputs/</code> с&nbsp;первичкой и&nbsp;<code>forms/Form-1040.pdf</code>. На&nbsp;выходе&nbsp;&mdash; <code>outputs/filled-1040.pdf</code> (заполненная декларация), <code>outputs/memo.md</code> (отчёт-сопровождение для&nbsp;CPA), <code>outputs/audit.log</code> (полный лог решений).</p>
             <p class="goal" lang="en">Goal: input — an <code>inputs/</code> folder of primary docs plus <code>forms/Form-1040.pdf</code>. Output — <code>outputs/filled-1040.pdf</code> (the return), <code>outputs/memo.md</code> (a memo for the CPA), <code>outputs/audit.log</code> (the full decision log).</p>
 
-            <h4 lang="ru" style="margin-top:1.25rem;">Десять фаз</h4>
-            <h4 lang="en" style="margin-top:1.25rem;">Ten phases</h4>
+            <h4 lang="ru" style="margin-top:1.25rem;">Одиннадцать фаз</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Eleven phases</h4>
             <ol class="steps" lang="ru">
-                <li><strong>Spec и&nbsp;CLAUDE.md.</strong> Войдите в&nbsp;Plan Mode. Через <code>superpowers:writing-plans</code> попросите Claude составить <code>spec.md</code>: цели, входы, выходы, фазы, критерии готовности, что вне scope. Зафиксируйте filing status, год декларации, ваш CLAUDE.md с&nbsp;дисклеймером.</li>
-                <li><strong>Тестовая первичка.</strong> Если у&nbsp;вас нет реальных документов:
+                <li><strong>Spec и&nbsp;CLAUDE.md.</strong> Перед тем как генерировать что-либо&nbsp;&mdash; договоримся с&nbsp;Claude о&nbsp;границах. Это самый большой проект курса, без&nbsp;чёткой spec вы&nbsp;утонете в&nbsp;деталях налогового кодекса.
+                    <pre class="shell">&gt; войди в Plan Mode. используй skill superpowers:writing-plans.
+&gt; составь spec.md для AI Tax Assistant USA:
+&gt;
+&gt; ЦЕЛЬ: на входе папка inputs/ с PDF первички
+&gt;   + forms/Form-1040.pdf. на выходе:
+&gt;   — outputs/filled-1040.pdf (заполненная декларация);
+&gt;   — outputs/memo.md (отчёт-сопровождение для CPA);
+&gt;   — outputs/audit.log (лог «source → field → value»).
+&gt;
+&gt; ФАЗЫ: парсинг → Total Income → Adjustments → AGI →
+&gt;   Deductions (standard vs itemized) → Tax → Credits →
+&gt;   заполнение PDF → memo+audit → verification+red-team.
+&gt;
+&gt; ВНЕ SCOPE: state taxes, Schedule C (фриланс), продажа дома,
+&gt;   foreign income, audit defence, САМА подача в IRS.
+&gt;
+&gt; ПАРАМЕТРЫ ОТ МЕНЯ: filing status = Single,
+&gt;   tax year = 2024. (поправь, если у тебя другое.)
+&gt;
+&gt; КРИТЕРИИ ГОТОВНОСТИ: все три выходных файла существуют,
+&gt;   verification subagent дал «арифметика сходится»,
+&gt;   red-team subagent задал 5 вопросов и я ответил на каждый
+&gt;   либо правкой, либо явной пометкой «для CPA».
+&gt;
+&gt; параллельно заполни CLAUDE.md: стек, команды запуска,
+&gt; явный дисклеймер про «учебный draft, не для подачи в IRS».</pre>
+                    Проверка: <code>spec.md</code> в&nbsp;корне проекта, в&nbsp;нём явные разделы «ЦЕЛЬ», «ФАЗЫ», «ВНЕ SCOPE», «КРИТЕРИИ ГОТОВНОСТИ»; <code>CLAUDE.md</code> содержит дисклеймер.</li>
+                <li><strong>Тестовая первичка.</strong> Если у&nbsp;вас нет реальных документов&nbsp;&mdash; пусть Claude сгенерирует тестовый комплект. Это пять-шесть согласованных PDF, на&nbsp;которых отрабатываются все фазы пайплайна.
                     <pre class="shell">&gt; сгенерируй в inputs/ комплект тестовой первички для одного
 &gt; вымышленного человека (Single, 2024 год, доход ~$95k):
 &gt; — W-2 от Acme Corp
@@ -431,29 +460,109 @@ filled-1040.pdf      (filled)</pre>
 &gt;
 &gt; используй skill pdf для генерации настоящих PDF
 &gt; (а не markdown). числа должны быть консистентными.</pre>
-                </li>
-                <li><strong>Парсинг (parallel subagents).</strong> Каждый документ&nbsp;&mdash; отдельный subagent. Параллельный запуск:
+                    Проверка: в&nbsp;<code>inputs/</code> 5 PDF-файлов; откройте любой&nbsp;&mdash; это настоящий PDF с&nbsp;числами, а&nbsp;не&nbsp;markdown.</li>
+                <li><strong>Парсинг&nbsp;&mdash; параллельные стажёры на&nbsp;каждый документ.</strong> Применяем технику этапа&nbsp;07: каждый файл&nbsp;&mdash; отдельный subagent в&nbsp;своём контексте. Параллельно. Каждый знает только свой тип документа&nbsp;&mdash; меньше шансов перепутать поля.
                     <pre class="shell">&gt; ПАРАЛЛЕЛЬНО запусти subagents (по одному на каждый файл в @inputs/),
 &gt; используя skill pdf. brief каждому:
 &gt;   ROLE: парсер документа &lt;тип&gt;.
 &gt;   GOAL: извлечь все ключевые поля.
 &gt;   OUTPUT: JSON со структурой { type, fields: { box: value, ... }, source_file }.
 &gt; собери результаты в data/parsed.json.</pre>
-                </li>
-                <li><strong>Расчёт&nbsp;&mdash; Total Income.</strong> На&nbsp;Python. Wages из&nbsp;W-2 + interest из&nbsp;1099-INT + dividends из&nbsp;1099-DIV + capital gains из&nbsp;1099-B (упрощённо: long-term по&nbsp;dates). Результат в&nbsp;<code>data/totals.json</code>.</li>
-                <li><strong>Adjustments → AGI.</strong> Из&nbsp;5498&nbsp;&mdash; IRA contributions (deductible vs nondeductible зависит от&nbsp;типа). Прочее&nbsp;&mdash; пока пропустить, отметить в&nbsp;memo.</li>
-                <li><strong>Standard vs Itemized.</strong> Считаем оба варианта. В&nbsp;itemized: 1098 (mortgage interest) + предположение про&nbsp;SALT (max $10k). Сравниваем, выбираем больший. Записываем выбор в&nbsp;<code>memo.md</code> с&nbsp;аргументацией.</li>
-                <li><strong>Tax brackets и&nbsp;Tax.</strong> Через context7 подтяните актуальные brackets за&nbsp;нужный год. Считаем по&nbsp;шкале. Capital gains&nbsp;&mdash; отдельной шкалой (long-term). Результат: total tax.</li>
-                <li><strong>Credits.</strong> Базовые: Saver’s Credit, Foreign Tax Credit (если есть). Сложные (Child Tax Credit и&nbsp;т.&nbsp;п.)&nbsp;&mdash; помечаем как «требуется проверка CPA», без&nbsp;автоматического начисления.</li>
-                <li><strong>Заполнение PDF.</strong> Через skill <code>pdf</code>:
+                    Проверка: <code>data/parsed.json</code> содержит запись для&nbsp;каждого файла, в&nbsp;каждой записи&nbsp;&mdash; <code>type</code>, заполненный <code>fields</code>, <code>source_file</code>. Числа из&nbsp;PDF совпадают с&nbsp;тем, что в&nbsp;JSON.</li>
+                <li><strong>Total Income&nbsp;&mdash; первая колонка декларации.</strong> Считаем суммарный валовой доход за&nbsp;год. Логика проста: сложить нужные поля из&nbsp;<code>parsed.json</code>. Claude напишет короткий Python-скрипт.
+                    <pre class="shell">&gt; напиши scripts/compute_income.py:
+&gt; читает data/parsed.json,
+&gt; складывает:
+&gt; — wages из W-2 (поле «1»);
+&gt; — interest из 1099-INT (box 1) и US Treasury interest (box 3);
+&gt; — dividends из 1099-DIV (box 1a, ordinary) — qualified (1b) пометь отдельно;
+&gt; — capital gains из 1099-B: для каждой сделки посчитай proceeds-basis,
+&gt;   long-term vs short-term по dates (long-term = держали больше года).
+&gt;
+&gt; результат в data/totals.json:
+&gt;   { wages, interest, dividends_ordinary, dividends_qualified,
+&gt;     short_term_gains, long_term_gains, total_income }.
+&gt;
+&gt; в audit.log дописывай: «&lt;file&gt; &lt;field&gt; → &lt;1040 line&gt; → &lt;value&gt;».</pre>
+                    Проверка: <code>data/totals.json</code> создан, <code>total_income</code>&nbsp;&mdash; сумма всех источников; в&nbsp;<code>audit.log</code> уже видны строки «source → field → value».</li>
+                <li><strong>Adjustments → AGI.</strong> Из&nbsp;<code>Total Income</code> вычитаем «над-линиевые» корректировки (deductible IRA contributions из&nbsp;5498 и&nbsp;т.&nbsp;п.). Получаем AGI&nbsp;&mdash; ключевое число, от&nbsp;которого зависят многие пороги.
+                    <pre class="shell">&gt; в scripts/compute_income.py добавь:
+&gt; — посчитай adjustments:
+&gt;   - IRA contributions из 5498 (deductible часть),
+&gt;   - student loan interest (если есть в parsed.json);
+&gt; — AGI = total_income - adjustments;
+&gt; — допиши в data/totals.json: { adjustments, agi }.
+&gt;
+&gt; ВАЖНО: если какой-то тип adjustment ты не уверен —
+&gt; НЕ начисляй автоматически, а добавь строку в data/memo-notes.json:
+&gt; «adjustment X не учтён, требуется проверка CPA». это попадёт в memo.</pre>
+                    Проверка: в&nbsp;<code>data/totals.json</code> есть <code>agi</code>, число выглядит разумно (меньше или равно total_income); если что-то не&nbsp;учтено&nbsp;&mdash; есть пометка в&nbsp;<code>memo-notes.json</code>.</li>
+                <li><strong>Standard vs Itemized&nbsp;&mdash; главная развилка.</strong> Считаем <em>оба</em> варианта вычета, выбираем больший. Решение фиксируем в&nbsp;memo с&nbsp;числами&nbsp;&mdash; чтобы CPA сразу видел, что мы&nbsp;не&nbsp;«забыли посмотреть itemized».
+                    <pre class="shell">&gt; напиши scripts/compute_deductions.py:
+&gt; — standard: подтяни через context7 актуальное значение для
+&gt;   filing status из spec.md и tax year из spec.md;
+&gt; — itemized: посчитай mortgage interest из 1098 (Box 1) +
+&gt;   SALT (state + property tax, capped at $10k) +
+&gt;   charitable (если есть документы) +
+&gt;   medical (выше 7.5% от agi);
+&gt; — сравни, выбери больший, запиши в data/totals.json: {deduction, choice};
+&gt;
+&gt; в data/memo-notes.json добавь раздел Deductions с числами обоих
+&gt; вариантов и явным «выбран Х, потому что $Х > $Y».</pre>
+                    Проверка: <code>deduction</code> и&nbsp;<code>choice</code> (значения «standard» или «itemized») в&nbsp;<code>totals.json</code>; в&nbsp;<code>memo-notes.json</code> раздел Deductions показывает обе цифры.</li>
+                <li><strong>Tax brackets и&nbsp;Tax.</strong> Берём актуальные brackets за&nbsp;нужный год (через context7&nbsp;&mdash; они меняются ежегодно), считаем налог по&nbsp;ступенчатой шкале. Capital gains long-term&nbsp;&mdash; отдельной льготной шкалой.
+                    <pre class="shell">&gt; напиши scripts/compute_tax.py:
+&gt; — через context7 подтяни tax brackets для filing status из spec.md
+&gt;   и tax year из spec.md (federal, ordinary income);
+&gt; — taxable_income = agi - deduction;
+&gt; — посчитай tax на ordinary income по шкале (прогрессивно);
+&gt; — отдельно посчитай tax на long_term_gains по льготной шкале
+&gt;   (тоже через context7, capital gains brackets);
+&gt; — total_tax = ordinary_tax + ltcg_tax;
+&gt; — запиши в data/totals.json: { taxable_income, ordinary_tax,
+&gt;   ltcg_tax, total_tax_before_credits }.
+&gt;
+&gt; покажи мне расчёт ordinary_tax по бракетам с разбивкой
+&gt; (как в § I тема 4), чтобы я мог его проверить вручную.</pre>
+                    Проверка: <code>total_tax_before_credits</code> в&nbsp;<code>totals.json</code>; Claude показал пошаговый расчёт в&nbsp;диалоге, цифры сходятся, если вы&nbsp;посчитаете на&nbsp;калькуляторе по&nbsp;первым двум брeketам.</li>
+                <li><strong>Credits.</strong> Налог уменьшается на&nbsp;credits. Базовые (Saver's Credit, Foreign Tax Credit) считаем; сложные (Child Tax Credit, EITC и&nbsp;т.&nbsp;п.) <em>не&nbsp;трогаем автоматически</em>&nbsp;&mdash; помечаем в&nbsp;memo как «к&nbsp;CPA».
+                    <pre class="shell">&gt; в scripts/compute_tax.py добавь:
+&gt; — credits_simple: посчитай Saver's Credit (если есть IRA из 5498
+&gt;   и AGI ниже порога) и Foreign Tax Credit (если есть box в 1099-DIV);
+&gt; — total_tax = total_tax_before_credits - credits_simple
+&gt;   (не уходим в минус);
+&gt; — запиши в data/totals.json: { credits_simple, total_tax }.
+&gt;
+&gt; в memo-notes.json добавь раздел «Credits — НЕ начислено
+&gt; автоматически»: Child Tax Credit, EITC, Premium Tax Credit,
+&gt; Adoption Credit. Объясни одной строкой каждый: «требует
+&gt; данных, которых нет в первичке» или «требует решения CPA».</pre>
+                    Проверка: <code>total_tax</code> в&nbsp;<code>totals.json</code>; в&nbsp;<code>memo-notes.json</code> явный список не&nbsp;начисленных credits с&nbsp;объяснениями. Это самый частый повод для&nbsp;CPA&nbsp;&mdash; ваш memo сразу его подсвечивает.</li>
+                <li><strong>Заполнение PDF.</strong> Все числа посчитаны&nbsp;&mdash; осталось перенести в&nbsp;официальную форму. Skill <code>pdf</code> делает это за&nbsp;три шага: извлечь карту полей, собрать соответствие «строка 1040 → наше значение», вписать.
                     <pre class="shell">&gt; используя skill pdf:
 &gt; 1) extract_form_field_info на forms/Form-1040.pdf, сохрани field-map.json;
 &gt; 2) собери mapping «строка 1040» → «значение из data/totals.json + tax + credits»;
 &gt; 3) fill_pdf_form_with_annotations: создай outputs/filled-1040.pdf
 &gt;    с пометками-аннотациями «откуда взято».</pre>
-                </li>
-                <li><strong>Memo и&nbsp;аудит-лог.</strong> Сборка <code>outputs/memo.md</code> с&nbsp;разделами: Filing status, Total Income (по&nbsp;каждому источнику), Adjustments → AGI, Deductions choice, Tax computation, Credits, Refund/Owed, <strong>что вне scope</strong>, дисклеймер. Параллельно&nbsp;&mdash; <code>outputs/audit.log</code> с&nbsp;каждым численным решением «source → field → value».</li>
-                <li><strong>Verification & red-team.</strong>
+                    Проверка: <code>outputs/filled-1040.pdf</code> открывается, в&nbsp;нём заполнены строка 1 (Wages), строка 2a/2b (interest), строки 3a/3b (dividends), строка 7 (capital gains), строка 12 (deduction), строка 16 (tax), строка 22-24 (credits/total tax), строка 33-37 (refund/owed). Рядом с&nbsp;каждым&nbsp;&mdash; аннотация-источник.</li>
+                <li><strong>Memo и&nbsp;аудит-лог.</strong> PDF&nbsp;&mdash; это «что», memo&nbsp;&mdash; «почему так посчитали», audit.log&nbsp;&mdash; «откуда каждое число». Втроём они дают CPA полную картину за&nbsp;5&nbsp;минут.
+                    <pre class="shell">&gt; собери outputs/memo.md из data/memo-notes.json и data/totals.json.
+&gt; структура:
+&gt;   # Tax Return Draft — &lt;name&gt;, tax year &lt;year&gt;, filing &lt;status&gt;
+&gt;   ## Filing status (с пояснением)
+&gt;   ## Total Income (разбивка по каждому источнику в виде таблицы)
+&gt;   ## Adjustments → AGI
+&gt;   ## Deductions choice (обе цифры + выбор + почему)
+&gt;   ## Tax computation (бракетная разбивка)
+&gt;   ## Credits (что начислили + что НЕ начислили + почему)
+&gt;   ## Refund / Amount Owed
+&gt;   ## Out of scope (state, freelance, etc — см. CLAUDE.md)
+&gt;   ## Disclaimer (учебный draft, не для подачи)
+&gt;
+&gt; проверь, что outputs/audit.log содержит строку
+&gt; для каждого numerical поля 1040: «source → 1040 line → value».</pre>
+                    Проверка: оба файла существуют; в&nbsp;<code>memo.md</code> есть раздел «Out of scope», в&nbsp;<code>audit.log</code> можно найти источник любого числа из&nbsp;PDF.</li>
+                <li><strong>Verification и&nbsp;Red-team&nbsp;&mdash; двойной аудит.</strong> Прежде чем сказать «готово»&nbsp;&mdash; запускаем параллельно двух стажёров: один проверяет арифметику, другой ищет «слепые пятна» как скептик-CPA.
                     <pre class="shell">&gt; ПАРАЛЛЕЛЬНО:
 &gt; 1) verification subagent: проверь арифметику (сравни суммы),
 &gt;    что все строки 1040, требующие значений из первички, заполнены;
@@ -463,11 +572,38 @@ filled-1040.pdf      (filled)</pre>
 &gt;
 &gt; ЖДИ обоих. собери результаты в outputs/review.md.
 &gt; если найдены проблемы — поправь до объявления «готово».</pre>
-                </li>
+                    Проверка: <code>outputs/review.md</code> существует, в&nbsp;нём есть оба отчёта; verification возвращает «арифметика сходится»; red-team задал 5&nbsp;вопросов&nbsp;&mdash; вы&nbsp;на&nbsp;каждый ответили либо правкой пайплайна, либо пометкой «для&nbsp;CPA» в&nbsp;memo.</li>
             </ol>
             <ol class="steps" lang="en">
-                <li><strong>Spec and CLAUDE.md.</strong> Enter Plan Mode. Via <code>superpowers:writing-plans</code> have Claude draft <code>spec.md</code>: goals, inputs, outputs, phases, acceptance, out of scope. Pin filing status, tax year, your CLAUDE.md with the disclaimer.</li>
-                <li><strong>Test primary docs.</strong> If you have no real ones:
+                <li><strong>Spec and CLAUDE.md.</strong> Before generating anything, agree with Claude on the boundaries. This is the largest project in the course; without a sharp spec you'll drown in tax-code details.
+                    <pre class="shell">&gt; enter Plan Mode. use the skill superpowers:writing-plans.
+&gt; draft spec.md for AI Tax Assistant USA:
+&gt;
+&gt; GOAL: input is the inputs/ folder of primary PDFs
+&gt;   plus forms/Form-1040.pdf. output is:
+&gt;   — outputs/filled-1040.pdf (the filled return);
+&gt;   — outputs/memo.md (memo for the CPA);
+&gt;   — outputs/audit.log ("source → field → value" trail).
+&gt;
+&gt; PHASES: parsing → Total Income → Adjustments → AGI →
+&gt;   Deductions (standard vs itemized) → Tax → Credits →
+&gt;   fill PDF → memo+audit → verification+red-team.
+&gt;
+&gt; OUT OF SCOPE: state taxes, Schedule C (freelance), home sale,
+&gt;   foreign income, audit defence, actually FILING with the IRS.
+&gt;
+&gt; PARAMETERS FROM ME: filing status = Single,
+&gt;   tax year = 2024. (override if yours differs.)
+&gt;
+&gt; ACCEPTANCE: all three output files exist;
+&gt;   verification subagent says "arithmetic reconciles";
+&gt;   red-team subagent asked 5 questions and I answered each
+&gt;   either with a fix or an explicit "for CPA" note.
+&gt;
+&gt; in parallel fill CLAUDE.md: stack, launch commands,
+&gt; an explicit disclaimer "learning draft, not for IRS filing".</pre>
+                    Check: <code>spec.md</code> in the project root, with explicit "GOAL", "PHASES", "OUT OF SCOPE", "ACCEPTANCE" sections; <code>CLAUDE.md</code> contains the disclaimer.</li>
+                <li><strong>Test primary docs.</strong> If you don't have real ones, let Claude generate a test set. Five-six consistent PDFs that exercise every pipeline phase.
                     <pre class="shell">&gt; generate a test set of primary docs in inputs/ for one
 &gt; fictional person (Single, tax year 2024, income ~$95k):
 &gt; — W-2 from Acme Corp
@@ -478,29 +614,109 @@ filled-1040.pdf      (filled)</pre>
 &gt;
 &gt; use the pdf skill to generate real PDFs
 &gt; (not markdown). numbers must be consistent.</pre>
-                </li>
-                <li><strong>Parsing (parallel subagents).</strong> One subagent per document. Parallel dispatch:
+                    Check: <code>inputs/</code> holds 5 PDF files; open any one&nbsp;&mdash; it's a real PDF with numbers, not markdown.</li>
+                <li><strong>Parsing&nbsp;&mdash; parallel interns per document.</strong> Apply the etape-07 technique: every file gets its own subagent in its own context. In parallel. Each one knows only its document type&nbsp;&mdash; fewer chances to confuse fields.
                     <pre class="shell">&gt; IN PARALLEL launch subagents (one per file in @inputs/),
 &gt; using the pdf skill. brief each:
 &gt;   ROLE: parser of document &lt;type&gt;.
 &gt;   GOAL: extract all key fields.
 &gt;   OUTPUT: JSON of shape { type, fields: { box: value, ... }, source_file }.
 &gt; gather results into data/parsed.json.</pre>
-                </li>
-                <li><strong>Compute — Total Income.</strong> In Python. Wages from W-2 + interest from 1099-INT + dividends from 1099-DIV + capital gains from 1099-B (simplified: long-term by dates). Save to <code>data/totals.json</code>.</li>
-                <li><strong>Adjustments → AGI.</strong> From 5498 — IRA contributions (deductible vs not depends on the type). Skip the rest, note in memo.</li>
-                <li><strong>Standard vs Itemized.</strong> Compute both. Itemized: 1098 (mortgage interest) + a SALT assumption (max $10k). Compare, pick the larger. Record the choice in <code>memo.md</code> with reasoning.</li>
-                <li><strong>Tax brackets and Tax.</strong> Via context7 pull current brackets for the year. Apply the schedule. Capital gains — separate (long-term). Result: total tax.</li>
-                <li><strong>Credits.</strong> Basic: Saver’s Credit, Foreign Tax Credit (if any). Complex (Child Tax Credit etc.) — mark as “needs CPA review,” no auto-entry.</li>
-                <li><strong>Fill the PDF.</strong> Via <code>pdf</code> skill:
+                    Check: <code>data/parsed.json</code> has an entry per file, each with <code>type</code>, populated <code>fields</code>, <code>source_file</code>. Numbers in the JSON match what you see in the PDFs.</li>
+                <li><strong>Total Income&nbsp;&mdash; the first column of the return.</strong> Sum yearly gross income. The logic is simple: add the right fields from <code>parsed.json</code>. Claude writes a short Python script.
+                    <pre class="shell">&gt; write scripts/compute_income.py:
+&gt; read data/parsed.json,
+&gt; sum:
+&gt; — wages from W-2 (field "1");
+&gt; — interest from 1099-INT (box 1) and US Treasury interest (box 3);
+&gt; — dividends from 1099-DIV (box 1a, ordinary) — mark qualified (1b) separately;
+&gt; — capital gains from 1099-B: per trade compute proceeds-basis,
+&gt;   long-term vs short-term by dates (long-term = held over a year).
+&gt;
+&gt; output to data/totals.json:
+&gt;   { wages, interest, dividends_ordinary, dividends_qualified,
+&gt;     short_term_gains, long_term_gains, total_income }.
+&gt;
+&gt; in audit.log append: "&lt;file&gt; &lt;field&gt; → &lt;1040 line&gt; → &lt;value&gt;".</pre>
+                    Check: <code>data/totals.json</code> created, <code>total_income</code> equals the sum of all sources; <code>audit.log</code> already shows "source → field → value" lines.</li>
+                <li><strong>Adjustments → AGI.</strong> Subtract "above-the-line" adjustments from Total Income (deductible IRA contributions from 5498, etc.). The result is AGI, the key number that drives many thresholds.
+                    <pre class="shell">&gt; in scripts/compute_income.py also:
+&gt; — compute adjustments:
+&gt;   - IRA contributions from 5498 (deductible portion),
+&gt;   - student loan interest (if in parsed.json);
+&gt; — AGI = total_income - adjustments;
+&gt; — append to data/totals.json: { adjustments, agi }.
+&gt;
+&gt; IMPORTANT: if you're unsure about any adjustment type,
+&gt; do NOT auto-add it; append a line to data/memo-notes.json:
+&gt; "adjustment X not applied, requires CPA review". it lands in memo.</pre>
+                    Check: <code>data/totals.json</code> has <code>agi</code>, value looks reasonable (less than or equal to total_income); if something was skipped, there's a note in <code>memo-notes.json</code>.</li>
+                <li><strong>Standard vs Itemized&nbsp;&mdash; the big fork.</strong> Compute <em>both</em> deduction options, pick the larger. Record the decision in the memo with numbers&nbsp;&mdash; so the CPA can see at a glance we didn't "forget to check itemized".
+                    <pre class="shell">&gt; write scripts/compute_deductions.py:
+&gt; — standard: via context7 pull the current value for
+&gt;   filing status from spec.md and tax year from spec.md;
+&gt; — itemized: compute mortgage interest from 1098 (Box 1) +
+&gt;   SALT (state + property tax, capped at $10k) +
+&gt;   charitable (if you have documents) +
+&gt;   medical (above 7.5% of agi);
+&gt; — compare, pick the larger, write to data/totals.json: {deduction, choice};
+&gt;
+&gt; in data/memo-notes.json add a Deductions section with both values
+&gt; and an explicit "chose X because $X > $Y".</pre>
+                    Check: <code>deduction</code> and <code>choice</code> (values "standard" or "itemized") in <code>totals.json</code>; the Deductions section in <code>memo-notes.json</code> shows both numbers.</li>
+                <li><strong>Tax brackets and Tax.</strong> Pull current brackets for the year (via context7&nbsp;&mdash; they change yearly), compute tax via the bracket schedule. Long-term capital gains use a separate preferential schedule.
+                    <pre class="shell">&gt; write scripts/compute_tax.py:
+&gt; — via context7 pull tax brackets for filing status from spec.md
+&gt;   and tax year from spec.md (federal, ordinary income);
+&gt; — taxable_income = agi - deduction;
+&gt; — compute tax on ordinary income via the bracket schedule;
+&gt; — separately compute tax on long_term_gains via the preferential schedule
+&gt;   (also via context7, capital gains brackets);
+&gt; — total_tax = ordinary_tax + ltcg_tax;
+&gt; — write to data/totals.json: { taxable_income, ordinary_tax,
+&gt;   ltcg_tax, total_tax_before_credits }.
+&gt;
+&gt; show me the ordinary_tax computation broken down by bracket
+&gt; (like in § I topic 4), so I can verify it by hand.</pre>
+                    Check: <code>total_tax_before_credits</code> in <code>totals.json</code>; Claude printed the step-by-step computation in the dialogue, the first two brackets match what you compute on a calculator.</li>
+                <li><strong>Credits.</strong> Tax gets reduced by credits. Compute basic ones (Saver's Credit, Foreign Tax Credit); leave complex ones (Child Tax Credit, EITC, etc.) <em>untouched</em>&nbsp;&mdash; mark in the memo as "for CPA".
+                    <pre class="shell">&gt; in scripts/compute_tax.py also:
+&gt; — credits_simple: compute Saver's Credit (if there's IRA in 5498
+&gt;   and AGI is below the threshold) and Foreign Tax Credit (if there's a box in 1099-DIV);
+&gt; — total_tax = total_tax_before_credits - credits_simple
+&gt;   (don't go negative);
+&gt; — write to data/totals.json: { credits_simple, total_tax }.
+&gt;
+&gt; in memo-notes.json add a section "Credits NOT auto-applied":
+&gt; Child Tax Credit, EITC, Premium Tax Credit, Adoption Credit.
+&gt; explain each in one line: "needs data not in the primary docs"
+&gt; or "needs CPA judgement".</pre>
+                    Check: <code>total_tax</code> in <code>totals.json</code>; <code>memo-notes.json</code> has an explicit list of un-applied credits with reasons. This is the most common reason to bring it to a CPA&nbsp;&mdash; your memo flags them up-front.</li>
+                <li><strong>Fill the PDF.</strong> All numbers are computed&nbsp;&mdash; just need to transfer them into the official form. The <code>pdf</code> skill does it in three steps: extract the field map, build the "1040 line → our value" mapping, write.
                     <pre class="shell">&gt; using the pdf skill:
 &gt; 1) extract_form_field_info on forms/Form-1040.pdf, save field-map.json;
 &gt; 2) build a mapping "1040 line" → "value from data/totals.json + tax + credits";
 &gt; 3) fill_pdf_form_with_annotations: create outputs/filled-1040.pdf
 &gt;    with annotation tags "where taken from".</pre>
-                </li>
-                <li><strong>Memo and audit log.</strong> Assemble <code>outputs/memo.md</code> with sections: Filing status, Total Income (per source), Adjustments → AGI, Deductions choice, Tax computation, Credits, Refund/Owed, <strong>out of scope</strong>, disclaimer. In parallel — <code>outputs/audit.log</code> with every numerical decision “source → field → value.”</li>
-                <li><strong>Verification & red team.</strong>
+                    Check: <code>outputs/filled-1040.pdf</code> opens; line 1 (Wages), lines 2a/2b (interest), lines 3a/3b (dividends), line 7 (capital gains), line 12 (deduction), line 16 (tax), lines 22-24 (credits/total tax), lines 33-37 (refund/owed) are all filled. Each value has a source annotation next to it.</li>
+                <li><strong>Memo and audit log.</strong> The PDF is "what", the memo is "why we computed it this way", the audit.log is "where each number came from". Together they give a CPA the full picture in 5 minutes.
+                    <pre class="shell">&gt; assemble outputs/memo.md from data/memo-notes.json and data/totals.json.
+&gt; structure:
+&gt;   # Tax Return Draft — &lt;name&gt;, tax year &lt;year&gt;, filing &lt;status&gt;
+&gt;   ## Filing status (with explanation)
+&gt;   ## Total Income (breakdown per source, as a table)
+&gt;   ## Adjustments → AGI
+&gt;   ## Deductions choice (both values + choice + why)
+&gt;   ## Tax computation (bracket breakdown)
+&gt;   ## Credits (what we applied + what we did NOT + why)
+&gt;   ## Refund / Amount Owed
+&gt;   ## Out of scope (state, freelance, etc — see CLAUDE.md)
+&gt;   ## Disclaimer (learning draft, not for filing)
+&gt;
+&gt; verify that outputs/audit.log contains a line
+&gt; for every numerical 1040 field: "source → 1040 line → value".</pre>
+                    Check: both files exist; <code>memo.md</code> has an "Out of scope" section, <code>audit.log</code> lets you trace the source of any number in the PDF.</li>
+                <li><strong>Verification and Red-team&nbsp;&mdash; the double audit.</strong> Before declaring "done", launch two interns in parallel: one checks the arithmetic, the other looks for "blind spots" as a sceptical CPA would.
                     <pre class="shell">&gt; IN PARALLEL:
 &gt; 1) verification subagent: check arithmetic (totals match),
 &gt;    every 1040 line that needs a primary-doc value is filled;
@@ -510,7 +726,7 @@ filled-1040.pdf      (filled)</pre>
 &gt;
 &gt; WAIT for both. gather into outputs/review.md.
 &gt; fix anything found before declaring "done".</pre>
-                </li>
+                    Check: <code>outputs/review.md</code> exists with both reports; verification says "arithmetic reconciles"; red-team posed 5 questions&nbsp;&mdash; you answered each either with a pipeline fix or with a "for CPA" note in the memo.</li>
             </ol>
 
             <h4 lang="ru">Что вы здесь освоили</h4>
@@ -540,56 +756,108 @@ filled-1040.pdf      (filled)</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Возьмите архитектуру этапа&nbsp;06: FastAPI backend на&nbsp;Render, БД на&nbsp;Neon, простой frontend на&nbsp;Vercel.</li>
-                <li>Backend:
+                <li><strong>Берём готовую архитектуру этапа&nbsp;06.</strong> Не&nbsp;изобретаем&nbsp;&mdash; используем тот&nbsp;же стек: FastAPI backend на&nbsp;Render, БД на&nbsp;Neon, простой frontend на&nbsp;Vercel. Создаём <em>отдельный</em> репозиторий (не&nbsp;смешиваем с&nbsp;инвест-кабинетом).
+                    <pre class="shell">&gt; создай новый проект tax-assistant-web.
+&gt; стек тот же, что в этапе 06 проект А:
+&gt; — backend/ — FastAPI + uvicorn (потом деплоим на Render);
+&gt; — frontend/ — статика HTML+JS (потом деплоим на Vercel);
+&gt; — CLAUDE.md с дисклеймером «учебный инструмент,
+&gt;   не для подачи в IRS»;
+&gt; — .gitignore с .env, tmp/, outputs/.
+&gt;
+&gt; backend импортирует пайплайн из проекта А (как библиотеку)
+&gt; или вызывает его через subprocess — выбери и поясни почему.</pre>
+                    Проверка: каркас проекта создан, в&nbsp;<code>CLAUDE.md</code> есть дисклеймер; Claude в&nbsp;диалоге пояснил, почему выбрал именно subprocess&nbsp;или импорт.</li>
+                <li><strong>Backend&nbsp;&mdash; один эндпоинт <code>/api/tax/run</code>.</strong> Принимает zip с&nbsp;первичкой, прогоняет пайплайн, возвращает три ссылки на&nbsp;файлы-результаты.
                     <pre class="shell">&gt; добавь эндпоинт POST /api/tax/run.
 &gt; принимает multipart upload zip с первичкой.
 &gt; распаковывает в tmp/, прогоняет пайплайн из проекта A,
 &gt; возвращает { pdf_url, memo_url, audit_url }
 &gt; (файлы доступны 24 часа, потом удаляются).
 &gt; ВАЖНО: никаких персональных данных в логах.</pre>
-                </li>
-                <li>Frontend:
+                    Проверка: локально <code>uvicorn</code> запускается; <code>curl -F file=@test.zip http://localhost:8000/api/tax/run</code> возвращает JSON с&nbsp;тремя URL.</li>
+                <li><strong>Frontend&nbsp;&mdash; страница /tax.</strong> Минимальная: дроп-зона, прогресс-бар, три ссылки. Стиль как у&nbsp;курса (paper-and-ink)&nbsp;&mdash; визуально серьёзно, не&nbsp;«ещё одно AI-tool с&nbsp;неоном».
                     <pre class="shell">&gt; страница /tax: дроп-зона для zip, прогресс-бар,
 &gt; список ссылок-результатов. стиль editorial / paper-and-ink,
 &gt; чтобы выглядело серьёзно. явный дисклеймер сверху.</pre>
-                </li>
-                <li>Авторизация (минимум):
+                    Проверка: страница открывается локально, можно перетащить zip-файл&nbsp;&mdash; стартует загрузка, после неё появляются три кликабельные ссылки.</li>
+                <li><strong>Защита от&nbsp;посторонних&nbsp;&mdash; одна общая фраза.</strong> Чтобы любой случайный посетитель не&nbsp;загрузил <em>свою</em> первичку (это PII!)&nbsp;&mdash; добавим простой пароль-prompt. Не&nbsp;production-уровень, но&nbsp;достаточно для&nbsp;того, чтобы показать другу.
                     <pre class="shell">&gt; добавь простой parol-prompt (один общий пароль из .env)
 &gt; чтобы случайные люди не загружали свою первичку.
 &gt; этого достаточно для демо — не для public service.</pre>
-                </li>
-                <li>Verification через playwright: загрузка тестового zip, проверка всех трёх ссылок-результатов, открытие PDF, скриншот.</li>
-                <li>Дисклеймер на&nbsp;каждой странице:
-                    <pre class="shell">⚠ Учебный демо-инструмент. Не использовать для подачи в IRS.
-   Результат — черновик, требующий проверки CPA.</pre>
-                </li>
+                    Проверка: при&nbsp;первом заходе на&nbsp;<code>/tax</code> Claude просит пароль; пароль из&nbsp;<code>.env</code> работает, любой другой&nbsp;&mdash; нет; пароль не&nbsp;виден в&nbsp;коде frontend.</li>
+                <li><strong>Проверка через Playwright.</strong> Прогон end-to-end: ввести пароль, загрузить тестовый zip, дождаться, открыть PDF.
+                    <pre class="shell">&gt; через playwright прогон на http://localhost:5000/tax:
+&gt; — введи тестовый пароль;
+&gt; — загрузи inputs.zip (собери из тестовой первички этапа 08b);
+&gt; — дождись появления трёх ссылок;
+&gt; — открой pdf_url, проверь что выглядит как заполненная 1040;
+&gt; — сделай скриншоты на каждом шаге.
+&gt; пришли отчёт со скриншотами.</pre>
+                    Проверка: Playwright-отчёт показывает все четыре шага, в&nbsp;конце&nbsp;&mdash; скриншот заполненного PDF.</li>
+                <li><strong>Дисклеймер на&nbsp;каждой странице&nbsp;&mdash; явно и&nbsp;громко.</strong> Это не&nbsp;юридический формализм, а&nbsp;защита для&nbsp;вас и&nbsp;тех, кому вы&nbsp;покажете сервис.
+                    <pre class="shell">&gt; в каждой странице frontend (и в шапке /tax, и в /)
+&gt; добавь сверху яркую полосу с текстом:
+&gt;
+&gt;   ⚠ Учебный демо-инструмент. Не использовать для подачи в IRS.
+&gt;     Результат — черновик, требующий проверки CPA.
+&gt;
+&gt; стиль: красный фон, белый текст, жирный.
+&gt; кнопка «понятно» которая прячет полосу — НЕ добавляй.
+&gt; она должна быть видна всегда.</pre>
+                    Проверка: на&nbsp;каждой странице&nbsp;&mdash; красная полоса с&nbsp;дисклеймером, при&nbsp;любом скроллинге она остаётся видна (sticky или на&nbsp;каждой странице сверху).</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Use the etape-06 architecture: FastAPI backend on Render, DB on Neon, simple frontend on Vercel.</li>
-                <li>Backend:
+                <li><strong>Take the etape-06 architecture off the shelf.</strong> Don't reinvent&nbsp;&mdash; reuse the same stack: FastAPI backend on Render, DB on Neon, simple frontend on Vercel. Create a <em>separate</em> repo (don't mix with the investment office).
+                    <pre class="shell">&gt; create a new tax-assistant-web project.
+&gt; same stack as etape 06 project A:
+&gt; — backend/ — FastAPI + uvicorn (later deploy to Render);
+&gt; — frontend/ — static HTML+JS (later deploy to Vercel);
+&gt; — CLAUDE.md with the disclaimer "learning tool,
+&gt;   not for IRS filing";
+&gt; — .gitignore with .env, tmp/, outputs/.
+&gt;
+&gt; the backend imports the project-A pipeline (as a library)
+&gt; or invokes it via subprocess — pick one and explain why.</pre>
+                    Check: project skeleton created, <code>CLAUDE.md</code> contains the disclaimer; Claude explained in the dialogue why it picked subprocess or import.</li>
+                <li><strong>Backend&nbsp;&mdash; one endpoint <code>/api/tax/run</code>.</strong> Takes a zip with primary docs, runs the pipeline, returns three URLs to result files.
                     <pre class="shell">&gt; add a POST /api/tax/run endpoint.
 &gt; accepts a multipart zip upload of primary docs.
 &gt; unzips into tmp/, runs the project A pipeline,
 &gt; returns { pdf_url, memo_url, audit_url }
 &gt; (files available for 24 hours, then deleted).
 &gt; IMPORTANT: no personal data in logs.</pre>
-                </li>
-                <li>Frontend:
+                    Check: <code>uvicorn</code> starts locally; <code>curl -F file=@test.zip http://localhost:8000/api/tax/run</code> returns a JSON with three URLs.</li>
+                <li><strong>Frontend&nbsp;&mdash; the /tax page.</strong> Minimal: drop-zone, progress bar, three links. Course style (paper-and-ink)&nbsp;&mdash; visually serious, not "yet another AI tool with neon".
                     <pre class="shell">&gt; /tax page: zip drop-zone, progress bar,
 &gt; list of result links. editorial / paper-and-ink style,
 &gt; to look serious. explicit disclaimer at the top.</pre>
-                </li>
-                <li>Auth (minimal):
+                    Check: the page opens locally, you can drop a zip&nbsp;&mdash; upload starts, three clickable links appear afterwards.</li>
+                <li><strong>Bystander protection&nbsp;&mdash; one shared phrase.</strong> So random visitors can't upload <em>their</em> primary docs (that's PII!)&nbsp;&mdash; add a simple password prompt. Not production-grade, but enough to show a friend.
                     <pre class="shell">&gt; add a simple password prompt (one shared password from .env)
 &gt; so random people don't upload their docs.
 &gt; enough for a demo, not a public service.</pre>
-                </li>
-                <li>Playwright verification: upload a test zip, check all three result links, open the PDF, screenshot.</li>
-                <li>Disclaimer on every page:
-                    <pre class="shell">⚠ Educational demo. Do not file with the IRS.
-   The output is a draft, must be reviewed by a CPA.</pre>
-                </li>
+                    Check: first time you hit <code>/tax</code> Claude asks for the password; the password from <code>.env</code> works, anything else doesn't; the password is not visible in frontend code.</li>
+                <li><strong>Playwright check.</strong> End-to-end run: enter the password, upload a test zip, wait, open the PDF.
+                    <pre class="shell">&gt; via playwright on http://localhost:5000/tax:
+&gt; — enter the test password;
+&gt; — upload inputs.zip (assembled from the etape-08b test primary docs);
+&gt; — wait for the three links;
+&gt; — open pdf_url, verify it looks like a filled 1040;
+&gt; — screenshot every step.
+&gt; report back with screenshots.</pre>
+                    Check: the Playwright report shows all four steps, with a final screenshot of the filled PDF.</li>
+                <li><strong>Disclaimer on every page&nbsp;&mdash; loud and clear.</strong> This isn't legal formalism; it's protection for you and for anyone you show the service to.
+                    <pre class="shell">&gt; on every frontend page (both /tax and /)
+&gt; add a bright top strip with the text:
+&gt;
+&gt;   ⚠ Educational demo. Do not file with the IRS.
+&gt;     The output is a draft, must be reviewed by a CPA.
+&gt;
+&gt; style: red background, white text, bold.
+&gt; do NOT add a "got it" button that hides the strip.
+&gt; it must stay visible always.</pre>
+                    Check: every page has the red disclaimer strip; on any scroll it stays visible (sticky or repeated at the top of every page).</li>
             </ol>
 
             <h4 lang="ru">Что вы здесь освоили</h4>
