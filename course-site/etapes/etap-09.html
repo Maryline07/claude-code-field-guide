@@ -205,6 +205,7 @@
             <div class="topic-body">
                 <div lang="ru">
                     <p>Минимальная структура папки:</p>
+                    <p lang="ru" class="note">Все три блока кода ниже (структура папки, <code>package.json</code>, псевдокод <code>server.ts</code>)&nbsp;&mdash; <em>примеры того, что Claude через skill <code>mcp-integration</code> соберёт за&nbsp;вас в&nbsp;Project&nbsp;A</em>. Это для&nbsp;узнавания формы, а&nbsp;не&nbsp;для&nbsp;печатания руками.</p>
                     <pre class="shell">daily-trader-mcp/
 ├── package.json          # описание пакета
 ├── server.ts             # главный файл — реализация MCP
@@ -235,6 +236,7 @@ server.addTool("get_history", ...);</pre>
                 </div>
                 <div lang="en">
                     <p>Minimal folder layout:</p>
+                    <p lang="en" class="note">All three code blocks below (folder layout, <code>package.json</code>, <code>server.ts</code> pseudocode) are <em>examples of what Claude (via the <code>mcp-integration</code> skill) builds for you in Project A</em>. For shape recognition, not for hand-typing.</p>
                     <pre class="shell">daily-trader-mcp/
 ├── package.json          # package metadata
 ├── server.ts             # main file — MCP impl
@@ -279,6 +281,7 @@ server.addTool("get_history", ...);</pre>
                         <li><code>mcp/</code>&nbsp;&mdash; ваш MCP-сервер;</li>
                         <li><code>plugin.json</code>&nbsp;&mdash; манифест: что есть в&nbsp;плагине, какие версии, описание.</li>
                     </ul>
+                    <p lang="ru" class="note">Дерево папок и&nbsp;<code>plugin.json</code> ниже&nbsp;&mdash; <em>пример того, что Claude через skill <code>plugin-structure</code> соберёт за&nbsp;вас в&nbsp;Project&nbsp;B</em>. Манифест писать руками не&nbsp;надо&nbsp;&mdash; форматов и&nbsp;полей много, легко ошибиться.</p>
                     <pre class="shell">my-personal-office/
 ├── plugin.json
 ├── README.md
@@ -330,6 +333,7 @@ server.addTool("get_history", ...);</pre>
                         <li><code>mcp/</code> — your MCP server;</li>
                         <li><code>plugin.json</code> — manifest: what’s inside, versions, description.</li>
                     </ul>
+                    <p lang="en" class="note">The folder tree and <code>plugin.json</code> below are <em>examples of what Claude (via the <code>plugin-structure</code> skill) assembles for you in Project B</em>. The manifest isn't something to write by hand&nbsp;&mdash; too many fields and formats, easy to slip up.</p>
                     <pre class="shell">my-personal-office/
 ├── plugin.json
 ├── README.md
@@ -529,58 +533,200 @@ server.addTool("get_history", ...);</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Создайте папку <code>daily-trader-mcp</code>. Попросите Claude заполнить <code>CLAUDE.md</code>: стек (Node.js + TypeScript, MCP SDK), сборка&nbsp;&mdash; <code>npm install</code> + <code>npx tsc</code>, запуск&nbsp;&mdash; <code>node dist/server.js</code>, ключ <code>ALPHAVANTAGE_KEY</code> из <code>.env</code>. Через Plan Mode попросите spec и&nbsp;план реализации.</li>
-                <li>Реализация четырёх tool'ов:
-                    <ul>
-                        <li><code>get_price(ticker)</code>&nbsp;&mdash; вызывает Alpha Vantage GLOBAL_QUOTE, возвращает <code>{ ticker, price, change_pct, currency, as_of }</code>;</li>
-                        <li><code>get_history(ticker, days)</code>&nbsp;&mdash; TIME_SERIES_DAILY, возвращает массив <code>{ date, close }</code>;</li>
-                        <li><code>compute_signal(ticker)</code>&nbsp;&mdash; считает MA-5 и&nbsp;MA-20, возвращает <code>{ signal: "buy" | "sell" | "hold", reason }</code>;</li>
-                        <li><code>set_alert(ticker, threshold, direction)</code>&nbsp;&mdash; пишет в&nbsp;<code>~/.claude/alerts.json</code>.</li>
-                    </ul>
-                </li>
-                <li>Реализация двух resources:
-                    <ul>
-                        <li><code>portfolio://current-positions</code>&nbsp;&mdash; читает <code>~/portfolio-journal/data/operations.csv</code>, считает текущие позиции;</li>
-                        <li><code>alerts://pending</code>&nbsp;&mdash; читает <code>~/.claude/alerts.json</code>.</li>
-                    </ul>
-                </li>
-                <li>Кэширование цен: <code>~/.claude/.daily-trader-cache/</code> с&nbsp;TTL 15&nbsp;мин (как в&nbsp;этапе&nbsp;03).</li>
-                <li>Обработка ошибок: rate limit, отсутствие ключа, недоступная сеть&nbsp;&mdash; везде дружелюбные сообщения.</li>
-                <li>Сборка: <code>npm install</code> + <code>npx tsc</code>. Подключение командой <code>claude mcp add daily-trader --scope user -- node &lt;путь к dist/server.js&gt;</code>.</li>
-                <li>Тесты:
+                <li><strong>Папка и&nbsp;spec.</strong> Создайте папку <code>daily-trader-mcp</code>, запустите <code>claude</code>. Сначала&nbsp;&mdash; CLAUDE.md и&nbsp;spec, чтобы Claude знал стек и&nbsp;границы.
+                    <pre class="shell">&gt; заполни CLAUDE.md в этой папке:
+&gt; — стек: Node.js + TypeScript, MCP SDK от Anthropic;
+&gt; — сборка: npm install + npx tsc (выход в dist/);
+&gt; — запуск: node dist/server.js;
+&gt; — секреты: ALPHAVANTAGE_KEY из .env, никогда в коде.</pre>
+                    <pre class="shell">&gt; войди в Plan Mode и составь spec.md для MCP «Daily Trader»:
+&gt; — четыре tools: get_price, get_history, compute_signal, set_alert;
+&gt; — два resources: portfolio://current-positions, alerts://pending;
+&gt; — transport: stdio;
+&gt; — кэширование цен с TTL 15 минут;
+&gt; — обработка ошибок: rate limit, нет ключа, нет сети.
+&gt; критерии готовности: все четыре tool'а возвращают валидный JSON
+&gt; и не падают на типичных входах.</pre>
+                    Проверка: <code>CLAUDE.md</code> и&nbsp;<code>spec.md</code> в&nbsp;папке; в&nbsp;spec явные секции tools/resources/критерии готовности.</li>
+                <li><strong>Четыре tool'а.</strong> Это «руки» MCP. Каждый делает одно конкретное действие&nbsp;&mdash; Claude вызывает его, получает результат.
+                    <pre class="shell">&gt; используя skill mcp-integration, реализуй четыре tool в server.ts:
+&gt;
+&gt; 1) get_price(ticker: string)
+&gt;    — вызывает Alpha Vantage GLOBAL_QUOTE;
+&gt;    — возвращает { ticker, price, change_pct, currency, as_of };
+&gt; 2) get_history(ticker: string, days: number)
+&gt;    — TIME_SERIES_DAILY, обрезает последние N дней;
+&gt;    — возвращает [{ date, close }, ...];
+&gt; 3) compute_signal(ticker: string)
+&gt;    — берёт историю за 30 дней, считает MA-5 и MA-20;
+&gt;    — возвращает { signal: "buy" | "sell" | "hold", reason };
+&gt; 4) set_alert(ticker: string, threshold: number, direction: "above" | "below")
+&gt;    — пишет JSON-строку в ~/.claude/alerts.json (создаёт если нет);
+&gt;    — возвращает { ok: true, alert_id }.
+&gt;
+&gt; для каждого tool: валидация параметров через zod (или ручная);
+&gt; описание в коде — оно попадёт в подсказку Claude.</pre>
+                    Проверка: <code>npx tsc</code> компилирует без&nbsp;ошибок; в&nbsp;<code>dist/server.js</code> зарегистрированы четыре tool'а.</li>
+                <li><strong>Два resource'а.</strong> Это «документы», которые Claude читает в&nbsp;контекст. <code>portfolio://current-positions</code>&nbsp;&mdash; ваш текущий портфель; <code>alerts://pending</code>&nbsp;&mdash; список активных алертов.
+                    <pre class="shell">&gt; добавь в server.ts два resource:
+&gt;
+&gt; 1) portfolio://current-positions
+&gt;    — читает ~/portfolio-journal/data/operations.csv;
+&gt;    — сворачивает операции в текущие позиции по тикерам;
+&gt;    — возвращает markdown-таблицу «тикер | qty | avg cost | current value».
+&gt;    — если CSV не найден — возвращает понятное сообщение,
+&gt;      не падает.
+&gt;
+&gt; 2) alerts://pending
+&gt;    — читает ~/.claude/alerts.json;
+&gt;    — возвращает markdown-список активных алертов;
+&gt;    — если файл пуст или нет — возвращает «алертов нет».</pre>
+                    Проверка: оба resource'а зарегистрированы и&nbsp;возвращают что-то осмысленное даже при&nbsp;отсутствии источника (без&nbsp;аварии).</li>
+                <li><strong>Кэширование цен.</strong> Alpha Vantage даёт жёсткий rate limit (5&nbsp;запросов/мин на&nbsp;free tier). Кэш с&nbsp;TTL 15&nbsp;мин экономит и&nbsp;квоту, и&nbsp;время.
+                    <pre class="shell">&gt; в get_price и get_history добавь файловый кэш:
+&gt; — папка: ~/.claude/.daily-trader-cache/;
+&gt; — имя файла: &lt;tool&gt;_&lt;ticker&gt;_&lt;params&gt;.json;
+&gt; — TTL 15 минут (отсчитывай по mtime файла);
+&gt; — если кэш свежий — возвращай из него, БЕЗ вызова API;
+&gt; — пиши в лог «cache hit» / «cache miss» для отладки.</pre>
+                    Проверка: первый вызов <code>get_price("AAPL")</code> делает HTTP-запрос; второй вызов в&nbsp;течение 15&nbsp;минут&nbsp;&mdash; не&nbsp;делает (видно в&nbsp;логе или по&nbsp;скорости ответа).</li>
+                <li><strong>Дружелюбные ошибки.</strong> Три типичных случая: rate limit от&nbsp;Alpha Vantage (429), нет&nbsp;<code>ALPHAVANTAGE_KEY</code> в&nbsp;env, нет сети. Без&nbsp;обработки Claude получит «Error: undefined»&nbsp;&mdash; пользователю никак не&nbsp;поможет.
+                    <pre class="shell">&gt; во всех tool'ах добавь обработку ошибок:
+&gt; — нет ALPHAVANTAGE_KEY → MCP-ошибка
+&gt;   «настройте ALPHAVANTAGE_KEY в env, см. README»;
+&gt; — Alpha Vantage 429 (rate limit) → ошибка
+&gt;   «лимит запросов исчерпан, попробуйте через минуту»;
+&gt; — нет сети (ECONNREFUSED, ETIMEDOUT) → ошибка
+&gt;   «нет соединения с Alpha Vantage, проверьте интернет»;
+&gt; — любая другая → общая «непредвиденная ошибка, см. логи».
+&gt;
+&gt; ВАЖНО: текст ошибки виден Claude — формулировки
+&gt; должны помочь ЕМУ объяснить пользователю, что чинить.</pre>
+                    Проверка: временно удалите ключ из&nbsp;<code>.env</code>, вызовите <code>get_price</code>&nbsp;&mdash; Claude получает понятное сообщение, а&nbsp;не&nbsp;стектрейс.</li>
+                <li><strong>Сборка и&nbsp;подключение к&nbsp;Claude.</strong> MCP-серверы регистрируются НЕ&nbsp;через <code>settings.json</code>, а&nbsp;командой <code>claude mcp add</code>&nbsp;&mdash; запомните это, иначе будете долго искать ошибку.
+                    <pre class="shell">&gt; собери проект (npm install + npx tsc).
+&gt; подскажи абсолютный путь к dist/server.js,
+&gt; и выполни:
+&gt; claude mcp add daily-trader --scope user -- node &lt;абс_путь&gt;.
+&gt;
+&gt; потом перезапусти claude, и через /mcp проверь —
+&gt; daily-trader должен появиться в списке.</pre>
+                    Проверка: <code>/mcp</code> внутри Claude показывает <code>daily-trader</code>&nbsp;&mdash; статус «connected».</li>
+                <li><strong>Тесты в&nbsp;диалоге.</strong> Прогон каждого tool и&nbsp;resource&nbsp;&mdash; убедиться, что всё подключилось.
                     <pre class="shell">&gt; через daily-trader вызови get_price для AAPL.
 &gt; через daily-trader вызови compute_signal для NVDA.
 &gt; через daily-trader вызови set_alert("AAPL", 200, "above").
 &gt; покажи resources://portfolio (если CSV доступен).</pre>
-                </li>
-                <li>Verification: <em>«запусти red-team subagent. brief: пройди по&nbsp;моему server.ts как security-reviewer. найди три места, где можно ошибиться: rate limit, утечка ключа, неполная валидация»</em>.</li>
+                    Проверка: все четыре вызова возвращают осмысленные данные; <code>set_alert</code> действительно дописал в&nbsp;<code>~/.claude/alerts.json</code> (проверьте файл).</li>
+                <li><strong>Security-аудит.</strong> Перед тем как упаковывать в&nbsp;плагин и&nbsp;публиковать&nbsp;&mdash; найдём слабые места.
+                    <pre class="shell">&gt; запусти red-team subagent (general-purpose, security-reviewer role).
+&gt; brief: пройди по моему server.ts как security-reviewer.
+&gt; найди три места, где можно ошибиться:
+&gt; — rate limit (что если Alpha Vantage поменяет лимиты);
+&gt; — утечка ключа (есть ли он в логах, error-сообщениях,
+&gt;   в кэше, в URL логирования);
+&gt; — неполная валидация (можно ли передать что-то «странное»
+&gt;   в ticker или threshold и сломать сервер).
+&gt; для каждого — конкретный фикс, со ссылкой на строку.</pre>
+                    Проверка: red-team вернул три конкретные находки с&nbsp;цитатами из&nbsp;кода; вы&nbsp;на&nbsp;каждую либо внесли правку, либо явно пометили в&nbsp;<code>CLAUDE.md</code> как «принятый риск».</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Create <code>daily-trader-mcp</code>. Ask Claude to fill <code>CLAUDE.md</code>: stack (Node.js + TypeScript, MCP SDK), build — <code>npm install</code> + <code>npx tsc</code>, run — <code>node dist/server.js</code>, key <code>ALPHAVANTAGE_KEY</code> from <code>.env</code>. Via Plan Mode draft a spec and a plan.</li>
-                <li>Implement four tools:
-                    <ul>
-                        <li><code>get_price(ticker)</code> — calls Alpha Vantage GLOBAL_QUOTE, returns <code>{ ticker, price, change_pct, currency, as_of }</code>;</li>
-                        <li><code>get_history(ticker, days)</code> — TIME_SERIES_DAILY, returns <code>{ date, close }[]</code>;</li>
-                        <li><code>compute_signal(ticker)</code> — computes MA-5 and MA-20, returns <code>{ signal: "buy" | "sell" | "hold", reason }</code>;</li>
-                        <li><code>set_alert(ticker, threshold, direction)</code> — writes to <code>~/.claude/alerts.json</code>.</li>
-                    </ul>
-                </li>
-                <li>Implement two resources:
-                    <ul>
-                        <li><code>portfolio://current-positions</code> — reads <code>~/portfolio-journal/data/operations.csv</code>, computes current positions;</li>
-                        <li><code>alerts://pending</code> — reads <code>~/.claude/alerts.json</code>.</li>
-                    </ul>
-                </li>
-                <li>Price cache: <code>~/.claude/.daily-trader-cache/</code> with 15-min TTL (etape 03 trick).</li>
-                <li>Error handling: rate limit, missing key, no network — friendly messages everywhere.</li>
-                <li>Build: <code>npm install</code> + <code>npx tsc</code>. Wire it in with <code>claude mcp add daily-trader --scope user -- node &lt;path to dist/server.js&gt;</code>.</li>
-                <li>Tests:
+                <li><strong>Folder and spec.</strong> Create the <code>daily-trader-mcp</code> folder, launch <code>claude</code>. First the CLAUDE.md and spec, so Claude knows the stack and the boundaries.
+                    <pre class="shell">&gt; fill in CLAUDE.md in this folder:
+&gt; — stack: Node.js + TypeScript, Anthropic MCP SDK;
+&gt; — build: npm install + npx tsc (output in dist/);
+&gt; — run: node dist/server.js;
+&gt; — secrets: ALPHAVANTAGE_KEY from .env, never in code.</pre>
+                    <pre class="shell">&gt; enter Plan Mode and draft spec.md for the Daily Trader MCP:
+&gt; — four tools: get_price, get_history, compute_signal, set_alert;
+&gt; — two resources: portfolio://current-positions, alerts://pending;
+&gt; — transport: stdio;
+&gt; — price caching with 15-min TTL;
+&gt; — error handling: rate limit, missing key, no network.
+&gt; acceptance: all four tools return valid JSON
+&gt; and don't crash on typical inputs.</pre>
+                    Check: <code>CLAUDE.md</code> and <code>spec.md</code> in the folder; the spec has clear tools/resources/acceptance sections.</li>
+                <li><strong>The four tools.</strong> These are the MCP's "hands". Each does one specific action&nbsp;&mdash; Claude calls it, gets a result.
+                    <pre class="shell">&gt; using the mcp-integration skill, implement four tools in server.ts:
+&gt;
+&gt; 1) get_price(ticker: string)
+&gt;    — calls Alpha Vantage GLOBAL_QUOTE;
+&gt;    — returns { ticker, price, change_pct, currency, as_of };
+&gt; 2) get_history(ticker: string, days: number)
+&gt;    — TIME_SERIES_DAILY, trim to last N days;
+&gt;    — returns [{ date, close }, ...];
+&gt; 3) compute_signal(ticker: string)
+&gt;    — takes 30-day history, computes MA-5 and MA-20;
+&gt;    — returns { signal: "buy" | "sell" | "hold", reason };
+&gt; 4) set_alert(ticker: string, threshold: number, direction: "above" | "below")
+&gt;    — appends a JSON line to ~/.claude/alerts.json (creates if missing);
+&gt;    — returns { ok: true, alert_id }.
+&gt;
+&gt; for each tool: parameter validation via zod (or by hand);
+&gt; description in the code — that's what Claude will see as a tool hint.</pre>
+                    Check: <code>npx tsc</code> compiles without errors; <code>dist/server.js</code> registers four tools.</li>
+                <li><strong>The two resources.</strong> These are "documents" Claude reads into context. <code>portfolio://current-positions</code>&nbsp;&mdash; your current portfolio; <code>alerts://pending</code>&nbsp;&mdash; the list of active alerts.
+                    <pre class="shell">&gt; add two resources to server.ts:
+&gt;
+&gt; 1) portfolio://current-positions
+&gt;    — reads ~/portfolio-journal/data/operations.csv;
+&gt;    — rolls operations up to current positions per ticker;
+&gt;    — returns a markdown table "ticker | qty | avg cost | current value".
+&gt;    — if the CSV is missing, return a clear message,
+&gt;      don't crash.
+&gt;
+&gt; 2) alerts://pending
+&gt;    — reads ~/.claude/alerts.json;
+&gt;    — returns a markdown list of active alerts;
+&gt;    — if empty or missing — "no alerts".</pre>
+                    Check: both resources are registered and return something meaningful even when the source is missing (no crash).</li>
+                <li><strong>Price caching.</strong> Alpha Vantage has a strict rate limit (5 req/min on free tier). A 15-min TTL cache saves both quota and time.
+                    <pre class="shell">&gt; add a file cache to get_price and get_history:
+&gt; — folder: ~/.claude/.daily-trader-cache/;
+&gt; — filename: &lt;tool&gt;_&lt;ticker&gt;_&lt;params&gt;.json;
+&gt; — TTL 15 minutes (use file mtime);
+&gt; — if cache is fresh — return from it, NO API call;
+&gt; — log "cache hit" / "cache miss" for debugging.</pre>
+                    Check: first call to <code>get_price("AAPL")</code> makes an HTTP request; second call within 15 minutes does not (visible in the log or by response speed).</li>
+                <li><strong>Friendly errors.</strong> Three typical cases: Alpha Vantage rate limit (429), missing <code>ALPHAVANTAGE_KEY</code> in env, no network. Without handling, Claude gets "Error: undefined"&nbsp;&mdash; useless for the user.
+                    <pre class="shell">&gt; in every tool add error handling:
+&gt; — missing ALPHAVANTAGE_KEY → MCP error
+&gt;   "set ALPHAVANTAGE_KEY in env, see README";
+&gt; — Alpha Vantage 429 (rate limit) → error
+&gt;   "request quota exhausted, try again in a minute";
+&gt; — no network (ECONNREFUSED, ETIMEDOUT) → error
+&gt;   "no connection to Alpha Vantage, check internet";
+&gt; — anything else → generic "unexpected error, see logs".
+&gt;
+&gt; IMPORTANT: the error text is visible to Claude — phrasings
+&gt; must help IT explain to the user what to fix.</pre>
+                    Check: temporarily remove the key from <code>.env</code>, call <code>get_price</code>&nbsp;&mdash; Claude receives a clear message, not a stack trace.</li>
+                <li><strong>Build and wire to Claude.</strong> MCP servers are NOT registered via <code>settings.json</code>&nbsp;&mdash; they're registered via the <code>claude mcp add</code> command. Remember that, or you'll chase the bug for a while.
+                    <pre class="shell">&gt; build the project (npm install + npx tsc).
+&gt; tell me the absolute path to dist/server.js,
+&gt; and run:
+&gt; claude mcp add daily-trader --scope user -- node &lt;abs_path&gt;.
+&gt;
+&gt; then restart claude, and via /mcp verify —
+&gt; daily-trader must appear in the list.</pre>
+                    Check: inside Claude, <code>/mcp</code> shows <code>daily-trader</code> with "connected" status.</li>
+                <li><strong>In-dialogue tests.</strong> Walk every tool and resource&nbsp;&mdash; confirm everything wired up.
                     <pre class="shell">&gt; via daily-trader call get_price for AAPL.
 &gt; via daily-trader call compute_signal for NVDA.
 &gt; via daily-trader call set_alert("AAPL", 200, "above").
 &gt; show resources://portfolio (if CSV is available).</pre>
-                </li>
-                <li>Verification: <em>“spawn a red-team subagent. brief: walk my server.ts as a security reviewer. find three places to fail: rate limit, key leak, incomplete validation.”</em></li>
+                    Check: all four calls return sensible data; <code>set_alert</code> actually appended to <code>~/.claude/alerts.json</code> (open the file to verify).</li>
+                <li><strong>Security audit.</strong> Before bundling into a plugin and publishing&nbsp;&mdash; find the weak spots.
+                    <pre class="shell">&gt; spawn a red-team subagent (general-purpose, security-reviewer role).
+&gt; brief: walk my server.ts as a security reviewer.
+&gt; find three places to fail:
+&gt; — rate limit (what if Alpha Vantage changes limits);
+&gt; — key leak (is it in logs, error messages,
+&gt;   cache, URL logging);
+&gt; — incomplete validation (can "weird" inputs in ticker
+&gt;   or threshold break the server).
+&gt; for each — a concrete fix with a line reference.</pre>
+                    Check: red-team returned three specific findings with code citations; you either applied each as a fix or explicitly noted it as an "accepted risk" in <code>CLAUDE.md</code>.</li>
             </ol>
         </article>
 
@@ -593,76 +739,160 @@ server.addTool("get_history", ...);</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Создайте папку <code>my-personal-office/</code>. Подпапки <code>skills/</code>, <code>commands/</code>, <code>hooks/</code>, <code>mcp/daily-trader/</code>.</li>
-                <li>Скопируйте туда:
-                    <ul>
-                        <li>skills (этап&nbsp;08a): <code>investing-analyst</code>, <code>personal-cfo</code>, <code>auto-publisher</code>;</li>
-                        <li>commands (этап&nbsp;08a): <code>forecast.md</code>, <code>cfo.md</code>, <code>timesheet.md</code>;</li>
-                        <li>hooks: <code>settings.json</code> с&nbsp;timesheet-хуком;</li>
-                        <li>MCP: проект&nbsp;A (<code>daily-trader-mcp</code>).</li>
-                    </ul>
-                </li>
-                <li>Сгенерируйте <code>plugin.json</code> через skill <code>plugin-structure</code>:
+                <li><strong>Каркас плагина.</strong> Создаём папку и&nbsp;четыре стандартных подпапки. Это та&nbsp;же структура, что показана в&nbsp;§&nbsp;I теме&nbsp;4.
+                    <pre class="shell">&gt; создай my-personal-office/ с подпапками:
+&gt;   skills/, commands/, hooks/, mcp/daily-trader/
+&gt; добавь .gitignore (node_modules, .env, dist, *.log)
+&gt; и пустой README.md — заполним позже.</pre>
+                    Проверка: папка <code>my-personal-office/</code> с&nbsp;четырьмя подпапками и&nbsp;двумя файлами в&nbsp;корне.</li>
+                <li><strong>Сборка артефактов курса.</strong> Копируем то, что уже сделано в&nbsp;этапах 07-09: три skill, три команды, hook timesheet, MCP «Daily Trader» из&nbsp;проекта&nbsp;A.
+                    <pre class="shell">&gt; собери в my-personal-office/ артефакты из предыдущих этапов:
+&gt;
+&gt; skills/  — три skill из этапа 08a:
+&gt;   — investing-analyst, personal-cfo, auto-publisher
+&gt;   (скопируй каждую папку целиком).
+&gt;
+&gt; commands/ — три slash-команды из этапа 08a:
+&gt;   — forecast.md, cfo.md, timesheet.md.
+&gt;
+&gt; hooks/ — копия ~/.claude/settings.json,
+&gt;   но только секция hooks с timesheet-хуком
+&gt;   (не утаскивай туда permissions и ключи).
+&gt;
+&gt; mcp/daily-trader/ — содержимое daily-trader-mcp из проекта А
+&gt;   (package.json, server.ts, README, но НЕ dist/ и не node_modules).
+&gt;
+&gt; покажи мне дерево результирующих файлов.</pre>
+                    Проверка: дерево <code>my-personal-office/</code> содержит все четыре раздела с&nbsp;файлами; нигде нет <code>.env</code>, <code>node_modules</code> или <code>dist/</code>.</li>
+                <li><strong>Манифест <code>plugin.json</code>.</strong> Это «лицо» плагина для&nbsp;Smithery&nbsp;&mdash; описание, версия, список того, что внутри.
                     <pre class="shell">&gt; используя skill plugin-structure,
 &gt; составь plugin.json для @&lt;you&gt;/personal-office:
 &gt; перечисли все skills, commands, hooks, mcp_servers
 &gt; (env: ALPHAVANTAGE_KEY).
 &gt; описание&nbsp;&mdash; одна строка о том, что это «личный финансовый кабинет
 &gt; на основе курса Полевое руководство по Claude Code».</pre>
-                </li>
-                <li>Напишите <code>README.md</code>: установка одной командой, что внутри (skills, commands, hooks, MCP), какие env нужны, лицензия MIT, скриншоты или asciinema для&nbsp;демо.</li>
-                <li>Создайте репо на&nbsp;GitHub:
+                    Проверка: <code>plugin.json</code> в&nbsp;корне; в&nbsp;нём явные секции <code>skills</code>, <code>commands</code>, <code>hooks</code>, <code>mcp_servers</code>; в&nbsp;<code>mcp_servers[0].env</code> указан только <em>имя</em> <code>ALPHAVANTAGE_KEY</code>, без&nbsp;значения.</li>
+                <li><strong>README с&nbsp;демо.</strong> Без&nbsp;README люди не&nbsp;поставят плагин&nbsp;&mdash; даже хороший. Покажите, что внутри, и&nbsp;как это пощупать за&nbsp;30&nbsp;секунд.
+                    <pre class="shell">&gt; напиши README.md для плагина:
+&gt; — заголовок и одна фраза «что это»;
+&gt; — установка одной командой
+&gt;   (npx smithery@latest mcp add @&lt;you&gt;/personal-office --client claude);
+&gt; — список того, что внутри: 3 skills, 3 commands, 1 hook,
+&gt;   1 MCP с 4 tools (каждый с одной строкой описания);
+&gt; — необходимые env переменные (ALPHAVANTAGE_KEY) и куда взять;
+&gt; — два-три примера использования («скажите Claude X — получите Y»);
+&gt; — лицензия MIT;
+&gt; — ссылка на курс «Полевое руководство по Claude Code».
+&gt;
+&gt; если можешь — сгенерируй один скриншот через playwright
+&gt; (открой /mcp в Claude где плагин установлен) и сошлись на него.</pre>
+                    Проверка: <code>README.md</code> с&nbsp;шестью пунктами; есть пример «скажите X → получите Y».</li>
+                <li><strong>Публичный репо на&nbsp;GitHub.</strong> Smithery подтягивает плагины из&nbsp;публичных репо&nbsp;&mdash; ваш должен быть открытым.
                     <pre class="shell">&gt; через gh создай ПУБЛИЧНЫЙ репо &lt;you&gt;/personal-office,
 &gt; запушь туда my-personal-office/ как корень,
 &gt; добавь лицензию MIT.</pre>
-                </li>
-                <li>Опубликуйте на&nbsp;Smithery:
+                    Проверка: <code>https://github.com/&lt;you&gt;/personal-office</code> открывается, в&nbsp;корне виден <code>plugin.json</code>, <code>README.md</code>, <code>LICENSE</code>; репо помечен Public.</li>
+                <li><strong>Сабмит на&nbsp;Smithery.</strong> Smithery сам валидирует <code>plugin.json</code>, через 5-10 минут плагин появится в&nbsp;витрине.
                     <pre class="shell">&gt; помоги мне:
 &gt; 1) зайти на smithery.ai (через web search покажи актуальную ссылку на submit);
 &gt; 2) пройти процесс «submit a plugin» с моим репо;
 &gt; 3) дождаться валидации и показать получившуюся ссылку.</pre>
-                </li>
-                <li>Чистая установка: возьмите другую папку, в&nbsp;которой ничего нет:
+                    Проверка: на&nbsp;Smithery есть страница вашего плагина; статус «published»; виден список tools, skills, commands.</li>
+                <li><strong>Чистая установка на&nbsp;другой машине (или в&nbsp;пустой папке).</strong> Это тест «работает&nbsp;ли у&nbsp;другого пользователя». Самая частая ошибка&nbsp;&mdash; забыли env-переменную или path-зависимость.
                     <pre class="shell"><span class="prompt">$</span> npx smithery@latest mcp add @&lt;you&gt;/personal-office --client claude</pre>
-                </li>
-                <li>Тест: запустите <code>claude</code> в&nbsp;этой папке. <code>/mcp</code> должен показать <code>daily-trader</code>; в&nbsp;общем <code>/</code>-меню должны появиться скиллы и&nbsp;команды плагина. Прогоните <code>/forecast</code>, <code>/cfo</code>&nbsp;&mdash; работает.</li>
-                <li>Финал: добавьте теги/категории в&nbsp;Smithery («finance», «investing», «course»), чтобы вас находили.</li>
+                    Проверка: установщик попросил ввести <code>ALPHAVANTAGE_KEY</code>; команда завершилась без&nbsp;ошибок.</li>
+                <li><strong>Прогон всего плагина в&nbsp;диалоге.</strong> Запустите <code>claude</code> в&nbsp;«чистой» папке&nbsp;&mdash; проверим, что и&nbsp;MCP, и&nbsp;скиллы, и&nbsp;команды работают.
+                    <pre class="shell">&gt; запусти claude в этой папке. потом:
+&gt; — /mcp — daily-trader должен быть в списке (connected);
+&gt; — / (просто слэш) — в меню должны быть /forecast, /cfo, /timesheet;
+&gt; — вызови /forecast 10 лет, /cfo, через daily-trader get_price AAPL;
+&gt; — попроси «оцени мой портфель» — должен сработать skill investing-analyst.
+&gt; пришли мне результат каждого шага.</pre>
+                    Проверка: все четыре пункта работают; если skill не&nbsp;подхватился&nbsp;&mdash; вернитесь к&nbsp;этапу&nbsp;08a фаза&nbsp;7 (уточнение description).</li>
+                <li><strong>Видимость на&nbsp;Smithery.</strong> Без&nbsp;тегов плагин теряется среди других. Добавьте 3-5 тегов&nbsp;&mdash; и&nbsp;его найдут в&nbsp;поиске.
+                    <pre class="shell">&gt; на странице моего плагина на smithery.ai добавь теги/категории:
+&gt; — finance, investing, course, personal-cfo, learning.
+&gt; обнови README, чтобы они там тоже упоминались
+&gt; (это помогает SEO внутри Smithery).</pre>
+                    Проверка: на&nbsp;странице плагина виден список тегов; поиск Smithery по&nbsp;«investing» возвращает ваш плагин.</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Create <code>my-personal-office/</code>. Subfolders <code>skills/</code>, <code>commands/</code>, <code>hooks/</code>, <code>mcp/daily-trader/</code>.</li>
-                <li>Copy there:
-                    <ul>
-                        <li>skills (etape 08a): <code>investing-analyst</code>, <code>personal-cfo</code>, <code>auto-publisher</code>;</li>
-                        <li>commands (etape 08a): <code>forecast.md</code>, <code>cfo.md</code>, <code>timesheet.md</code>;</li>
-                        <li>hooks: <code>settings.json</code> with the timesheet hook;</li>
-                        <li>MCP: project A (<code>daily-trader-mcp</code>).</li>
-                    </ul>
-                </li>
-                <li>Generate <code>plugin.json</code> via the <code>plugin-structure</code> skill:
+                <li><strong>Plugin skeleton.</strong> Create the folder and the four standard subfolders. Same layout shown in § I topic 4.
+                    <pre class="shell">&gt; create my-personal-office/ with subfolders:
+&gt;   skills/, commands/, hooks/, mcp/daily-trader/
+&gt; add .gitignore (node_modules, .env, dist, *.log)
+&gt; and an empty README.md — we'll fill it later.</pre>
+                    Check: the <code>my-personal-office/</code> folder has four subfolders and two files at the root.</li>
+                <li><strong>Pull in the course artefacts.</strong> Copy what we already built across etapes 07-09: three skills, three commands, the timesheet hook, the "Daily Trader" MCP from project A.
+                    <pre class="shell">&gt; collect the artefacts from earlier etapes into my-personal-office/:
+&gt;
+&gt; skills/  — three skills from etape 08a:
+&gt;   — investing-analyst, personal-cfo, auto-publisher
+&gt;   (copy each folder whole).
+&gt;
+&gt; commands/ — three slash commands from etape 08a:
+&gt;   — forecast.md, cfo.md, timesheet.md.
+&gt;
+&gt; hooks/ — a copy of ~/.claude/settings.json,
+&gt;   but only the hooks section with the timesheet hook
+&gt;   (don't drag permissions or keys in).
+&gt;
+&gt; mcp/daily-trader/ — contents of daily-trader-mcp from project A
+&gt;   (package.json, server.ts, README, but NOT dist/ nor node_modules).
+&gt;
+&gt; show me the resulting file tree.</pre>
+                    Check: the <code>my-personal-office/</code> tree shows all four sections with files; nowhere is there an <code>.env</code>, <code>node_modules</code> or <code>dist/</code>.</li>
+                <li><strong>The <code>plugin.json</code> manifest.</strong> This is the plugin's "face" for Smithery&nbsp;&mdash; description, version, list of what's inside.
                     <pre class="shell">&gt; using plugin-structure,
 &gt; build plugin.json for @&lt;you&gt;/personal-office:
 &gt; list all skills, commands, hooks, mcp_servers
 &gt; (env: ALPHAVANTAGE_KEY).
 &gt; description — one line about a "personal financial office
 &gt; based on the Field Guide to Claude Code course".</pre>
-                </li>
-                <li>Write <code>README.md</code>: one-command install, what’s inside (skills, commands, hooks, MCP), required envs, MIT licence, screenshots or asciinema for the demo.</li>
-                <li>Create a GitHub repo:
+                    Check: <code>plugin.json</code> at the root; it has clear <code>skills</code>, <code>commands</code>, <code>hooks</code>, <code>mcp_servers</code> sections; <code>mcp_servers[0].env</code> lists only the <em>name</em> <code>ALPHAVANTAGE_KEY</code>, no value.</li>
+                <li><strong>A README with a demo.</strong> Without a README people won't install your plugin&nbsp;&mdash; even a good one. Show what's inside and how to feel it in 30 seconds.
+                    <pre class="shell">&gt; write README.md for the plugin:
+&gt; — title and a one-line "what this is";
+&gt; — one-command install
+&gt;   (npx smithery@latest mcp add @&lt;you&gt;/personal-office --client claude);
+&gt; — what's inside: 3 skills, 3 commands, 1 hook,
+&gt;   1 MCP with 4 tools (each with a one-line description);
+&gt; — required env variables (ALPHAVANTAGE_KEY) and where to get them;
+&gt; — two-three usage examples ("tell Claude X — get Y");
+&gt; — MIT licence;
+&gt; — link to the "Field Guide to Claude Code" course.
+&gt;
+&gt; if you can — generate one screenshot via playwright
+&gt; (open /mcp in Claude where the plugin is installed) and reference it.</pre>
+                    Check: <code>README.md</code> with six items; has an "tell Claude X → get Y" example.</li>
+                <li><strong>Public GitHub repo.</strong> Smithery pulls plugins from public repos&nbsp;&mdash; yours must be open.
                     <pre class="shell">&gt; via gh create a PUBLIC repo &lt;you&gt;/personal-office,
 &gt; push my-personal-office/ as the root,
 &gt; add an MIT licence.</pre>
-                </li>
-                <li>Publish on Smithery:
+                    Check: <code>https://github.com/&lt;you&gt;/personal-office</code> opens; <code>plugin.json</code>, <code>README.md</code>, <code>LICENSE</code> visible at the root; repo flagged Public.</li>
+                <li><strong>Submit to Smithery.</strong> Smithery validates the <code>plugin.json</code>; 5-10 minutes later the plugin shows up in the storefront.
                     <pre class="shell">&gt; help me:
 &gt; 1) go to smithery.ai (via web search show the current submit link);
 &gt; 2) run "submit a plugin" with my repo;
 &gt; 3) wait for validation and show the resulting URL.</pre>
-                </li>
-                <li>Clean install: take another folder, totally empty:
+                    Check: there's a page for your plugin on Smithery; status "published"; the list of tools, skills, commands is visible.</li>
+                <li><strong>Clean install on another machine (or in an empty folder).</strong> This is the "does it work for another user" test. The most common bug&nbsp;&mdash; you forgot an env variable or a path dependency.
                     <pre class="shell"><span class="prompt">$</span> npx smithery@latest mcp add @&lt;you&gt;/personal-office --client claude</pre>
-                </li>
-                <li>Test: launch <code>claude</code> there. <code>/mcp</code> should show <code>daily-trader</code>; the general <code>/</code> menu should include the plugin’s skills and commands. Run <code>/forecast</code>, <code>/cfo</code> — works.</li>
-                <li>Finally: add Smithery tags/categories (“finance,” “investing,” “course”) so others find you.</li>
+                    Check: the installer prompted for <code>ALPHAVANTAGE_KEY</code>; the command finished without errors.</li>
+                <li><strong>End-to-end run of the plugin in the dialogue.</strong> Launch <code>claude</code> in the "clean" folder&nbsp;&mdash; verify the MCP, the skills, and the commands all work.
+                    <pre class="shell">&gt; launch claude in this folder. then:
+&gt; — /mcp — daily-trader should be in the list (connected);
+&gt; — / (just slash) — the menu should include /forecast, /cfo, /timesheet;
+&gt; — call /forecast 10 years, /cfo, via daily-trader get_price AAPL;
+&gt; — ask "rate my portfolio" — the investing-analyst skill should fire.
+&gt; report each step's result.</pre>
+                    Check: all four bullets work; if the skill didn't fire&nbsp;&mdash; revisit etape 08a phase 7 (description tightening).</li>
+                <li><strong>Discoverability on Smithery.</strong> Without tags your plugin is lost among the others. Add 3-5 tags&nbsp;&mdash; people will find it via search.
+                    <pre class="shell">&gt; on my plugin page on smithery.ai, add tags/categories:
+&gt; — finance, investing, course, personal-cfo, learning.
+&gt; update the README so they're mentioned there too
+&gt; (helps SEO inside Smithery).</pre>
+                    Check: the plugin page shows the tag list; a Smithery search for "investing" returns your plugin.</li>
             </ol>
         </article>
     </div>
