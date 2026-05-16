@@ -176,6 +176,7 @@
             <summary><span lang="ru">2. aiogram&nbsp;3: маршрутизатор, хендлеры, FSM</span><span lang="en">2. aiogram 3: router, handlers, FSM</span></summary>
             <div class="topic-body">
                 <p lang="ru"><strong><dfn class="term" tabindex="0" data-def="Python-фреймворк для Telegram-ботов. Один из самых популярных в RU-комьюнити, основан на async/await. Версия 3.x — современная, с роутерной архитектурой.">aiogram</dfn></strong>&nbsp;&mdash; асинхронный python-фреймворк для&nbsp;Telegram-ботов. Архитектурно похож на&nbsp;FastAPI, который вы&nbsp;уже знаете: есть «приложение» (Dispatcher), есть «роутеры», на&nbsp;них регистрируются обработчики. Только вместо HTTP-эндпоинтов&nbsp;&mdash; обработчики команд и&nbsp;текстов.</p>
+                <p lang="ru" class="note">Код ниже&nbsp;&mdash; <em>пример того, что Claude напишет за&nbsp;вас</em>, а&nbsp;не&nbsp;то, что нужно печатать руками. Ваша задача&nbsp;&mdash; узнать в&nbsp;нём структуру: где роутер, где обработчик команды, где запуск.</p>
                 <pre class="shell"># bot/bot.py — модуль бота, который импортирует backend
 import os
 from aiogram import Bot, Dispatcher, Router
@@ -210,6 +211,7 @@ async def run_bot():
 &gt; один handler на /start, один на /portfolio.
 &gt; не используй FSM пока. объясни каждую строку.</pre>
                 <p lang="en"><strong><dfn class="term" tabindex="0" data-def="A Python framework for Telegram bots. One of the most popular in the RU community, built on async/await. Version 3.x — modern, router-based architecture.">aiogram</dfn></strong> is an async Python framework for Telegram bots. Architecturally similar to FastAPI, which you already know: there’s an “app” (Dispatcher), routers, and handlers attached to them. Instead of HTTP endpoints — command and text handlers.</p>
+                <p lang="en" class="note">The code above is <em>an example of what Claude writes for you</em>, not something to type by hand. Your job is to recognise the structure in it: where the router is, where the command handler lives, where the bot launches.</p>
                 <p lang="en">Three concepts to remember:</p>
                 <dl lang="en">
                     <dt><strong>Handler</strong></dt><dd>an async function that handles one event (command <code>/start</code>, text “hi”, a button). The decorator <code>@router.message(...)</code> binds it to a filter.</dd>
@@ -227,6 +229,7 @@ async def run_bot():
             <div class="topic-body">
                 <p lang="ru">Backend этапа&nbsp;06&nbsp;&mdash; это web-сервис: он&nbsp;слушает порт <code>$PORT</code>, Render шлёт на&nbsp;него healthcheck и&nbsp;при&nbsp;успехе считает сервис «живым». Бот&nbsp;же ничего не&nbsp;слушает&nbsp;&mdash; он&nbsp;просто крутит цикл polling. На&nbsp;«взрослых» платформах для&nbsp;этого заводят отдельный <dfn class="term" tabindex="0" data-def="долгоживущий процесс на сервере, который не отвечает по HTTP, а делает свою работу в фоне: опрашивает очередь, отправляет уведомления, считает что-то по расписанию. У worker нет URL.">worker-сервис</dfn>&nbsp;&mdash; но&nbsp;на&nbsp;бесплатном тарифе Render воркеров нет.</p>
                 <p lang="ru"><strong>Решение:</strong> запускаем polling-цикл бота <em>фоновой задачей внутри</em> того&nbsp;же процесса, что и&nbsp;backend. FastAPI умеет это из&nbsp;коробки&nbsp;&mdash; через lifespan-обработчик:</p>
+                <p lang="ru" class="note">Опять&nbsp;же&nbsp;&mdash; это <em>пример</em>, чтобы вы&nbsp;узнали схему, когда Claude такое напишет. Подробный промпт для&nbsp;Claude дан в&nbsp;Project&nbsp;A, фаза&nbsp;7&nbsp;&mdash; там не&nbsp;нужно копировать этот код.</p>
                 <pre class="shell"># backend/main.py
 from contextlib import asynccontextmanager
 import asyncio
@@ -250,6 +253,7 @@ app = FastAPI(lifespan=lifespan)</pre>
                 <p lang="ru" class="note"><strong>Минус подхода:</strong> бесплатный Render-сервис засыпает после 15&nbsp;минут без&nbsp;HTTP-трафика&nbsp;&mdash; вместе с&nbsp;ним «засыпает» и&nbsp;бот. Первое сообщение после простоя разбудит сервис (~1&nbsp;минута), дальше бот отвечает живо. Для&nbsp;личного учебного бота это приемлемо; «не&nbsp;засыпающий» бот&nbsp;&mdash; это webhook этапа&nbsp;11.</p>
                 <p lang="en">The etape-06 backend is a web service: it listens on <code>$PORT</code>, Render sends healthchecks, and treats it as alive on success. A bot listens to nothing — it just runs a polling loop. On grown-up platforms you’d give it a separate <dfn class="term" tabindex="0" data-def="a long-running process on a server that doesn’t answer HTTP — it does background work: poll a queue, send notifications, run something on a schedule. A worker has no URL.">worker service</dfn> — but Render’s free tier has no workers.</p>
                 <p lang="en"><strong>The fix:</strong> run the bot’s polling loop as a <em>background task inside</em> the same process as the backend. FastAPI supports this out of the box — via a lifespan handler:</p>
+                <p lang="en" class="note">Again — this is <em>an example</em> so you recognise the shape when Claude writes it. The detailed prompt for Claude is in Project&nbsp;A, phase&nbsp;7&nbsp;&mdash; you don't need to copy this code.</p>
                 <pre class="shell"># backend/main.py
 from contextlib import asynccontextmanager
 import asyncio
@@ -418,12 +422,93 @@ dp = Dispatcher(storage=storage)</pre>
             <h4 lang="en" style="margin-top:1.25rem;">Phases (via spec → Plan Mode → TodoWrite, as in etape 04)</h4>
             <ol class="steps" lang="ru">
                 <li><strong>Skeleton.</strong> Новая папка <code>bot/</code> <em>внутри</em> проекта backend этапа&nbsp;06 (бот будет импортироваться backend-ом, своего сервиса у&nbsp;него нет). Добавьте в&nbsp;<code>backend/requirements.txt</code> строку <code>aiogram&gt;=3.4</code>. В&nbsp;<code>CLAUDE.md</code> backend-а допишите: «бот&nbsp;&mdash; фоновая задача внутри web-сервиса, запускается lifespan-обработчиком».</li>
-                <li><strong>Backend: расширение схемы.</strong> Alembic-миграция из&nbsp;темы&nbsp;6: <code>telegram_id</code> в&nbsp;<code>User</code>, таблица <code>TelegramLinkToken</code>. Применить локально, потом против Neon после <code>pg_dump</code>.</li>
-                <li><strong>Backend: эндпоинты привязки.</strong> Три новых HTTP-эндпоинта: <code>POST /api/telegram/link-init</code> (под&nbsp;<code>require_auth</code>, возвращает <code>{ url: "https://t.me/...?start=..." }</code>), <code>POST /api/telegram/link</code> (без&nbsp;auth, принимает <code>{ token, telegram_id }</code>, возвращает <code>{ jwt, expires_at }</code>), <code>POST /api/telegram/unlink</code> (под&nbsp;auth).</li>
-                <li><strong>Frontend: кнопка «Привязать Telegram».</strong> На&nbsp;странице <code>/profile</code> кнопка зовёт <code>link-init</code>, открывает полученную ссылку в&nbsp;Telegram. После возврата&nbsp;&mdash; индикатор «привязан как @username».</li>
-                <li><strong>Bot: minimal skeleton.</strong> <code>bot/bot.py</code> с&nbsp;двумя routers (<code>auth_router</code>, <code>main_router</code>), MemoryStorage, handler <code>/start</code>, который ловит <code>command.args</code> и&nbsp;ходит в&nbsp;<code>/api/telegram/link</code>. Функция <code>run_bot()</code> логирует «бот запущен».</li>
-                <li><strong>Bot: команды кабинета.</strong> Handlers <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>. Каждый: достать JWT из&nbsp;storage по&nbsp;telegram_id; если нет&nbsp;&mdash; «зайдите через /start &lt;token&gt; из&nbsp;кабинета»; если есть&nbsp;&mdash; HTTP-запрос на&nbsp;backend с&nbsp;JWT в&nbsp;<code>Authorization: Bearer ...</code>; форматирование ответа в&nbsp;Markdown (Telegram умеет).</li>
-                <li><strong>Backend: запуск бота.</strong> В&nbsp;<code>backend/main.py</code> добавьте lifespan-обработчик с&nbsp;<code>asyncio.create_task(run_bot())</code>. Теперь один процесс отдаёт web-API и&nbsp;в&nbsp;фоне крутит polling.</li>
+                <li><strong>Расширяем базу данных.</strong> В&nbsp;таблицу пользователей надо добавить столбец <code>telegram_id</code> и&nbsp;новую таблицу для&nbsp;одноразовых кодов привязки. Это <em>миграция</em>&nbsp;&mdash; см.&nbsp;тему&nbsp;6. Прежде чем накатывать на&nbsp;Neon&nbsp;&mdash; сделайте бэкап.
+                    <pre class="shell">&gt; сделай alembic-миграцию для backend этапа 06:
+&gt; — добавь в таблицу users необязательный столбец telegram_id
+&gt;   (это число от Telegram, его используем, чтобы связать
+&gt;    пользователя кабинета с его Telegram-аккаунтом);
+&gt; — добавь таблицу telegram_link_tokens — туда мы кладём
+&gt;   одноразовый код привязки (см. тему 4): id, token, user_id,
+&gt;   expires_at (5 минут), used (bool — был ли использован);
+&gt; — индекс по telegram_id для быстрого поиска при логине из бота.
+&gt; объясни мне, почему столбец telegram_id должен быть необязательным.</pre>
+                    <pre class="shell">&gt; прежде чем накатывать миграцию на боевую базу Neon —
+&gt; покажи мне команду pg_dump для бэкапа DATABASE_URL
+&gt; в файл backup-before-tg.sql, и потом команду alembic upgrade head.</pre>
+                    Проверка: миграция прошла локально (sqlite), бэкап-файл создан, миграция прошла на&nbsp;Neon, в&nbsp;старых пользователях <code>telegram_id</code> пустой&nbsp;&mdash; данные не&nbsp;потерялись.</li>
+                <li><strong>Три новых ручки в&nbsp;backend для&nbsp;привязки Telegram.</strong> Веб-кабинет должен уметь сгенерировать одноразовый код привязки; бот должен суметь его&nbsp;обменять на&nbsp;JWT; пользователь должен иметь возможность отвязаться. Три HTTP-эндпоинта.
+                    <pre class="shell">&gt; в backend этапа 06 добавь три новых эндпоинта:
+&gt;
+&gt; 1) POST /api/telegram/link-init (только для авторизованных)
+&gt;    — генерирует одноразовый случайный код (32 символа),
+&gt;    сохраняет в telegram_link_tokens со сроком 5 минут,
+&gt;    возвращает { url: "https://t.me/&lt;твой_бот&gt;?start=&lt;код&gt;" }
+&gt;
+&gt; 2) POST /api/telegram/link (БЕЗ авторизации — бот пока без JWT)
+&gt;    — принимает { token, telegram_id };
+&gt;    проверяет, что token есть в таблице, ещё не истёк, used=False;
+&gt;    помечает used=True, прописывает telegram_id в users;
+&gt;    возвращает { jwt, expires_at } — JWT с временем жизни 24 часа.
+&gt;
+&gt; 3) POST /api/telegram/unlink (только для авторизованных)
+&gt;    — обнуляет users.telegram_id, всё.
+&gt;
+&gt; ВАЖНО: token используется ровно один раз; в логи ни token, ни jwt не пиши.</pre>
+                    Проверка: через автодоки FastAPI (<code>/docs</code>) попробуйте вызвать <code>link-init</code> вручную (войдя в&nbsp;кабинет)&nbsp;&mdash; получите ссылку с&nbsp;токеном. Откройте&nbsp;её&nbsp;&mdash; Telegram предложит запустить бота, но&nbsp;бота ещё нет, это нормально.</li>
+                <li><strong>Кнопка «Привязать Telegram» в&nbsp;кабинете.</strong> Веб-кабинет уже умеет /profile (этап&nbsp;06). Туда добавляется кнопка, которая дёргает <code>link-init</code> и&nbsp;открывает полученную ссылку.
+                    <pre class="shell">&gt; в frontend кабинета добавь на странице /profile секцию
+&gt; «Привязка Telegram»:
+&gt; — если users.telegram_id пустой: показывай кнопку «Привязать Telegram»;
+&gt;   при клике — fetch на /api/telegram/link-init, открываем
+&gt;   полученный url в новой вкладке;
+&gt; — если telegram_id уже есть: показывай «Привязан как @username»
+&gt;   и кнопку «Отвязать» (зовёт /api/telegram/unlink).</pre>
+                    Проверка: на&nbsp;<code>/profile</code> видна кнопка, клик открывает Telegram-страницу с&nbsp;ботом и&nbsp;кнопкой «Запустить».</li>
+                <li><strong>Сам бот: минимальный каркас.</strong> Создаём папку <code>bot/</code> внутри backend-проекта&nbsp;&mdash; здесь будет жить вся логика бота. Сначала только обработка <code>/start &lt;код&gt;</code>: бот ловит код привязки, передаёт в&nbsp;backend, получает JWT.
+                    <pre class="shell">&gt; создай папку bot/ внутри backend-проекта этапа 06.
+&gt; в bot/bot.py:
+&gt; — два роутера: auth_router (только команды привязки)
+&gt;   и main_router (всё остальное — пока пустой);
+&gt; — MemoryStorage для хранения JWT-токенов пользователей
+&gt;   (тема 5: при рестарте сервиса теряется, это пока ок);
+&gt; — handler на команду /start: если есть аргумент после команды,
+&gt;   передай его и telegram_id в наш POST /api/telegram/link;
+&gt;   полученный JWT положи в storage по telegram_id;
+&gt;   ответь пользователю «Привязка успешна, набери /portfolio»;
+&gt; — функция run_bot() читает TELEGRAM_BOT_TOKEN из env,
+&gt;   запускает long polling, в начале печатает «бот запущен»;
+&gt; — все ошибки пиши через logging.exception,
+&gt;   но НИКОГДА не пиши в лог сам token или JWT.</pre>
+                    Проверка: пока ничего не&nbsp;запускаем (бот ещё не&nbsp;встроен в&nbsp;backend)&nbsp;&mdash; файлы созданы, Claude объяснил, что куда положил.</li>
+                <li><strong>Команды кабинета в&nbsp;боте: /portfolio, /last, /forecast.</strong> Эти команды&nbsp;&mdash; «прокладки»: бот достаёт JWT, дёргает <em>ваш&nbsp;же</em> backend (тот, что в&nbsp;этапе&nbsp;06), и&nbsp;форматирует ответ для&nbsp;Telegram. Никакой новой бизнес-логики.
+                    <pre class="shell">&gt; в bot/bot.py добавь три handler-а в main_router:
+&gt;
+&gt; /portfolio — показать портфель;
+&gt; /last      — показать последние 10 операций;
+&gt; /forecast  — показать прогноз с тремя сценариями.
+&gt;
+&gt; каждый handler делает одно и то же:
+&gt; 1) достать JWT из storage по telegram_id текущего пользователя;
+&gt; 2) если JWT нет — ответить «сначала привяжите бота:
+&gt;    войдите в кабинет → /profile → Привязать Telegram»;
+&gt; 3) если JWT есть — HTTP-запрос на BACKEND_URL/api/...
+&gt;    с заголовком Authorization: Bearer &lt;jwt&gt;;
+&gt; 4) ответ сервера отформатировать в Markdown
+&gt;    (заголовок жирным, числа моноширинно) и отправить пользователю.
+&gt;
+&gt; вынеси шаги 1-2 в общую функцию require_link, чтобы не дублировать.</pre>
+                    Проверка: код есть, но&nbsp;ещё не&nbsp;запущен&nbsp;&mdash; следующий шаг встроит бота в&nbsp;backend.</li>
+                <li><strong>Запускаем бота из&nbsp;backend.</strong> На&nbsp;бесплатном Render отдельных «воркеров» нет (см.&nbsp;тему&nbsp;3). Поэтому бот будет жить <em>фоновой задачей внутри</em> того&nbsp;же backend-сервиса этапа&nbsp;06. Один процесс отдаёт сайт и&nbsp;крутит бота.
+                    <pre class="shell">&gt; в backend/main.py встрой запуск бота через lifespan-обработчик:
+&gt; — на старте сервиса вызывай asyncio.create_task(run_bot())
+&gt;   — это запустит цикл polling Telegram в фоне;
+&gt; — приложение FastAPI продолжает слушать $PORT,
+&gt;   healthcheck Render должен проходить как раньше;
+&gt; — добавь в requirements.txt: aiogram&gt;=3.4;
+&gt; — TELEGRAM_BOT_TOKEN добавь в .env локально И в Render env
+&gt;   (значение возьми у BotFather, см. § 0).
+&gt; покажи мне получившийся main.py с подсветкой добавленного.</pre>
+                    Проверка: backend запускается локально (<code>uvicorn main:app --reload</code>) и&nbsp;в&nbsp;логах появляется «бот запущен, опрашиваю Telegram».</li>
                 <li><strong>Локальный тест.</strong> Запустить backend на&nbsp;своей машине&nbsp;&mdash; бот поднимется вместе с&nbsp;ним. Через свой реальный Telegram пройти полный сценарий: вход в&nbsp;кабинет → «Привязать» → открыть бота → <code>/portfolio</code> → проверить, что числа совпадают с&nbsp;вебом.</li>
                 <li><strong>Деплой.</strong> Отдельного сервиса нет&nbsp;&mdash; бот деплоится вместе с&nbsp;backend этапа&nbsp;06. В&nbsp;env vars вашего Render-сервиса добавьте <code>TELEGRAM_BOT_TOKEN</code> (<code>DATABASE_URL</code> и&nbsp;остальное уже там). <code>git push</code>&nbsp;&mdash; Render пересоберёт сервис, бот поднимется через lifespan-обработчик.</li>
                 <li><strong>Verification.</strong>
@@ -446,12 +531,93 @@ dp = Dispatcher(storage=storage)</pre>
             </ol>
             <ol class="steps" lang="en">
                 <li><strong>Skeleton.</strong> New <code>bot/</code> folder <em>inside</em> the etape-06 backend project (the bot is imported by the backend — it has no service of its own). Add <code>aiogram&gt;=3.4</code> to <code>backend/requirements.txt</code>. In the backend’s <code>CLAUDE.md</code> note: “the bot is a background task inside the web service, launched by a lifespan handler”.</li>
-                <li><strong>Backend: schema extension.</strong> Alembic migration from topic 6: <code>telegram_id</code> on <code>User</code>, table <code>TelegramLinkToken</code>. Apply locally, then against Neon after <code>pg_dump</code>.</li>
-                <li><strong>Backend: linking endpoints.</strong> Three new HTTP endpoints: <code>POST /api/telegram/link-init</code> (under <code>require_auth</code>, returns <code>{ url: "https://t.me/...?start=..." }</code>), <code>POST /api/telegram/link</code> (no auth, takes <code>{ token, telegram_id }</code>, returns <code>{ jwt, expires_at }</code>), <code>POST /api/telegram/unlink</code> (auth).</li>
-                <li><strong>Frontend: “Link Telegram” button.</strong> On <code>/profile</code> a button calls <code>link-init</code>, opens the URL in Telegram. After return — indicator “linked as @username”.</li>
-                <li><strong>Bot: minimal skeleton.</strong> <code>bot/bot.py</code> with two routers (<code>auth_router</code>, <code>main_router</code>), MemoryStorage, a <code>/start</code> handler that reads <code>command.args</code> and calls <code>/api/telegram/link</code>. The <code>run_bot()</code> function logs “bot up”.</li>
-                <li><strong>Bot: office commands.</strong> Handlers <code>/portfolio</code>, <code>/last</code>, <code>/forecast</code>. Each: fetch JWT from storage by telegram_id; if missing — “sign in via /start &lt;token&gt; from the office”; otherwise call backend with <code>Authorization: Bearer ...</code>; format reply in Markdown.</li>
-                <li><strong>Backend: launch the bot.</strong> In <code>backend/main.py</code> add a lifespan handler with <code>asyncio.create_task(run_bot())</code>. Now one process serves the web API and runs polling in the background.</li>
+                <li><strong>Extend the database.</strong> The users table needs a <code>telegram_id</code> column, and a new table for one-time link codes. That's a <em>migration</em>&nbsp;&mdash; see topic 6. Before applying it to Neon&nbsp;&mdash; back up.
+                    <pre class="shell">&gt; make an alembic migration for the etape-06 backend:
+&gt; — add an optional telegram_id column to the users table
+&gt;   (it's a number from Telegram, we use it to link a cabinet
+&gt;    user with their Telegram account);
+&gt; — add a telegram_link_tokens table — that's where we keep
+&gt;   the one-time link code (see topic 4): id, token, user_id,
+&gt;   expires_at (5 minutes), used (bool — has it been used);
+&gt; — an index on telegram_id for fast lookup at bot login time.
+&gt; explain to me why telegram_id has to be nullable.</pre>
+                    <pre class="shell">&gt; before applying the migration to the live Neon database —
+&gt; show me the pg_dump command to back up DATABASE_URL
+&gt; into backup-before-tg.sql, and then the alembic upgrade head command.</pre>
+                    Check: migration passes locally (sqlite), backup file exists, migration passes against Neon, existing users have an empty <code>telegram_id</code>&nbsp;&mdash; no data lost.</li>
+                <li><strong>Three new backend endpoints for the link flow.</strong> The web office must be able to issue a one-time link code; the bot must be able to exchange it for a JWT; the user must be able to unlink. Three HTTP endpoints.
+                    <pre class="shell">&gt; in the etape-06 backend, add three new endpoints:
+&gt;
+&gt; 1) POST /api/telegram/link-init (authenticated users only)
+&gt;    — generates a one-time random code (32 chars),
+&gt;    stores it in telegram_link_tokens with 5-min TTL,
+&gt;    returns { url: "https://t.me/&lt;your_bot&gt;?start=&lt;code&gt;" }
+&gt;
+&gt; 2) POST /api/telegram/link (NO auth — the bot has no JWT yet)
+&gt;    — takes { token, telegram_id };
+&gt;    checks that token exists in the table, hasn't expired, used=False;
+&gt;    marks used=True, writes telegram_id into users;
+&gt;    returns { jwt, expires_at } — a JWT with a 24-hour lifetime.
+&gt;
+&gt; 3) POST /api/telegram/unlink (authenticated users only)
+&gt;    — sets users.telegram_id back to NULL, that's it.
+&gt;
+&gt; IMPORTANT: token is used exactly once; never log token or jwt.</pre>
+                    Check: through the FastAPI auto-docs (<code>/docs</code>) try calling <code>link-init</code> manually (after signing in)&nbsp;&mdash; you'll get a URL with a token. Open it&nbsp;&mdash; Telegram offers to launch the bot, but the bot doesn't exist yet; that's fine.</li>
+                <li><strong>"Link Telegram" button in the cabinet.</strong> The web cabinet already has /profile (etape 06). Add a button there that calls <code>link-init</code> and opens the returned URL.
+                    <pre class="shell">&gt; in the cabinet frontend, add a "Telegram link" section
+&gt; on the /profile page:
+&gt; — if users.telegram_id is empty: show a "Link Telegram" button;
+&gt;   on click — fetch /api/telegram/link-init, open the returned
+&gt;   url in a new tab;
+&gt; — if telegram_id is set: show "Linked as @username"
+&gt;   and an "Unlink" button (calls /api/telegram/unlink).</pre>
+                    Check: on <code>/profile</code> the button is visible; clicking it opens the Telegram page with the bot and a "Start" button.</li>
+                <li><strong>The bot itself: minimal skeleton.</strong> Create a <code>bot/</code> folder inside the backend project&nbsp;&mdash; all bot logic lives here. Start with only <code>/start &lt;code&gt;</code> handling: the bot catches the link code, hands it to the backend, gets a JWT back.
+                    <pre class="shell">&gt; create a bot/ folder inside the etape-06 backend project.
+&gt; in bot/bot.py:
+&gt; — two routers: auth_router (only link commands)
+&gt;   and main_router (everything else — empty for now);
+&gt; — MemoryStorage for keeping users' JWTs
+&gt;   (topic 5: wiped on service restart, that's ok for now);
+&gt; — a /start handler: if there's an argument after the command,
+&gt;   pass it and telegram_id to our POST /api/telegram/link;
+&gt;   store the returned JWT in storage keyed by telegram_id;
+&gt;   reply to the user "Linked! type /portfolio";
+&gt; — a run_bot() function that reads TELEGRAM_BOT_TOKEN from env,
+&gt;   starts long polling, logs "bot up" at start;
+&gt; — log all errors via logging.exception,
+&gt;   but NEVER log the token or JWT itself.</pre>
+                    Check: nothing is running yet (the bot isn't wired into the backend)&nbsp;&mdash; the files exist and Claude explained where each piece went.</li>
+                <li><strong>Office commands in the bot: /portfolio, /last, /forecast.</strong> These commands are pure "shims": the bot fetches the JWT, hits <em>your own</em> backend (the etape-06 one), formats the reply for Telegram. No new business logic.
+                    <pre class="shell">&gt; in bot/bot.py add three handlers to main_router:
+&gt;
+&gt; /portfolio — show the portfolio;
+&gt; /last      — show the last 10 operations;
+&gt; /forecast  — show the forecast with three scenarios.
+&gt;
+&gt; each handler does the same thing:
+&gt; 1) fetch the JWT from storage by the current user's telegram_id;
+&gt; 2) if no JWT — reply "link the bot first:
+&gt;    open the cabinet → /profile → Link Telegram";
+&gt; 3) if there's a JWT — HTTP call to BACKEND_URL/api/...
+&gt;    with Authorization: Bearer &lt;jwt&gt;;
+&gt; 4) format the server's reply in Markdown
+&gt;    (bold heading, monospace numbers) and send it to the user.
+&gt;
+&gt; pull steps 1-2 into a shared require_link helper to avoid duplication.</pre>
+                    Check: the code is there but not yet running&nbsp;&mdash; the next step wires the bot into the backend.</li>
+                <li><strong>Launch the bot from the backend.</strong> Free Render has no separate "workers" (see topic 3). So the bot lives as a <em>background task inside</em> the same etape-06 backend service. One process serves the site and runs the bot.
+                    <pre class="shell">&gt; in backend/main.py, wire the bot launch via a lifespan handler:
+&gt; — on service start, call asyncio.create_task(run_bot())
+&gt;   — that runs the Telegram polling loop in the background;
+&gt; — the FastAPI app keeps listening on $PORT,
+&gt;   Render's healthcheck must pass as before;
+&gt; — add to requirements.txt: aiogram&gt;=3.4;
+&gt; — add TELEGRAM_BOT_TOKEN to local .env AND to Render env
+&gt;   (value from BotFather, see § 0).
+&gt; show me the resulting main.py highlighting the additions.</pre>
+                    Check: the backend starts locally (<code>uvicorn main:app --reload</code>) and the logs show "bot up, polling Telegram".</li>
                 <li><strong>Local test.</strong> Run the backend locally — the bot comes up with it. Walk the full flow on your real Telegram: sign in → “Link” → open the bot → <code>/portfolio</code> → numbers match the web.</li>
                 <li><strong>Deploy.</strong> No separate service — the bot deploys with the etape-06 backend. In your Render service’s env vars add <code>TELEGRAM_BOT_TOKEN</code> (<code>DATABASE_URL</code> and the rest are already there). <code>git push</code> — Render rebuilds the service, the bot comes up via the lifespan handler.</li>
                 <li><strong>Verification.</strong> Manual checklist (Playwright doesn’t test Telegram clients well):
@@ -499,7 +665,7 @@ dp = Dispatcher(storage=storage)</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Хендлер <code>/ask</code> в&nbsp;<code>main_router</code>:
+                <li><strong>Новая команда <code>/ask</code>.</strong> Бот превращается в&nbsp;тонкую обёртку над&nbsp;вашим&nbsp;же эндпоинтом <code>/api/advisor/ask</code> из&nbsp;этапа&nbsp;06 проект&nbsp;B. Никакой новой логики, никаких новых вызовов Claude: бот&nbsp;&mdash; просто «прокси». Пока ждём ответ AI, показываем пользователю индикатор «печатает…», чтобы он&nbsp;не&nbsp;думал, что бот завис.
                     <pre class="shell">&gt; добавь handler /ask:
 &gt; — берёт всё после команды как вопрос (message.text без "/ask ")
 &gt; — если пусто — отвечает «использование: /ask &lt;ваш вопрос&gt;»
@@ -508,27 +674,27 @@ dp = Dispatcher(storage=storage)</pre>
 &gt; — пока ждёт ответа: сразу шлёт «думаю…» через bot.send_chat_action(action="typing")
 &gt;   в фоне через asyncio.create_task — каждые 4 секунды повторяй
 &gt; — получив ответ, шлёт answer + строку «модель: sonnet · ~123 токенов» курсивом</pre>
-                </li>
-                <li>Длинные ответы Telegram режет на&nbsp;4096 символов. Если ответ длиннее&nbsp;&mdash; разбейте на&nbsp;несколько сообщений (aiogram умеет, но&nbsp;надо явно):
+                    Проверка: напишите боту <code>/ask какой у&nbsp;меня риск?</code>&nbsp;&mdash; должен появиться индикатор «печатает», потом ответ AI с&nbsp;маленькой строчкой про&nbsp;модель и&nbsp;токены внизу.</li>
+                <li><strong>Длинные ответы&nbsp;&mdash; в&nbsp;несколько сообщений.</strong> Telegram режет любое сообщение длиннее 4096 символов. AI-ответы про&nbsp;портфель часто длиннее. Добавим разбивку.
                     <pre class="shell">&gt; добавь функцию send_long(message, text, max=4000):
 &gt; — режет text на куски по абзацам
 &gt; — отправляет последовательно через message.answer
 &gt; — пометь parse_mode="Markdown" чтобы списки и **жирный** работали
 &gt; — экранируй спецсимволы Markdown в исходном ответе</pre>
-                </li>
-                <li>Rate limiting на&nbsp;стороне бота (бережём и&nbsp;Anthropic-кредиты, и&nbsp;Telegram-API):
+                    Проверка: задайте развёрнутый вопрос («распиши подробно по&nbsp;каждой бумаге»)&nbsp;&mdash; ответ должен прийти двумя-тремя сообщениями подряд, без обрезаний.</li>
+                <li><strong>Защита от&nbsp;спама и&nbsp;утечки денег.</strong> Каждый <code>/ask</code> стоит вам реальных токенов Anthropic. Если кто-то получит доступ к&nbsp;боту&nbsp;&mdash; он&nbsp;может разорить ваш баланс за&nbsp;минуты. Простая защита: не&nbsp;больше 5 вопросов в&nbsp;минуту от&nbsp;одного пользователя.
                     <pre class="shell">&gt; добавь middleware на main_router:
 &gt; — для команды /ask: не больше 5 вопросов в минуту от одного telegram_id
 &gt; — храни счётчики в storage с TTL 60 секунд
 &gt; — при превышении: «лимит /ask: 5 в минуту, попробуйте позже» и без вызова backend</pre>
-                </li>
-                <li>Кнопки быстрых вопросов после&nbsp;<code>/start</code>:
+                    Проверка: отправьте 6&nbsp;вопросов подряд&nbsp;&mdash; на&nbsp;шестом должно появиться сообщение про&nbsp;лимит, и&nbsp;в&nbsp;логах backend не&nbsp;должно быть шестого вызова <code>/api/advisor/ask</code>.</li>
+                <li><strong>Кнопки-подсказки после&nbsp;привязки.</strong> Сразу после <code>/start</code> покажем под полем ввода четыре кнопки&nbsp;&mdash; пользователю не&nbsp;нужно запоминать команды.
                     <pre class="shell">&gt; после успешной привязки в /start добавь reply-keyboard:
 &gt; [📊 Портфель] [🕒 Последние] [🔮 Прогноз]
 &gt; [💬 Спросить AI]
 &gt; кнопка "Спросить AI" — превращается в forced reply «о чём спросить?»,
 &gt; а ответ пользователя обрабатывается как /ask &lt;ответ&gt;</pre>
-                </li>
+                    Проверка: после <code>/start</code> с&nbsp;кодом привязки внизу чата появляются четыре кнопки; клик по&nbsp;любой делает соответствующую команду без&nbsp;ручного ввода.</li>
                 <li>Деплой. <code>git push</code>&nbsp;&mdash; Render пересоберёт сервис, бот поднимется заново через lifespan-обработчик. Эндпоинт <code>/api/advisor/ask</code> уже есть с&nbsp;этапа&nbsp;06.</li>
                 <li>Verification:
                     <pre class="shell">&gt; в Telegram:
@@ -543,7 +709,7 @@ dp = Dispatcher(storage=storage)</pre>
                 <li>Финальный аудит: <em>«посмотри логи backend и&nbsp;бота за&nbsp;последний час. найди следы текстов вопросов или ответов AI. это нормально (debug) или утечка (PII)? предложи политику логирования»</em>.</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Handler <code>/ask</code> in <code>main_router</code>:
+                <li><strong>The new <code>/ask</code> command.</strong> The bot becomes a thin wrapper around your own <code>/api/advisor/ask</code> from etape 06 project B. No new logic, no new Claude calls: the bot is purely a "proxy". While we wait for the AI's reply, show a "typing…" indicator so the user doesn't think the bot has frozen.
                     <pre class="shell">&gt; add /ask handler:
 &gt; — take everything after the command as the question
 &gt; — if empty — reply "usage: /ask &lt;your question&gt;"
@@ -552,27 +718,27 @@ dp = Dispatcher(storage=storage)</pre>
 &gt; — while waiting: send bot.send_chat_action("typing")
 &gt;   via asyncio.create_task, repeat every 4s
 &gt; — on reply, send answer + a small italic line "model: sonnet · ~123 tokens"</pre>
-                </li>
-                <li>Telegram trims at 4096 chars. Longer answers — split:
+                    Check: write to the bot <code>/ask what's my risk?</code>&nbsp;&mdash; you should see a "typing" indicator, then the AI's reply with a small line about model and tokens at the bottom.</li>
+                <li><strong>Long replies&nbsp;&mdash; in several messages.</strong> Telegram trims any message past 4096 chars. Portfolio AI answers often run longer. Add splitting.
                     <pre class="shell">&gt; add send_long(message, text, max=4000):
 &gt; — splits text on paragraph boundaries
 &gt; — sends sequentially via message.answer
 &gt; — parse_mode="Markdown" so lists and **bold** work
 &gt; — escape Markdown specials in the input</pre>
-                </li>
-                <li>Bot-side rate limiting (saves Anthropic credits and Telegram quota):
+                    Check: ask a long-form question ("detail every position one by one")&nbsp;&mdash; the reply should arrive as two or three messages in a row, with no truncation.</li>
+                <li><strong>Spam protection and money safety.</strong> Each <code>/ask</code> costs you real Anthropic tokens. If someone gets access to the bot, they can drain your balance in minutes. Simple defense: no more than 5 questions per minute from a single user.
                     <pre class="shell">&gt; add a middleware on main_router:
 &gt; — for /ask: max 5 questions per minute per telegram_id
 &gt; — counters in storage with 60-sec TTL
 &gt; — on overflow: "limit: 5/min, try later" and skip the backend call</pre>
-                </li>
-                <li>Quick-question buttons after <code>/start</code>:
+                    Check: send 6 questions in a row&nbsp;&mdash; on the sixth the limit message must appear, and the backend logs must show no sixth call to <code>/api/advisor/ask</code>.</li>
+                <li><strong>Suggestion buttons after linking.</strong> Right after <code>/start</code> show four buttons under the input field&nbsp;&mdash; the user shouldn't have to remember commands.
                     <pre class="shell">&gt; after a successful link in /start, add a reply keyboard:
 &gt; [📊 Portfolio] [🕒 Latest] [🔮 Forecast]
 &gt; [💬 Ask AI]
 &gt; "Ask AI" turns into a forced reply "what to ask?",
 &gt; the user's reply is treated as /ask &lt;reply&gt;</pre>
-                </li>
+                    Check: after <code>/start</code> with a link code, four buttons appear at the bottom of the chat; clicking any of them runs the matching command without typing.</li>
                 <li>Deploy. <code>git push</code> — Render rebuilds the service, the bot comes back up via the lifespan handler. The <code>/api/advisor/ask</code> endpoint already exists from etape 06.</li>
                 <li>Verification:
                     <pre class="shell">&gt; in Telegram:
