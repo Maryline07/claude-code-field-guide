@@ -1025,25 +1025,128 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 
         <article class="project solo">
             <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
-            <h3><span lang="ru">Сервис коллекции с&nbsp;регистрацией</span><span lang="en">A collection service with sign-up</span></h3>
-            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;A&nbsp;&mdash; тот&nbsp;же full-stack стек (FastAPI + PostgreSQL на&nbsp;Neon + Render-backend + Vercel-frontend + JWT-auth), но&nbsp;для&nbsp;вашей коллекции: книг, настольных игр, кофеен, мест города. Каждый пользователь ведёт свою.</p>
-            <p class="goal" lang="en">Goal: variation of A — same full-stack (FastAPI + PostgreSQL on Neon + Render backend + Vercel frontend + JWT auth), but for your collection: books, board games, coffee shops, places in town. Each user runs their own.</p>
+            <h3><span lang="ru">Поделиться портфелем по&nbsp;ссылке</span><span lang="en">Share your portfolio by link</span></h3>
+            <p class="goal" lang="ru">Цель: добавить в&nbsp;инвест-кабинет (проект&nbsp;A) одну фичу&nbsp;&mdash; кнопку «поделиться». По&nbsp;клику backend генерит подписанную read-only ссылку вида <code>https://my-investing.vercel.app/share/abc123…</code>. Друг открывает её&nbsp;без логина и&nbsp;видит снимок вашего портфеля и&nbsp;график прогноза. Без&nbsp;email, без&nbsp;сумм в&nbsp;рублях, без&nbsp;возможности что-либо изменить. Полдня работы, одна новая идея&nbsp;&mdash; подписанные share-токены.</p>
+            <p class="goal" lang="en">Goal: add one feature to your investment office (project&nbsp;A)&nbsp;— a "share" button. On click the backend generates a signed read-only link like <code>https://my-investing.vercel.app/share/abc123…</code>. A friend opens it without signing in and sees a snapshot of your portfolio and the forecast chart. No email, no rouble amounts, no way to change anything. Half a day of work, one new idea&nbsp;— signed share tokens.</p>
 
-            <h4 lang="ru">Подсказки</h4>
-            <h4 lang="en">Hints</h4>
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Три вопроса дизайна до&nbsp;кода.</strong> Прежде чем просить Claude писать что-либо, ответьте себе и&nbsp;запишите в&nbsp;<code>spec_share.md</code>:
+                    <ul style="margin-top:0.5rem;">
+                        <li><em>Снимок или живой портфель?</em> Если по&nbsp;ссылке видно текущее состояние, друг через месяц увидит совсем другое&nbsp;&mdash; иногда это неудобно. Снимок безопаснее: показываете именно ту&nbsp;картинку, которую хотели показать.</li>
+                        <li><em>Срок жизни?</em> 30&nbsp;дней&nbsp;&mdash; разумно по&nbsp;умолчанию. «Навсегда» провоцирует забыть, 7&nbsp;дней раздражает.</li>
+                        <li><em>Сколько ссылок одновременно?</em> Одна (новая отменяет старую) или несколько (отдельно для&nbsp;семьи, отдельно для&nbsp;бухгалтера, отдельно с&nbsp;подписью)?</li>
+                    </ul>
+                    Без этих трёх решений Claude угадает за&nbsp;вас и&nbsp;угадает не&nbsp;то.</li>
+                <li><strong>Backend: таблица и&nbsp;два эндпоинта.</strong>
+                    <pre class="shell">&gt; в backend/ добавь функцию «поделиться портфелем по ссылке».
+&gt; новая таблица ShareToken (id, user_id, token, created_at, expires_at, mode).
+&gt; token — secrets.token_urlsafe(24), это 32 символа случайной строки.
+&gt; два эндпоинта:
+&gt;   POST /api/share/create  (требует JWT, возвращает { token, url, expires_at })
+&gt;   GET  /api/share/&lt;token&gt; (БЕЗ JWT, возвращает только safe-view)
+&gt; safe-view — отдельная Pydantic-модель PortfolioSnapshot:
+&gt;   только тикеры, веса в %, доходность от точки старта в %.
+&gt;   БЕЗ user_id, БЕЗ email, БЕЗ сумм в рублях, БЕЗ списка операций.
+&gt; если token истёк или не найден — возвращай 404 (не 403, не «истёк»),
+&gt;   чтобы по сообщению нельзя было угадывать существующие токены.</pre>
+                    Проверка: <code>POST /api/share/create</code> с&nbsp;токеном JWT возвращает ссылку. <code>GET</code> по&nbsp;этой ссылке без&nbsp;JWT отдаёт JSON с&nbsp;тикерами, без&nbsp;email и&nbsp;сумм.</li>
+                <li><strong>Frontend: публичная страница и&nbsp;кнопка.</strong>
+                    <pre class="shell">&gt; frontend: новая страница /share/&lt;token&gt; — публичная, БЕЗ проверки JWT.
+&gt; рендерит safe-view через GET /api/share/&lt;token&gt;.
+&gt; верх страницы — обычный лендинг с CTA «заведи свой кабинет → /signup»
+&gt;   (это будущие пользователи, не упускай).
+&gt; ниже — те же графики весов и прогноза, что на /dashboard,
+&gt;   но без таблицы операций и без сумм в рублях.
+&gt;
+&gt; на /dashboard рядом с заголовком добавь кнопку «поделиться»:
+&gt;   клик → модалка → готовая ссылка, кнопка «копировать»,
+&gt;   подпись «действует до DD.MM».</pre>
+                    Проверка: открыли свою ссылку в&nbsp;инкогнито-вкладке&nbsp;&mdash; страница рендерится без&nbsp;логина.</li>
+                <li><strong>Аудит&nbsp;&mdash; обязательная фаза, не&nbsp;пропускайте.</strong>
+                    <pre class="shell">&gt; через playwright прогон в инкогнито (без JWT) на /share/&lt;token&gt;:
+&gt; 1) проверь, что в DOM нет: моего email, моего user_id, любых
+&gt;    сумм в рублях, списка моих операций;
+&gt; 2) в network-логе НЕ должно быть вызовов /api/operations,
+&gt;    /api/auth/me, /api/forecast — публичная страница не должна их дёргать;
+&gt; 3) поменяй последний символ токена в URL — должно вернуть 404,
+&gt;    а не 500 и не пустую страницу;
+&gt; 4) curl -i на /api/share/&lt;несуществующий-токен&gt; — ответ 404
+&gt;    в пределах 1 секунды, не 30 секунд молчания;
+&gt; 5) убедись, что в логах Render полный токен не светится:
+&gt;    замени middleware так, чтобы /api/share/* логировались
+&gt;    как /api/share/*** (звёздочки вместо токена).
+&gt; пришли отчёт списком, что нашёл и что починил.</pre>
+                </li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Three design questions before code.</strong> Before asking Claude to write anything, answer for yourself and write down in <code>spec_share.md</code>:
+                    <ul style="margin-top:0.5rem;">
+                        <li><em>Snapshot or live?</em> If the link shows the current state, your friend will see something completely different in a month — sometimes awkward. A snapshot is safer: you show exactly the picture you meant to show.</li>
+                        <li><em>Lifetime?</em> 30 days is a sensible default. "Forever" tempts you to forget; 7 days is annoying.</li>
+                        <li><em>How many links at once?</em> One (a new one cancels the old) or several (one for family, one for an accountant, one with a note)?</li>
+                    </ul>
+                    Without these three calls, Claude will guess for you — and guess wrong.</li>
+                <li><strong>Backend: a table and two endpoints.</strong>
+                    <pre class="shell">&gt; in backend/ add "share portfolio by link".
+&gt; new table ShareToken (id, user_id, token, created_at, expires_at, mode).
+&gt; token = secrets.token_urlsafe(24), a 32-char random string.
+&gt; two endpoints:
+&gt;   POST /api/share/create  (needs JWT, returns { token, url, expires_at })
+&gt;   GET  /api/share/&lt;token&gt; (NO JWT, returns only the safe-view)
+&gt; safe-view — a separate Pydantic model PortfolioSnapshot:
+&gt;   tickers, weights in %, return from start date in %.
+&gt;   NO user_id, NO email, NO rouble amounts, NO operations list.
+&gt; if the token is expired or not found — return 404 (not 403, not "expired"),
+&gt;   so the response can't be used to guess existing tokens.</pre>
+                    Check: <code>POST /api/share/create</code> with a JWT returns a link. <code>GET</code> on that link without JWT returns JSON with tickers, no email, no amounts.</li>
+                <li><strong>Frontend: a public page and a button.</strong>
+                    <pre class="shell">&gt; frontend: new page /share/&lt;token&gt; — public, NO JWT check.
+&gt; renders the safe-view via GET /api/share/&lt;token&gt;.
+&gt; top of the page — a small landing with CTA "open your office → /signup"
+&gt;   (these are future users, don't waste the moment).
+&gt; below it — the same weight and forecast charts as on /dashboard,
+&gt;   but no operations table and no rouble amounts.
+&gt;
+&gt; on /dashboard, next to the title, add a "share" button:
+&gt;   click → modal → the ready link, a "copy" button,
+&gt;   caption "valid until DD.MM".</pre>
+                    Check: open your link in an incognito tab — the page renders without sign-in.</li>
+                <li><strong>Audit&nbsp;— a required phase, do not skip.</strong>
+                    <pre class="shell">&gt; via playwright in incognito (no JWT) on /share/&lt;token&gt;:
+&gt; 1) check the DOM contains NONE of: my email, my user_id, any
+&gt;    rouble amounts, any list of my operations;
+&gt; 2) the network log must NOT contain calls to /api/operations,
+&gt;    /api/auth/me, /api/forecast — the public page must not touch them;
+&gt; 3) change the last character of the token in the URL — must return 404,
+&gt;    not 500, not an empty page;
+&gt; 4) curl -i on /api/share/&lt;nonexistent-token&gt; — 404 within 1 second,
+&gt;    not 30 seconds of silence;
+&gt; 5) confirm the full token is not in the Render logs:
+&gt;    tweak middleware so /api/share/* logs as /api/share/***
+&gt;    (asterisks in place of the token).
+&gt; report back: what you found, what you fixed.</pre>
+                </li>
+            </ol>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Подсказки и&nbsp;грабли</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Tips and pitfalls</h4>
             <ul lang="ru">
-                <li>Тот&nbsp;же скелет, что в&nbsp;A. Меняется только модель данных и&nbsp;UX.</li>
-                <li>Модель: User + Item + Tag. У&nbsp;Item: title, description, image_url, rating, tags.</li>
-                <li>UX: добавить элемент с&nbsp;загрузкой картинки, поиск по&nbsp;коллекции, фильтры по&nbsp;тегам/рейтингу, страница «случайный элемент».</li>
-                <li>Картинки можно хранить через сторонний сервис (например, Cloudinary бесплатно).</li>
-                <li>Используйте опыт этапа&nbsp;05 для&nbsp;двух репозиториев.</li>
+                <li><strong>Не&nbsp;показывайте суммы в&nbsp;рублях.</strong> Лучший снимок&nbsp;&mdash; веса в&nbsp;процентах, доходность в&nbsp;процентах, список тикеров. Реальные суммы&nbsp;&mdash; личные данные, их&nbsp;не&nbsp;показывают друзьям и&nbsp;точно не&nbsp;показывают через share-ссылку, у&nbsp;которой нет логина. Если друг попросит сумму&nbsp;&mdash; пришлите скриншот руками.</li>
+                <li><strong>30 дней&nbsp;&mdash; разумный дефолт.</strong> «Навсегда» провоцирует забыть и&nbsp;оставить открытой годами. 7&nbsp;дней&nbsp;&mdash; раздражает («снова делать»). 30&nbsp;&mdash; середина.</li>
+                <li><strong>Логи Render видят URL.</strong> Если эндпоинт <code>/api/share/&lt;token&gt;</code> логируется с&nbsp;полным путём&nbsp;&mdash; токен попадает в&nbsp;логи. Кто читает логи&nbsp;&mdash; читает токены. Спросите Claude: <em>«в&nbsp;backend есть middleware, которое логирует path? если да&nbsp;&mdash; замени токен на&nbsp;*** в&nbsp;логах для&nbsp;маршрутов /api/share/*»</em>. То&nbsp;же про&nbsp;Sentry, Datadog и&nbsp;любую другую аналитику, если подключите.</li>
+                <li><strong>Сначала пользоваться, потом украшать.</strong> Соблазн будет&nbsp;&mdash; нарисовать красивую share-страницу, добавить OG-картинку для&nbsp;превью в&nbsp;Telegram, иконку «поделиться» в&nbsp;шеринге системы. Не&nbsp;сейчас. Сначала: создал&nbsp;&mdash;&nbsp;открыл в&nbsp;инкогнито&nbsp;&mdash;&nbsp;убедился, что не&nbsp;утекает лишнего&nbsp;&mdash;&nbsp;живёт неделю. Красивее&nbsp;&mdash; потом.</li>
+                <li><strong>Тест-сценарий: пошлите ссылку себе в&nbsp;Telegram.</strong> «Сохранёнка» в&nbsp;Telegram&nbsp;&mdash; быстрый способ открыть ссылку с&nbsp;телефона, без&nbsp;кэша и&nbsp;cookies браузера ноутбука. Это самый честный тест «как видит чужой человек».</li>
+                <li><strong>Снимки&nbsp;&mdash; это копия данных на&nbsp;момент создания.</strong> Если выбрали режим snapshot&nbsp;&mdash; при&nbsp;создании ссылки backend пишет в&nbsp;<code>ShareToken.payload_json</code> готовый JSON портфеля. Потом <code>GET</code> отдаёт его&nbsp;же, не&nbsp;ходя в&nbsp;таблицу операций. Это надёжнее: даже если завтра вы&nbsp;удалите все операции&nbsp;&mdash;&nbsp;старая ссылка покажет тот&nbsp;же портфель, что вчера.</li>
             </ul>
             <ul lang="en">
-                <li>Same skeleton as A. Only the data model and UX change.</li>
-                <li>Model: User + Item + Tag. Item has: title, description, image_url, rating, tags.</li>
-                <li>UX: add an item with image upload, search across the collection, filters by tag/rating, "random item" page.</li>
-                <li>Images can live on a third-party service (e.g. Cloudinary free).</li>
-                <li>Use the etape-05 muscle for two repos.</li>
+                <li><strong>Don't show rouble amounts.</strong> The best snapshot is weights in %, return in %, and a list of tickers. Real amounts are personal data; you don't show them to friends, and you certainly don't show them through a share link with no sign-in. If a friend asks for the sum — send a screenshot by hand.</li>
+                <li><strong>30 days is a sensible default.</strong> "Forever" tempts you to forget and leave the link open for years. 7 days is annoying ("doing it again"). 30 is the middle.</li>
+                <li><strong>Render logs see the URL.</strong> If the <code>/api/share/&lt;token&gt;</code> endpoint logs the full path, the token lands in the logs. Whoever reads the logs reads the tokens. Ask Claude: <em>"is there middleware that logs path in the backend? if so, replace the token with *** in the log for /api/share/* routes."</em> Same for Sentry, Datadog or any analytics you wire up.</li>
+                <li><strong>Use first, decorate later.</strong> The temptation will be — draw a beautiful share page, add an OG image for Telegram previews, hook in the system "share" icon. Not now. First: created — opened in incognito — confirmed no leaks — survived a week. Pretty comes later.</li>
+                <li><strong>Test scenario: send the link to yourself on Telegram.</strong> Telegram's "Saved Messages" is the fast way to open the link from a phone, with no cache or cookies from your laptop browser. It's the honest test of "what a stranger sees."</li>
+                <li><strong>Snapshots are a copy at create time.</strong> If you chose snapshot mode, on link creation the backend writes a ready portfolio JSON into <code>ShareToken.payload_json</code>. The <code>GET</code> then returns that, never touching the operations table. That's more robust: even if tomorrow you delete every operation, the old link still shows yesterday's portfolio.</li>
             </ul>
 
             <details class="verify">
@@ -1056,28 +1159,28 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <div class="verify-body">
                     <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
                     <ul lang="ru">
-                        <li>есть две публичные ссылки: backend на&nbsp;Render и&nbsp;frontend на&nbsp;Vercel;</li>
-                        <li>можно зарегистрироваться, войти, добавить минимум 5&nbsp;элементов;</li>
-                        <li>другой человек регистрируется и&nbsp;видит <em>только свою</em> коллекцию (проверьте&nbsp;&mdash; зарегистрируйтесь дважды разным email);</li>
-                        <li>работает поиск или фильтры;</li>
-                        <li>в&nbsp;логах backend нет API-ключей и&nbsp;паролей (проверьте через Render dashboard);</li>
-                        <li>через playwright прогнан полный сценарий «новый пользователь → регистрация → 3 элемента → выход → вход».</li>
+                        <li>на&nbsp;<code>/dashboard</code> есть кнопка «поделиться», по&nbsp;клику получается ссылка вида <code>/share/abc123…</code> (32 символа);</li>
+                        <li>открытие в&nbsp;инкогнито показывает тикеры и&nbsp;веса; <em>не&nbsp;показывает</em> email, user_id, суммы в&nbsp;рублях, список операций;</li>
+                        <li>изменение одного символа в&nbsp;токене&nbsp;&mdash; ответ 404, не&nbsp;500 и&nbsp;не&nbsp;пустая страница;</li>
+                        <li>в&nbsp;логах backend (Render → Logs) полный токен не&nbsp;светится&nbsp;&mdash; вместо него видны звёздочки;</li>
+                        <li>ссылка отправлена себе в&nbsp;Telegram «сохранёнку», открыта с&nbsp;телефона&nbsp;&mdash; графики видны, лендинг с&nbsp;CTA на&nbsp;<code>/signup</code> читается;</li>
+                        <li>ссылка с&nbsp;<code>expires_at</code> в&nbsp;прошлом возвращает тот&nbsp;же 404, что и&nbsp;несуществующая.</li>
                     </ul>
                     <ul lang="en">
-                        <li>two public URLs: backend on Render, frontend on Vercel;</li>
-                        <li>users can sign up, sign in, add at least 5 items;</li>
-                        <li>another user registers and sees <em>only their</em> collection (verify — sign up twice with different emails);</li>
-                        <li>search or filters work;</li>
-                        <li>no API keys or passwords in backend logs (check via Render dashboard);</li>
-                        <li>Playwright walked the full "new user → sign-up → 3 items → sign-out → sign-in" scenario.</li>
+                        <li>there is a "share" button on <code>/dashboard</code>; one click returns a link like <code>/share/abc123…</code> (32 chars);</li>
+                        <li>opening it in incognito shows tickers and weights; <em>does not</em> show email, user_id, rouble amounts, or operations;</li>
+                        <li>changing one character of the token returns 404, not 500 and not an empty page;</li>
+                        <li>backend logs (Render → Logs) do not contain the full token — asterisks instead;</li>
+                        <li>the link sent to your own Telegram "Saved Messages" opens on a phone — the charts render and the CTA to <code>/signup</code> reads cleanly;</li>
+                        <li>a link with <code>expires_at</code> in the past returns the same 404 as a non-existent one.</li>
                     </ul>
                     <div class="ask" lang="ru">
                         <strong>Спросите Claude напоследок</strong>
-                        <em>«Прогуляйся по&nbsp;моему сервису через playwright как security-эксперт. Найди три места, где я&nbsp;мог&nbsp;бы случайно «утечь» данные одного пользователя другому. Как это исправить?»</em>
+                        <em>«Проведи аудит share-фичи как нарушитель: ты&nbsp;получил мою ссылку и&nbsp;хочешь узнать обо&nbsp;мне больше, чем я&nbsp;готов раскрыть. Перечисли три самые опасные утечки данных из&nbsp;текущей safe-view и&nbsp;покажи минимальные правки, чтобы их&nbsp;закрыть.»</em>
                     </div>
                     <div class="ask" lang="en">
                         <strong>Ask Claude last</strong>
-                        <em>"Walk my service via Playwright as a security reviewer. Find three places where I could leak one user’s data to another. How to fix?"</em>
+                        <em>"Audit the share feature as an attacker: you got my link and want to learn more about me than I meant to reveal. List the three most dangerous data leaks in the current safe-view and show the minimal edits to close them."</em>
                     </div>
                 </div>
             </details>
@@ -1085,25 +1188,158 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 
         <article class="project solo">
             <span class="label"><span lang="ru">Проект D · самостоятельно</span><span lang="en">Project D · solo</span></span>
-            <h3><span lang="ru">AI-куратор для&nbsp;вашей коллекции</span><span lang="en">AI curator for your collection</span></h3>
-            <p class="goal" lang="ru">Цель: вариация проекта&nbsp;B&nbsp;&mdash; добавить в&nbsp;сервис коллекции (проект&nbsp;C) вкладку «AI-куратор». Тот&nbsp;же стек, что в&nbsp;B (Claude API, prompt caching, multi-model), но&nbsp;вместо вопросов по&nbsp;портфелю&nbsp;&mdash; вопросы по&nbsp;коллекции: «найди книги похожие на&nbsp;мои любимые», «куда сходить вечером, если я&nbsp;уже был в&nbsp;этих местах», «какие пробелы в&nbsp;моей коллекции».</p>
-            <p class="goal" lang="en">Goal: variation of B — add an "AI curator" tab to your collection service (project C). Same stack as B (Claude API, prompt caching, multi-model), but instead of portfolio questions — collection questions: "find books similar to my favourites", "where to go tonight if I’ve already been to these places", "what’s missing in my collection".</p>
+            <h3><span lang="ru">Еженедельный AI-обзор на&nbsp;email</span><span lang="en">Weekly AI review by email</span></h3>
+            <p class="goal" lang="ru">Цель: добавить в&nbsp;кабинет (проект&nbsp;A) и&nbsp;AI-консультанта (проект&nbsp;B) ещё одну фичу. Каждый понедельник в&nbsp;9:00 backend сам анализирует ваши операции за&nbsp;неделю, делает короткий обзор через Claude и&nbsp;шлёт письмо. На&nbsp;сайте появляется страница <code>/reviews</code> с&nbsp;архивом. Один день работы, две новые идеи: scheduled jobs (cron на&nbsp;Render) и&nbsp;transactional email.</p>
+            <p class="goal" lang="en">Goal: add one more feature to the office (project&nbsp;A) and the AI advisor (project&nbsp;B). Every Monday at 09:00 the backend analyses your operations from the past week, drafts a short review via Claude and emails it to you. The site gets a <code>/reviews</code> page with the archive. One day of work, two new ideas: scheduled jobs (cron on Render) and transactional email.</p>
 
-            <h4 lang="ru">Подсказки</h4>
-            <h4 lang="en">Hints</h4>
+            <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Решите до&nbsp;кода: что в&nbsp;письме?</strong> Два варианта:
+                    <ul style="margin-top:0.5rem;">
+                        <li><em>Полный HTML-обзор в&nbsp;письме.</em> Красиво в&nbsp;Gmail&nbsp;&mdash; ломается в&nbsp;Outlook и&nbsp;Apple Mail, тянет CSS-костыли, на&nbsp;мобиле выглядит криво.</li>
+                        <li><em>Plain-text-уведомление + ссылка.</em> Тема письма + одна строка «обзор готов» + большая кнопка «открыть&nbsp;→ /reviews/123». Работает везде, всегда, и&nbsp;возвращает читателя на&nbsp;ваш сайт.</li>
+                    </ul>
+                    Рекомендую второе. Письмо&nbsp;&mdash; это уведомление, обзор&nbsp;&mdash; контент на&nbsp;сайте.</li>
+                <li><strong>Регистрация Resend, 5&nbsp;минут.</strong> Заведите аккаунт на&nbsp;<a href="https://resend.com">resend.com</a> (3000 писем/мес бесплатно, карта не&nbsp;нужна), создайте API-ключ. Для&nbsp;старта можно отправлять с&nbsp;<code>onboarding@resend.dev</code>, но&nbsp;<em>только на&nbsp;свой адрес</em>. Чтобы слать другим&nbsp;&mdash; нужно подтвердить домен (это уже потом). Альтернативы&nbsp;&mdash; Postmark и&nbsp;SendGrid, оба похожи; Resend выбираем за&nbsp;простоту регистрации.</li>
+                <li><strong>Backend: функция генерации обзора.</strong>
+                    <pre class="shell">&gt; в backend/ добавь функцию generate_weekly_review(user_id, week_start):
+&gt;   1) собирает операции за неделю [week_start, week_start + 7 дней);
+&gt;   2) если операций &lt; 3 — возвращает None (не шлём пустые обзоры);
+&gt;   3) вызывает claude-haiku-4-5 (это рутина, sonnet — оверкилл)
+&gt;      с tool_use на structured output:
+&gt;        { headline: str, top_3_observations: list[str],
+&gt;          warning: str | None, suggestion: str }
+&gt;   4) сохраняет в новую таблицу WeeklyReview
+&gt;      (id, user_id, week_start, payload_json, status, created_at).
+&gt;      status: 'generated' | 'sent' | 'failed'.
+&gt;
+&gt; и эндпоинт GET /api/reviews — список обзоров текущего пользователя
+&gt; за последние 12 недель, отсортированный от свежих к старым.
+&gt;
+&gt; ВАЖНО: используй tool_use из claude-api skill, НЕ парси JSON
+&gt; из текста через regex или json.loads — Claude иногда добавляет
+&gt; преамбулу до JSON, парсинг ломается. Структурный output —
+&gt; единственный надёжный способ.</pre>
+                </li>
+                <li><strong>Backend: тестовый эндпоинт «запустить сейчас».</strong> До&nbsp;cron-а нужен ручной запуск, чтобы не&nbsp;ждать понедельника:
+                    <pre class="shell">&gt; добавь POST /api/admin/run_weekly_review_now —
+&gt; доступен только мне (проверь email из JWT == моему).
+&gt; вызывает generate_weekly_review(current_user.id, прошлый понедельник)
+&gt; и сразу шлёт письмо через Resend на мой email.
+&gt; возвращает { review_id, email_status }.</pre>
+                    Проверка: после деплоя дёрните этот эндпоинт раз. Письмо должно прийти в&nbsp;течение минуты. Если не&nbsp;пришло&nbsp;&mdash; смотрите логи Render и&nbsp;dashboard Resend.</li>
+                <li><strong>Cron-сервис на&nbsp;Render.</strong>
+                    <pre class="shell">&gt; добавь backend/scheduler.py с одним скриптом run_for_all_users():
+&gt;   для каждого активного пользователя:
+&gt;     1) уже есть WeeklyReview за эту неделю? если да — skip;
+&gt;     2) generate_weekly_review(user.id, последний_понедельник);
+&gt;     3) если получился — пометь status='generated', сохрани;
+&gt;   потом отдельным проходом:
+&gt;     для каждого WeeklyReview со status='generated':
+&gt;       отправь email через Resend → пометь 'sent';
+&gt;       если письмо упало — пометь 'failed', не дублируй на след. запуске.
+&gt;   лог: user_id, status, без текста обзора.
+&gt;
+&gt; на render.com создай НОВЫЙ сервис типа Cron Job (не Web Service!):
+&gt;   schedule: 0 9 * * 1   (каждый понедельник в 09:00 UTC)
+&gt;   command: python backend/scheduler.py</pre>
+                </li>
+                <li><strong>Frontend: страница архива <code>/reviews</code>.</strong>
+                    <pre class="shell">&gt; frontend: страница /reviews — авторизованная, требует JWT.
+&gt; показывает список WeeklyReview за последние 12 недель.
+&gt; каждый обзор — карточка:
+&gt;   headline крупно, 3 наблюдения списком,
+&gt;   warning (если есть) — в коралловой плашке,
+&gt;   suggestion — кнопкой «обсудить с консультантом»,
+&gt;   клик переходит на /advisor с этим suggestion как первой репликой.
+&gt; в навигации основного кабинета добавь пункт «Обзоры».</pre>
+                </li>
+                <li><strong>Проверка на&nbsp;живом cron-е.</strong> Ждём ближайший понедельник 09:00 UTC. Если письмо не&nbsp;пришло&nbsp;&mdash; Render → Cron Job → Logs. Самая частая причина: env-переменные не&nbsp;скопированы во&nbsp;второй сервис (см.&nbsp;грабли ниже).</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Decide before code: what goes into the email?</strong> Two options:
+                    <ul style="margin-top:0.5rem;">
+                        <li><em>Full HTML review inside the email.</em> Pretty in Gmail&nbsp;— breaks in Outlook and Apple Mail, pulls in CSS hacks, looks awkward on mobile.</li>
+                        <li><em>Plain-text notification + link.</em> Subject + one line "review ready" + a big button "open&nbsp;→ /reviews/123". Works everywhere, always, and pulls the reader back to your site.</li>
+                    </ul>
+                    Recommended: the second. The email is a notification; the review is content on the site.</li>
+                <li><strong>Resend signup, 5 minutes.</strong> Make an account on <a href="https://resend.com">resend.com</a> (3000 emails/mo free, no card), create an API key. To start you can send from <code>onboarding@resend.dev</code>, but <em>only to your own address</em>. To send to others, verify a domain (later concern). Alternatives are Postmark and SendGrid, both similar; we pick Resend for signup simplicity.</li>
+                <li><strong>Backend: the review generator.</strong>
+                    <pre class="shell">&gt; in backend/ add generate_weekly_review(user_id, week_start):
+&gt;   1) collect operations in [week_start, week_start + 7 days);
+&gt;   2) if there are &lt; 3 ops, return None (no empty reviews);
+&gt;   3) call claude-haiku-4-5 (this is routine; sonnet is overkill)
+&gt;      with tool_use for structured output:
+&gt;        { headline: str, top_3_observations: list[str],
+&gt;          warning: str | None, suggestion: str }
+&gt;   4) save into a new table WeeklyReview
+&gt;      (id, user_id, week_start, payload_json, status, created_at).
+&gt;      status: 'generated' | 'sent' | 'failed'.
+&gt;
+&gt; and GET /api/reviews — the current user's reviews,
+&gt; last 12 weeks, newest first.
+&gt;
+&gt; IMPORTANT: use tool_use from the claude-api skill, do NOT parse
+&gt; JSON from the text via regex or json.loads — Claude sometimes adds
+&gt; a preamble before the JSON, and that parsing breaks. Structured
+&gt; output is the only reliable way.</pre>
+                </li>
+                <li><strong>Backend: a "run now" test endpoint.</strong> Before wiring cron you need a manual trigger so you don't have to wait for Monday:
+                    <pre class="shell">&gt; add POST /api/admin/run_weekly_review_now —
+&gt; available only to me (check email from JWT == mine).
+&gt; calls generate_weekly_review(current_user.id, last Monday)
+&gt; and immediately sends an email via Resend to my address.
+&gt; returns { review_id, email_status }.</pre>
+                    Check: after deploy, hit this endpoint once. The email should arrive within a minute. If it doesn't — look at the Render logs and the Resend dashboard.</li>
+                <li><strong>Cron service on Render.</strong>
+                    <pre class="shell">&gt; add backend/scheduler.py with one script run_for_all_users():
+&gt;   for each active user:
+&gt;     1) does a WeeklyReview for this week already exist? if so, skip;
+&gt;     2) generate_weekly_review(user.id, last_monday);
+&gt;     3) if it returned a review — mark status='generated', save it.
+&gt;   then a second pass:
+&gt;     for each WeeklyReview with status='generated':
+&gt;       send the email via Resend → mark 'sent';
+&gt;       if the email failed — mark 'failed', no dup on next run.
+&gt;   log: user_id, status, no review text.
+&gt;
+&gt; on render.com create a NEW service of type Cron Job (not Web Service!):
+&gt;   schedule: 0 9 * * 1   (every Monday at 09:00 UTC)
+&gt;   command: python backend/scheduler.py</pre>
+                </li>
+                <li><strong>Frontend: the <code>/reviews</code> archive page.</strong>
+                    <pre class="shell">&gt; frontend: /reviews — authed, needs JWT.
+&gt; lists WeeklyReview for the last 12 weeks.
+&gt; each review = a card:
+&gt;   headline big, 3 observations as a list,
+&gt;   warning (if any) — in a coral pill,
+&gt;   suggestion — a button "discuss with the advisor",
+&gt;   click goes to /advisor with this suggestion as the first message.
+&gt; add a "Reviews" item to the office's main nav.</pre>
+                </li>
+                <li><strong>Verify on the real cron.</strong> Wait for the next Monday 09:00 UTC. If no email arrives — Render → Cron Job → Logs. The most common cause: env vars weren't copied to the second service (see pitfalls below).</li>
+            </ol>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Подсказки и&nbsp;грабли</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Tips and pitfalls</h4>
             <ul lang="ru">
-                <li>Эндпоинт <code>/api/curator/ask</code>&nbsp;&mdash; точная копия <code>/api/advisor/ask</code> из&nbsp;проекта&nbsp;B, но&nbsp;контекст: «ты&nbsp;помогаешь куратору личной коллекции» + список элементов пользователя (через <code>require_auth</code>) + теги.</li>
-                <li>Используйте <code>claude-sonnet-4-6</code> для&nbsp;развёрнутых ответов и&nbsp;<code>claude-haiku-4-5</code> для&nbsp;быстрых задач (например, авто-предложить теги для&nbsp;нового элемента&nbsp;&mdash; эндпоинт <code>/api/curator/suggest_tags</code>).</li>
-                <li>Prompt caching на&nbsp;системный промпт + список коллекции&nbsp;&mdash; третий вопрос подряд должен идти заметно быстрее и&nbsp;стоить меньше токенов.</li>
-                <li>На&nbsp;UI: те&nbsp;же три быстрых вопроса-кнопки сверху, что в&nbsp;B, но&nbsp;адаптированные под&nbsp;коллекцию&nbsp;&mdash; «что у&nbsp;меня в&nbsp;коллекции пробелы», «топ-5 любимых», «что&nbsp;бы добавить».</li>
-                <li>Безопасность: <code>ANTHROPIC_API_KEY</code> только в&nbsp;env Render, никогда в&nbsp;логах.</li>
+                <li><strong>Render Cron Jobs&nbsp;&mdash; отдельный сервис со&nbsp;своими переменными.</strong> На&nbsp;render.com cron&nbsp;&mdash; это <em>не</em> Web Service, а&nbsp;тип «Cron Job», и&nbsp;он&nbsp;<em>не&nbsp;наследует</em> env-переменные от&nbsp;вашего backend. <code>DATABASE_URL</code>, <code>ANTHROPIC_API_KEY</code>, <code>RESEND_API_KEY</code>&nbsp;&mdash; всё нужно скопировать руками во&nbsp;вкладку Environment <em>второго</em> сервиса. Это причина «у&nbsp;меня молчит cron» в&nbsp;90% случаев.</li>
+                <li><strong>Не&nbsp;ждите понедельника, тестируйте сразу.</strong> Эндпоинт <code>/api/admin/run_weekly_review_now</code>&nbsp;&mdash; это <em>обязательная</em> часть, не&nbsp;опциональная. Без него вы&nbsp;неделю не&nbsp;узнаете, что у&nbsp;вас опечатка в&nbsp;JSON-схеме или пробел вместо подчёркивания в&nbsp;имени переменной.</li>
+                <li><strong>Идемпотентность не&nbsp;равна «if exists return».</strong> Если генерация прошла, а&nbsp;письмо упало&nbsp;&mdash; в&nbsp;БД лежит <code>WeeklyReview</code>, человек обзора не&nbsp;видел. Поэтому два прохода: сначала генерация со&nbsp;статусом <code>generated</code>, потом отдельный проход «найти всё <code>generated</code> и&nbsp;слать письма». При&nbsp;падении на&nbsp;следующем запуске cron спокойно дошлёт.</li>
+                <li><strong>Структурный output (<code>tool_use</code>) ≠ JSON-в-тексте.</strong> Claude умеет возвращать строгий JSON через механизм tools&nbsp;&mdash; это его официальная функция. Без неё ответ будет вида «Конечно! Вот&nbsp;ваш обзор: {…}»&nbsp;&mdash; и&nbsp;<code>json.loads()</code> сломается. Спросите skill <code>claude-api</code>: <em>«как принудить Claude вернуть конкретный JSON-объект через tool_use, без парсинга текста?»</em>&nbsp;&mdash; он&nbsp;покажет правильную форму вызова.</li>
+                <li><strong>Письмо&nbsp;&mdash; это уведомление, не&nbsp;контент.</strong> Тема + одна строка + кнопка-ссылка. Причины: HTML-почта ломается в&nbsp;Outlook (Microsoft рендерит её&nbsp;через Word), мобильный клиент режет длину, и&nbsp;человек должен возвращаться к&nbsp;вам на&nbsp;сайт. Полный обзор&nbsp;&mdash; на&nbsp;<code>/reviews</code>.</li>
+                <li><strong>Реальная стоимость&nbsp;&mdash; копейки.</strong> Haiku 4.5: ~$0.25/1M входных токенов + $1.25/1M выходных. Один обзор&nbsp;&mdash; около 3K входных + 0.5K выходных, это меньше $0.001 на&nbsp;пользователя в&nbsp;неделю. 100 пользователей × 52 недели = меньше $5 в&nbsp;год. Не&nbsp;бойтесь включать сразу всем.</li>
+                <li><strong>Часовой пояс пользователя.</strong> Cron на&nbsp;Render работает в&nbsp;UTC. «Понедельник 09:00 UTC»&nbsp;&mdash; это в&nbsp;Москве 12:00, в&nbsp;Берлине 10:00 (или 11:00 в&nbsp;летнее время). Если хотите «09:00 по&nbsp;местному времени для&nbsp;каждого»&nbsp;&mdash; это другая задача (хранить timezone у&nbsp;пользователя + запускать cron каждый час и&nbsp;фильтровать кому пора). Для&nbsp;первой версии оставьте UTC.</li>
             </ul>
             <ul lang="en">
-                <li>Endpoint <code>/api/curator/ask</code> — exact copy of <code>/api/advisor/ask</code> from project B, but context: "you help curate a personal collection" + user’s items (via <code>require_auth</code>) + tags.</li>
-                <li>Use <code>claude-sonnet-4-6</code> for long answers and <code>claude-haiku-4-5</code> for quick tasks (e.g. auto-suggest tags for a new item — endpoint <code>/api/curator/suggest_tags</code>).</li>
-                <li>Prompt caching on the system prompt + collection list — the third question in a row should be visibly faster and cheaper.</li>
-                <li>UI: same three quick-question buttons as in B, but adapted to the collection — "what gaps do I have", "my top 5", "what should I add".</li>
-                <li>Security: <code>ANTHROPIC_API_KEY</code> in Render env only, never in logs.</li>
+                <li><strong>Render Cron Jobs are a separate service with their own env.</strong> On render.com a cron is <em>not</em> a Web Service but a "Cron Job" type, and it does <em>not</em> inherit env vars from your backend. <code>DATABASE_URL</code>, <code>ANTHROPIC_API_KEY</code>, <code>RESEND_API_KEY</code> — all must be copied by hand into the Environment tab of the <em>second</em> service. This is the cause of "my cron is silent" 90% of the time.</li>
+                <li><strong>Don't wait for Monday — test now.</strong> The <code>/api/admin/run_weekly_review_now</code> endpoint is a <em>required</em> part, not optional. Without it you won't find out for a week that you have a typo in the JSON schema or a space instead of an underscore in a variable name.</li>
+                <li><strong>Idempotency is not just "if exists return."</strong> If generation succeeded but the email failed, you have a <code>WeeklyReview</code> row but the user never saw it. Hence two passes: first generation with status <code>generated</code>, then a separate "find all <code>generated</code> and send emails" pass. On the next cron run, a failed send is quietly retried.</li>
+                <li><strong>Structured output (<code>tool_use</code>) ≠ JSON-in-text.</strong> Claude can return strict JSON through the tools mechanism — that's its official feature. Without it the reply will look like "Sure! Here's your review: {…}" and <code>json.loads()</code> will break. Ask the <code>claude-api</code> skill: <em>"how do I force Claude to return a specific JSON object via tool_use, without parsing text?"</em> — it will show the right call shape.</li>
+                <li><strong>The email is a notification, not the content.</strong> Subject + one line + a button-link. Reasons: HTML email breaks in Outlook (Microsoft renders it via Word), mobile clients cut length, and the reader should come back to your site. The full review lives on <code>/reviews</code>.</li>
+                <li><strong>Real cost is pennies.</strong> Haiku 4.5: ~$0.25/1M input tokens + $1.25/1M output. One review is around 3K input + 0.5K output, less than $0.001 per user per week. 100 users × 52 weeks = less than $5/year. Don't be afraid to turn it on for everyone.</li>
+                <li><strong>The user's timezone.</strong> Cron on Render runs in UTC. "Monday 09:00 UTC" is 12:00 in Moscow, 10:00 in Berlin (or 11:00 with DST). If you want "09:00 in each user's local time" — that's a different task (store timezone per user + run cron every hour and filter who's due). Keep UTC for the first version.</li>
             </ul>
 
             <details class="verify">
@@ -1116,30 +1352,30 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <div class="verify-body">
                     <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
                     <ul lang="ru">
-                        <li>в&nbsp;сервисе коллекции (проект&nbsp;C) есть страница <code>/curator</code>;</li>
-                        <li>AI отвечает релевантно: упоминает <em>ваши</em> элементы и&nbsp;теги, не&nbsp;галлюцинирует;</li>
-                        <li>в&nbsp;ответе показываются модель и&nbsp;tokens_used (как в&nbsp;проекте&nbsp;B);</li>
-                        <li>третий подряд вопрос стоит меньше токенов первого (cache hit);</li>
-                        <li>эндпоинт <code>suggest_tags</code> использует haiku, а&nbsp;<code>ask</code>&nbsp;&mdash; sonnet;</li>
-                        <li>другой пользователь видит куратор только по&nbsp;<em>своей</em> коллекции;</li>
-                        <li>в&nbsp;логах backend нет ни&nbsp;ключа, ни&nbsp;текстов промптов.</li>
+                        <li>в&nbsp;Render Dashboard есть <em>два</em> сервиса: ваш Web Service (backend) и&nbsp;отдельный Cron Job со&nbsp;своим расписанием;</li>
+                        <li>у&nbsp;Cron Job в&nbsp;Environment проставлены те&nbsp;же три ключа: <code>DATABASE_URL</code>, <code>ANTHROPIC_API_KEY</code>, <code>RESEND_API_KEY</code>;</li>
+                        <li><code>POST /api/admin/run_weekly_review_now</code> отрабатывает за&nbsp;&lt;30 секунд, на&nbsp;email приходит письмо;</li>
+                        <li>в&nbsp;dashboard Resend письмо помечено как <code>delivered</code>, не&nbsp;<code>bounced</code>;</li>
+                        <li>на&nbsp;<code>/reviews</code> после двух прогонов&nbsp;&mdash; два разных обзора, не&nbsp;дубликат;</li>
+                        <li>тестовый пользователь без операций обзор не&nbsp;получает (функция вернула <code>None</code>);</li>
+                        <li>в&nbsp;логах cron-сервиса видны строки <code>user_id=X status=sent</code> и&nbsp;<code>user_id=Y status=skipped</code>, но&nbsp;нет текста обзоров.</li>
                     </ul>
                     <ul lang="en">
-                        <li>the collection service (project C) has a <code>/curator</code> page;</li>
-                        <li>the AI answers relevantly: it mentions <em>your</em> items and tags, doesn’t hallucinate;</li>
-                        <li>the reply shows the model and tokens_used (as in B);</li>
-                        <li>the third question in a row costs fewer tokens than the first (cache hit);</li>
-                        <li>the <code>suggest_tags</code> endpoint uses haiku, <code>ask</code> uses sonnet;</li>
-                        <li>another user sees a curator only over <em>their</em> collection;</li>
-                        <li>no API key or prompt text in backend logs.</li>
+                        <li>Render Dashboard shows <em>two</em> services: your Web Service (backend) and a separate Cron Job on its own schedule;</li>
+                        <li>the Cron Job's Environment has the same three keys: <code>DATABASE_URL</code>, <code>ANTHROPIC_API_KEY</code>, <code>RESEND_API_KEY</code>;</li>
+                        <li><code>POST /api/admin/run_weekly_review_now</code> finishes in &lt;30 seconds, the email arrives;</li>
+                        <li>in the Resend dashboard the email is marked <code>delivered</code>, not <code>bounced</code>;</li>
+                        <li><code>/reviews</code> after two runs shows two different reviews, not a duplicate;</li>
+                        <li>a test user with no operations gets no review (the function returned <code>None</code>);</li>
+                        <li>the cron service logs show lines like <code>user_id=X status=sent</code> and <code>user_id=Y status=skipped</code> — but never the review text.</li>
                     </ul>
                     <div class="ask" lang="ru">
                         <strong>Спросите Claude напоследок</strong>
-                        <em>«Сравни мой <code>/curator</code> и&nbsp;твой <code>/advisor</code>: какие промпты у&nbsp;них общие? Можно&nbsp;ли вынести единый «AI-слой» так, чтобы для&nbsp;нового сервиса достаточно было поменять только системный промпт и&nbsp;функцию сбора контекста?»</em>
+                        <em>«Прочитай <code>scheduler.py</code> и&nbsp;email-логику. Сценарии, которые ломают идемпотентность: что если cron упадёт между генерацией и&nbsp;отправкой email? Что если Resend вернёт 5xx? Что если пользователь удалил аккаунт между генерацией и&nbsp;отправкой? Покажи минимальные правки, чтобы каждый из&nbsp;трёх сценариев не&nbsp;приводил к&nbsp;дубликатам или пустоте.»</em>
                     </div>
                     <div class="ask" lang="en">
                         <strong>Ask Claude last</strong>
-                        <em>"Compare my <code>/curator</code> and the <code>/advisor</code>: what prompts do they share? Could we extract a single ‘AI layer’ so that adding a new service only requires swapping the system prompt and the context-gathering function?"</em>
+                        <em>"Read <code>scheduler.py</code> and the email logic. Scenarios that break idempotency: what if the cron crashes between generation and sending the email? What if Resend returns 5xx? What if the user deletes their account between generation and sending? Show me the minimal edits so each scenario doesn't produce duplicates or silence."</em>
                     </div>
                 </div>
             </details>
