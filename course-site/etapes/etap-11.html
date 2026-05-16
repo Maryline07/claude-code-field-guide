@@ -206,6 +206,7 @@
             <div class="topic-body">
                 <div lang="ru">
                     <p>Когда вы&nbsp;пишете промпт в&nbsp;Claude Code и&nbsp;Claude вызывает tools&nbsp;&mdash; цикл крутится <em>внутри</em> Claude Code, вы&nbsp;его не&nbsp;видите. В&nbsp;Agent SDK этот&nbsp;же цикл&nbsp;&mdash; <strong>ваш собственный код</strong>:</p>
+                    <p class="note"><strong>Не печатайте этот цикл руками.</strong> Это образец того, что Claude напишет за&nbsp;вас по&nbsp;skill <code>claude-api</code>. Показываем, чтобы вы видели структуру&nbsp;&mdash; и&nbsp;узнавали её, когда Claude её напишет в&nbsp;ваших проектах ниже.</p>
                     <pre class="shell">messages = [{"role": "user", "content": "проанализируй акцию AAPL"}]
 
 while True:
@@ -234,6 +235,7 @@ while True:
                 </div>
                 <div lang="en">
                     <p>When you prompt in Claude Code and Claude uses tools, the loop runs <em>inside</em> Claude Code — you don’t see it. In the Agent SDK that same loop is <strong>your own code</strong>:</p>
+                    <p class="note"><strong>Don’t type this loop by hand.</strong> It’s a sample of what Claude will write for you via the <code>claude-api</code> skill. We show it so you recognise the shape — and spot it when Claude generates it inside the projects below.</p>
                     <pre class="shell">messages = [{"role": "user", "content": "analyse stock AAPL"}]
 
 while True:
@@ -276,6 +278,7 @@ while True:
                         <li>Логирование&nbsp;&mdash; обязательное и&nbsp;структурированное (JSON), чтобы потом разобрать.</li>
                     </ul>
                     <p>Пример&nbsp;&mdash; GitHub Action для&nbsp;auto code review:</p>
+                    <p class="note"><strong>Образец YAML, не печатать руками.</strong> Когда вы будете делать solo-проект C (GitHub Action для code review), Claude напишет вам подобный workflow. Смотрите, чтобы запомнить структуру: триггер, среда, шаги.</p>
                     <pre class="shell"># .github/workflows/claude-review.yml
 name: Claude Code Review
 on:
@@ -310,6 +313,7 @@ jobs:
                         <li>Logging — mandatory and structured (JSON), to parse later.</li>
                     </ul>
                     <p>Example — a GitHub Action for auto code review:</p>
+                    <p class="note"><strong>YAML sample, not for typing by hand.</strong> When you do solo project C (a GitHub Action for code review), Claude will write you a similar workflow. Look at it to memorise the shape: trigger, environment, steps.</p>
                     <pre class="shell"># .github/workflows/claude-review.yml
 name: Claude Code Review
 on:
@@ -342,6 +346,7 @@ jobs:
             <div class="topic-body">
                 <div lang="ru">
                     <p>В&nbsp;Claude Code мы&nbsp;давали Claude tools <em>через MCP</em>. В&nbsp;SDK&nbsp;&mdash; через определения прямо в&nbsp;коде:</p>
+                    <p class="note"><strong>Образец, не печатать руками.</strong> Это формат, в котором Claude сам опишет ваши tools, когда вы перечислите их в промпте (см. шаг&nbsp;3 проекта&nbsp;A).</p>
                     <pre class="shell">my_tools = [
     {
         "name": "get_price",
@@ -371,6 +376,7 @@ jobs:
                 </div>
                 <div lang="en">
                     <p>In Claude Code we gave Claude tools <em>via MCP</em>. In the SDK — via definitions in code:</p>
+                    <p class="note"><strong>Sample, not for hand-typing.</strong> This is the shape Claude will produce for your tools when you list them in a prompt (see project A, step 3).</p>
                     <pre class="shell">my_tools = [
     {
         "name": "get_price",
@@ -406,6 +412,7 @@ jobs:
             <div class="topic-body">
                 <div lang="ru">
                     <p><strong>Prompt caching</strong>&nbsp;&mdash; вы&nbsp;уже видели в&nbsp;этапе&nbsp;06. В&nbsp;SDK активируется одним полем:</p>
+                    <p class="note"><strong>Это образец, как выглядит prompt caching в коде.</strong> Skill <code>claude-api</code> добавит <code>cache_control</code> автоматически&nbsp;&mdash; вы увидите такой&nbsp;же блок в шаге&nbsp;4 проекта&nbsp;A.</p>
                     <pre class="shell">response = client.messages.create(
     model="claude-sonnet-4-6",
     system=[
@@ -420,6 +427,7 @@ jobs:
                 </div>
                 <div lang="en">
                     <p><strong>Prompt caching</strong> — you saw it in etape 06. In the SDK it’s one field:</p>
+                    <p class="note"><strong>A sample of how prompt caching looks in code.</strong> The <code>claude-api</code> skill adds <code>cache_control</code> for you — you’ll see the same shape in step 4 of project A.</p>
                     <pre class="shell">response = client.messages.create(
     model="claude-sonnet-4-6",
     system=[
@@ -534,7 +542,9 @@ jobs:
 &gt; сначала get_time, потом post_telegram, и завершился.</pre>
                 </li>
                 <li>Проверка идемпотентности: запустите дважды&nbsp;&mdash; должны прийти два сообщения.</li>
-                <li>Бюджет токенов: добавьте <code>max_tokens=200</code> на&nbsp;запрос. Запустите ещё раз. Логи&nbsp;&mdash; через PostHog skill этапа&nbsp;10.</li>
+                <li>Бюджет токенов: добавьте <code>max_tokens=200</code> на&nbsp;запрос. Запустите ещё раз. Логи&nbsp;&mdash; через PostHog skill этапа&nbsp;10.
+                    <p><strong>Проверка:</strong> в PostHog (или в локальном логе) видна запись с input/output токенами на каждый прогон; стоимость одного полного цикла &lt;&nbsp;$0.001 (haiku дешёвый).</p>
+                </li>
             </ol>
             <ol lang="en">
                 <li>Create <code>hello-agent</code>, drop <code>ANTHROPIC_API_KEY</code> into <code>.env</code>.</li>
@@ -556,7 +566,9 @@ jobs:
 &gt; get_time, then post_telegram, then finished.</pre>
                 </li>
                 <li>Idempotency check: run twice — two messages should arrive.</li>
-                <li>Token budget: add <code>max_tokens=200</code> per request. Run again. Logs — via the etape-10 PostHog skill.</li>
+                <li>Token budget: add <code>max_tokens=200</code> per request. Run again. Logs — via the etape-10 PostHog skill.
+                    <p><strong>Check:</strong> PostHog (or the local log) shows a record with input/output tokens per run; one full cycle costs &lt;&nbsp;$0.001 (haiku is cheap).</p>
+                </li>
             </ol>
             <p lang="ru">Что мы&nbsp;тренируем: <strong>скелет агента в&nbsp;5–10 строк Python</strong>, который сам решает, когда вызывать tools, и&nbsp;завершается, когда задача выполнена.</p>
             <p lang="en">What we train: <strong>a 5–10-line Python agent skeleton</strong> that decides when to call tools and finishes when the task is done.</p>
@@ -582,28 +594,53 @@ jobs:
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Создайте репо <code>twitter-signals/</code>. Структура:
+                <li><strong>Создайте структуру проекта.</strong> Это ваш первый «headless»-проект: Claude как библиотека внутри Python-скрипта, без CLI. Заведите репо <code>twitter-signals/</code>. Целевая структура:
                     <pre class="shell">twitter-signals/
-├── daemon.py            # главный цикл
-├── agent.py             # Claude Agent SDK
+├── daemon.py            # главный цикл, ловит твиты
+├── agent.py             # Claude Agent SDK, анализирует
 ├── tools/
 │   ├── price.py         # get_price через Alpha Vantage
 │   └── telegram.py      # post_telegram
 ├── data/
-│   └── tickers.json     # тикеры для слежки
+│   ├── tickers.json     # тикеры для слежки
+│   └── sample-tweets.json  # офлайн-демо
 ├── .env.example
 └── CLAUDE.md</pre>
-                    Попросите Claude заполнить <code>CLAUDE.md</code>: стек (Python, Claude Agent SDK, Alpha Vantage), команда запуска <code>python daemon.py</code>, бюджетный лимит $0.50/день, модель haiku, ключи из <code>.env</code>.
+                    <pre class="shell">&gt; создай структуру проекта twitter-signals по шаблону выше.
+&gt; .env.example: ANTHROPIC_API_KEY, ALPHA_VANTAGE_KEY,
+&gt;   TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID — все без значений.
+&gt; .gitignore — стандартный для python (venv, .env, __pycache__).
+&gt; CLAUDE.md заполни: стек (Python, Claude Agent SDK, Alpha Vantage),
+&gt; команда запуска `python daemon.py`, дневной бюджет $0.50,
+&gt; модель claude-haiku-4-5, ключи из .env.</pre>
+                    <p><strong>Проверка:</strong> Claude создал папки и файлы; в <code>.env.example</code> 4 ключа без значений; в <code>CLAUDE.md</code> есть строка про дневной бюджет; в <code>.gitignore</code> есть <code>.env</code>.</p>
                 </li>
-                <li>Если у&nbsp;вас есть X&nbsp;API&nbsp;&mdash; <code>daemon.py</code> подключается к&nbsp;streaming-эндпоинту и&nbsp;ловит твиты. Если нет&nbsp;&mdash; demo-режим, читает <code>data/sample-tweets.json</code> по&nbsp;одному в&nbsp;5&nbsp;секунд.</li>
-                <li><code>agent.py</code>&nbsp;&mdash; Claude Agent SDK с&nbsp;тремя tools:
-                    <ul>
-                        <li><code>get_price(ticker)</code>&nbsp;&mdash; текущая цена;</li>
-                        <li><code>get_my_position(ticker)</code>&nbsp;&mdash; есть&nbsp;ли у&nbsp;меня эта акция (читает <code>portfolio-journal/data/operations.csv</code>);</li>
-                        <li><code>post_telegram(text)</code>&nbsp;&mdash; уведомление.</li>
-                    </ul>
+                <li><strong>Заполните <code>daemon.py</code>&nbsp;&mdash; главный цикл.</strong> Он читает твиты и для каждого вызывает <code>agent.py</code>. Два режима: demo (по умолчанию, из файла) или X API (если у вас платный доступ).
+                    <pre class="shell">&gt; напиши daemon.py:
+&gt;   - функция load_tweets() с двумя ветками:
+&gt;     если X_BEARER_TOKEN есть в .env — стрим через X API,
+&gt;     иначе — читает data/sample-tweets.json по 1 твиту в 5 секунд;
+&gt;   - главный async-цикл: получил твит → передал в agent.run(tweet);
+&gt;   - graceful shutdown по Ctrl+C, не теряем последний обрабатываемый твит.
+&gt; и создай data/sample-tweets.json с 5 примерами:
+&gt; positive AAPL ("выручка рекорд"), negative TSLA ("отзыв тысяч авто"),
+&gt; нейтральный про общий рынок, и ещё два на ваш вкус.</pre>
+                    <p><strong>Проверка:</strong> запустите <code>python daemon.py</code> без X-ключа&nbsp;&mdash; в консоли каждые 5 секунд появляется новый твит, через ~25 секунд цикл проходит весь файл и завершается.</p>
                 </li>
-                <li>Системный промпт (с&nbsp;prompt caching, потому что одинаков на&nbsp;каждом твите):
+                <li><strong>Заполните <code>agent.py</code>&nbsp;&mdash; мозг проекта.</strong> Здесь живёт agent loop из Topics §I и три tools, через которые Claude получает данные и шлёт уведомления.
+                    <pre class="shell">&gt; используя skill claude-api, напиши agent.py:
+&gt;   функция analyse(tweet_text) запускает agent loop;
+&gt;   три tools (определи через JSON-schema, исполнение — Python-функции):
+&gt;     - get_price(ticker) → читает Alpha Vantage
+&gt;       (https://www.alphavantage.co/query?function=GLOBAL_QUOTE&amp;symbol=...)
+&gt;     - get_my_position(ticker) → читает portfolio-journal/data/operations.csv
+&gt;       (этап 06), возвращает {"shares": N, "avg_price": M}
+&gt;       или {"shares": 0}, если позиции нет;
+&gt;     - post_telegram(text) → шлёт сообщение через Telegram Bot API.
+&gt; модель claude-haiku-4-5, max_iterations=5, max_tokens=300.</pre>
+                    <p><strong>Проверка:</strong> вызовите <code>analyse("AAPL опубликовала рекордную прибыль")</code> руками из python REPL&nbsp;&mdash; в трассе должен быть хотя бы один <code>tool_use</code> для <code>get_price</code>.</p>
+                </li>
+                <li><strong>Передайте Claude системный промпт с «характером» агента.</strong> Этот текст уходит в каждый вызов <code>messages.create</code> как <code>system=[...]</code> с включённым prompt caching (Topics §I, тема «Prompt caching»)&nbsp;&mdash; одинаков на каждом твите, оплачивается дёшево.
                     <pre class="shell">Ты — финансовый аналитик-скептик. Каждый твит про акцию
 оцени по шкале 1–10:
   - sentiment (1 = очень плохо, 10 = очень хорошо);
@@ -617,48 +654,98 @@ jobs:
 Иначе — ничего не делай, просто заверши.
 
 Никаких советов «купить/продать». Только наблюдение.</pre>
+                    <p><strong>Проверка:</strong> в <code>agent.py</code> поле <code>system</code>&nbsp;&mdash; список словарей вида <code>[{"type": "text", "text": "...", "cache_control": {"type": "ephemeral"}}]</code>. Если просто <code>system="..."</code>&nbsp;&mdash; кэширование не включится, попросите Claude поправить.</p>
                 </li>
-                <li>Дисциплина (см. §&nbsp;I):
-                    <ul>
-                        <li><code>max_iterations = 5</code> в&nbsp;agent loop;</li>
-                        <li><code>max_tokens = 300</code>&nbsp;&mdash; короткие ответы;</li>
-                        <li>модель <strong>haiku</strong>&nbsp;&mdash; дёшево для&nbsp;потока твитов;</li>
-                        <li>дневной бюджет $0.50 на&nbsp;агента, прерываемся при превышении;</li>
-                        <li>идемпотентность: <code>data/sent-alerts.json</code>&nbsp;&mdash; не&nbsp;шлём один и&nbsp;тот&nbsp;же сигнал дважды.</li>
-                    </ul>
+                <li><strong>Добавьте защиту от «убежавшего» агента.</strong> Без неё одна ошибка может за ночь сжечь весь ваш месячный бюджет. Шесть мер из Topics §I (тема «Безопасность headless») + идемпотентность под наш случай.
+                    <pre class="shell">&gt; в agent.py добавь дисциплину:
+&gt;   - max_iterations=5 в agent loop (страховка от вечного цикла);
+&gt;   - max_tokens=300 на ответ (твит — короткий вход);
+&gt;   - дневной бюджет $0.50 на агента: считай токены в data/budget.json,
+&gt;     при превышении — пиши в лог и выходи без вызова Claude;
+&gt;   - идемпотентность: data/sent-alerts.json со словарём
+&gt;     {"AAPL-2026-05-16-positive": true} — не шлём один сигнал дважды;
+&gt;   - тайм-аут 60 секунд на messages.create.</pre>
+                    <p><strong>Проверка:</strong> поставьте <code>max_iterations=1</code>, прогоните demo-режим&nbsp;&mdash; в логах должно быть сообщение об остановке после 1 итерации, ни один твит не уходит в Telegram.</p>
                 </li>
-                <li>Запуск. Для&nbsp;учёбы достаточно локального: <code>python daemon.py</code> в&nbsp;отдельном окне терминала. Если хотите, чтобы демон жил в&nbsp;интернете&nbsp;&mdash; оберните его&nbsp;в&nbsp;минимальный web-сервис (FastAPI с&nbsp;эндпоинтом <code>/health</code>), а&nbsp;цикл демона запустите фоновой задачей в&nbsp;lifespan-обработчике (<code>asyncio.create_task</code>)&nbsp;&mdash; тот&nbsp;же приём, что у&nbsp;бота в&nbsp;этапе&nbsp;06b. Деплой&nbsp;&mdash; бесплатный web-сервис на&nbsp;Render. Чтобы сервис не&nbsp;засыпал, добавьте keep-alive пинг каждые 10&nbsp;минут (системный cron или skill <code>schedule</code> из&nbsp;этапа&nbsp;10).</li>
-                <li>Verification:
+                <li><strong>Запустите демон.</strong> Для учёбы достаточно локального запуска. Хотите, чтобы демон работал и без вашего ноутбука&nbsp;&mdash; обёртка для Render такая же, как у бота в этапе&nbsp;06b.
+                    <pre class="shell"><span class="cmt"># локально, для учёбы</span>
+<span class="prompt">$</span> python daemon.py</pre>
+                    <pre class="shell">&gt; (опционально, для деплоя на Render)
+&gt; оберни daemon.py в FastAPI с эндпоинтом GET /health
+&gt; (возвращает {"status": "ok"}), а цикл демона запусти
+&gt; фоновой задачей через asyncio.create_task в lifespan-обработчике
+&gt; — как у бота в этапе 06b. Деплой на Render как web service.
+&gt; чтобы Render не засыпал, добавь cron-skill из этапа 10:
+&gt; пинг GET /health каждые 10 минут с UptimeRobot или GitHub Actions.</pre>
+                    <p><strong>Проверка:</strong> локально в терминале каждые 5 секунд новый твит, в Telegram приходят только сигналы по тикерам из <code>operations.csv</code>. На Render <code>/health</code> отвечает <code>{"status": "ok"}</code>, в логах сервиса видны строки об обработанных твитах.</p>
+                </li>
+                <li><strong>Прогоните red-team аудит.</strong> Headless-агент работает без вас: пока вы спите, ошибка в нём может стоить дорого. Прежде чем оставить демон работать сутками, попросите Claude найти три слабых места.
                     <pre class="shell">&gt; запусти red-team subagent. brief:
 &gt; представь, что я случайно скачал tweet-flood
 &gt; (100 твитов в минуту). что произойдёт с моим бюджетом
-&gt; и API ключом? какие три защиты мне нужны?</pre>
+&gt; и API ключом? какие три защиты мне нужны?
+&gt; покажи список «риск → текущее состояние → что добавить».</pre>
+                    <p><strong>Проверка:</strong> Claude нашёл хотя бы один риск, которого вы не учли в шаге&nbsp;5. Если все три защиты уже на месте&nbsp;&mdash; спросите по-другому: «какие три риска <em>остались</em>?».</p>
                 </li>
-                <li>Дисклеймер обязателен: каждый push в&nbsp;Telegram заканчивается строкой «<em>наблюдение, не&nbsp;инвестиционный совет</em>».</li>
+                <li><strong>Добавьте обязательный дисклеймер.</strong> Любая trading-подобная штука без подписи «не совет»&nbsp;&mdash; юридический и этический риск. Закрепите дисклеймер в коде tool, не в системном промпте (систему модель может «забыть»).
+                    <pre class="shell">&gt; в tools/telegram.py: в функции post_telegram(text)
+&gt; перед отправкой ВСЕГДА дописывай в конец строки:
+&gt;   "\n\n— наблюдение, не инвестиционный совет"
+&gt; (если строка уже содержит этот текст — не дублируй).
+&gt; добавь юнит-тест test_telegram.py: post_telegram("hi")
+&gt; — отправленное сообщение должно заканчиваться на
+&gt; «не инвестиционный совет».</pre>
+                    <p><strong>Проверка:</strong> в реальном пуше из demo-режима последняя строка сообщения&nbsp;&mdash; именно дисклеймер. Если Claude вынес дисклеймер в системный промпт&nbsp;&mdash; поправьте: должен быть в Python-коде <code>post_telegram</code>.</p>
+                </li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Create a <code>twitter-signals/</code> repo. Layout:
+                <li><strong>Scaffold the project.</strong> This is your first “headless” project: Claude as a library inside a Python script, no CLI. Create a <code>twitter-signals/</code> repo. Target layout:
                     <pre class="shell">twitter-signals/
-├── daemon.py            # main loop
-├── agent.py             # Claude Agent SDK
+├── daemon.py            # main loop, catches tweets
+├── agent.py             # Claude Agent SDK, analyses
 ├── tools/
 │   ├── price.py         # get_price via Alpha Vantage
 │   └── telegram.py      # post_telegram
 ├── data/
-│   └── tickers.json     # watched tickers
+│   ├── tickers.json     # watched tickers
+│   └── sample-tweets.json  # offline demo
 ├── .env.example
 └── CLAUDE.md</pre>
-                    Ask Claude to fill <code>CLAUDE.md</code>: stack (Python, Claude Agent SDK, Alpha Vantage), start command <code>python daemon.py</code>, budget cap $0.50/day, model haiku, keys from <code>.env</code>.
+                    <pre class="shell">&gt; create the twitter-signals project per the layout above.
+&gt; .env.example: ANTHROPIC_API_KEY, ALPHA_VANTAGE_KEY,
+&gt;   TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID — all empty.
+&gt; .gitignore — standard python (venv, .env, __pycache__).
+&gt; fill CLAUDE.md: stack (Python, Claude Agent SDK, Alpha Vantage),
+&gt; start command `python daemon.py`, daily budget $0.50,
+&gt; model claude-haiku-4-5, keys from .env.</pre>
+                    <p><strong>Check:</strong> Claude created the folders and files; <code>.env.example</code> has 4 keys without values; <code>CLAUDE.md</code> mentions the daily budget; <code>.gitignore</code> includes <code>.env</code>.</p>
                 </li>
-                <li>If you have X API access — <code>daemon.py</code> connects to a streaming endpoint and catches tweets. If not — demo mode reads <code>data/sample-tweets.json</code> one every 5 seconds.</li>
-                <li><code>agent.py</code> — Claude Agent SDK with three tools:
-                    <ul>
-                        <li><code>get_price(ticker)</code> — current price;</li>
-                        <li><code>get_my_position(ticker)</code> — do I hold the stock (reads <code>portfolio-journal/data/operations.csv</code>);</li>
-                        <li><code>post_telegram(text)</code> — alert.</li>
-                    </ul>
+                <li><strong>Fill in <code>daemon.py</code> — the main loop.</strong> It reads tweets and dispatches each to <code>agent.py</code>. Two modes: demo (default, from file) or X API (if you have paid access).
+                    <pre class="shell">&gt; write daemon.py:
+&gt;   - load_tweets() with two branches:
+&gt;     if X_BEARER_TOKEN is set in .env — stream via X API,
+&gt;     otherwise — read data/sample-tweets.json, 1 tweet every 5 seconds;
+&gt;   - main async loop: tweet received → agent.run(tweet);
+&gt;   - graceful shutdown on Ctrl+C, don't drop the tweet in flight.
+&gt; also create data/sample-tweets.json with 5 examples:
+&gt; positive AAPL ("record earnings"), negative TSLA ("thousands of cars recalled"),
+&gt; neutral broad-market, plus two of your own.</pre>
+                    <p><strong>Check:</strong> run <code>python daemon.py</code> without an X key — every 5 seconds a new tweet prints, after ~25 seconds the loop walks the file and exits.</p>
                 </li>
-                <li>System prompt (with caching — identical on every tweet):
+                <li><strong>Fill in <code>agent.py</code> — the brain.</strong> Here lives the agent loop from Topics §I, plus the three tools through which Claude gets data and sends alerts.
+                    <pre class="shell">&gt; using the claude-api skill, write agent.py:
+&gt;   analyse(tweet_text) launches the agent loop;
+&gt;   three tools (JSON-schema defs, Python-function implementations):
+&gt;     - get_price(ticker) → reads Alpha Vantage
+&gt;       (https://www.alphavantage.co/query?function=GLOBAL_QUOTE&amp;symbol=...)
+&gt;     - get_my_position(ticker) → reads portfolio-journal/data/operations.csv
+&gt;       (etape 06), returns {"shares": N, "avg_price": M}
+&gt;       or {"shares": 0} if no position;
+&gt;     - post_telegram(text) → sends via Telegram Bot API.
+&gt; model claude-haiku-4-5, max_iterations=5, max_tokens=300.</pre>
+                    <p><strong>Check:</strong> call <code>analyse("AAPL posted record earnings")</code> by hand from a Python REPL — the trace should include at least one <code>tool_use</code> for <code>get_price</code>.</p>
+                </li>
+                <li><strong>Hand Claude the system prompt with the agent’s “character.”</strong> This text rides on every <code>messages.create</code> call as <code>system=[...]</code> with prompt caching on (Topics §I, “Prompt caching”) — identical on every tweet, cheap.
                     <pre class="shell">You are a sceptical financial analyst. Each stock-related tweet
 score on 1–10:
   - sentiment (1 = very bad, 10 = very good);
@@ -672,24 +759,49 @@ call post_telegram ONCE with a short summary.
 Otherwise — do nothing, just finish.
 
 No "buy/sell" advice. Observation only.</pre>
+                    <p><strong>Check:</strong> in <code>agent.py</code> the <code>system</code> field is a list of dicts like <code>[{"type": "text", "text": "...", "cache_control": {"type": "ephemeral"}}]</code>. If it’s just <code>system="..."</code> — caching won’t kick in; ask Claude to fix it.</p>
                 </li>
-                <li>Discipline (see § I):
-                    <ul>
-                        <li><code>max_iterations = 5</code> in the agent loop;</li>
-                        <li><code>max_tokens = 300</code> — short replies;</li>
-                        <li>model <strong>haiku</strong> — cheap for a tweet stream;</li>
-                        <li>daily budget $0.50 per agent, abort on overage;</li>
-                        <li>idempotency: <code>data/sent-alerts.json</code> — never push the same signal twice.</li>
-                    </ul>
+                <li><strong>Add the guard rails against a “runaway” agent.</strong> Without them one error can burn your monthly budget overnight. Six measures from Topics §I (“Headless safety”) + an idempotency cache.
+                    <pre class="shell">&gt; add discipline to agent.py:
+&gt;   - max_iterations=5 in the agent loop (infinite-loop guard);
+&gt;   - max_tokens=300 per reply (tweets are a short input);
+&gt;   - daily budget $0.50 per agent: count tokens in data/budget.json,
+&gt;     over budget → log + exit without calling Claude;
+&gt;   - idempotency: data/sent-alerts.json mapping
+&gt;     {"AAPL-2026-05-16-positive": true} — never push the same signal twice;
+&gt;   - 60-second timeout on messages.create.</pre>
+                    <p><strong>Check:</strong> set <code>max_iterations=1</code>, run demo mode — logs should show a stop message after 1 iteration, no tweet leaves for Telegram.</p>
                 </li>
-                <li>Running it. For learning, local is enough: <code>python daemon.py</code> in a separate terminal window. If you want the daemon to live on the internet — wrap it in a minimal web service (FastAPI with a <code>/health</code> endpoint) and launch the daemon loop as a background task in a lifespan handler (<code>asyncio.create_task</code>) — the same trick as the bot in etape 06b. Deploy as a free Render web service. To keep it from sleeping, add a keep-alive ping every 10 minutes (system cron or the <code>schedule</code> skill from etape 10).</li>
-                <li>Verification:
+                <li><strong>Run the daemon.</strong> For learning, local is enough. If you want it to live without your laptop — the Render wrap is the same as the bot in etape 06b.
+                    <pre class="shell"><span class="cmt"># local, for learning</span>
+<span class="prompt">$</span> python daemon.py</pre>
+                    <pre class="shell">&gt; (optional, for Render)
+&gt; wrap daemon.py in FastAPI with a GET /health endpoint
+&gt; (returns {"status": "ok"}) and launch the daemon loop
+&gt; as a background task via asyncio.create_task in a lifespan handler
+&gt; — same trick as the bot in etape 06b. Deploy on Render as a web service.
+&gt; keep it from sleeping: add the cron skill from etape 10:
+&gt; ping GET /health every 10 minutes via UptimeRobot or GitHub Actions.</pre>
+                    <p><strong>Check:</strong> locally a new tweet every 5 seconds; only signals for tickers in <code>operations.csv</code> reach Telegram. On Render, <code>/health</code> returns <code>{"status": "ok"}</code> and the service logs show processed-tweet lines.</p>
+                </li>
+                <li><strong>Run a red-team audit.</strong> A headless agent works without you: while you sleep, an error can be expensive. Before leaving the daemon running 24/7, ask Claude to find three weak spots.
                     <pre class="shell">&gt; run a red-team subagent. brief:
 &gt; pretend I accidentally pulled a tweet-flood
 &gt; (100 tweets/min). what happens to my budget
-&gt; and API key? what three safeguards do I need?</pre>
+&gt; and API key? what three safeguards do I need?
+&gt; show "risk → current state → what to add".</pre>
+                    <p><strong>Check:</strong> Claude found at least one risk you didn’t cover in step 5. If all three are already in place — re-ask: “what three risks <em>remain</em>?”.</p>
                 </li>
-                <li>Disclaimer mandatory: every Telegram push ends with “<em>observation, not investment advice</em>.”</li>
+                <li><strong>Add a mandatory disclaimer.</strong> Anything trading-shaped without a “not advice” line is a legal and ethical risk. Hard-code it into the tool, not the system prompt (a system prompt can be “forgotten” by the model).
+                    <pre class="shell">&gt; in tools/telegram.py: inside post_telegram(text)
+&gt; ALWAYS append before sending:
+&gt;   "\n\n— observation, not investment advice"
+&gt; (if the text already contains it — don't duplicate).
+&gt; add a unit test test_telegram.py: post_telegram("hi")
+&gt; — the sent message must end with
+&gt; "not investment advice".</pre>
+                    <p><strong>Check:</strong> a real demo-mode push ends on the disclaimer line. If Claude moved the disclaimer into the system prompt — push back: it must live in <code>post_telegram</code>.</p>
+                </li>
             </ol>
         </article>
 
@@ -702,18 +814,50 @@ No "buy/sell" advice. Observation only.</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Репо <code>concierge-bot/</code>. Запуск локально или на&nbsp;Render как web-сервис с&nbsp;фоновым циклом (как бот в&nbsp;этапе&nbsp;06b). Попросите Claude заполнить <code>CLAUDE.md</code>: стек (Python, Claude Agent SDK, aiogram, Neon PostgreSQL), команды запуска локально и&nbsp;на&nbsp;Render, ключи из <code>.env</code>.</li>
-                <li>Память: PostgreSQL-таблица <code>memory(user_id, key, value, updated_at)</code>. Хранит «факты» о&nbsp;пользователе: предпочтения, города, бюджет по&nbsp;умолчанию, история запросов.</li>
-                <li>Tools для&nbsp;агента:
-                    <ul>
-                        <li><code>remember(key, value)</code>&nbsp;&mdash; запомнить факт;</li>
-                        <li><code>recall(key)</code>&nbsp;&mdash; извлечь факт;</li>
-                        <li><code>web_search(query)</code>&nbsp;&mdash; поиск в&nbsp;интернете;</li>
-                        <li><code>web_fetch(url)</code>&nbsp;&mdash; чтение страницы;</li>
-                        <li><code>send_message(text)</code>&nbsp;&mdash; ответ пользователю.</li>
-                    </ul>
+                <li><strong>Создайте репо <code>concierge-bot/</code>.</strong> Это похоже на бот этапа&nbsp;06b (aiogram), но с двумя добавками: Claude Agent SDK как мозг и долговременная память в БД.
+                    <pre class="shell">&gt; создай проект concierge-bot:
+&gt;   bot.py        — aiogram, ловит /start, /forget, /recall, /budget,
+&gt;                   и любые текстовые сообщения;
+&gt;   agent.py      — Claude Agent SDK, agent loop;
+&gt;   memory.py     — обёртка над PostgreSQL (через asyncpg);
+&gt;   tools/        — папка с tool-функциями.
+&gt; .env.example: ANTHROPIC_API_KEY, TELEGRAM_BOT_TOKEN,
+&gt;   DATABASE_URL (Neon connection string), ENCRYPTION_KEY.
+&gt; CLAUDE.md заполни: стек (Python, Claude Agent SDK, aiogram, Neon PostgreSQL),
+&gt; команды запуска локально и на Render (web service + фоновой задачей),
+&gt; ключи из .env, дневной бюджет $1 на пользователя.</pre>
+                    <p><strong>Проверка:</strong> структура совпадает; в <code>CLAUDE.md</code> есть обе команды запуска (локально + Render); <code>.env</code> в <code>.gitignore</code>.</p>
                 </li>
-                <li>Системный промпт:
+                <li><strong>Поднимите Neon и создайте таблицу <code>memory</code>.</strong> Это «длинная» память агента&nbsp;&mdash; то, что переживает <code>break</code> цикла (см. Topics §I).
+                    <pre class="shell">&gt; в Neon (или локально через docker postgres) создай таблицу:
+&gt;   CREATE TABLE memory (
+&gt;     id SERIAL PRIMARY KEY,
+&gt;     user_id BIGINT NOT NULL,
+&gt;     key TEXT NOT NULL,
+&gt;     value_encrypted BYTEA NOT NULL,
+&gt;     updated_at TIMESTAMPTZ DEFAULT NOW(),
+&gt;     UNIQUE(user_id, key)
+&gt;   );
+&gt;   CREATE INDEX ON memory(user_id);
+&gt; в memory.py: функции set_fact(user_id, key, value)
+&gt; и get_fact(user_id, key), get_all_facts(user_id);
+&gt; шифрование через cryptography.Fernet с ключом ENCRYPTION_KEY
+&gt; (как в дневнике этапа 10).</pre>
+                    <p><strong>Проверка:</strong> в Neon-консоли запрос <code>SELECT * FROM memory</code> возвращает пустую таблицу со столбцами; <code>set_fact(1, "city", "Москва")</code> + <code>get_fact(1, "city")</code> возвращает <code>"Москва"</code>; в БД при этом видна <em>зашифрованная</em> бинарка, а не открытый текст.</p>
+                </li>
+                <li><strong>Опишите пять tools для агента.</strong> Каждый&nbsp;&mdash; JSON-schema плюс Python-функция, как в Topics §I (тема «Tool definitions»).
+                    <pre class="shell">&gt; в tools/ создай файлы с функциями + JSON-schema:
+&gt;   remember(key, value) → set_fact(user_id, key, value);
+&gt;   recall(key) → get_fact(user_id, key);
+&gt;   web_search(query) → используй DuckDuckGo HTML API или Tavily
+&gt;     (skill web-search из этапа 09, если установлен);
+&gt;   web_fetch(url) → requests.get + извлечение текста через BeautifulSoup;
+&gt;   send_message(text) → bot.send_message(chat_id, text).
+&gt; user_id и chat_id передавай через замыкание/контекст,
+&gt; чтобы tools «знали» текущего пользователя.</pre>
+                    <p><strong>Проверка:</strong> в Python REPL <code>tools.remember("test", "hello")</code> работает (в БД появилась запись); <code>tools.web_search("test")</code> возвращает список ссылок.</p>
+                </li>
+                <li><strong>Передайте Claude системный промпт.</strong> Тут&nbsp;&mdash; «характер» вашего консьержа. Один на всех пользователей, с prompt caching.
                     <pre class="shell">Ты — личный ассистент. Перед каждой задачей:
 1) recall интересные факты про пользователя (предпочтения, бюджеты);
 2) если задача требует свежих данных — web_search и web_fetch;
@@ -721,16 +865,33 @@ No "buy/sell" advice. Observation only.</pre>
 4) если узнал что-то новое о пользователе — remember.
 
 НЕ выдумывай факты. Если не знаешь — спрашивай через send_message.</pre>
+                    <p><strong>Проверка:</strong> в <code>agent.py</code> системный промпт лежит в поле <code>system</code> как <code>[{"type":"text","text":"...","cache_control":{"type":"ephemeral"}}]</code>; начиная со второго запроса в логах виден отчёт <code>cache_read_input_tokens &gt; 0</code>.</p>
                 </li>
-                <li>Цикл: получили сообщение от&nbsp;пользователя → запустили agent loop с&nbsp;историей последних 10 сообщений + всеми <code>recall</code>-ами → агент работает → завершился → сохраняем последний ответ в&nbsp;memory.</li>
-                <li>Команды бота:
-                    <ul>
-                        <li><code>/forget</code>&nbsp;&mdash; очистить всю память (GDPR);</li>
-                        <li><code>/recall</code>&nbsp;&mdash; показать, что бот про&nbsp;вас «знает»;</li>
-                        <li><code>/budget</code>&nbsp;&mdash; показать сколько токенов потрачено за&nbsp;месяц.</li>
-                    </ul>
+                <li><strong>Свяжите бот и агента.</strong> Каждое сообщение пользователя&nbsp;&mdash; один прогон agent loop, который сам решает, какие tools вызывать.
+                    <pre class="shell">&gt; в bot.py: на каждое текстовое сообщение —
+&gt; agent.run(user_id, chat_id, message_text).
+&gt; в agent.py: agent.run загружает последние 10 сообщений из memory,
+&gt; добавляет новое от пользователя, запускает цикл из Topics §I
+&gt; (max_iterations=8, max_tokens=1500), на end_turn —
+&gt; сохраняет ответ ассистента в историю.
+&gt; tool send_message агент вызывает САМ, когда хочет ответить
+&gt; (а не «через return»).</pre>
+                    <p><strong>Проверка:</strong> напишите боту «привет»&nbsp;&mdash; в течение 10 секунд приходит ответ; в Neon в таблице <code>memory</code> для вашего <code>user_id</code> появилась запись с историей сообщений.</p>
                 </li>
-                <li>Test-drive:
+                <li><strong>Добавьте служебные команды.</strong> Без них пользователь не может ни увидеть, что бот про него знает, ни забрать своё право на «забыть».
+                    <pre class="shell">&gt; в bot.py добавь три команды:
+&gt;   /forget — DELETE FROM memory WHERE user_id = ?,
+&gt;             ответ: «всё забыл, начнём заново»;
+&gt;   /recall — SELECT key, value FROM memory WHERE user_id = ?,
+&gt;             расшифровать и показать списком;
+&gt;   /budget — посчитать input+output токены за календарный месяц
+&gt;             из логов PostHog (или из локального файла usage.json),
+&gt;             вернуть стоимость в долларах по haiku-тарифу.
+&gt; обработай /forget как «требует подтверждения»:
+&gt; «вы уверены? напишите «удалить»».</pre>
+                    <p><strong>Проверка:</strong> <code>/recall</code> на чистом аккаунте — «пока ничего». После пары сообщений&nbsp;&mdash; список фактов. <code>/forget</code> с подтверждением&nbsp;&mdash; следующий <code>/recall</code> снова пустой.</p>
+                </li>
+                <li><strong>Прогоните test-drive вживую.</strong> Это первый рабочий пример того, чем агент с памятью отличается от обычного чат-бота.
                     <pre class="shell">[вы]   привет, я люблю керамику и небольшие путешествия
 [бот]  записал 👋 чем могу помочь?
 [вы]   куда поехать на 3 дня в апреле, бюджет 50к
@@ -743,23 +904,80 @@ No "buy/sell" advice. Observation only.</pre>
        - любит керамику
        - предпочитает небольшие путешествия
        - типичный бюджет на 3-дневную поездку: ~50к</pre>
+                    <p><strong>Проверка:</strong> во второй беседе (без напоминания о керамике) бот всё ещё учитывает её&nbsp;&mdash; например, в подарках сестре сразу предлагает керамику. Это и есть «долговременная память в работе».</p>
                 </li>
-                <li>Безопасность: <code>max_tokens=1500</code>, <code>max_iterations=8</code>, дневной бюджет на&nbsp;пользователя $1, шифрование <code>memory.value</code> в&nbsp;БД (как в&nbsp;дневнике этапа&nbsp;10).</li>
-                <li>Verification: запустите subagent с&nbsp;ролью «privacy-аудит». Brief: представь, что бот утёк через дамп БД. Что увидит атакующий? Что нельзя восстановить?</li>
+                <li><strong>Зафиксируйте лимиты безопасности.</strong> Без них один настойчивый пользователь может уронить вам бюджет.
+                    <pre class="shell">&gt; в agent.py добавь:
+&gt;   - max_iterations=8 на одно сообщение;
+&gt;   - max_tokens=1500 на ответ;
+&gt;   - дневной бюджет $1 на пользователя:
+&gt;     перед вызовом messages.create проверь usage_today(user_id),
+&gt;     при превышении — «лимит на сегодня исчерпан, продолжим завтра».
+&gt; в memory.py:
+&gt;   - все value записывай ЗАШИФРОВАННО через Fernet (как в этапе 10);
+&gt;   - НИ В КОЕМ СЛУЧАЕ не сохраняй в БД пароли, ключи API, номера карт
+&gt;     — даже если пользователь их прислал. Перед remember()
+&gt;     проверяй текст regexp'ом «sk-...», «4XXX-XXXX-...» и т. п.,
+&gt;     при совпадении — отказывайся сохранять и предупреждай пользователя.</pre>
+                    <p><strong>Проверка:</strong> пришлите боту «запомни мой пароль qwerty123»&nbsp;&mdash; он должен ответить отказом и не записать в БД; <code>SELECT value_encrypted FROM memory</code> возвращает бинарку, а не текст.</p>
+                </li>
+                <li><strong>Прогоните privacy-аудит.</strong> Headless-бот хранит ваши факты&nbsp;&mdash; перед запуском важно понять, что произойдёт при утечке БД.
+                    <pre class="shell">&gt; запусти subagent с ролью «privacy-аудит». brief:
+&gt; представь, что concierge-bot утёк через дамп БД (pg_dump).
+&gt; что увидит атакующий: какие столбцы открыты,
+&gt; что можно расшифровать без ENCRYPTION_KEY,
+&gt; что нельзя восстановить вообще?
+&gt; найди три типа данных, которые я случайно мог записать
+&gt; в открытом виде и должен переписать. покажи список
+&gt; «данные → текущее состояние → как исправить».</pre>
+                    <p><strong>Проверка:</strong> аудит нашёл хотя бы один реальный риск (например, <code>updated_at</code> открыт и палит время онлайн пользователя; или <code>user_id</code> = telegram-id, который сам по себе&nbsp;&mdash; персональные данные). Если всё уже идеально&nbsp;&mdash; спросите «что ещё бы вы поменяли при росте до 1000 пользователей?».</p>
+                </li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Repo <code>concierge-bot/</code>. Run locally or on Render as a web service with a background loop (like the bot in etape 06b). Ask Claude to fill <code>CLAUDE.md</code>: stack (Python, Claude Agent SDK, aiogram, Neon PostgreSQL), local and Render start commands, keys from <code>.env</code>.</li>
-                <li>Memory: a PostgreSQL <code>memory(user_id, key, value, updated_at)</code> table. Stores “facts” about the user: preferences, cities, default budget, request history.</li>
-                <li>Agent tools:
-                    <ul>
-                        <li><code>remember(key, value)</code> — store a fact;</li>
-                        <li><code>recall(key)</code> — fetch a fact;</li>
-                        <li><code>web_search(query)</code> — internet search;</li>
-                        <li><code>web_fetch(url)</code> — read a page;</li>
-                        <li><code>send_message(text)</code> — reply to the user.</li>
-                    </ul>
+                <li><strong>Create the <code>concierge-bot/</code> repo.</strong> This looks like the etape-06b bot (aiogram) with two additions: Claude Agent SDK as the brain and long-term memory in a DB.
+                    <pre class="shell">&gt; scaffold the concierge-bot project:
+&gt;   bot.py        — aiogram, handles /start, /forget, /recall, /budget,
+&gt;                   and any text message;
+&gt;   agent.py      — Claude Agent SDK, agent loop;
+&gt;   memory.py     — PostgreSQL wrapper (via asyncpg);
+&gt;   tools/        — folder for tool functions.
+&gt; .env.example: ANTHROPIC_API_KEY, TELEGRAM_BOT_TOKEN,
+&gt;   DATABASE_URL (Neon connection string), ENCRYPTION_KEY.
+&gt; fill CLAUDE.md: stack (Python, Claude Agent SDK, aiogram, Neon PostgreSQL),
+&gt; local + Render start commands (web service with background task),
+&gt; keys from .env, daily budget $1 per user.</pre>
+                    <p><strong>Check:</strong> layout matches; <code>CLAUDE.md</code> has both start commands (local + Render); <code>.env</code> is in <code>.gitignore</code>.</p>
                 </li>
-                <li>System prompt:
+                <li><strong>Spin up Neon and create the <code>memory</code> table.</strong> This is the agent’s “long” memory — what survives a loop <code>break</code> (see Topics §I).
+                    <pre class="shell">&gt; in Neon (or locally via docker postgres) create:
+&gt;   CREATE TABLE memory (
+&gt;     id SERIAL PRIMARY KEY,
+&gt;     user_id BIGINT NOT NULL,
+&gt;     key TEXT NOT NULL,
+&gt;     value_encrypted BYTEA NOT NULL,
+&gt;     updated_at TIMESTAMPTZ DEFAULT NOW(),
+&gt;     UNIQUE(user_id, key)
+&gt;   );
+&gt;   CREATE INDEX ON memory(user_id);
+&gt; in memory.py: set_fact(user_id, key, value),
+&gt; get_fact(user_id, key), get_all_facts(user_id);
+&gt; encrypt via cryptography.Fernet with ENCRYPTION_KEY
+&gt; (as in the etape-10 diary).</pre>
+                    <p><strong>Check:</strong> in Neon console <code>SELECT * FROM memory</code> returns the empty table with columns; <code>set_fact(1, "city", "Moscow")</code> + <code>get_fact(1, "city")</code> returns <code>"Moscow"</code>; in the DB you see an <em>encrypted</em> blob, not plaintext.</p>
+                </li>
+                <li><strong>Declare five tools for the agent.</strong> Each is a JSON-schema plus a Python function, as in Topics §I (“Tool definitions”).
+                    <pre class="shell">&gt; in tools/ create files with functions + JSON-schema:
+&gt;   remember(key, value) → set_fact(user_id, key, value);
+&gt;   recall(key) → get_fact(user_id, key);
+&gt;   web_search(query) → DuckDuckGo HTML API or Tavily
+&gt;     (web-search skill from etape 09 if installed);
+&gt;   web_fetch(url) → requests.get + BeautifulSoup text extraction;
+&gt;   send_message(text) → bot.send_message(chat_id, text).
+&gt; pass user_id and chat_id via closure/context
+&gt; so tools "know" the current user.</pre>
+                    <p><strong>Check:</strong> in a Python REPL <code>tools.remember("test", "hello")</code> works (a row appears in the DB); <code>tools.web_search("test")</code> returns a list of links.</p>
+                </li>
+                <li><strong>Hand Claude the system prompt.</strong> The concierge’s “character.” One for all users, with prompt caching.
                     <pre class="shell">You are a personal assistant. Before every task:
 1) recall relevant facts about the user (preferences, budgets);
 2) if the task needs fresh data — web_search and web_fetch;
@@ -767,16 +985,33 @@ No "buy/sell" advice. Observation only.</pre>
 4) if you learned something new — remember.
 
 DO NOT invent facts. If you don't know — ask via send_message.</pre>
+                    <p><strong>Check:</strong> in <code>agent.py</code> the system prompt sits in <code>system</code> as <code>[{"type":"text","text":"...","cache_control":{"type":"ephemeral"}}]</code>; from the second request on, logs show <code>cache_read_input_tokens &gt; 0</code>.</p>
                 </li>
-                <li>Loop: a user message arrives → run the agent loop with the last 10 messages + all <code>recall</code>s → agent works → finishes → save the last reply to memory.</li>
-                <li>Bot commands:
-                    <ul>
-                        <li><code>/forget</code> — wipe all memory (GDPR);</li>
-                        <li><code>/recall</code> — show what the bot “knows” about you;</li>
-                        <li><code>/budget</code> — show monthly token spend.</li>
-                    </ul>
+                <li><strong>Wire the bot to the agent.</strong> Each user message = one agent-loop run, which decides which tools to call.
+                    <pre class="shell">&gt; in bot.py: on every text message —
+&gt; agent.run(user_id, chat_id, message_text).
+&gt; in agent.py: agent.run loads the last 10 messages from memory,
+&gt; appends the new user message, runs the loop from Topics §I
+&gt; (max_iterations=8, max_tokens=1500), on end_turn —
+&gt; saves the assistant reply into history.
+&gt; the send_message tool is called BY THE AGENT itself
+&gt; (not "via return").</pre>
+                    <p><strong>Check:</strong> message the bot “hi” — a reply arrives within 10 seconds; in Neon, the <code>memory</code> table has a row for your <code>user_id</code> with message history.</p>
                 </li>
-                <li>Test drive:
+                <li><strong>Add the housekeeping commands.</strong> Without them the user can’t see what the bot knows about them, nor exercise their right to “forget.”
+                    <pre class="shell">&gt; in bot.py add three commands:
+&gt;   /forget — DELETE FROM memory WHERE user_id = ?,
+&gt;             reply: "wiped, fresh start";
+&gt;   /recall — SELECT key, value FROM memory WHERE user_id = ?,
+&gt;             decrypt and show as a list;
+&gt;   /budget — sum input+output tokens for the calendar month
+&gt;             from PostHog logs (or local usage.json),
+&gt;             return dollar cost at haiku rates.
+&gt; gate /forget behind a confirmation:
+&gt; "are you sure? type 'delete'".</pre>
+                    <p><strong>Check:</strong> <code>/recall</code> on a fresh account — “nothing yet.” After a few messages — a list of facts. <code>/forget</code> with confirmation — next <code>/recall</code> is empty again.</p>
+                </li>
+                <li><strong>Run a live test drive.</strong> This is the first real demonstration of how an agent with memory differs from a regular chat bot.
                     <pre class="shell">[you] hi, I like ceramics and short trips
 [bot] noted 👋 how can I help?
 [you] where to go for 3 days in April, budget 50k
@@ -789,9 +1024,33 @@ DO NOT invent facts. If you don't know — ask via send_message.</pre>
       - likes ceramics
       - prefers short trips
       - typical 3-day budget: ~50k</pre>
+                    <p><strong>Check:</strong> in a later conversation (without re-mentioning ceramics) the bot still factors it in — e.g., suggests ceramics for a sister’s gift unprompted. That’s long memory at work.</p>
                 </li>
-                <li>Safety: <code>max_tokens=1500</code>, <code>max_iterations=8</code>, daily per-user budget $1, encryption of <code>memory.value</code> in the DB (as in the etape-10 diary).</li>
-                <li>Verification: run a “privacy audit” subagent. Brief: imagine the bot leaked via a DB dump. What does the attacker see? What can’t be reconstructed?</li>
+                <li><strong>Lock down safety limits.</strong> Without them one persistent user can blow your budget.
+                    <pre class="shell">&gt; in agent.py add:
+&gt;   - max_iterations=8 per message;
+&gt;   - max_tokens=1500 per reply;
+&gt;   - daily $1 budget per user:
+&gt;     before messages.create check usage_today(user_id),
+&gt;     over budget — "daily limit reached, continue tomorrow".
+&gt; in memory.py:
+&gt;   - all values written ENCRYPTED via Fernet (like etape 10);
+&gt;   - UNDER NO CIRCUMSTANCES store passwords, API keys, card numbers
+&gt;     — even if the user sent them. Before remember()
+&gt;     regex-check the text for "sk-...", "4XXX-XXXX-..." etc.;
+&gt;     on a match — refuse to store and warn the user.</pre>
+                    <p><strong>Check:</strong> send “remember my password qwerty123” — the bot must refuse and not write to the DB; <code>SELECT value_encrypted FROM memory</code> returns a blob, not text.</p>
+                </li>
+                <li><strong>Run a privacy audit.</strong> A headless bot stores your facts — before launch, it’s vital to understand what happens on a DB leak.
+                    <pre class="shell">&gt; spawn a subagent as "privacy auditor". brief:
+&gt; imagine concierge-bot leaked via a DB dump (pg_dump).
+&gt; what does the attacker see: which columns are open,
+&gt; what can be decrypted without ENCRYPTION_KEY,
+&gt; what can't be reconstructed at all?
+&gt; find three data types I might have accidentally stored in cleartext
+&gt; and need to rewrite. show "data → current state → fix".</pre>
+                    <p><strong>Check:</strong> the audit found at least one real risk (e.g., <code>updated_at</code> is open and reveals user online time; or <code>user_id</code> equals a telegram id, itself personal data). If everything is already perfect — ask “what would you change at 1000 users?”.</p>
+                </li>
             </ol>
         </article>
     </div>
