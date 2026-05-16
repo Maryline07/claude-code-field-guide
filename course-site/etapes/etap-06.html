@@ -830,44 +830,81 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; возвращает { answer: string, model: string, tokens_used: int }.
 &gt; ВАЖНО: ANTHROPIC_API_KEY — только из env, никогда не светится в логах.</pre>
                 </li>
-                <li>В&nbsp;<code>frontend/</code> добавьте страницу <code>/advisor</code> с&nbsp;чатом. История сообщений в&nbsp;state. Ответы можно делать двумя способами&nbsp;&mdash; скажите Claude, какой хотите:
-                    <ul style="margin-top:0.3rem;">
-                        <li><strong>Обычный запрос-ответ</strong> (проще): кнопка «Спросить» → ждёте → появляется полный ответ. Начните с&nbsp;этого.</li>
-                        <li><strong>Streaming</strong> (красиво): ответ появляется по&nbsp;словам, как в&nbsp;самом Claude. Сложнее в&nbsp;реализации&nbsp;&mdash; переходите, когда базовый вариант уже работает.</li>
-                    </ul>
-                </li>
-                <li>Уточните UI:
-                    <ul>
-                        <li><em>«сделай вид «классической переписки», узкая колонка, тёплая палитра»</em>;</li>
-                        <li><em>«в&nbsp;каждом ответе показывай маленькую плашку «модель + tokens», для&nbsp;прозрачности»</em>;</li>
-                        <li><em>«добавь три быстрых вопроса-кнопки сверху: «оцени мой риск», «куда переложить?», «прогноз на&nbsp;год»»</em>.</li>
-                    </ul>
-                </li>
-                <li>Обработка ошибок:
-                    <pre class="shell">&gt; добавь обработку:
-&gt; — если ANTHROPIC_API_KEY не задан — friendly ошибка «AI выключен».
-&gt; — если кончились кредиты Anthropic — друг. ошибка «лимит, попробуйте позже».
-&gt; — если backend не отвечает — повтор через 3 секунды, потом ошибка.</pre>
-                </li>
-                <li>Multi-model логика:
-                    <pre class="shell">&gt; добавь второй эндпоинт /api/advisor/classify:
-&gt; принимает «что эта операция?», использует haiku
-&gt; (классификация транзакций — простая задача, экономим деньги).
-&gt; покажи в advisor.html, как переключаются модели.</pre>
-                </li>
-                <li>Деплой backend на&nbsp;Render, frontend на&nbsp;Vercel. <strong>В&nbsp;Render</strong> добавьте <code>ANTHROPIC_API_KEY</code> через интерфейс (НЕ&nbsp;коммитьте в&nbsp;<code>.env</code>).</li>
-                <li>Verification:
-                    <pre class="shell">&gt; через playwright прогон:
+                <li><strong>Страница чата.</strong> Создайте файл <code>frontend/advisor.html</code>&nbsp;&mdash; это и&nbsp;есть страница по&nbsp;адресу <code>/advisor</code>. История переписки хранится в&nbsp;JavaScript-массиве (пока вкладка открыта&nbsp;&mdash; история видна, закрыли&nbsp;&mdash; пропала). Начните с&nbsp;простого режима: нажали «Спросить» → ждёте → весь ответ появляется сразу. Попросите Claude:
+                    <pre class="shell">&gt; создай frontend/advisor.html — страницу AI-консультанта.
+&gt; чат-интерфейс: поле ввода + кнопка «Спросить» + область с историей переписки.
+&gt; история сообщений — JavaScript-массив в памяти вкладки.
+&gt; режим ответов: обычный запрос-ответ (не streaming) —
+&gt;   кнопка нажата → fetch POST /api/advisor/ask → ждём → показываем ответ целиком.
+&gt; JWT-токен берём из localStorage и шлём в Authorization: Bearer.
+&gt; стиль: классическая переписка, узкая колонка, тёплая палитра.</pre>
+                    Проверка: страница открывается, можно написать вопрос и получить ответ от&nbsp;AI. Streaming (ответ по&nbsp;словам, как в&nbsp;самом Claude)&nbsp;&mdash; добавьте позже, когда базовый вариант уже работает.</li>
+                <li><strong>Доводка внешнего вида.</strong> Три отдельных промпта подряд&nbsp;&mdash; после каждого посмотрите страницу и переходите к следующему.
+                    <pre class="shell">&gt; в advisor.html поправь стиль: тёплая палитра как на остальных
+&gt; страницах кабинета, узкая колонка по центру (максимум 640px),
+&gt; переписка — классический вид «вопрос справа, ответ слева».</pre>
+                    <pre class="shell">&gt; под каждым ответом AI добавь маленькую серую плашку:
+&gt; «модель: claude-sonnet-4-6 · 2143 tokens».
+&gt; Это для меня, чтобы видеть, какая модель отвечала и насколько
+&gt; объёмный ответ — пригодится, когда будем считать стоимость.</pre>
+                    <pre class="shell">&gt; над полем ввода добавь три кнопки-подсказки:
+&gt; «оцени мой риск», «куда переложить?», «прогноз на год».
+&gt; Клик по кнопке вставляет вопрос в поле ввода (но НЕ отправляет —
+&gt; даёт мне отредактировать перед отправкой).</pre>
+                    Проверка: страница выглядит как переписка, под ответами видна плашка с моделью и токенами, кнопки-подсказки вставляют текст в поле ввода.</li>
+                <li><strong>Что показывать, когда что-то ломается.</strong> Три типичные ошибки в&nbsp;работе с&nbsp;AI: ключ забыли вставить, кредиты Anthropic кончились, сервер задумался дольше обычного. Без обработки пользователь увидит загадочный «500» в&nbsp;консоли&nbsp;&mdash; лучше показать понятное сообщение.
+                    <pre class="shell">&gt; в /api/advisor/ask добавь обработку трёх ситуаций:
+&gt; 1) ANTHROPIC_API_KEY не задан в env → возвращай 503
+&gt;    с сообщением «AI временно выключен, попробуйте позже».
+&gt; 2) Anthropic вернул 429 (кредиты кончились) → 503
+&gt;    с сообщением «дневной лимит исчерпан».
+&gt; 3) на стороне frontend: если запрос идёт больше 10 секунд —
+&gt;    повтори один раз; если и тогда нет ответа —
+&gt;    покажи «сервер не отвечает, попробуйте позже».</pre>
+                    Проверка: временно переименуйте <code>ANTHROPIC_API_KEY</code> в&nbsp;<code>.env</code> на&nbsp;<code>ANTHROPIC_API_KEY_BROKEN</code>, перезапустите backend, задайте вопрос&nbsp;&mdash; должно появиться понятное сообщение, а&nbsp;не&nbsp;«Failed to fetch».</li>
+                <li><strong>Вторая модель&nbsp;&mdash; Haiku&nbsp;&mdash; для&nbsp;классификации.</strong> Sonnet хорошо отвечает на&nbsp;развёрнутые вопросы, но&nbsp;для&nbsp;простой задачи «это покупка кофе или транспорт?» он&nbsp;избыточен и&nbsp;дорог. Добавьте параллельный эндпоинт на&nbsp;быстрой и&nbsp;дешёвой Haiku.
+                    <pre class="shell">&gt; добавь второй эндпоинт POST /api/advisor/classify:
+&gt; принимает { description: "Starbucks 380₽" } —
+&gt; возвращает { category: "food", confidence: 0.92 }.
+&gt; использует claude-haiku-4-5 (НЕ sonnet — это важно).
+&gt; prompt caching на системный промпт «классифицируй транзакцию
+&gt; в одну из категорий: food, transport, housing, entertainment, other».
+&gt;
+&gt; в advisor.html: добавь рядом с каждой новой операцией
+&gt; авто-классификацию через этот эндпоинт. В плашке под ответом
+&gt; показывай «модель: claude-haiku-4-5», чтобы я видел, что
+&gt; переключение моделей работает.</pre>
+                    Проверка: в&nbsp;плашке под ответами видны два разных названия модели&nbsp;&mdash; Sonnet для&nbsp;развёрнутых вопросов, Haiku для&nbsp;классификации операций.</li>
+                <li><strong>Выкатываем в&nbsp;интернет.</strong> Backend и&nbsp;frontend уже задеплоены из&nbsp;проекта&nbsp;A&nbsp;&mdash; здесь только обновляем их&nbsp;новыми файлами и&nbsp;добавляем один секрет.
+                    <ol style="margin-top:0.5rem;">
+                        <li><strong>Backend.</strong> <code>git push</code> в&nbsp;репозиторий backend&nbsp;&mdash; Render автоматически пересоберёт сервис через 2–3 минуты.</li>
+                        <li><strong>Ключ Anthropic в&nbsp;Render.</strong> Откройте ваш Web Service на&nbsp;<a href="https://render.com">render.com</a> → вкладка <strong>Environment</strong> → <strong>Add Environment Variable</strong> → имя <code>ANTHROPIC_API_KEY</code>, значение скопируйте из&nbsp;<a href="https://console.anthropic.com/settings/keys">console.anthropic.com/settings/keys</a>. <em>Не коммитьте</em> ключ в&nbsp;<code>.env</code>&nbsp;&mdash; файл попадёт на&nbsp;GitHub, ключ украдут за&nbsp;час и&nbsp;спишут ваши кредиты.</li>
+                        <li><strong>Frontend.</strong> <code>git push</code> в&nbsp;репозиторий frontend&nbsp;&mdash; Vercel пересоберёт за&nbsp;30&nbsp;секунд.</li>
+                    </ol>
+                    Проверка: откройте <code>https://your-app.vercel.app/advisor</code>, задайте вопрос&nbsp;&mdash; ответ должен прийти от&nbsp;живого Anthropic-сервера, а&nbsp;не&nbsp;только от&nbsp;локального бэкенда.</li>
+                <li><strong>Проверка живого сайта через Playwright.</strong> То&nbsp;же, что в&nbsp;проекте&nbsp;A&nbsp;&mdash; пускаем Claude гулять по&nbsp;опубликованному URL и&nbsp;смотреть, всё&nbsp;ли работает.
+                    <pre class="shell">&gt; через playwright прогон на https://your-app.vercel.app:
 &gt; — войди как тестовый user;
 &gt; — открой /advisor;
 &gt; — задай 3 вопроса по портфелю;
 &gt; — проверь что:
 &gt;     1) ответы релевантны (упоминают тикеры из моего портфеля);
-&gt;     2) tokens_used меньше у второго и третьего вопроса (cache hit);
-&gt;     3) classify-эндпоинт использует haiku, а ask — sonnet.
-&gt; пришли отчёт.</pre>
+&gt;     2) tokens_used меньше у второго и третьего вопроса
+&gt;        (это значит, что prompt caching работает);
+&gt;     3) classify-эндпоинт использует haiku, а ask — sonnet
+&gt;        (видно по плашкам под ответами).
+&gt; пришли отчёт со скриншотами.</pre>
                 </li>
-                <li>Финальный аудит: <em>«если кто-то получит мой Anthropic API key, как он&nbsp;узнает, через какое моё приложение он&nbsp;утёк? есть&nbsp;ли в&nbsp;логах что-то, что я&nbsp;должен очистить?»</em></li>
+                <li><strong>Аудит безопасности.</strong> Перед тем как показать сайт другим людям&nbsp;&mdash; проверьте, не&nbsp;попал&nbsp;ли куда-нибудь ваш ключ или тексты промптов.
+                    <pre class="shell">&gt; если кто-то получит мой ANTHROPIC_API_KEY, по логам Render
+&gt; он сможет понять, через какое моё приложение ключ утёк?
+&gt; есть ли в логах строки, которые я должен очистить:
+&gt; — сами тексты вопросов пользователей;
+&gt; — фрагменты ответов Claude;
+&gt; — заголовки Authorization с JWT-токенами.
+&gt; покажи все места в коде, где мы пишем что-то в лог,
+&gt; и предложи, что заменить на «[redacted]».</pre>
+                    Проверка: в&nbsp;ответе Claude нет упоминания самого <code>ANTHROPIC_API_KEY</code>, заголовков <code>Authorization</code> или текстов промптов в&nbsp;логах.</li>
             </ol>
             <ol class="steps" lang="en">
                 <li>In <code>backend/</code> add the endpoint <code>/api/advisor/ask</code>:
@@ -880,44 +917,80 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; returns { answer: string, model: string, tokens_used: int }.
 &gt; IMPORTANT: ANTHROPIC_API_KEY only from env, never logged.</pre>
                 </li>
-                <li>In <code>frontend/</code> add an <code>/advisor</code> page with a chat. Message history in state. Pick how replies arrive — tell Claude which you want:
-                    <ul style="margin-top:0.3rem;">
-                        <li><strong>Regular request-response</strong> (simpler): "Ask" button → wait → full reply appears. Start here.</li>
-                        <li><strong>Streaming</strong> (polished): reply appears word by word, like Claude itself. Harder to implement — switch to this once the basic version works.</li>
-                    </ul>
-                </li>
-                <li>Refine UI:
-                    <ul>
-                        <li><em>"go for ‘classic correspondence’ look — narrow column, warm palette"</em>;</li>
-                        <li><em>"each reply shows a tiny ‘model + tokens’ tag for transparency"</em>;</li>
-                        <li><em>"three quick-question buttons on top: ‘rate my risk,’ ‘where to reallocate?,’ ‘yearly forecast’"</em>.</li>
-                    </ul>
-                </li>
-                <li>Error handling:
-                    <pre class="shell">&gt; add handling:
-&gt; — if ANTHROPIC_API_KEY missing — friendly "AI off".
-&gt; — if Anthropic credits exhausted — friendly "limit, try later".
-&gt; — if backend doesn't reply — retry 3 sec, then error.</pre>
-                </li>
-                <li>Multi-model logic:
-                    <pre class="shell">&gt; add a second endpoint /api/advisor/classify:
-&gt; takes "what is this operation?", uses haiku
-&gt; (transaction classification — simple, save money).
-&gt; show on advisor.html how models switch.</pre>
-                </li>
-                <li>Deploy backend on Render, frontend on Vercel. <strong>In Render</strong> add <code>ANTHROPIC_API_KEY</code> via the UI (DO NOT commit to <code>.env</code>).</li>
-                <li>Verification:
-                    <pre class="shell">&gt; via playwright:
+                <li><strong>Chat page.</strong> Create the file <code>frontend/advisor.html</code>&nbsp;&mdash; that is the page at the <code>/advisor</code> URL. Conversation history lives in a JavaScript array (visible while the tab is open; gone when the tab closes). Start with the simple mode: press "Ask" → wait → the full reply appears at once. Ask Claude:
+                    <pre class="shell">&gt; create frontend/advisor.html — the AI advisor page.
+&gt; chat interface: input field + "Ask" button + reply history area.
+&gt; message history — a JavaScript array in tab memory.
+&gt; reply mode: regular request-response (no streaming) —
+&gt;   button pressed → fetch POST /api/advisor/ask → wait → show the full reply.
+&gt; JWT token from localStorage sent as Authorization: Bearer.
+&gt; style: classic chat look, narrow column, warm palette.</pre>
+                    Check: the page opens, you can type a question and get an AI reply. Streaming (reply word by word, like Claude itself) — add it later, once the basic version works.</li>
+                <li><strong>Polish the look.</strong> Three separate prompts in a row&nbsp;&mdash; after each, glance at the page and move on to the next.
+                    <pre class="shell">&gt; in advisor.html, tune the style: warm palette like the rest
+&gt; of the office, narrow centred column (max 640px),
+&gt; conversation in the classic "question right, answer left" layout.</pre>
+                    <pre class="shell">&gt; under each AI reply, add a tiny grey tag:
+&gt; "model: claude-sonnet-4-6 · 2143 tokens".
+&gt; This is for me — to see which model answered and how big
+&gt; the reply was; useful later when we estimate cost.</pre>
+                    <pre class="shell">&gt; above the input field, add three suggestion buttons:
+&gt; "rate my risk", "where to reallocate?", "yearly forecast".
+&gt; Clicking a button inserts the question into the input
+&gt; (but does NOT submit — it lets me edit before sending).</pre>
+                    Check: the page reads like a chat, the model + tokens tag shows under each answer, and the suggestion buttons drop their text into the input field.</li>
+                <li><strong>What to show when something breaks.</strong> Three typical AI failures: the key was never set, the Anthropic credits ran out, or the server takes longer than usual. Without handling, the user sees a mystery "500" in the console&nbsp;&mdash; better to show a clear message.
+                    <pre class="shell">&gt; in /api/advisor/ask, handle three cases:
+&gt; 1) ANTHROPIC_API_KEY missing from env → return 503
+&gt;    with the message "AI temporarily off, try again later".
+&gt; 2) Anthropic returned 429 (credits exhausted) → 503
+&gt;    with the message "daily limit reached".
+&gt; 3) frontend side: if a request runs longer than 10 seconds —
+&gt;    retry once; if still no answer —
+&gt;    show "server not responding, try again later".</pre>
+                    Check: temporarily rename <code>ANTHROPIC_API_KEY</code> in <code>.env</code> to <code>ANTHROPIC_API_KEY_BROKEN</code>, restart the backend, ask a question&nbsp;&mdash; a clear message should appear, not "Failed to fetch".</li>
+                <li><strong>A second model&nbsp;&mdash; Haiku&nbsp;&mdash; for classification.</strong> Sonnet handles open-ended questions well, but for a simple task like "is this a coffee purchase or transport?" it's overkill and expensive. Add a parallel endpoint on the fast, cheap Haiku.
+                    <pre class="shell">&gt; add a second endpoint POST /api/advisor/classify:
+&gt; takes { description: "Starbucks 380₽" } —
+&gt; returns { category: "food", confidence: 0.92 }.
+&gt; uses claude-haiku-4-5 (NOT sonnet — this matters).
+&gt; prompt caching on the system prompt "classify a transaction
+&gt; into one of: food, transport, housing, entertainment, other".
+&gt;
+&gt; in advisor.html: next to each new operation, auto-classify
+&gt; through this endpoint. In the tag under the reply,
+&gt; show "model: claude-haiku-4-5" so I can see model switching works.</pre>
+                    Check: the tags under replies show two different model names&nbsp;&mdash; Sonnet for open-ended questions, Haiku for operation classification.</li>
+                <li><strong>Ship it to the internet.</strong> Backend and frontend are already deployed from project&nbsp;A&nbsp;&mdash; here you only push the new files and add one secret.
+                    <ol style="margin-top:0.5rem;">
+                        <li><strong>Backend.</strong> <code>git push</code> to the backend repo&nbsp;&mdash; Render rebuilds the service automatically in 2–3 minutes.</li>
+                        <li><strong>Anthropic key in Render.</strong> Open your Web Service on <a href="https://render.com">render.com</a> → the <strong>Environment</strong> tab → <strong>Add Environment Variable</strong> → name <code>ANTHROPIC_API_KEY</code>, value copied from <a href="https://console.anthropic.com/settings/keys">console.anthropic.com/settings/keys</a>. <em>Do not commit</em> the key to <code>.env</code>&nbsp;&mdash; the file lands on GitHub, the key gets stolen within an hour and someone burns through your credits.</li>
+                        <li><strong>Frontend.</strong> <code>git push</code> to the frontend repo&nbsp;&mdash; Vercel rebuilds in 30 seconds.</li>
+                    </ol>
+                    Check: open <code>https://your-app.vercel.app/advisor</code>, ask a question&nbsp;&mdash; the answer should come from the live Anthropic server, not only from your local backend.</li>
+                <li><strong>Live-site check via Playwright.</strong> Same as in project&nbsp;A&nbsp;&mdash; let Claude walk the deployed URL and report what works.
+                    <pre class="shell">&gt; via playwright on https://your-app.vercel.app:
 &gt; — sign in as a test user;
 &gt; — open /advisor;
 &gt; — ask 3 portfolio questions;
-&gt; — check:
-&gt;     1) replies are relevant (mention my tickers);
-&gt;     2) tokens_used drops on q2 and q3 (cache hit);
-&gt;     3) classify uses haiku, ask uses sonnet.
-&gt; report back.</pre>
+&gt; — check that:
+&gt;     1) replies are relevant (mention tickers from my portfolio);
+&gt;     2) tokens_used drops on the second and third question
+&gt;        (this means prompt caching is working);
+&gt;     3) the classify endpoint uses haiku, ask uses sonnet
+&gt;        (visible in the tags under replies).
+&gt; report back with screenshots.</pre>
                 </li>
-                <li>Final audit: <em>"if my Anthropic API key leaks, how would they tell which app it leaked from? Are there log lines I should scrub?"</em></li>
+                <li><strong>Security audit.</strong> Before you show the site to other people&nbsp;&mdash; check whether your key or your prompt text leaked anywhere.
+                    <pre class="shell">&gt; if someone gets my ANTHROPIC_API_KEY, can they tell from the
+&gt; Render logs which of my apps it leaked from?
+&gt; are there log lines I should redact:
+&gt; — the actual text of user questions;
+&gt; — fragments of Claude's replies;
+&gt; — Authorization headers with JWT tokens?
+&gt; show me every place in the code where we write to a log,
+&gt; and suggest what to replace with "[redacted]".</pre>
+                    Check: Claude's answer doesn't mention <code>ANTHROPIC_API_KEY</code>, <code>Authorization</code> headers, or prompt text in logs.</li>
             </ol>
 
             <h4 lang="ru">Что вы здесь освоили</h4>
