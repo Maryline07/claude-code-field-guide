@@ -258,6 +258,7 @@
                         <li><strong>Telegram</strong>&nbsp;&mdash; мгновенно, бесплатно, у&nbsp;всех на&nbsp;телефоне.</li>
                     </ul>
                     <p>Для&nbsp;курса берём Telegram. Минимум, чтобы отправить сообщение себе:</p>
+                    <p lang="ru" class="note">Команда и&nbsp;код ниже&nbsp;&mdash; <em>примеры того, что Claude обернёт в&nbsp;ваш скрипт <code>lib/telegram.py</code></em> в&nbsp;Project&nbsp;A. Это не&nbsp;инструкции «выполни сам», а&nbsp;иллюстрация формата HTTP-вызова, чтобы вы&nbsp;узнавали его в&nbsp;коде Claude.</p>
                     <pre class="shell"><span class="prompt">$</span> curl -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
        -d "chat_id=$CHAT_ID" \
        -d "text=Hello from Claude"</pre>
@@ -276,6 +277,7 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
                         <li><strong>Telegram</strong> — instant, free, on everyone’s phone.</li>
                     </ul>
                     <p>The course goes Telegram. Minimal “send myself a message”:</p>
+                    <p lang="en" class="note">The command and code below are <em>examples of what Claude wraps into your <code>lib/telegram.py</code> script</em> in Project A. They're not "run this yourself" instructions, but an illustration of the HTTP call shape so you recognise it in Claude's code.</p>
                     <pre class="shell"><span class="prompt">$</span> curl -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
        -d "chat_id=$CHAT_ID" \
        -d "text=Hello from Claude"</pre>
@@ -516,84 +518,312 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>В&nbsp;Plan Mode (этап&nbsp;04) попросите Claude составить <code>spec.md</code> для&nbsp;«Финансового дворецкого»: четыре расписания, источники данных (portfolio-journal CSV, Daily Trader MCP), формат каждого сообщения.</li>
-                <li>Создайте папку <code>financial-butler/</code>. Структура:
-                    <pre class="shell">financial-butler/
-├── scripts/
-│   ├── morning_digest.py     # 8:30 каждый день
-│   ├── friday_review.py      # 19:00 пятницы
-│   ├── price_alert.py        # каждые 15 минут (real-time)
-│   └── monthly_audit.py      # 1-е число в 9:00
-├── lib/
-│   ├── telegram.py           # отправка сообщений
-│   ├── posthog.py            # запись телеметрии
-│   └── lock.py               # идемпотентность через файл-флаг
-├── .env.example              # шаблон без значений
-├── crontab.txt               # строки расписания (см. шаг ниже)
-└── CLAUDE.md</pre>
-                    Попросите Claude сразу заполнить <code>CLAUDE.md</code>: назначение четырёх скриптов, расписание каждого, ключи из <code>.env</code> (<code>TELEGRAM_TOKEN</code>, <code>ANTHROPIC_API_KEY</code>, <code>ALPHAVANTAGE_KEY</code>), как запустить скрипт вручную для теста.
-                </li>
-                <li><strong>morning_digest.py.</strong> Считает текущие позиции (через Daily Trader MCP <code>get_price</code>), вчерашние изменения, новости по&nbsp;holdings (через WebSearch + summarisation Claude API). Шлёт markdown-сводку в&nbsp;Telegram. Цена&nbsp;&mdash; кэшируется на&nbsp;15&nbsp;минут.</li>
-                <li><strong>friday_review.py.</strong> За&nbsp;неделю: общий рост, лучший и&nbsp;худший тикер, прогноз на&nbsp;неделю через ваш skill «инвест-аналитик». Использует Claude API с&nbsp;Sonnet и&nbsp;prompt caching (этап&nbsp;06).</li>
-                <li><strong>price_alert.py.</strong> Каждые 15 минут проверяет: упала&nbsp;ли цена больше 1% за&nbsp;сутки? Если да&nbsp;&mdash; шлёт алерт. <strong>Идемпотентность</strong>: ведёт <code>data/alerts-sent.json</code>, чтобы не&nbsp;слать одно и&nbsp;то&nbsp;же дважды.</li>
-                <li><strong>monthly_audit.py.</strong> 1-го числа считает: куда ушли деньги в&nbsp;прошлом месяце (по&nbsp;дашборду из&nbsp;этапа&nbsp;04), три самых неожиданных факта.</li>
-                <li>Подключите PostHog: используя skill <code>posthog:llma-cc-setup</code>, добавьте телеметрию во&nbsp;все четыре скрипта. Каждый запуск пишет: модель, токены, длительность, успех/ошибка.</li>
-                <li>Настройте расписание&nbsp;&mdash; бесплатно, двумя способами на&nbsp;выбор:
-                    <ul style="margin-top:0.3rem;">
-                        <li><strong>Системный cron</strong> (если компьютер часто включён)&nbsp;&mdash; <code>crontab -e</code>, по&nbsp;строке на&nbsp;скрипт:</li>
-                    </ul>
+                <li><strong>Spec в&nbsp;Plan Mode.</strong> Четыре независимые автоматизации&nbsp;&mdash; легко запутаться. Сначала договариваемся, что именно каждая делает, и&nbsp;только потом пишем код.
+                    <pre class="shell">&gt; войди в Plan Mode и составь spec.md для «Финансового дворецкого»:
+&gt;
+&gt; ЦЕЛЬ: четыре независимых автоматизации, шлющие сообщения
+&gt;   в один Telegram-чат на разном расписании.
+&gt; РАСПИСАНИЕ:
+&gt;   1) утренняя сводка — каждый день в 8:30 МСК;
+&gt;   2) пятничный обзор — пятница в 19:00 МСК;
+&gt;   3) price alert — каждые 15 минут;
+&gt;   4) месячный аудит — 1-е число в 9:00 МСК.
+&gt; ИСТОЧНИКИ: portfolio-journal/data/operations.csv,
+&gt;   Daily Trader MCP из этапа 09 (get_price, compute_signal),
+&gt;   Claude API через ANTHROPIC_API_KEY для саммаризации.
+&gt; ФОРМАТ каждого сообщения: markdown, конкретные числа,
+&gt;   максимум 250 слов, без «возможно».
+&gt; ВНЕ SCOPE: автоматическая покупка/продажа, личные данные
+&gt;   в PostHog (только метрики), real-time графики.</pre>
+                    Проверка: <code>spec.md</code> с&nbsp;явными разделами; четыре расписания перечислены с&nbsp;точными временами; есть «ВНЕ SCOPE».</li>
+                <li><strong>Каркас проекта.</strong> Структура папки фиксированная, чтобы Claude между фазами не&nbsp;терял, где что.
+                    <pre class="shell">&gt; создай папку financial-butler/ со структурой:
+&gt;   scripts/  — четыре python-файла (morning_digest, friday_review,
+&gt;               price_alert, monthly_audit);
+&gt;   lib/      — общие модули (telegram.py для отправки,
+&gt;               posthog.py для телеметрии, lock.py для флаг-файла);
+&gt;   .env.example  — шаблон env-переменных БЕЗ значений;
+&gt;   crontab.txt   — строки расписания для системного cron;
+&gt;   CLAUDE.md     — описание проекта.
+&gt;
+&gt; заполни CLAUDE.md:
+&gt; — что делает каждый из четырёх скриптов и его расписание;
+&gt; — какие env переменные нужны (TELEGRAM_TOKEN, TELEGRAM_CHAT_ID,
+&gt;   ANTHROPIC_API_KEY, ALPHAVANTAGE_KEY);
+&gt; — как запустить скрипт вручную для теста
+&gt;   (python scripts/morning_digest.py);
+&gt; — явный дисклеймер «4 правила автопилота» из § I темы 7.</pre>
+                    Проверка: все папки/файлы созданы; <code>CLAUDE.md</code> содержит явные четыре правила; <code>.env.example</code> без&nbsp;ключей.</li>
+                <li><strong>Скрипт #1&nbsp;&mdash; утренняя сводка.</strong> Самый частый запуск&nbsp;&mdash; каждое утро. Должен быть быстрым (≤ 30&nbsp;секунд) и&nbsp;кратким (≤ 250&nbsp;слов в&nbsp;telegram).
+                    <pre class="shell">&gt; напиши scripts/morning_digest.py:
+&gt; — читает portfolio-journal/data/operations.csv;
+&gt; — через Daily Trader MCP get_price получает текущие цены
+&gt;   (если MCP недоступен — graceful fallback на «нет данных»);
+&gt; — считает изменение каждой позиции за вчера в %;
+&gt; — формирует markdown:
+&gt;   🌅 утро &lt;date&gt;
+&gt;   ## портфель: $&lt;total&gt; (&lt;+/- daily%&gt;)
+&gt;   ## топ движения: 3 строки тикер | % | $;
+&gt;   ## новости по holdings (1-2 через WebSearch);
+&gt; — шлёт через lib/telegram.py одним сообщением;
+&gt; — пишет в PostHog через lib/posthog.py: модель, токены, время.
+&gt; — идемпотентность: lib/lock.py проверяет
+&gt;   data/last-morning-run.txt; если уже было сегодня — выходит.</pre>
+                    Проверка: <code>python scripts/morning_digest.py</code> работает локально&nbsp;&mdash; пришло сообщение в&nbsp;Telegram длиной ≤ 250&nbsp;слов; второй запуск в&nbsp;тот&nbsp;же день&nbsp;&mdash; ничего не&nbsp;шлёт (идемпотентность работает).</li>
+                <li><strong>Скрипт #2&nbsp;&mdash; пятничный обзор.</strong> Раз в&nbsp;неделю, развёрнутее (до&nbsp;500&nbsp;слов). Использует Claude Sonnet&nbsp;+ prompt caching.
+                    <pre class="shell">&gt; напиши scripts/friday_review.py:
+&gt; — читает operations.csv за последние 7 дней;
+&gt; — через Daily Trader MCP считает return за неделю;
+&gt; — через Claude API (sonnet, prompt caching на системный промпт
+&gt;   + структуру портфеля) генерирует обзор:
+&gt;   📊 неделя &lt;date1&gt;..&lt;date2&gt;
+&gt;   ## общий рост: +X.Y%
+&gt;   ## лучшая позиция: &lt;ticker&gt; (+X%)
+&gt;   ## худшая позиция: &lt;ticker&gt; (-X%)
+&gt;   ## что повлияло (2-3 фактических факта, не прогнозы);
+&gt;   ## план на следующую неделю (через skill investing-analyst).
+&gt; — шлёт в telegram, пишет в PostHog.
+&gt; — идемпотентность: проверяет data/last-friday-run.txt.</pre>
+                    Проверка: запуск локально присылает обзор; в&nbsp;PostHog видно событие с&nbsp;моделью «sonnet» и&nbsp;кэшированными токенами.</li>
+                <li><strong>Скрипт #3&nbsp;&mdash; real-time price alert.</strong> Запускается каждые 15&nbsp;минут&nbsp;&mdash; здесь идемпотентность критична, иначе один и&nbsp;тот&nbsp;же алерт прилетит десятки раз.
+                    <pre class="shell">&gt; напиши scripts/price_alert.py:
+&gt; — для каждого тикера в портфеле через get_price получает цену;
+&gt; — сравнивает с вчерашним закрытием (или с ценой в начале дня);
+&gt; — если падение больше 1% за сутки — формирует алерт:
+&gt;   ⚠ &lt;ticker&gt; упал на X.Y% за сутки, текущая $&lt;price&gt;.
+&gt; — идемпотентность ОБЯЗАТЕЛЬНА:
+&gt;   data/alerts-sent.json хранит «&lt;ticker&gt;_&lt;date&gt;_&lt;threshold&gt;»;
+&gt;   перед отправкой проверяет, не слали ли уже сегодня
+&gt;   именно этот алерт. если слали — пропускает.
+&gt; — лог в PostHog: алерт «sent» или «suppressed (duplicate)».</pre>
+                    Проверка: запустите скрипт дважды подряд&nbsp;&mdash; второй запуск НЕ&nbsp;шлёт алерты, в&nbsp;PostHog видно «suppressed (duplicate)».</li>
+                <li><strong>Скрипт #4&nbsp;&mdash; месячный аудит.</strong> Раз в&nbsp;месяц, самый развёрнутый. Использует Opus для&nbsp;качественной аналитики (см.&nbsp;этап&nbsp;06).
+                    <pre class="shell">&gt; напиши scripts/monthly_audit.py:
+&gt; — читает operations.csv за прошлый месяц;
+&gt; — через Claude API (opus) генерирует аудит:
+&gt;   ## куда ушли деньги (топ-5 категорий трат);
+&gt;   ## топ-3 неожиданных факта
+&gt;     (например, кофе на $200 — больше, чем ужины);
+&gt;   ## сравнение с предыдущим месяцем (+/- по категориям);
+&gt;   ## одна конкретная рекомендация на следующий месяц.
+&gt; — шлёт в telegram (можно 2-3 сообщения, если длинно).
+&gt; — идемпотентность: data/last-monthly-run.txt с YYYY-MM,
+&gt;   повторный запуск в том же месяце — exit.</pre>
+                    Проверка: запуск локально присылает аудит за&nbsp;текущий «прошлый» месяц; цифры в&nbsp;аудите сходятся с&nbsp;CSV (выборочно проверьте 2-3 строки).</li>
+                <li><strong>PostHog для&nbsp;всех четырёх.</strong> Один общий модуль <code>lib/posthog.py</code>, чтобы не&nbsp;дублировать. Без&nbsp;него вы&nbsp;узнаете о&nbsp;поломке только когда не&nbsp;придёт утреннее сообщение&nbsp;&mdash; то&nbsp;есть слишком поздно.
+                    <pre class="shell">&gt; используя skill posthog:llma-cc-setup, подключи телеметрию:
+&gt; — lib/posthog.py с функцией log_run(script, model, tokens,
+&gt;   latency_ms, status, error?);
+&gt; — каждый из четырёх скриптов в конце вызывает log_run;
+&gt; — настрой PostHog dashboard с двумя графиками:
+&gt;   1) токены/день по каждому скрипту (видно, который «разжирел»);
+&gt;   2) ошибки за последние 7 дней (видно, который сломался).
+&gt; покажи ссылку на дашборд.</pre>
+                    Проверка: на&nbsp;PostHog dashboard виден график с&nbsp;вашими первыми запусками; в&nbsp;названиях событий&nbsp;&mdash; имя скрипта (<code>morning_digest</code>, <code>friday_review</code>, ...).</li>
+                <li><strong>Расписание&nbsp;&mdash; на&nbsp;выбор: cron или skill <code>schedule</code>.</strong> Бесплатные пути, оба работают.
                     <pre class="shell"># crontab — времена в UTC, привычные московские пересчитайте
 30 5 * * *   cd ~/financial-butler && python scripts/morning_digest.py
 0 16 * * 5   cd ~/financial-butler && python scripts/friday_review.py
 */15 * * * * cd ~/financial-butler && python scripts/price_alert.py
 0 6 1 * *    cd ~/financial-butler && python scripts/monthly_audit.py</pre>
-                    <ul>
-                        <li><strong>Skill <code>schedule</code></strong> (если не&nbsp;хотите держать компьютер включённым)&nbsp;&mdash; попросите Claude: <em>«через skill schedule поставь morning_digest на&nbsp;8:30 МСК ежедневно»</em>. Расписание живёт в&nbsp;облаке Anthropic, ваш компьютер не&nbsp;нужен.</li>
-                    </ul>
-                </li>
-                <li>Запустите по&nbsp;расписанию. Дождитесь первого срабатывания каждой задачи (для&nbsp;real-time alert&nbsp;&mdash; 15&nbsp;минут, для&nbsp;morning digest&nbsp;&mdash; следующее утро). Если что-то не&nbsp;пришло&nbsp;&mdash; смотрите вывод cron (лог-файл скрипта) либо историю запусков skill <code>schedule</code>.</li>
-                <li>Дисциплина «кнопка стоп»: добавьте отдельную команду <code>/pause</code> в&nbsp;вашем Telegram-боте&nbsp;&mdash; она ставит флаг-файл, и&nbsp;все четыре скрипта при старте проверяют этот флаг. Удобно, когда вы&nbsp;в&nbsp;отпуске и&nbsp;не&nbsp;хотите пушей.</li>
-                <li>Verification через subagent: <em>«запусти red-team subagent. brief: представь, что один из&nbsp;скриптов завис. что произойдёт за&nbsp;неделю? где бы&nbsp;ты&nbsp;добавил защиту?»</em></li>
+                    <pre class="shell">&gt; или (не хотите держать компьютер включённым):
+&gt; через skill schedule создай 4 remote agent в облаке Anthropic:
+&gt;   — morning_digest @ 8:30 Europe/Moscow ежедневно;
+&gt;   — friday_review @ 19:00 Europe/Moscow по пятницам;
+&gt;   — price_alert @ */15 minutes (каждые 15 минут);
+&gt;   — monthly_audit @ 1-го числа в 9:00 Europe/Moscow.
+&gt; покажи список созданных агентов.</pre>
+                    Проверка: либо <code>crontab -l</code> показывает четыре строки, либо <code>/schedule list</code> показывает четыре remote agent.</li>
+                <li><strong>Первое срабатывание.</strong> Для&nbsp;<code>price_alert</code>&nbsp;&mdash; через 15&nbsp;минут; для&nbsp;<code>morning_digest</code>&nbsp;&mdash; следующее утро. Не&nbsp;ленитесь дождаться&nbsp;&mdash; реальная проверка важнее ручного теста.
+                    <pre class="shell">&gt; следующие 24 часа я наблюдаю за автопилотом.
+&gt; если какой-то скрипт не сработал в расписание:
+&gt; — для cron: помоги посмотреть лог-файл и cron-журнал
+&gt;   (на linux — grep CRON /var/log/syslog);
+&gt; — для skill schedule: покажи историю запусков
+&gt;   и поясни статус (success / error / timeout).
+&gt; если ошибка — предложи фикс, я применю.</pre>
+                    Проверка: получили <em>хотя&nbsp;бы один</em> запуск каждого из&nbsp;четырёх скриптов; в&nbsp;PostHog видны соответствующие события с&nbsp;status=success.</li>
+                <li><strong>Стоп-кнопка через <code>/pause</code>.</strong> Когда уезжаете в&nbsp;отпуск или едете в&nbsp;командировку&nbsp;&mdash; одна команда останавливает всё. Это и&nbsp;есть правило&nbsp;3 из&nbsp;четырёх (§&nbsp;I тема&nbsp;7).
+                    <pre class="shell">&gt; добавь в financial-butler/ telegram-обработчик команд:
+&gt; — /pause — пишет файл data/paused.flag, отвечает
+&gt;   «🛑 автопилот на паузе»;
+&gt; — /resume — удаляет paused.flag, отвечает «✅ автопилот включён»;
+&gt; — /status — показывает «paused» или «active» + последние
+&gt;   запуски каждого скрипта (через PostHog API).
+&gt;
+&gt; в lib/lock.py добавь функцию is_paused(): True если
+&gt; data/paused.flag существует. каждый скрипт в начале:
+&gt;   if is_paused(): exit(0).
+&gt;
+&gt; обработчик команд: либо отдельный скрипт telegram_listener.py
+&gt; в long polling (как в этапе 06b), либо webhook —
+&gt; выбери и поясни почему.</pre>
+                    Проверка: пишете боту <code>/pause</code>&nbsp;&mdash; получаете подтверждение; через 16&nbsp;минут <code>price_alert</code> запустился, но&nbsp;ничего не&nbsp;прислал; <code>/resume</code> возвращает работу.</li>
+                <li><strong>Red-team аудит автопилота.</strong> Прежде чем расслабиться и&nbsp;забыть про&nbsp;систему&nbsp;&mdash; пусть стажёр найдёт три способа её&nbsp;сломать.
+                    <pre class="shell">&gt; запусти red-team subagent (general-purpose, role: SRE-инженер).
+&gt; brief: представь, что один из скриптов завис на 6 часов.
+&gt; пройди по моему financial-butler/ и ответь на 4 вопроса:
+&gt; 1) что произойдёт за неделю простоя одного из скриптов?
+&gt; 2) где в коде нет «границы времени» (правило 2 из § I темы 7)?
+&gt; 3) если ANTHROPIC_API_KEY истёк — где об этом узнаю?
+&gt; 4) если PostHog недоступен — продолжат ли скрипты работать
+&gt;    или упадут?
+&gt; для каждого ответа — конкретный фикс со ссылкой на файл.</pre>
+                    Проверка: red-team вернул четыре ответа с&nbsp;цитатами кода; вы&nbsp;на&nbsp;каждый либо применили фикс, либо явно записали в&nbsp;<code>CLAUDE.md</code> как «принятый риск».</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>In Plan Mode (etape 04) have Claude draft <code>spec.md</code> for the “Financial Butler”: four schedules, data sources (portfolio-journal CSV, Daily Trader MCP), message format per schedule.</li>
-                <li>Create <code>financial-butler/</code>. Layout:
-                    <pre class="shell">financial-butler/
-├── scripts/
-│   ├── morning_digest.py     # 8:30 daily
-│   ├── friday_review.py      # 19:00 Friday
-│   ├── price_alert.py        # every 15 min (real-time)
-│   └── monthly_audit.py      # 1st at 9:00
-├── lib/
-│   ├── telegram.py           # message sending
-│   ├── posthog.py            # telemetry write
-│   └── lock.py               # idempotency via flag file
-├── .env.example              # template without values
-├── crontab.txt               # schedule lines (see step below)
-└── CLAUDE.md</pre>
-                    Ask Claude to fill <code>CLAUDE.md</code> right away: what each script does, its schedule, which keys come from <code>.env</code> (<code>TELEGRAM_TOKEN</code>, <code>ANTHROPIC_API_KEY</code>, <code>ALPHAVANTAGE_KEY</code>), and how to run a script manually for testing.
-                </li>
-                <li><strong>morning_digest.py.</strong> Computes current positions (Daily Trader MCP <code>get_price</code>), yesterday’s deltas, news on holdings (WebSearch + Claude API summarisation). Sends a markdown digest to Telegram. Prices cached for 15 minutes.</li>
-                <li><strong>friday_review.py.</strong> Weekly: total return, best/worst ticker, weekly outlook through your “investing analyst” skill. Uses Claude API with Sonnet and prompt caching (etape 06).</li>
-                <li><strong>price_alert.py.</strong> Every 15 minutes checks: did price drop more than 1% in 24h? If so — push the alert. <strong>Idempotency</strong>: maintains <code>data/alerts-sent.json</code> so the same alert isn’t sent twice.</li>
-                <li><strong>monthly_audit.py.</strong> On the 1st: where did money go last month (the etape-04 dashboard), three biggest surprises.</li>
-                <li>Wire PostHog: with the <code>posthog:llma-cc-setup</code> skill add telemetry to all four scripts. Each run logs model, tokens, latency, success/error.</li>
-                <li>Set up the schedule — free, two ways to choose from:
-                    <ul style="margin-top:0.3rem;">
-                        <li><strong>System cron</strong> (if your computer is often on) — <code>crontab -e</code>, one line per script:</li>
-                    </ul>
+                <li><strong>Spec in Plan Mode.</strong> Four independent automations&nbsp;&mdash; easy to get tangled. Agree on what each does first, only then write code.
+                    <pre class="shell">&gt; enter Plan Mode and draft spec.md for the "Financial Butler":
+&gt;
+&gt; GOAL: four independent automations pushing to one Telegram chat
+&gt;   on different schedules.
+&gt; SCHEDULE:
+&gt;   1) morning digest — daily at 8:30 Moscow;
+&gt;   2) Friday review — Friday at 19:00 Moscow;
+&gt;   3) price alert — every 15 minutes;
+&gt;   4) monthly audit — 1st of the month at 9:00 Moscow.
+&gt; SOURCES: portfolio-journal/data/operations.csv,
+&gt;   the Daily Trader MCP from etape 09 (get_price, compute_signal),
+&gt;   Claude API via ANTHROPIC_API_KEY for summarisation.
+&gt; MESSAGE FORMAT: markdown, concrete numbers,
+&gt;   max 250 words, no "maybe".
+&gt; OUT OF SCOPE: auto buy/sell, personal data in PostHog
+&gt;   (metrics only), real-time charts.</pre>
+                    Check: <code>spec.md</code> with clear sections; four schedules listed with exact times; "OUT OF SCOPE" present.</li>
+                <li><strong>Project skeleton.</strong> Fixed folder layout so Claude doesn't lose track of what's where between phases.
+                    <pre class="shell">&gt; create financial-butler/ with this layout:
+&gt;   scripts/  — four python files (morning_digest, friday_review,
+&gt;               price_alert, monthly_audit);
+&gt;   lib/      — shared modules (telegram.py for sending,
+&gt;               posthog.py for telemetry, lock.py for the flag file);
+&gt;   .env.example  — env template WITHOUT values;
+&gt;   crontab.txt   — schedule lines for system cron;
+&gt;   CLAUDE.md     — project description.
+&gt;
+&gt; fill CLAUDE.md:
+&gt; — what each of the four scripts does and its schedule;
+&gt; — which env variables are needed (TELEGRAM_TOKEN, TELEGRAM_CHAT_ID,
+&gt;   ANTHROPIC_API_KEY, ALPHAVANTAGE_KEY);
+&gt; — how to run a script manually for testing
+&gt;   (python scripts/morning_digest.py);
+&gt; — an explicit disclaimer of "the 4 autopilot rules" from § I topic 7.</pre>
+                    Check: all folders/files created; <code>CLAUDE.md</code> contains the explicit four rules; <code>.env.example</code> has no keys.</li>
+                <li><strong>Script #1&nbsp;&mdash; morning digest.</strong> The most frequent run&nbsp;&mdash; every morning. Must be fast (≤ 30 seconds) and brief (≤ 250 words in Telegram).
+                    <pre class="shell">&gt; write scripts/morning_digest.py:
+&gt; — reads portfolio-journal/data/operations.csv;
+&gt; — through the Daily Trader MCP get_price fetches current prices
+&gt;   (if MCP is unavailable — graceful fallback to "no data");
+&gt; — computes each position's change since yesterday in %;
+&gt; — assembles markdown:
+&gt;   🌅 morning &lt;date&gt;
+&gt;   ## portfolio: $&lt;total&gt; (&lt;+/- daily%&gt;)
+&gt;   ## top moves: 3 lines ticker | % | $;
+&gt;   ## news on holdings (1-2 via WebSearch);
+&gt; — sends through lib/telegram.py in one message;
+&gt; — writes to PostHog via lib/posthog.py: model, tokens, time.
+&gt; — idempotency: lib/lock.py checks
+&gt;   data/last-morning-run.txt; if already today — exit.</pre>
+                    Check: <code>python scripts/morning_digest.py</code> works locally&nbsp;&mdash; a message arrived in Telegram, ≤ 250 words; a second run on the same day&nbsp;&mdash; sends nothing (idempotency works).</li>
+                <li><strong>Script #2&nbsp;&mdash; Friday review.</strong> Weekly, more detailed (up to 500 words). Uses Claude Sonnet + prompt caching.
+                    <pre class="shell">&gt; write scripts/friday_review.py:
+&gt; — reads operations.csv for the last 7 days;
+&gt; — through the Daily Trader MCP computes weekly return;
+&gt; — via Claude API (sonnet, prompt caching on the system prompt
+&gt;   + portfolio structure) generates the review:
+&gt;   📊 week &lt;date1&gt;..&lt;date2&gt;
+&gt;   ## total return: +X.Y%
+&gt;   ## best position: &lt;ticker&gt; (+X%)
+&gt;   ## worst position: &lt;ticker&gt; (-X%)
+&gt;   ## what drove it (2-3 factual items, no forecasts);
+&gt;   ## plan for next week (via the investing-analyst skill).
+&gt; — sends to telegram, writes to PostHog.
+&gt; — idempotency: checks data/last-friday-run.txt.</pre>
+                    Check: a local run delivers the review; PostHog shows the event with model "sonnet" and cached tokens.</li>
+                <li><strong>Script #3&nbsp;&mdash; real-time price alert.</strong> Runs every 15 minutes&nbsp;&mdash; idempotency is critical here, otherwise the same alert fires dozens of times.
+                    <pre class="shell">&gt; write scripts/price_alert.py:
+&gt; — for each ticker in the portfolio fetch price via get_price;
+&gt; — compares to yesterday's close (or today's opening price);
+&gt; — if drop is over 1% within 24h — assemble the alert:
+&gt;   ⚠ &lt;ticker&gt; dropped by X.Y% in 24h, current $&lt;price&gt;.
+&gt; — idempotency MANDATORY:
+&gt;   data/alerts-sent.json stores "&lt;ticker&gt;_&lt;date&gt;_&lt;threshold&gt;";
+&gt;   before sending check whether this exact alert
+&gt;   was already sent today. if yes — skip.
+&gt; — log to PostHog: alert "sent" or "suppressed (duplicate)".</pre>
+                    Check: run the script twice in a row&nbsp;&mdash; second run sends NO alerts; PostHog shows "suppressed (duplicate)".</li>
+                <li><strong>Script #4&nbsp;&mdash; monthly audit.</strong> Once a month, most elaborate. Uses Opus for higher-quality analytics (see etape 06).
+                    <pre class="shell">&gt; write scripts/monthly_audit.py:
+&gt; — reads operations.csv for last month;
+&gt; — via Claude API (opus) generates the audit:
+&gt;   ## where the money went (top 5 spending categories);
+&gt;   ## top 3 surprises
+&gt;     (e.g., coffee $200 — more than dinners);
+&gt;   ## vs previous month (+/- by category);
+&gt;   ## one concrete recommendation for next month.
+&gt; — sends to telegram (2-3 messages if long).
+&gt; — idempotency: data/last-monthly-run.txt with YYYY-MM,
+&gt;   re-run in the same month — exit.</pre>
+                    Check: a local run delivers the audit for the current "last" month; audit numbers reconcile with the CSV (spot-check 2-3 lines).</li>
+                <li><strong>PostHog for all four.</strong> One shared <code>lib/posthog.py</code>, no duplication. Without it you'll learn about a breakage only when the morning message doesn't arrive&nbsp;&mdash; far too late.
+                    <pre class="shell">&gt; using the posthog:llma-cc-setup skill, wire telemetry:
+&gt; — lib/posthog.py with log_run(script, model, tokens,
+&gt;   latency_ms, status, error?);
+&gt; — each of the four scripts calls log_run at the end;
+&gt; — set up a PostHog dashboard with two charts:
+&gt;   1) tokens/day per script (you see which one bloated);
+&gt;   2) errors over last 7 days (you see which one broke).
+&gt; show the dashboard URL.</pre>
+                    Check: the PostHog dashboard shows a chart with your first runs; event names include the script name (<code>morning_digest</code>, <code>friday_review</code>, ...).</li>
+                <li><strong>Schedule&nbsp;&mdash; pick: cron or the <code>schedule</code> skill.</strong> Both free, both work.
                     <pre class="shell"># crontab — times in UTC; convert to your local TZ
 30 5 * * *   cd ~/financial-butler && python scripts/morning_digest.py
 0 16 * * 5   cd ~/financial-butler && python scripts/friday_review.py
 */15 * * * * cd ~/financial-butler && python scripts/price_alert.py
 0 6 1 * *    cd ~/financial-butler && python scripts/monthly_audit.py</pre>
-                    <ul>
-                        <li><strong>The <code>schedule</code> skill</strong> (if you don’t want to keep a computer on) — ask Claude: <em>“via the schedule skill, run morning_digest at 8:30 Moscow time daily”</em>. The schedule lives in Anthropic’s cloud — no machine of yours.</li>
-                    </ul>
-                </li>
-                <li>Run on schedule. Wait for the first hit of each task (15 minutes for the alert, next morning for the digest). Anything missing — check the cron output (the script’s log file) or the <code>schedule</code> skill’s run history.</li>
-                <li>“Stop button” discipline: add a <code>/pause</code> command to your Telegram bot — sets a flag file, and all four scripts check it on start. Useful for vacations.</li>
-                <li>Verification via subagent: <em>“spawn a red-team subagent. brief: pretend one script froze. what happens in a week? where would you add protection?”</em></li>
+                    <pre class="shell">&gt; or (don't want to keep a computer on):
+&gt; via the schedule skill create 4 remote agents in Anthropic's cloud:
+&gt;   — morning_digest @ 8:30 Europe/Moscow daily;
+&gt;   — friday_review @ 19:00 Europe/Moscow on Fridays;
+&gt;   — price_alert @ */15 minutes (every 15 minutes);
+&gt;   — monthly_audit @ 1st at 9:00 Europe/Moscow.
+&gt; show the list of created agents.</pre>
+                    Check: either <code>crontab -l</code> shows four lines, or <code>/schedule list</code> shows four remote agents.</li>
+                <li><strong>First scheduled run.</strong> For <code>price_alert</code>&nbsp;&mdash; in 15 minutes; for <code>morning_digest</code>&nbsp;&mdash; next morning. Don't skip the wait&nbsp;&mdash; the real test is more important than a manual one.
+                    <pre class="shell">&gt; over the next 24 hours I'll watch the autopilot.
+&gt; if any script didn't fire on schedule:
+&gt; — for cron: help me check the log file and cron journal
+&gt;   (on linux — grep CRON /var/log/syslog);
+&gt; — for the schedule skill: show the run history
+&gt;   and explain the status (success / error / timeout).
+&gt; on error — propose a fix, I'll apply.</pre>
+                    Check: got <em>at least one</em> run for each of the four scripts; PostHog shows the corresponding events with status=success.</li>
+                <li><strong>Stop button via <code>/pause</code>.</strong> When you're on vacation or travel&nbsp;&mdash; one command halts everything. This is rule 3 of four (§ I topic 7).
+                    <pre class="shell">&gt; add to financial-butler/ a telegram command handler:
+&gt; — /pause — writes data/paused.flag, replies
+&gt;   "🛑 autopilot paused";
+&gt; — /resume — deletes paused.flag, replies "✅ autopilot active";
+&gt; — /status — shows "paused" or "active" + last runs of each
+&gt;   script (via PostHog API).
+&gt;
+&gt; in lib/lock.py add is_paused(): True if
+&gt; data/paused.flag exists. each script starts with:
+&gt;   if is_paused(): exit(0).
+&gt;
+&gt; command handler: either a separate telegram_listener.py
+&gt; on long polling (like etape 06b) or a webhook —
+&gt; pick one and explain why.</pre>
+                    Check: send the bot <code>/pause</code>&nbsp;&mdash; you get a confirmation; 16 minutes later <code>price_alert</code> fired but sent nothing; <code>/resume</code> restores work.</li>
+                <li><strong>Red-team audit of the autopilot.</strong> Before you relax and forget about the system&nbsp;&mdash; let an intern find three ways to break it.
+                    <pre class="shell">&gt; spawn a red-team subagent (general-purpose, role: SRE engineer).
+&gt; brief: imagine one of the scripts froze for 6 hours.
+&gt; walk my financial-butler/ and answer 4 questions:
+&gt; 1) what happens over a week of downtime for one script?
+&gt; 2) where in the code is there no "time bound" (rule 2 of § I topic 7)?
+&gt; 3) if ANTHROPIC_API_KEY expired — where do I find out?
+&gt; 4) if PostHog is unavailable — do scripts keep running
+&gt;    or crash?
+&gt; for each answer — a concrete fix with a file reference.</pre>
+                    Check: red-team returned four answers with code citations; on each you either applied a fix or explicitly logged in <code>CLAUDE.md</code> as an "accepted risk".</li>
             </ol>
         </article>
 
@@ -606,15 +836,57 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Создайте репо <code>diary-bot/</code>. Используйте опыт этапа&nbsp;06 (FastAPI + PostgreSQL) или просто SQLite-файл.</li>
-                <li>Модель данных: <code>entries(date, q1, q2, q3, q4, q5, raw_chat)</code>.</li>
-                <li>Расписание (системный cron или skill <code>schedule</code>):
-                    <ul>
-                        <li><code>0 19 * * *</code>&nbsp;&mdash; 22:00 по&nbsp;Москве (UTC+3): бот шлёт первый вопрос;</li>
-                        <li><code>0 11 * * 0</code>&nbsp;&mdash; 14:00 воскресенье: бот шлёт еженедельный отчёт.</li>
-                    </ul>
-                </li>
-                <li>Скрипт «пять вопросов»:
+                <li><strong>Каркас и&nbsp;выбор БД.</strong> Используем опыт этапа&nbsp;06: для&nbsp;учебного дневника достаточно SQLite-файла (одна таблица). FastAPI+PostgreSQL&nbsp;&mdash; перебор, если бот общается только с&nbsp;вами.
+                    <pre class="shell">&gt; создай папку diary-bot/ со структурой:
+&gt;   scripts/  — ask_five_questions.py, weekly_report.py, listener.py;
+&gt;   lib/      — telegram.py, db.py (SQLite), crypto.py (шифрование);
+&gt;   data/     — diary.db (SQLite), pусто для start;
+&gt;   .env.example — TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID,
+&gt;                  ANTHROPIC_API_KEY, DIARY_ENCRYPTION_KEY;
+&gt;   CLAUDE.md — описание + «дисклеймер приватности».
+&gt;
+&gt; почему SQLite а не PostgreSQL — поясни одной строкой
+&gt; в CLAUDE.md (один пользователь, локальный файл, нет concurrent
+&gt; writes — Postgres избыточен).</pre>
+                    Проверка: папка создана; <code>CLAUDE.md</code> содержит и&nbsp;дисклеймер приватности, и&nbsp;аргументацию выбора SQLite.</li>
+                <li><strong>Модель данных.</strong> Одна таблица&nbsp;&mdash; <code>entries</code>. Поля для&nbsp;пяти вопросов хранятся <em>зашифрованными</em>; ключ&nbsp;&mdash; в&nbsp;env.
+                    <pre class="shell">&gt; в lib/db.py создай схему SQLite:
+&gt;
+&gt;   CREATE TABLE entries (
+&gt;     date TEXT PRIMARY KEY,         -- YYYY-MM-DD
+&gt;     q1_encrypted BLOB,             -- "ярко"
+&gt;     q2_encrypted BLOB,             -- "фокус"
+&gt;     q3_encrypted BLOB,             -- "выбило"
+&gt;     q4_encrypted BLOB,             -- "запомнился"
+&gt;     q5_encrypted BLOB,             -- "благодарность"
+&gt;     raw_chat_encrypted BLOB,       -- весь чат полностью
+&gt;     created_at TEXT,
+&gt;     completed BOOLEAN              -- все 5 собрали?
+&gt;   );
+&gt;
+&gt; функции: save_entry(date, answers, raw_chat),
+&gt;          get_entry(date),
+&gt;          get_week(start_date) — возвращает 7 расшифрованных записей.
+&gt;
+&gt; в lib/crypto.py — Fernet (из cryptography), ключ из env
+&gt; DIARY_ENCRYPTION_KEY. при отсутствии ключа — явная ошибка,
+&gt; не молчаливое падение.</pre>
+                    Проверка: <code>data/diary.db</code> создан; ручной тест&nbsp;&mdash; <code>save_entry</code>, <code>get_entry</code> работают, в&nbsp;sqlite-файле видны зашифрованные BLOB (через <code>sqlite3 data/diary.db</code>).</li>
+                <li><strong>Расписание.</strong> Два срабатывания: вечерний опрос и&nbsp;воскресный отчёт. Используем тот&nbsp;же путь, что в&nbsp;Project&nbsp;A&nbsp;&mdash; cron или skill <code>schedule</code>.
+                    <pre class="shell">&gt; настрой расписание (один из двух путей):
+&gt;
+&gt; cron (если ноутбук всегда включён):
+&gt;   0 19 * * *   cd ~/diary-bot && python scripts/ask_five_questions.py
+&gt;   0 11 * * 0   cd ~/diary-bot && python scripts/weekly_report.py
+&gt;
+&gt; или skill schedule (без своего сервера):
+&gt;   — diary_questions @ 22:00 Europe/Moscow ежедневно;
+&gt;   — diary_weekly @ воскресенье 14:00 Europe/Moscow.
+&gt;
+&gt; покажи мне crontab -l (или /schedule list)
+&gt; — чтобы убедиться, что записи на месте.</pre>
+                    Проверка: <code>crontab -l</code> показывает две строки или <code>/schedule list</code> показывает двух remote agent.</li>
+                <li><strong>Скрипт «пять вопросов».</strong> Шлёт вопросы по&nbsp;одному, ждёт ответ на&nbsp;каждый, сохраняет в&nbsp;БД.
                     <pre class="shell">&gt; составь python-скрипт ask_five_questions.py:
 &gt; шлёт пять вопросов поочерёдно, каждый в новом сообщении telegram.
 &gt; пять вопросов (сначала жёстко зашитые, потом будем варьировать):
@@ -626,8 +898,8 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 &gt; ждёт ответ на каждый (через polling api telegram).
 &gt; сохраняет в БД entries.</pre>
                     <p style="margin-top:0.5rem;">Важная деталь ментальной модели: cron только <em>запускает</em> скрипт. После отправки вопросов скрипт не&nbsp;завершается сразу&nbsp;&mdash; он&nbsp;несколько минут опрашивает Telegram, дожидаясь ваших ответов, и&nbsp;закрывается только когда все пять собраны (или вышел тайм-аут). То&nbsp;есть «ждёт ответы» не&nbsp;cron, а&nbsp;сам скрипт, пока живёт.</p>
-                </li>
-                <li>Скрипт «еженедельный отчёт»:
+                    Проверка: запустите скрипт вручную (<code>python scripts/ask_five_questions.py</code>) в&nbsp;19:00&nbsp;&mdash; получили первый вопрос в&nbsp;Telegram, ответили; после пятого ответа скрипт завершается, в&nbsp;БД появилась запись с&nbsp;<code>completed=true</code>.</li>
+                <li><strong>Скрипт «еженедельный отчёт».</strong> Воскресенье&nbsp;&mdash; Claude анализирует семь записей за&nbsp;неделю.
                     <pre class="shell">&gt; составь weekly_report.py:
 &gt; читает entries за последнюю неделю.
 &gt; через claude api (sonnet с prompt caching):
@@ -636,22 +908,111 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 &gt;   - находит 2 «дыры» (молчаливые дни — почему?);
 &gt;   - формулирует одну рекомендацию на следующую неделю.
 &gt; шлёт markdown-отчёт в telegram.</pre>
-                </li>
-                <li>Сделайте <code>/skip</code> в&nbsp;боте&nbsp;&mdash; пользователь может пропустить вечерний опрос. <code>/replay 2024-04-15</code>&nbsp;&mdash; повторно показать пять вопросов того дня (если вы&nbsp;забыли). <code>/last</code>&nbsp;&mdash; последний еженедельный отчёт.</li>
-                <li>Privacy. Записи чувствительные. Зашифруйте <code>raw_chat</code> в&nbsp;БД (например, через <code>cryptography.fernet</code>) и&nbsp;ключ держите в&nbsp;env vars (локально&nbsp;&mdash; в&nbsp;<code>.env</code>, на&nbsp;сервере&nbsp;&mdash; в&nbsp;env vars хостинга). <em>Если ключ потеряется&nbsp;&mdash; данные не&nbsp;восстановить</em>; это намеренно.</li>
-                <li>Подключите PostHog только для&nbsp;<em>метрик</em>: количество ответов, длительность, ошибки. <strong>Никаких содержательных полей</strong>&nbsp;&mdash; чтобы дневник не&nbsp;утекал в&nbsp;PostHog.</li>
-                <li>Verification: запустите <code>/replay</code> на&nbsp;вчерашних вопросах, проверьте что неделя ещё не&nbsp;собралась (если вы&nbsp;только что начали). На&nbsp;следующий понедельник&nbsp;&mdash; должен прийти первый еженедельный отчёт.</li>
+                    Проверка: запуск локально (после нескольких заполненных дней)&nbsp;&mdash; пришёл отчёт; темы и&nbsp;пики действительно цитируют ваши записи, а&nbsp;не&nbsp;общие фразы.</li>
+                <li><strong>Управляющие команды бота.</strong> Дневник&nbsp;&mdash; вещь хрупкая. Без&nbsp;<code>/skip</code>, <code>/replay</code>, <code>/last</code> вы&nbsp;либо перестанете отвечать, либо забросите.
+                    <pre class="shell">&gt; в scripts/listener.py (long polling) добавь три команды:
+&gt;
+&gt; /skip — пропустить сегодняшний вопрос (создаёт запись
+&gt;          с completed=false и пометкой «пропущено»);
+&gt; /replay YYYY-MM-DD — повторно показать пять вопросов
+&gt;          того дня (если забыли заполнить);
+&gt; /last — прислать последний еженедельный отчёт ещё раз
+&gt;         (на случай если потеряли).
+&gt;
+&gt; listener запускается через cron каждый час
+&gt; (или работает постоянно — выбери и поясни почему).</pre>
+                    Проверка: попробуйте каждую команду&nbsp;&mdash; <code>/skip</code> создаёт запись с&nbsp;пометкой; <code>/replay</code> на&nbsp;дате существующей записи переспрашивает; <code>/last</code> присылает последний отчёт.</li>
+                <li><strong>Privacy: шифрование уже сделали, но&nbsp;проверим утечки.</strong> Шифрование БД не&nbsp;поможет, если данные где-то «текут» в&nbsp;виде plaintext (логи, ошибки, мониторинг).
+                    <pre class="shell">&gt; пройдись по всему коду diary-bot/ как security-reviewer:
+&gt; 1) есть ли print/logger.info, который выводит answers
+&gt;    или raw_chat в plaintext?
+&gt; 2) если скрипт упадёт с исключением — попадёт ли текст
+&gt;    ответов в stacktrace и оттуда в cron-лог?
+&gt; 3) есть ли DIARY_ENCRYPTION_KEY в каком-нибудь логе
+&gt;    (даже фрагментом)?
+&gt; для каждого пункта — конкретный фикс со ссылкой на файл.
+&gt; в CLAUDE.md в конце добавь «Privacy checklist» с этими пунктами.</pre>
+                    Проверка: ни&nbsp;один из&nbsp;трёх пунктов не&nbsp;найден; <code>CLAUDE.md</code> содержит «Privacy checklist» как напоминание на&nbsp;будущее.</li>
+                <li><strong>PostHog только для&nbsp;метрик, без&nbsp;содержания.</strong> Третий принцип приватности&nbsp;&mdash; внешняя аналитика видит, что вы&nbsp;«ответили на&nbsp;4 из&nbsp;5 вопросов», но&nbsp;НЕ&nbsp;<em>что именно</em> ответили.
+                    <pre class="shell">&gt; в lib/posthog.py — лог только следующих событий:
+&gt; — questions_asked (count: 5)
+&gt; — answer_received (question_id: 1..5, latency_seconds)
+&gt; — entry_saved (completed: true/false)
+&gt; — weekly_report_sent (week_start)
+&gt;
+&gt; КАТЕГОРИЧЕСКИ НЕ ПОСЫЛАТЬ:
+&gt; — текст вопросов (если он будет варьироваться);
+&gt; — текст ответов (никогда!);
+&gt; — фрагменты raw_chat;
+&gt; — содержание отчёта.
+&gt;
+&gt; пройдись subagent'ом по PostHog-вызовам и подтверди,
+&gt; что ни одно из «КАТЕГОРИЧЕСКИ НЕ» туда не попадает.</pre>
+                    Проверка: на&nbsp;PostHog dashboard видны метрики (количество ответов, длительность), но&nbsp;ни&nbsp;одно поле не&nbsp;содержит ваш текст; subagent подтвердил.</li>
+                <li><strong>Конечная проверка: «первая неделя».</strong> Заполните пять дней (можно вручную через <code>python scripts/ask_five_questions.py</code>, если cron ещё не&nbsp;успел), дождитесь воскресенья&nbsp;&mdash; должен прийти первый еженедельный отчёт.
+                    <pre class="shell">&gt; помоги мне пройти «верификационную неделю»:
+&gt; — день 1-5: заполняю пять вопросов;
+&gt; — день 3: пробую /skip (пропускаю день специально);
+&gt; — день 4: пробую /replay 2024-XX-XX (вчерашняя дата);
+&gt; — воскресенье в 14:00: ожидаю еженедельный отчёт.
+&gt;
+&gt; в конце недели через PostHog покажи мне:
+&gt; — сколько было completed=true vs false;
+&gt; — средняя задержка между вопросом и ответом
+&gt;   (если &gt; 30 минут — может, время вопросов неудобное).</pre>
+                    Проверка: воскресный отчёт пришёл; в&nbsp;нём упомянуты три темы из&nbsp;ваших реальных ответов; в&nbsp;PostHog видны метрики недели; если 4&nbsp;из&nbsp;7 дней&nbsp;&mdash; пропуски, подумайте о&nbsp;переносе времени.</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Create a <code>diary-bot/</code> repo. Use the etape-06 muscle (FastAPI + PostgreSQL) or just SQLite.</li>
-                <li>Data model: <code>entries(date, q1, q2, q3, q4, q5, raw_chat)</code>.</li>
-                <li>Schedule (system cron or the <code>schedule</code> skill):
-                    <ul>
-                        <li><code>0 19 * * *</code> — 22:00 Moscow (UTC+3): bot fires the first question;</li>
-                        <li><code>0 11 * * 0</code> — 14:00 Sunday: bot fires the weekly report.</li>
-                    </ul>
-                </li>
-                <li>“Five questions” script:
+                <li><strong>Skeleton and DB choice.</strong> Use the etape-06 muscle: for a learning diary a SQLite file is enough (one table). FastAPI+PostgreSQL is overkill when the bot only talks to you.
+                    <pre class="shell">&gt; create diary-bot/ with this layout:
+&gt;   scripts/  — ask_five_questions.py, weekly_report.py, listener.py;
+&gt;   lib/      — telegram.py, db.py (SQLite), crypto.py (encryption);
+&gt;   data/     — diary.db (SQLite), empty for start;
+&gt;   .env.example — TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID,
+&gt;                  ANTHROPIC_API_KEY, DIARY_ENCRYPTION_KEY;
+&gt;   CLAUDE.md — description + "privacy disclaimer".
+&gt;
+&gt; in CLAUDE.md, in one line, explain why SQLite over PostgreSQL
+&gt; (single user, local file, no concurrent writes — Postgres overkill).</pre>
+                    Check: folder created; <code>CLAUDE.md</code> contains both the privacy disclaimer and the SQLite rationale.</li>
+                <li><strong>Data model.</strong> One table&nbsp;&mdash; <code>entries</code>. Five-question fields stored <em>encrypted</em>; key in env.
+                    <pre class="shell">&gt; in lib/db.py create the SQLite schema:
+&gt;
+&gt;   CREATE TABLE entries (
+&gt;     date TEXT PRIMARY KEY,         -- YYYY-MM-DD
+&gt;     q1_encrypted BLOB,             -- "bright"
+&gt;     q2_encrypted BLOB,             -- "focus"
+&gt;     q3_encrypted BLOB,             -- "threw off"
+&gt;     q4_encrypted BLOB,             -- "stood out"
+&gt;     q5_encrypted BLOB,             -- "gratitude"
+&gt;     raw_chat_encrypted BLOB,       -- the whole chat
+&gt;     created_at TEXT,
+&gt;     completed BOOLEAN              -- all 5 collected?
+&gt;   );
+&gt;
+&gt; functions: save_entry(date, answers, raw_chat),
+&gt;            get_entry(date),
+&gt;            get_week(start_date) — returns 7 decrypted entries.
+&gt;
+&gt; in lib/crypto.py — Fernet (from cryptography), key from env
+&gt; DIARY_ENCRYPTION_KEY. if the key is missing — explicit error,
+&gt; not silent failure.</pre>
+                    Check: <code>data/diary.db</code> created; manual test&nbsp;&mdash; <code>save_entry</code>, <code>get_entry</code> work, the sqlite file shows encrypted BLOBs (via <code>sqlite3 data/diary.db</code>).</li>
+                <li><strong>Schedule.</strong> Two triggers: evening prompt and Sunday report. Use the same path as Project A&nbsp;&mdash; cron or the <code>schedule</code> skill.
+                    <pre class="shell">&gt; set up the schedule (one of two paths):
+&gt;
+&gt; cron (if your laptop is always on):
+&gt;   0 19 * * *   cd ~/diary-bot && python scripts/ask_five_questions.py
+&gt;   0 11 * * 0   cd ~/diary-bot && python scripts/weekly_report.py
+&gt;
+&gt; or the schedule skill (no server of yours):
+&gt;   — diary_questions @ 22:00 Europe/Moscow daily;
+&gt;   — diary_weekly @ Sunday 14:00 Europe/Moscow.
+&gt;
+&gt; show me crontab -l (or /schedule list)
+&gt; — to confirm the entries are there.</pre>
+                    Check: <code>crontab -l</code> shows two lines or <code>/schedule list</code> shows two remote agents.</li>
+                <li><strong>"Five questions" script.</strong> Sends questions one by one, waits for each answer, saves to DB.
                     <pre class="shell">&gt; build python script ask_five_questions.py:
 &gt; sends five questions one by one, each as a new telegram message.
 &gt; five (hardcoded for now, vary later):
@@ -663,8 +1024,8 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 &gt; waits for each answer (via telegram polling api).
 &gt; saves to DB entries.</pre>
                     <p style="margin-top:0.5rem;">A key mental-model detail: cron only <em>launches</em> the script. After sending the questions the script doesn’t exit right away — it polls Telegram for several minutes, waiting for your answers, and closes only once all five are in (or a timeout fires). So it’s the script, while it’s alive, that “waits for answers” — not cron.</p>
-                </li>
-                <li>“Weekly report” script:
+                    Check: run the script manually (<code>python scripts/ask_five_questions.py</code>) at 19:00&nbsp;&mdash; got the first question in Telegram, replied; after the fifth answer the script exits and the DB shows a row with <code>completed=true</code>.</li>
+                <li><strong>"Weekly report" script.</strong> Sunday&nbsp;&mdash; Claude analyses seven entries from the past week.
                     <pre class="shell">&gt; build weekly_report.py:
 &gt; reads last week's entries.
 &gt; via claude api (sonnet with prompt caching):
@@ -673,11 +1034,59 @@ bot.send_message(chat_id=os.environ["TELEGRAM_CHAT_ID"], text="...")</pre>
 &gt;   - finds 2 silences (skipped days — why?);
 &gt;   - one recommendation for next week.
 &gt; sends a markdown report to telegram.</pre>
-                </li>
-                <li>Add <code>/skip</code> — user skips today’s prompt. <code>/replay 2024-04-15</code> — re-shows that day’s five questions if you forgot. <code>/last</code> — last weekly report.</li>
-                <li>Privacy. Entries are sensitive. Encrypt <code>raw_chat</code> in the DB (e.g., <code>cryptography.fernet</code>); keep the key in env vars (locally in <code>.env</code>, on a server in your host’s env vars). <em>If the key is lost — data is unrecoverable</em>; intentional.</li>
-                <li>Connect PostHog for <em>metrics only</em>: response counts, latencies, errors. <strong>No content fields</strong> — diary must not leak to PostHog.</li>
-                <li>Verification: run <code>/replay</code> on yesterday’s questions, check the week hasn’t aggregated (if you just started). Next Monday — the first weekly report should land.</li>
+                    Check: a local run (after a few filled days)&nbsp;&mdash; the report arrived; the themes and peaks actually cite your entries, not generic phrases.</li>
+                <li><strong>Bot control commands.</strong> A diary is a fragile thing. Without <code>/skip</code>, <code>/replay</code>, <code>/last</code> you'll either stop responding or abandon it.
+                    <pre class="shell">&gt; in scripts/listener.py (long polling) add three commands:
+&gt;
+&gt; /skip — skip today's prompt (creates a row
+&gt;          with completed=false and a "skipped" flag);
+&gt; /replay YYYY-MM-DD — re-show that day's five questions
+&gt;          (if you forgot to fill it in);
+&gt; /last — re-send the last weekly report
+&gt;         (in case you lost it).
+&gt;
+&gt; the listener runs via cron hourly
+&gt; (or stays alive permanently — pick one and explain why).</pre>
+                    Check: try each command&nbsp;&mdash; <code>/skip</code> creates a flagged row; <code>/replay</code> on an existing date re-asks; <code>/last</code> resends the latest report.</li>
+                <li><strong>Privacy: encryption already done, now check for leaks.</strong> DB encryption doesn't help if data "flows" anywhere in plaintext (logs, errors, monitoring).
+                    <pre class="shell">&gt; walk all of diary-bot/ as a security reviewer:
+&gt; 1) is there any print/logger.info that emits answers
+&gt;    or raw_chat in plaintext?
+&gt; 2) if a script crashes — does the exception stacktrace
+&gt;    contain answer text and land in the cron log?
+&gt; 3) is DIARY_ENCRYPTION_KEY in any log
+&gt;    (even partially)?
+&gt; for each — a concrete fix with a file reference.
+&gt; in CLAUDE.md, append a "Privacy checklist" with these items.</pre>
+                    Check: none of the three issues found; <code>CLAUDE.md</code> contains a "Privacy checklist" as a future reminder.</li>
+                <li><strong>PostHog for metrics only, never content.</strong> Third privacy principle&nbsp;&mdash; external analytics sees that you "answered 4 out of 5", but NOT <em>what</em> you answered.
+                    <pre class="shell">&gt; in lib/posthog.py — log ONLY these events:
+&gt; — questions_asked (count: 5)
+&gt; — answer_received (question_id: 1..5, latency_seconds)
+&gt; — entry_saved (completed: true/false)
+&gt; — weekly_report_sent (week_start)
+&gt;
+&gt; STRICTLY NEVER SEND:
+&gt; — the text of the questions (if you vary them later);
+&gt; — answer text (ever!);
+&gt; — raw_chat fragments;
+&gt; — report content.
+&gt;
+&gt; spawn a subagent over the PostHog calls and confirm
+&gt; that none of the "STRICTLY NEVER" items leaks.</pre>
+                    Check: the PostHog dashboard shows metrics (answer counts, latencies), but no field contains your text; subagent confirmed.</li>
+                <li><strong>Final check: "first week".</strong> Fill five days (you can do it manually via <code>python scripts/ask_five_questions.py</code> if cron hasn't caught up yet), wait for Sunday&nbsp;&mdash; the first weekly report should arrive.
+                    <pre class="shell">&gt; walk me through the "verification week":
+&gt; — day 1-5: I fill the five questions;
+&gt; — day 3: try /skip (deliberately skip a day);
+&gt; — day 4: try /replay 2024-XX-XX (yesterday's date);
+&gt; — Sunday at 14:00: expect the weekly report.
+&gt;
+&gt; at the end of the week, via PostHog show me:
+&gt; — how many completed=true vs false;
+&gt; — average latency between question and answer
+&gt;   (if &gt; 30 minutes — maybe the question timing is wrong).</pre>
+                    Check: the Sunday report arrived; it mentions three themes from your real answers; PostHog shows weekly metrics; if 4 out of 7 days are skips, consider rescheduling.</li>
             </ol>
         </article>
     </div>
