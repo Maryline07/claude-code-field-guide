@@ -596,23 +596,45 @@
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Создайте папку <code>dd-nvda</code>, запустите <code>claude</code>. Подготовьте <code>CLAUDE.md</code>: «инвестиционные мемо&nbsp;&mdash; нейтральный тон, факты, без&nbsp;«я&nbsp;считаю», итоговый вердикт обоснован».</li>
-                <li>Войдите в&nbsp;Plan Mode и&nbsp;попросите Claude составить spec для&nbsp;четырёх briefs. Убедитесь, что у&nbsp;каждого&nbsp;есть:
-                    <ul>
-                        <li>Роль (фундаментальный / технический / новостной / макро);</li>
-                        <li>Цель и&nbsp;три-четыре конкретных вопроса, на&nbsp;которые он&nbsp;должен ответить;</li>
-                        <li>Источники данных (какие WebFetch разрешены);</li>
-                        <li>Формат ответа (markdown, разделы);</li>
-                        <li>Объём (одна страница).</li>
-                    </ul>
-                </li>
-                <li>Утвердите brief'ы. Дайте команду:
+                <li><strong>Готовим папку и&nbsp;тон документа.</strong> Создайте папку <code>dd-nvda</code>, запустите <code>claude</code>. Перед тем как просить аналитиков работать, надо договориться с&nbsp;Claude о&nbsp;стиле документа&nbsp;&mdash; иначе четыре стажёра дадут четыре разных тона.
+                    <pre class="shell">&gt; заполни CLAUDE.md в этой папке:
+&gt; — это проект для инвестиционных due diligence по акциям;
+&gt; — тон: нейтральный, факты вместо мнений;
+&gt; — НЕ используй формулировки «я считаю», «по моему мнению»,
+&gt;   «возможно стоит» — только проверяемые утверждения;
+&gt; — каждый вердикт должен быть обоснован 3 аргументами «за»
+&gt;   и 3 «против».</pre>
+                    Проверка: файл <code>CLAUDE.md</code> в&nbsp;папке существует и&nbsp;содержит эти правила&nbsp;&mdash; Claude будет читать его при&nbsp;каждом запуске в&nbsp;этой папке.</li>
+                <li><strong>Spec из&nbsp;четырёх brief'ов.</strong> Прежде чем нанимать стажёров, составьте «бриф для&nbsp;брифов»&nbsp;&mdash; план, где для&nbsp;каждого из&nbsp;четырёх аналитиков описаны роль, цель, что НЕ&nbsp;делать, формат и&nbsp;объём (см.&nbsp;тему «Brief»). Это&nbsp;же spec, как в&nbsp;этапе&nbsp;04.
+                    <pre class="shell">&gt; войди в Plan Mode и составь spec.md для DD на NVDA.
+&gt; в нём — четыре brief'а для параллельных subagents:
+&gt;
+&gt; 1) ФУНДАМЕНТАЛЬНЫЙ: роль, цель, 3-4 конкретных вопроса
+&gt;    (выручка yoy, прибыль yoy, P/E vs сектор),
+&gt;    разрешённые источники (WebFetch на investor.nvidia.com и
+&gt;    финансовые ленты), формат (markdown), объём (1 страница).
+&gt; 2) ТЕХНИЧЕСКИЙ: тренд, поддержки/сопротивления, скользящие средние.
+&gt; 3) НОВОСТНОЙ: sentiment по 20-30 свежим заголовкам.
+&gt; 4) МАКРО: отрасль (полупроводники), экономический фон.
+&gt;
+&gt; ВАЖНО: в каждом brief явно укажи «НЕ ДЕЛАЙ»:
+&gt; — фундаменталист не даёт технических советов;
+&gt; — новостник не делает прогнозов;
+&gt; — все возвращают только факты, без формулировок «я считаю».</pre>
+                    Проверка: <code>spec.md</code> в&nbsp;папке содержит четыре пронумерованных brief'а, в&nbsp;каждом видны пять пунктов (роль / цель / источники / НЕ&nbsp;делай / формат). Не&nbsp;утверждайте план, пока какой-то brief сырой.</li>
+                <li><strong>Запускаем команду параллельно.</strong> После одобрения spec четыре стажёра уйдут в&nbsp;работу одновременно. Общее время ≈ времени самого медленного.
                     <pre class="shell">&gt; план одобрен. ПАРАЛЛЕЛЬНО запусти четыре subagents с этими brief.
 &gt; используй skill superpowers:dispatching-parallel-agents
 &gt; для правильной организации.</pre>
-                </li>
-                <li>Дождитесь возврата всех. Прочитайте каждый ответ отдельно. Если кто-то «уплыл» (например, новостной начал давать прогнозы&nbsp;&mdash; запрещено в&nbsp;brief)&nbsp;&mdash; перезапустите его с&nbsp;уточнённым brief.</li>
-                <li>Финальная сшивка:
+                    Проверка: в&nbsp;логе диалога видно четыре вызова <code>Task</code> подряд с&nbsp;<code>run_in_background: true</code> (а&nbsp;не&nbsp;один-два-три-четыре по&nbsp;очереди). Общее ожидание&nbsp;&mdash; одно на&nbsp;всех, не&nbsp;сумма.</li>
+                <li><strong>Читаем по&nbsp;одному, ловим «уплывания».</strong> Когда все стажёры вернутся&nbsp;&mdash; не&nbsp;спешите сшивать. Прочитайте каждый ответ отдельно. Если кто-то нарушил «НЕ ДЕЛАЙ» из&nbsp;brief'а (новостник начал прогнозировать, фундаменталист выдал техсоветы)&nbsp;&mdash; перезапустите этого одного.
+                    <pre class="shell">&gt; subagent #3 (новостной) в ответе дал прогноз цены —
+&gt; это запрещено в brief. перезапусти его одного с тем же brief,
+&gt; добавь в начале: «НАПОМИНАНИЕ: только sentiment заголовков,
+&gt; никаких прогнозов цены, никаких слов "ожидается рост/падение".
+&gt; если хочется сказать прогноз — пиши вместо этого "не моя задача"».</pre>
+                    Проверка: ни&nbsp;один из&nbsp;четырёх ответов не&nbsp;содержит запрещённых формулировок («я&nbsp;считаю», «возможно», «ожидается»).</li>
+                <li><strong>Сшиваем мемо.</strong> Главный Claude собирает четыре блока в&nbsp;один документ и&nbsp;добавляет своё резюме как дирижёр.
                     <pre class="shell">&gt; собери memo-nvda.md со структурой:
 &gt;   ## Резюме (3 предложения, написанные тобой)
 &gt;   ## Фундаментальные показатели (от subagent 1)
@@ -623,35 +645,70 @@
 &gt;     - 3 аргумента «за»;
 &gt;     - 3 аргумента «против»;
 &gt;     - финальное решение и три ключевых риска.</pre>
-                </li>
-                <li>Откройте memo. Прочитайте как редактор: что убедительно, что нет.</li>
-                <li>Финальный аудит&nbsp;&mdash; «red team»:
+                    Проверка: <code>memo-nvda.md</code> в&nbsp;папке, шесть разделов, вердикт обоснован шестью аргументами.</li>
+                <li><strong>Редакторская читка.</strong> Откройте memo и&nbsp;прочитайте как редактор инвест-журнала: что убедительно, что нет, какой раздел просит дополнения. Замеченное&nbsp;&mdash; назад Claude'у.
+                    <pre class="shell">&gt; я прочитал memo-nvda.md как редактор. что меня смутило:
+&gt; — раздел «Технический анализ» слишком короткий, нет упоминания
+&gt;   текущих уровней поддержки;
+&gt; — в «Вердикт» один из аргументов «за» дублирует факт из «Фундаментал».
+&gt; перепиши эти два места: тех.анализ дополни конкретными цифрами,
+&gt; в вердикте замени дубликат на новый, не звучавший выше аргумент.</pre>
+                    Проверка: после правок ни&nbsp;один аргумент в&nbsp;вердикте не&nbsp;повторяет факты из&nbsp;разделов выше.</li>
+                <li><strong>Red team&nbsp;&mdash; пятый стажёр-критик.</strong> Все аналитики работали «за» вашу позицию (собирали факты). Теперь нанимаем одного «против»&nbsp;&mdash; чтобы заранее увидеть, чем вас собьёт скептик.
                     <pre class="shell">&gt; запусти ещё одного subagent — «red-team аналитик».
 &gt; brief: пройдись по memo-nvda.md, найди 3 слабых места в моём
 &gt; вердикте. с какими аргументами я бы прозвучал убедительнее
 &gt; для скептика-инвестора?
 &gt; формат: 3 пункта по 4-5 строк.</pre>
-                </li>
-                <li>Добавьте раздел «Critique» в&nbsp;memo, чтобы зафиксировать слабые места&nbsp;&mdash; и&nbsp;при следующем DD не&nbsp;повторять.</li>
+                    Проверка: red-team вернул три конкретные слабости с&nbsp;цитатами из&nbsp;memo, а&nbsp;не&nbsp;общие фразы «можно улучшить».</li>
+                <li><strong>Фиксируем критику в&nbsp;memo.</strong> Чтобы при&nbsp;следующем DD не&nbsp;наступить на&nbsp;те&nbsp;же грабли&nbsp;&mdash; добавьте раздел «Critique» в&nbsp;конец memo. Это и&nbsp;ваш чек-лист на&nbsp;будущее.
+                    <pre class="shell">&gt; добавь в memo-nvda.md в самом конце раздел:
+&gt;   ## Critique (что слабо в моём вердикте)
+&gt;     - три пункта от red-team subagent (с цитатами из memo),
+&gt;     - под каждым — короткий ответ «что я мог бы усилить
+&gt;       в следующий раз» (1 строка).</pre>
+                    Проверка: memo заканчивается разделом «Critique», в&nbsp;нём три пункта от&nbsp;red-team и&nbsp;три ответных строки от&nbsp;вас. Этот шаблон используйте во&nbsp;всех будущих DD&nbsp;&mdash; вернётесь к&nbsp;нему в&nbsp;solo-проекте&nbsp;C.</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Create <code>dd-nvda</code>, launch <code>claude</code>. Prep <code>CLAUDE.md</code>: “investment memos — neutral tone, facts, no ‘I think,’ verdict must be argued.”</li>
-                <li>Enter Plan Mode and have Claude draft a spec for the four briefs. Each must have:
-                    <ul>
-                        <li>Role (fundamental / technical / news / macro);</li>
-                        <li>Goal and three-four concrete questions to answer;</li>
-                        <li>Allowed data sources (which WebFetch);</li>
-                        <li>Reply format (markdown, sections);</li>
-                        <li>Length (one page).</li>
-                    </ul>
-                </li>
-                <li>Approve briefs. Order:
+                <li><strong>Set up the folder and the tone.</strong> Create <code>dd-nvda</code>, launch <code>claude</code>. Before sending in the analysts, agree with Claude on document style&nbsp;&mdash; otherwise four interns will deliver four different tones.
+                    <pre class="shell">&gt; fill in CLAUDE.md in this folder:
+&gt; — this project is for investment due diligence on stocks;
+&gt; — tone: neutral, facts instead of opinions;
+&gt; — do NOT use phrases like "I think", "in my opinion",
+&gt;   "perhaps we should" — only verifiable statements;
+&gt; — every verdict must be backed by 3 arguments "for"
+&gt;   and 3 "against".</pre>
+                    Check: <code>CLAUDE.md</code> exists in the folder with these rules&nbsp;&mdash; Claude will read it on every launch in this folder.</li>
+                <li><strong>A spec made of four briefs.</strong> Before hiring interns, draft a "brief for the briefs"&nbsp;&mdash; a plan where each of the four analysts has a role, goal, "do not", format and length (see the "Brief" topic). Same kind of spec as etape 04.
+                    <pre class="shell">&gt; enter Plan Mode and draft spec.md for DD on NVDA.
+&gt; inside it — four briefs for parallel subagents:
+&gt;
+&gt; 1) FUNDAMENTAL: role, goal, 3-4 concrete questions
+&gt;    (revenue yoy, profit yoy, P/E vs sector),
+&gt;    allowed sources (WebFetch on investor.nvidia.com and
+&gt;    financial feeds), format (markdown), length (1 page).
+&gt; 2) TECHNICAL: trend, supports/resistances, moving averages.
+&gt; 3) NEWS: sentiment over 20-30 fresh headlines.
+&gt; 4) MACRO: sector (semis), economic backdrop.
+&gt;
+&gt; IMPORTANT: in every brief, spell out the "DO NOT":
+&gt; — fundamentalist gives no technical advice;
+&gt; — news analyst makes no forecasts;
+&gt; — all return facts only, no "I think" phrasing.</pre>
+                    Check: <code>spec.md</code> in the folder lists four numbered briefs, each shows the five items (role / goal / sources / do-not / format). Do not approve the plan while any brief is half-baked.</li>
+                <li><strong>Dispatch the team in parallel.</strong> Once the spec is approved, four interns start at the same time. Total wait ≈ time of the slowest one.
                     <pre class="shell">&gt; plan approved. IN PARALLEL launch four subagents with these briefs.
 &gt; use the superpowers:dispatching-parallel-agents skill
 &gt; to coordinate properly.</pre>
-                </li>
-                <li>Wait for all. Read each separately. If anyone “drifted” (e.g., the news analyst started forecasting — forbidden in the brief) — re-run with a tighter brief.</li>
-                <li>Final stitch:
+                    Check: in the dialogue log you can see four <code>Task</code> calls in a row with <code>run_in_background: true</code> (not one-two-three-four sequentially). One wait covers all of them, not the sum.</li>
+                <li><strong>Read one by one, catch the drifts.</strong> When all interns come back&nbsp;&mdash; don't stitch yet. Read each reply separately. If someone broke the "DO NOT" in their brief (news analyst started forecasting, fundamentalist gave tech advice)&nbsp;&mdash; re-run that one.
+                    <pre class="shell">&gt; subagent #3 (news) gave a price forecast in its answer —
+&gt; that is forbidden in the brief. re-run that one alone with the same brief,
+&gt; add at the start: "REMINDER: headline sentiment only,
+&gt; no price forecasts, no words 'expected to rise/fall'.
+&gt; if you feel like saying a forecast — write 'not my job' instead."</pre>
+                    Check: none of the four replies contains forbidden phrasing ("I think", "perhaps", "is expected to").</li>
+                <li><strong>Stitch the memo.</strong> Main Claude assembles the four blocks into one document and adds its own conductor summary.
                     <pre class="shell">&gt; build memo-nvda.md with the structure:
 &gt;   ## Summary (3 sentences you write)
 &gt;   ## Fundamentals (from subagent 1)
@@ -662,16 +719,28 @@
 &gt;     - 3 arguments for;
 &gt;     - 3 arguments against;
 &gt;     - the final call and three key risks.</pre>
-                </li>
-                <li>Open the memo. Read as an editor: what convinces, what doesn’t.</li>
-                <li>Final audit — “red team”:
+                    Check: <code>memo-nvda.md</code> exists, six sections, verdict backed by six arguments.</li>
+                <li><strong>Editor's read.</strong> Open the memo and read it as an investment-journal editor: what convinces, what doesn't, which section needs more. Send what you noticed back to Claude.
+                    <pre class="shell">&gt; I read memo-nvda.md as an editor. what bothered me:
+&gt; — the "Technicals" section is too short; no current support levels;
+&gt; — in "Verdict" one "for" argument duplicates a fact from "Fundamentals".
+&gt; rewrite these two: enrich Technicals with concrete numbers,
+&gt; in the verdict replace the duplicate with a fresh argument that
+&gt; doesn't appear earlier.</pre>
+                    Check: after the edits no argument in the verdict repeats facts from the sections above.</li>
+                <li><strong>Red team&nbsp;&mdash; a fifth intern, the critic.</strong> All four analysts worked "for" your position (collecting facts). Now hire one "against"&nbsp;&mdash; to see in advance what a sceptic would knock down.
                     <pre class="shell">&gt; launch one more subagent — "red-team analyst."
 &gt; brief: walk memo-nvda.md, find 3 weaknesses in my verdict.
 &gt; what arguments would make me sound more convincing
 &gt; to a sceptical investor?
 &gt; format: 3 bullets, 4-5 lines each.</pre>
-                </li>
-                <li>Add a “Critique” section to the memo so the weaknesses are recorded — and not repeated next DD.</li>
+                    Check: red-team returned three specific weaknesses with citations from the memo, not generic "could be improved" lines.</li>
+                <li><strong>Record the critique in the memo.</strong> So that next DD you don't step on the same rake&nbsp;&mdash; add a "Critique" section at the end. It's also your checklist for the future.
+                    <pre class="shell">&gt; add a section at the end of memo-nvda.md:
+&gt;   ## Critique (what's weak in my verdict)
+&gt;     - three bullets from the red-team subagent (with memo citations),
+&gt;     - under each — a short line "what I could strengthen next time".</pre>
+                    Check: the memo ends with a "Critique" section containing three red-team bullets and three response lines from you. Reuse this template on every future DD&nbsp;&mdash; you'll come back to it in solo project C.</li>
             </ol>
 
             <h4 lang="ru">Что вы здесь освоили</h4>
@@ -699,8 +768,10 @@
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li>Зайдите в&nbsp;корень <code>my-investing</code> (или вашего инвест-кабинета). Запустите <code>claude</code>.</li>
-                <li>Промпт на&nbsp;старт:
+                <li><strong>Заходим в&nbsp;проект.</strong> Откройте корень <code>my-investing</code> (или вашего инвест-кабинета этапа&nbsp;06) и&nbsp;запустите <code>claude</code>. Команда будет работать только с&nbsp;<code>backend/</code>.
+                    <p>Проверка: <code>claude</code> запустился в&nbsp;корне проекта, видит папку <code>backend/</code>.</p>
+                </li>
+                <li><strong>Запускаем трёх ревьюеров параллельно.</strong> Каждый смотрит на&nbsp;backend под&nbsp;своим углом: качество, безопасность, простота. Три отчёта вместо одного дают вам три разных «оптики».
                     <pre class="shell">&gt; ПАРАЛЛЕЛЬНО запусти трёх subagents на @backend/:
 &gt;
 &gt; 1) code-reviewer (или general-purpose с ролью code-reviewer):
@@ -719,30 +790,42 @@
 &gt;    формат: до/после, краткое объяснение.
 &gt;
 &gt; ЖДИ всех. покажи отчёты по одному.</pre>
+                    Проверка: получили <em>три отдельных</em> отчёта (а не один склеенный), в&nbsp;каждом виден свой формат.</li>
+                <li><strong>Ищем перекрытия и&nbsp;разногласия.</strong> Прочитайте все три отчёта подряд. <em>Совпадения</em> между двумя или тремя стажёрами часто означают «настоящую» проблему&nbsp;&mdash; такую видят разные оптики. <em>Расхождения</em>&nbsp;&mdash; повод подумать, чьё мнение здесь весит больше.
+                    <p>Проверка: вы&nbsp;можете назвать минимум одну проблему, которую увидели двое из&nbsp;троих (или все трое), и&nbsp;минимум одну, где мнения расходятся.</p>
                 </li>
-                <li>Прочитайте все три. Заметьте: совпадения часто означают «настоящие» проблемы, расхождения&nbsp;&mdash; разные точки зрения.</li>
-                <li>Промпт-сшивка:
+                <li><strong>Сшиваем общий отчёт.</strong> Главный Claude собирает три потока в&nbsp;один документ, раскладывая по&nbsp;серьёзности.
                     <pre class="shell">&gt; собери review.md:
 &gt;   ## Критическое (всё, что critical+high security, и баги code-reviewer)
 &gt;   ## Желательное (medium, конвенции, упрощения)
 &gt;   ## К обсуждению (где мнения расходятся)
 &gt; для каждого пункта добавь файл и строку, где видна проблема.</pre>
-                </li>
-                <li>Создайте план улучшений:
+                    Проверка: <code>review.md</code> существует, три раздела, каждый пункт ссылается на&nbsp;конкретный файл и&nbsp;строку (не&nbsp;общие фразы).</li>
+                <li><strong>Из&nbsp;отчёта&nbsp;&mdash; в&nbsp;план улучшений.</strong> Чтобы не&nbsp;утонуть в&nbsp;списке&nbsp;&mdash; разбейте на&nbsp;фазы по&nbsp;срочности. Это снова spec в&nbsp;стиле этапа&nbsp;04.
                     <pre class="shell">&gt; составь improvement-plan.md в формате spec:
 &gt;   - три фазы по убыванию срочности;
 &gt;   - в каждой фазе — список задач с критериями готовности;
 &gt;   - примерное время на каждую фазу.</pre>
-                </li>
-                <li>В&nbsp;Plan Mode запросите план реализации первой фазы. Через TodoWrite пройдите её&nbsp;по&nbsp;шагам (этап&nbsp;04).</li>
-                <li>После реализации&nbsp;&mdash; повторный прогон трёх subagents:
+                    Проверка: <code>improvement-plan.md</code>&nbsp;&mdash; три фазы, у&nbsp;каждой задачи есть критерий «готово, если …».</li>
+                <li><strong>Чиним первую фазу.</strong> Сначала&nbsp;&mdash; реализационный план в&nbsp;Plan Mode (Claude разложит фазу на&nbsp;конкретные правки), потом проходим по&nbsp;TodoWrite задача за&nbsp;задачей&nbsp;&mdash; как в&nbsp;этапе&nbsp;04.
+                    <pre class="shell">&gt; войди в Plan Mode и составь план реализации первой фазы
+&gt; из improvement-plan.md. для каждой задачи фазы:
+&gt; — какие файлы трогаем,
+&gt; — что меняем,
+&gt; — как проверим, что сработало.
+&gt; после моего одобрения — заведи TodoWrite со списком этих задач
+&gt; и иди по нему.</pre>
+                    Проверка: первая фаза целиком закрыта&nbsp;&mdash; все галочки в&nbsp;TodoWrite зелёные, backend по-прежнему запускается без&nbsp;ошибок.</li>
+                <li><strong>Повторное ревью.</strong> Запускаем тех&nbsp;же трёх стажёров повторно&nbsp;&mdash; смотрим, что закрылось.
                     <pre class="shell">&gt; запусти тех же троих ещё раз. сравни с предыдущими отчётами.
 &gt; что закрыто? что осталось? что появилось нового?</pre>
-                </li>
+                    Проверка: критических замечаний из&nbsp;первого прогона стало меньше; если появились новые&nbsp;&mdash; это не&nbsp;провал, это нормальная динамика рефакторинга. Цикл «ревью&nbsp;→ план&nbsp;→ реализация&nbsp;→ ревью» теперь у&nbsp;вас в&nbsp;руках.</li>
             </ol>
             <ol class="steps" lang="en">
-                <li>Enter the root of <code>my-investing</code> (or your investment office). Launch <code>claude</code>.</li>
-                <li>Kickoff prompt:
+                <li><strong>Enter the project.</strong> Open the root of <code>my-investing</code> (or your etape-06 investment office) and launch <code>claude</code>. The team will work only on <code>backend/</code>.
+                    <p>Check: <code>claude</code> is up at the project root and can see the <code>backend/</code> folder.</p>
+                </li>
+                <li><strong>Dispatch three reviewers in parallel.</strong> Each looks at the backend through its own lens: quality, security, simplicity. Three reports instead of one give you three different "optics".
                     <pre class="shell">&gt; IN PARALLEL launch three subagents on @backend/:
 &gt;
 &gt; 1) code-reviewer (or general-purpose with reviewer role):
@@ -761,26 +844,36 @@
 &gt;    format: before/after, brief explanation.
 &gt;
 &gt; WAIT for all. show reports one by one.</pre>
+                    Check: you got <em>three separate</em> reports (not one merged), each in its own format.</li>
+                <li><strong>Spot overlaps and disagreements.</strong> Read all three reports back-to-back. <em>Overlaps</em> between two or three interns often signal "real" issues&nbsp;&mdash; they show up under different lenses. <em>Divergences</em> are a cue to think about whose view weighs more here.
+                    <p>Check: you can name at least one issue spotted by two of the three (or all three), and at least one where they disagree.</p>
                 </li>
-                <li>Read all three. Notice: overlaps often mean “real” problems, divergences — different lenses.</li>
-                <li>Stitch prompt:
+                <li><strong>Stitch the combined report.</strong> Main Claude folds the three streams into one document, sorted by severity.
                     <pre class="shell">&gt; build review.md:
 &gt;   ## Critical (everything critical+high security, plus reviewer bugs)
 &gt;   ## Recommended (medium, conventions, simplifications)
 &gt;   ## To discuss (where opinions diverge)
 &gt; for each item include the file and the line that shows the issue.</pre>
-                </li>
-                <li>Improvement plan:
+                    Check: <code>review.md</code> exists, three sections, every item points to a specific file and line (not vague phrases).</li>
+                <li><strong>From report to improvement plan.</strong> To avoid drowning in the list&nbsp;&mdash; break it into phases by urgency. Another etape-04-style spec.
                     <pre class="shell">&gt; draft improvement-plan.md as a spec:
 &gt;   - three phases by descending urgency;
 &gt;   - per phase — task list with acceptance criteria;
 &gt;   - rough time per phase.</pre>
-                </li>
-                <li>In Plan Mode request the implementation plan for phase 1. Walk it via TodoWrite (etape 04).</li>
-                <li>After implementation — re-run the three subagents:
+                    Check: <code>improvement-plan.md</code>&nbsp;&mdash; three phases; every task has a "done when …" criterion.</li>
+                <li><strong>Fix phase one.</strong> Start with an implementation plan in Plan Mode (Claude breaks the phase into concrete edits), then walk through it task by task with TodoWrite&nbsp;&mdash; just like etape 04.
+                    <pre class="shell">&gt; enter Plan Mode and draft an implementation plan for phase 1
+&gt; of improvement-plan.md. for each task in the phase:
+&gt; — which files we touch,
+&gt; — what we change,
+&gt; — how we'll verify it worked.
+&gt; after I approve — create a TodoWrite with these tasks
+&gt; and walk it through.</pre>
+                    Check: phase one is fully closed&nbsp;&mdash; all TodoWrite items green, the backend still starts without errors.</li>
+                <li><strong>Re-review.</strong> Run the same three interns again&nbsp;&mdash; see what closed.
                     <pre class="shell">&gt; run the same three again. compare to previous reports.
 &gt; what's closed? what remains? what's new?</pre>
-                </li>
+                    Check: there are fewer critical findings than in the first run; if new ones appeared, that's not failure&nbsp;&mdash; that's the normal dynamic of refactoring. The loop "review → plan → implement → review" is now yours.</li>
             </ol>
 
             <h4 lang="ru">Что вы здесь освоили</h4>
