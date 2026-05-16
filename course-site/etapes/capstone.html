@@ -110,6 +110,72 @@
         <p class="reading" lang="ru">Главное правило выбора: <strong>будете&nbsp;ли вы&nbsp;пользоваться этим сами после курса?</strong> Если да&nbsp;&mdash; берите. Если только «в&nbsp;портфолио»&nbsp;&mdash; будет вяло. Капстоун&nbsp;&mdash; единственный шанс <em>сделать ваш собственный инструмент</em>, к&nbsp;которому вы&nbsp;будете возвращаться годами.</p>
         <p class="reading" lang="en">The main rule of choice: <strong>will you actually use it after the course?</strong> If yes — go. If just for “the portfolio” — it’ll feel flat. The capstone is your single shot to <em>build your own tool</em> you’ll return to for years.</p>
 
+        <div class="aside-card" style="margin-top:1.75rem;">
+            <span class="label"><span lang="ru">обязательно · до выбора варианта</span><span lang="en">required · before picking an option</span></span>
+            <h3><span lang="ru">Первые два дня&nbsp;&mdash; общие для всех четырёх вариантов</span><span lang="en">The first two days — the same for all four options</span></h3>
+            <p lang="ru" style="margin:0.5rem 0 0.8rem;">До&nbsp;того, как вы&nbsp;начнёте писать код, нужны две вещи: <strong>spec.md</strong> (вы&nbsp;точно знаете, что именно делаете) и <strong>scaffolding</strong> (репо, <code>CLAUDE.md</code>, <code>.env.example</code>, <code>.gitignore</code> готовы). На&nbsp;это уходит 1–2 дня, и&nbsp;вариант выбора тут не&nbsp;важен&nbsp;&mdash; работа одна и&nbsp;та же.</p>
+            <p lang="en" style="margin:0.5rem 0 0.8rem;">Before you write code, two things are needed: <strong>spec.md</strong> (you know exactly what you’re building) and <strong>scaffolding</strong> (repo, <code>CLAUDE.md</code>, <code>.env.example</code>, <code>.gitignore</code> in place). This takes 1–2 days, and your option choice doesn’t matter — the work is the same.</p>
+
+            <p lang="ru" style="margin:0.8rem 0 0.4rem;"><strong>День 1 · spec.md через Plan Mode.</strong></p>
+            <p lang="en" style="margin:0.8rem 0 0.4rem;"><strong>Day 1 · spec.md via Plan Mode.</strong></p>
+            <pre class="shell" lang="ru">&gt; включи Plan Mode (Shift+Tab) и используй skill spec-driven-development
+&gt; из этапа 08b. Я выбрал капстоун: &lt;имя варианта, например «Налоговая студия»&gt;.
+&gt; составь spec.md по разделам:
+&gt;   - Цель (1-2 предложения);
+&gt;   - Целевой пользователь (кто, зачем, как часто);
+&gt;   - Главные фичи (5-8 пунктов, в одну строку каждая);
+&gt;   - Стек (frontend, backend, БД, внешние API);
+&gt;   - 6+ техник курса, которые я обязательно использую
+&gt;     (из этапов 03/06/07/08/09/10/11);
+&gt;   - Три фазы по неделям (что готово к концу каждой);
+&gt;   - Критерии готовности (как пойму, что закончил);
+&gt;   - Вне scope (что НЕ делаю в капстоуне).
+&gt; покажи план, я подтвержу — потом сохраним в spec.md.</pre>
+            <pre class="shell" lang="en">&gt; enable Plan Mode (Shift+Tab) and use the spec-driven-development skill
+&gt; from etape 08b. I picked the capstone: &lt;option name, e.g. "Tax Studio"&gt;.
+&gt; draft spec.md with sections:
+&gt;   - Goal (1-2 sentences);
+&gt;   - Target user (who, why, how often);
+&gt;   - Core features (5-8 bullets, one line each);
+&gt;   - Stack (frontend, backend, DB, external APIs);
+&gt;   - 6+ course techniques I will definitely use
+&gt;     (from etapes 03/06/07/08/09/10/11);
+&gt;   - Three weekly phases (what's done by the end of each);
+&gt;   - Acceptance criteria (how I'll know I'm done);
+&gt;   - Out of scope (what I am NOT doing in the capstone).
+&gt; show the plan, I'll confirm — then save it as spec.md.</pre>
+            <p lang="ru"><strong>Проверка:</strong> в&nbsp;<code>spec.md</code> есть все 8 разделов; раздел «6+ техник» содержит конкретные пункты (не&nbsp;«использую MCP», а&nbsp;«использую Daily Trader MCP из&nbsp;этапа&nbsp;09»); раздел «Вне scope» не&nbsp;пустой&nbsp;&mdash; явно перечислены 3-5 фич, которых вы&nbsp;<em>не</em> делаете в&nbsp;капстоуне.</p>
+            <p lang="en"><strong>Check:</strong> <code>spec.md</code> has all 8 sections; the “6+ techniques” block names specific items (not “use MCP” but “use the Daily Trader MCP from etape 09”); the “Out of scope” section is not empty — it explicitly lists 3-5 features you are <em>not</em> doing.</p>
+
+            <p lang="ru" style="margin:0.8rem 0 0.4rem;"><strong>День 2 · scaffolding + CLAUDE.md.</strong></p>
+            <p lang="en" style="margin:0.8rem 0 0.4rem;"><strong>Day 2 · scaffolding + CLAUDE.md.</strong></p>
+            <pre class="shell" lang="ru">&gt; создай новый репо &lt;имя проекта&gt; рядом с моими проектами курса.
+&gt; используя spec.md, сделай:
+&gt;   - папки фронт/бэк/тесты/документы по стеку из spec;
+&gt;   - .env.example со всеми ключами, что упомянуты в spec
+&gt;     (без значений);
+&gt;   - .gitignore: стандартный python + node + .env;
+&gt;   - CLAUDE.md по шаблону этапов 09/10/11:
+&gt;       цель проекта (из spec), стек, команды запуска,
+&gt;       дневной бюджет на Claude API, модели по задачам,
+&gt;       где хранятся секреты, ссылки на используемые skills/MCP;
+&gt;   - README.md (двуязычный): пока заглушка с целью и статусом «in progress».
+&gt; финальный commit "feat: project scaffold" и push на GitHub.</pre>
+            <pre class="shell" lang="en">&gt; create a new repo &lt;project name&gt; next to my course projects.
+&gt; using spec.md, set up:
+&gt;   - frontend/backend/tests/docs folders per the stack in spec;
+&gt;   - .env.example with every key mentioned in spec (no values);
+&gt;   - .gitignore: standard python + node + .env;
+&gt;   - CLAUDE.md following the etape 09/10/11 pattern:
+&gt;       project goal (from spec), stack, run commands,
+&gt;       daily Claude-API budget, models by task,
+&gt;       where secrets live, links to skills/MCP I use;
+&gt;   - README.md (bilingual): a stub with goal + "in progress" status.
+&gt; final commit "feat: project scaffold" and push to GitHub.</pre>
+            <p lang="ru"><strong>Проверка:</strong> репо на&nbsp;GitHub открывается; <code>CLAUDE.md</code> упоминает дневной бюджет в&nbsp;долларах; <code>.env</code> попал в&nbsp;<code>.gitignore</code> (проверьте: <code>git status</code> не&nbsp;показывает <code>.env</code>); <code>spec.md</code> закоммичен в&nbsp;корень.</p>
+            <p lang="en"><strong>Check:</strong> the GitHub repo opens; <code>CLAUDE.md</code> mentions the daily budget in dollars; <code>.env</code> is in <code>.gitignore</code> (verify with <code>git status</code> — no <code>.env</code> listed); <code>spec.md</code> is committed at the root.</p>
+        </div>
+
         <article class="project">
             <span class="label"><span lang="ru">Вариант&nbsp;A · «Мой инвестиционный ИИ»</span><span lang="en">Option A · “My Investing AI”</span></span>
             <h3><span lang="ru">Полный SaaS для&nbsp;себя и&nbsp;двух-трёх друзей</span><span lang="en">Full SaaS for yourself and two-three friends</span></h3>
@@ -136,7 +202,7 @@
                 <li>Импорт CSV из&nbsp;3+ брокеров с&nbsp;универсальной нормализацией (этап&nbsp;02).</li>
                 <li>Дашборд с&nbsp;живыми ценами через ваш Daily Trader MCP (этап&nbsp;09).</li>
                 <li>Прогнозы в&nbsp;трёх сценариях (этап&nbsp;04).</li>
-                <li>AI-консультант с&nbsp;долговременной памятью (этап&nbsp;06 + этап&nbsp;11).</li>
+                <li>AI-консультант на&nbsp;Claude API (этап&nbsp;06). <em>Если прошли этап&nbsp;11&nbsp;&mdash; добавьте долговременную память по&nbsp;шаблону консьержа; если пропустили&nbsp;&mdash; оставьте обычный чат, это нормально.</em></li>
                 <li>Ежедневная Telegram-сводка по&nbsp;cron (этап&nbsp;10).</li>
                 <li>Еженедельный DD: команда из&nbsp;4&nbsp;subagents (этап&nbsp;07).</li>
                 <li>Установленный плагин <code>@you/personal-office</code> (этап&nbsp;09)&nbsp;&mdash; поверх сервиса.</li>
@@ -146,7 +212,7 @@
                 <li>CSV import from 3+ brokers with universal normalisation (etape 02).</li>
                 <li>Live-price dashboard via your Daily Trader MCP (etape 09).</li>
                 <li>Three-scenario forecasts (etape 04).</li>
-                <li>AI advisor with long-term memory (etapes 06 + 11).</li>
+                <li>AI advisor on the Claude API (etape 06). <em>If you did etape 11 — add long-term memory using the concierge template; if you skipped — keep a plain chat, that’s fine.</em></li>
                 <li>Daily Telegram digest on cron (etape 10).</li>
                 <li>Weekly DD: a 4-subagent team (etape 07).</li>
                 <li>Your installed <code>@you/personal-office</code> plugin (etape 09) on top.</li>
@@ -191,6 +257,36 @@
                 <li>you used the product yourself for 5+ consecutive days — not “build and forget,” but “part of the morning”;</li>
                 <li>FEEDBACK.md captures a 30-second piece of feedback from a friend and your responses.</li>
             </ul>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Стартовый промпт (после общих «двух дней»)</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Starter prompt (after the shared “two days”)</h4>
+            <pre class="shell" lang="ru">&gt; у меня готов spec.md и scaffolding по варианту A
+&gt; «Мой инвестиционный ИИ». вытащи из spec.md MVP —
+&gt; минимум, который я смогу показать другу к концу первой недели:
+&gt;   - какие 3 фичи входят в MVP (auth + что ещё?);
+&gt;   - какие 5+ фич — позже (по фазам);
+&gt;   - какие техники курса нужны уже на неделе 1, а какие — позже.
+&gt; покажи таблицей. потом сохрани в roadmap.md.</pre>
+            <pre class="shell" lang="en">&gt; spec.md and scaffolding ready for option A
+&gt; "My Investing AI". From spec.md extract the MVP —
+&gt; the smallest version I can show a friend by end of week 1:
+&gt;   - which 3 features are in the MVP (auth + what else?);
+&gt;   - which 5+ features come later (by phase);
+&gt;   - which course techniques are needed already in week 1 vs later.
+&gt; show as a table. then save as roadmap.md.</pre>
+
+            <h4 lang="ru">Три фазы по неделям</h4>
+            <h4 lang="en">Three weekly phases</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Неделя 1 · MVP: auth, импорт CSV, базовый дашборд.</strong> К концу: вы и друг можете зарегистрироваться, загрузить выписку, увидеть список позиций. Деплой на&nbsp;Render+Vercel, дисклеймер на&nbsp;главной.</li>
+                <li><strong>Неделя 2 · MCP и AI-консультант.</strong> Подключите Daily Trader MCP (этап&nbsp;09), сделайте сценарные прогнозы (этап&nbsp;04), запустите AI-консультанта на&nbsp;Claude API (с&nbsp;памятью из&nbsp;этапа&nbsp;11, если делали).</li>
+                <li><strong>Неделя 3 · автопилот и&nbsp;DD.</strong> Cron-сводка в&nbsp;Telegram (этап&nbsp;10), еженедельный DD через 4&nbsp;subagents (этап&nbsp;07), плагин <code>@you/personal-office</code> (этап&nbsp;09). Друг получает доступ, даёт 30-секундный отзыв в&nbsp;FEEDBACK.md.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Week 1 · MVP: auth, CSV import, basic dashboard.</strong> By end: you and a friend can sign up, upload a statement, see the positions list. Deployed on Render+Vercel, disclaimer on the homepage.</li>
+                <li><strong>Week 2 · MCP and AI advisor.</strong> Hook in the Daily Trader MCP (etape 09), add scenario forecasts (etape 04), launch the AI advisor on the Claude API (with memory from etape 11 if you did it).</li>
+                <li><strong>Week 3 · autopilot and DD.</strong> Telegram cron digest (etape 10), weekly DD via 4 subagents (etape 07), the <code>@you/personal-office</code> plugin (etape 09). The friend gets access and writes a 30-second piece of feedback into FEEDBACK.md.</li>
+            </ol>
         </article>
 
         <article class="project">
@@ -253,6 +349,40 @@
                 <li>a test CPA account sees its test “clients”;</li>
                 <li>an obvious disclaimer “not for IRS filing without a CPA.”</li>
             </ul>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Стартовый промпт (после общих «двух дней»)</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Starter prompt (after the shared “two days”)</h4>
+            <pre class="shell" lang="ru">&gt; готов spec.md и scaffolding по варианту B «Налоговая студия».
+&gt; вытащи из spec.md MVP под первую неделю:
+&gt;   - какой минимальный пайплайн «загрузил ZIP → получил PDF»
+&gt;     можно собрать без всей CPA-инфраструктуры;
+&gt;   - какие 2-3 фичи переносим на неделю 2 (multi-user, CPA-аккаунты);
+&gt;   - какие — на неделю 3 (audit-лог, авто-удаление через 24 часа).
+&gt; покажи таблицей. сохрани в roadmap.md.
+&gt; ВАЖНО: в roadmap пометь, где нужны subagents из этапа 07
+&gt; и где — skill pdf из этапа 08b.</pre>
+            <pre class="shell" lang="en">&gt; spec.md and scaffolding ready for option B "Tax Studio".
+&gt; from spec.md extract the week-1 MVP:
+&gt;   - the smallest "uploaded ZIP → got PDF" pipeline,
+&gt;     without the full CPA infrastructure;
+&gt;   - 2-3 features deferred to week 2 (multi-user, CPA accounts);
+&gt;   - which ones to week 3 (audit log, 24h auto-delete).
+&gt; show as a table. save as roadmap.md.
+&gt; IMPORTANT: in the roadmap mark where etape-07 subagents are needed
+&gt; and where — the etape-08b pdf skill.</pre>
+
+            <h4 lang="ru">Три фазы по неделям</h4>
+            <h4 lang="en">Three weekly phases</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Неделя 1 · MVP-пайплайн.</strong> Один пользователь (вы), upload ZIP, парсинг через subagents (этап&nbsp;07), расчёт через ваш скилл «налоговый аналитик» (этап&nbsp;08a), вывод PDF через skill <code>pdf</code> (этап&nbsp;08b). К концу: один полный «test-ZIP» прошёл от&nbsp;загрузки до&nbsp;<code>filled-1040.pdf</code>.</li>
+                <li><strong>Неделя 2 · Multi-user + CPA-аккаунты.</strong> JWT-регистрация (этап&nbsp;06), фоновая обработка ZIP, страница «мои клиенты» для&nbsp;CPA. К концу: 3 тестовых аккаунта работают параллельно, не&nbsp;видят данные друг друга.</li>
+                <li><strong>Неделя 3 · Безопасность, audit-лог, дисклеймеры.</strong> Аудит-лог <code>source → field → value</code>, анонимизация в&nbsp;логах, авто-удаление файлов через 24&nbsp;часа, дисклеймер на&nbsp;каждой странице. К концу: 5 разных ZIP проходят без вашего вмешательства, FEEDBACK.md от&nbsp;знакомого, кто делает 1040 сам.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Week 1 · MVP pipeline.</strong> A single user (you), ZIP upload, parsing via subagents (etape 07), calculation through your “tax analyst” skill (etape 08a), output PDF via the <code>pdf</code> skill (etape 08b). By end: one full “test ZIP” went from upload to <code>filled-1040.pdf</code>.</li>
+                <li><strong>Week 2 · Multi-user + CPA accounts.</strong> JWT signup (etape 06), background ZIP processing, “my clients” page for CPAs. By end: 3 test accounts run in parallel, can’t see each other’s data.</li>
+                <li><strong>Week 3 · Safety, audit log, disclaimers.</strong> Audit log <code>source → field → value</code>, log anonymisation, auto-delete files after 24h, disclaimer on every page. By end: 5 different ZIPs pass without your intervention, FEEDBACK.md from someone who files their own 1040.</li>
+            </ol>
         </article>
 
         <article class="project">
@@ -313,6 +443,38 @@
                 <li>Sunday report landed for a week of observations;</li>
                 <li>sensitive financial data encrypted in the DB, with a <code>/forget</code> command.</li>
             </ul>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Стартовый промпт (после общих «двух дней»)</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Starter prompt (after the shared “two days”)</h4>
+            <pre class="shell" lang="ru">&gt; готов spec.md и scaffolding по варианту C «Семейный портал».
+&gt; вытащи из spec.md MVP под первую неделю:
+&gt;   - самый ценный кусок для семьи — это бот для быстрого ввода трат
+&gt;     с auto-классификацией через Claude. с него начнём;
+&gt;   - какие фичи (дашборд, цели, отчёт) переносим на недели 2 и 3.
+&gt; покажи таблицей. сохрани в roadmap.md.
+&gt; ВАЖНО: подумай, как пригласить второго члена семьи на неделе 1
+&gt; (нужен ли invite-link, какие данные он увидит сразу).</pre>
+            <pre class="shell" lang="en">&gt; spec.md and scaffolding ready for option C "Family Portal".
+&gt; from spec.md extract the week-1 MVP:
+&gt;   - the most valuable bit for the family is the fast-entry bot
+&gt;     with Claude auto-classification. start there;
+&gt;   - which features (dashboard, goals, report) go to weeks 2 and 3.
+&gt; show as a table. save as roadmap.md.
+&gt; IMPORTANT: figure out how to invite a second family member in week 1
+&gt; (invite link? what data do they see right away?).</pre>
+
+            <h4 lang="ru">Три фазы по неделям</h4>
+            <h4 lang="en">Three weekly phases</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Неделя 1 · MVP: Telegram-бот для ввода трат.</strong> Multi-user auth (этап&nbsp;06), Telegram-бот (этап&nbsp;06b), классификация через Claude API. К концу: вы и кто-то из семьи пишете боту «обед 800»&nbsp;&mdash; запись с категорией появляется в общей базе.</li>
+                <li><strong>Неделя 2 · Дашборд + цели накоплений.</strong> Web-страница (общие vs индивидуальные траты), цели с прогноз-ETA (этап&nbsp;04), cron-напоминалки за&nbsp;3 дня до счетов (этап&nbsp;10). К концу: 2 цели на дашборде, обе обновляются автоматически.</li>
+                <li><strong>Неделя 3 · Sunday-отчёт + приватность.</strong> Subagent-отчёт по&nbsp;всей семье (этап&nbsp;07), шифрование чувствительных полей (этап&nbsp;10), <code>/forget</code>. К концу: первое воскресное письмо пришло, FEEDBACK.md от&nbsp;второго члена семьи.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Week 1 · MVP: Telegram expense-entry bot.</strong> Multi-user auth (etape 06), Telegram bot (etape 06b), Claude-API classification. By end: you and a family member can type “lunch 800” to the bot — a categorised row lands in the shared DB.</li>
+                <li><strong>Week 2 · Dashboard + saving goals.</strong> Web page (shared vs personal expenses), goals with ETA forecasting (etape 04), 3-day cron reminders for bills (etape 10). By end: 2 goals on the dashboard, both auto-updating.</li>
+                <li><strong>Week 3 · Sunday report + privacy.</strong> Subagent family-wide report (etape 07), encryption of sensitive fields (etape 10), <code>/forget</code>. By end: the first Sunday digest landed, FEEDBACK.md from the second family member.</li>
+            </ol>
         </article>
 
         <article class="project">
@@ -373,6 +535,42 @@
                 <li>obvious disclaimer: “game fund, no real money”;</li>
                 <li>Friend feedback: 2 members write a one-liner “what I like / don’t” into <code>FEEDBACK.md</code>.</li>
             </ul>
+
+            <h4 lang="ru" style="margin-top:1.25rem;">Стартовый промпт (после общих «двух дней»)</h4>
+            <h4 lang="en" style="margin-top:1.25rem;">Starter prompt (after the shared “two days”)</h4>
+            <pre class="shell" lang="ru">&gt; готов spec.md и scaffolding по варианту D «Совместный AI-фонд».
+&gt; вытащи из spec.md MVP под первую неделю:
+&gt;   - что важнее на неделе 1: бот для приёма /propose
+&gt;     или сам DD-механизм? я думаю — бот, чтобы участники
+&gt;     уже привыкали оставлять идеи. подтверди или предложи иначе;
+&gt;   - какие 2-3 фичи в фокусе недели 2 (DD + голосование)
+&gt;     и недели 3 (отчёт + best-analyst).
+&gt; покажи таблицей. сохрани в roadmap.md.
+&gt; ВАЖНО: ОБЯЗАТЕЛЬНО запиши в роадмап «дисклеймер
+&gt; ‘игровой фонд, не реальные деньги’ на главной с дня 1».</pre>
+            <pre class="shell" lang="en">&gt; spec.md and scaffolding ready for option D "Co-op AI Fund".
+&gt; from spec.md extract the week-1 MVP:
+&gt;   - what matters more in week 1: the /propose intake bot,
+&gt;     or the DD engine itself? I think — the bot, so members
+&gt;     get used to posting ideas. confirm or suggest otherwise;
+&gt;   - which 2-3 features for week 2 (DD + voting)
+&gt;     and week 3 (report + best-analyst).
+&gt; show as a table. save as roadmap.md.
+&gt; IMPORTANT: MUST add to roadmap "disclaimer
+&gt; 'game fund, no real money' on the homepage from day 1".</pre>
+
+            <h4 lang="ru">Три фазы по неделям</h4>
+            <h4 lang="en">Three weekly phases</h4>
+            <ol class="steps" lang="ru">
+                <li><strong>Неделя 1 · MVP: regestration + /propose.</strong> Multi-user auth (этап&nbsp;06), Telegram-бот (этап&nbsp;06b) принимает <code>/propose AAPL because ...</code>, идеи лежат в очереди. К концу: 5 человек зарегистрированы, 3 предложения в очереди, дисклеймер на главной.</li>
+                <li><strong>Неделя 2 · DD-команда и&nbsp;голосование.</strong> 4-subagent DD (этап&nbsp;07) автоматически анализирует каждую идею, отчёт виден всем, голосование +1/0/-1, виртуальный портфель из «фонд-баксов». К концу: 3 идеи прошли полный цикл «proposal → DD → vote → portfolio».</li>
+                <li><strong>Неделя 3 · Отчётность и&nbsp;red-team.</strong> Ежемесячный отчёт с&nbsp;hit-rate и&nbsp;best-analyst, обязательный red-team аудит в&nbsp;конце каждого DD (этап&nbsp;07). К концу: первый ежемесячный отчёт пришёл, FEEDBACK.md от&nbsp;двух участников.</li>
+            </ol>
+            <ol class="steps" lang="en">
+                <li><strong>Week 1 · MVP: registration + /propose.</strong> Multi-user auth (etape 06), Telegram bot (etape 06b) accepts <code>/propose AAPL because ...</code>, ideas enter a queue. By end: 5 people signed up, 3 ideas queued, disclaimer on the homepage.</li>
+                <li><strong>Week 2 · DD team and voting.</strong> A 4-subagent DD (etape 07) auto-analyses each idea, the report visible to all, voting +1/0/-1, virtual “fund-bucks” portfolio. By end: 3 ideas went through the full cycle “proposal → DD → vote → portfolio”.</li>
+                <li><strong>Week 3 · Reporting and red-team.</strong> Monthly report with hit-rate and best-analyst, mandatory red-team audit at the end of each DD (etape 07). By end: first monthly report landed, FEEDBACK.md from two members.</li>
+            </ol>
         </article>
     </div>
 </section>
