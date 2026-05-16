@@ -149,17 +149,17 @@
                     <p>Это самая «волшебная» возможность загрузок. Любая таблица&nbsp;&mdash; меню, прайс-лист, тикеры портфеля, уровни игры, план комнат, расписание, контактный список&nbsp;&mdash; превращается в&nbsp;повторяющиеся визуальные элементы.</p>
                     <p>Принцип: <strong>колонки = поля, строки = повторы</strong>.</p>
                     <p>Пример. Таблица меню кофейни:</p>
-                    <pre class="shell">| Раздел   | Позиция        | Описание                | Цена |
-|----------|----------------|-------------------------|------|
-| espresso | Espresso       | Один шот, 30 мл         | 180  |
-| espresso | Doppio         | Двойной, 60 мл          | 220  |
-| espresso | Macchiato      | С пенкой молока         | 240  |
-| filter   | V60            | Hand-pour, Эфиопия      | 280  |
-| filter   | Aeropress      | Под давлением, Колумбия | 280  |
-| filter   | Cold brew      | 18 часов на холоде      | 320  |
-| sweets   | Цельнозерновой | Овёс, мёд, изюм         | 180  |
-| sweets   | Морковный      | Грецкий орех, корица    | 220  |
-| sweets   | Шоколадный     | 70% Сент-Винсент        | 240  |</pre>
+                    <pre class="shell">| Раздел   | Позиция        | Описание                | Цена  |
+|----------|----------------|-------------------------|-------|
+| espresso | Espresso       | Один шот, 30 мл         | $3.00 |
+| espresso | Doppio         | Двойной, 60 мл          | $3.50 |
+| espresso | Macchiato      | С пенкой молока         | $4.00 |
+| filter   | V60            | Hand-pour, Эфиопия      | $4.50 |
+| filter   | Aeropress      | Под давлением, Колумбия | $4.50 |
+| filter   | Cold brew      | 18 часов на холоде      | $5.00 |
+| sweets   | Цельнозерновой | Овёс, мёд, изюм         | $3.50 |
+| sweets   | Морковный      | Грецкий орех, корица    | $4.50 |
+| sweets   | Шоколадный     | 70% Сент-Винсент        | $5.00 |</pre>
                     <p>Загружаете .xlsx с&nbsp;этой таблицей. В&nbsp;промпте:</p>
                     <pre class="shell">&gt; меню кофейни «Северный край» по таблице выше.
 &gt; формат A4 вертикальный, для печати.
@@ -183,15 +183,15 @@
                     <p>Example. Café menu table:</p>
                     <pre class="shell">| Section  | Item            | Description              | Price |
 |----------|-----------------|--------------------------|-------|
-| espresso | Espresso        | Single shot, 30 ml       | 180   |
-| espresso | Doppio          | Double, 60 ml            | 220   |
-| espresso | Macchiato       | With milk foam           | 240   |
-| filter   | V60             | Hand-pour, Ethiopia      | 280   |
-| filter   | Aeropress       | Under pressure, Colombia | 280   |
-| filter   | Cold brew       | 18 hours cold            | 320   |
-| sweets   | Wholegrain      | Oats, honey, raisins     | 180   |
-| sweets   | Carrot          | Walnut, cinnamon         | 220   |
-| sweets   | Chocolate       | 70% Saint-Vincent        | 240   |</pre>
+| espresso | Espresso        | Single shot, 30 ml       | $3.00 |
+| espresso | Doppio          | Double, 60 ml            | $3.50 |
+| espresso | Macchiato       | With milk foam           | $4.00 |
+| filter   | V60             | Hand-pour, Ethiopia      | $4.50 |
+| filter   | Aeropress       | Under pressure, Colombia | $4.50 |
+| filter   | Cold brew       | 18 hours cold            | $5.00 |
+| sweets   | Wholegrain      | Oats, honey, raisins     | $3.50 |
+| sweets   | Carrot          | Walnut, cinnamon         | $4.50 |
+| sweets   | Chocolate       | 70% Saint-Vincent        | $5.00 |</pre>
                     <p>Upload the .xlsx with this table. In the prompt:</p>
                     <pre class="shell">&gt; café menu "Northern Coast" from the table above.
 &gt; format A4 vertical, for print.
@@ -420,7 +420,7 @@
 &gt; вверху — заголовок MENU крупно. внизу — адрес «ул. Морская, 12», часы «8:00 — 21:00».</pre>
                 </li>
                 <li>Дождитесь первой версии. Если разделы перепутаны или цены не&nbsp;по&nbsp;правому краю&nbsp;&mdash; уточните инлайн-комментарием на&nbsp;конкретной секции (этап&nbsp;01).</li>
-                <li>Добавьте десятую позицию в&nbsp;.xlsx (например, «Эфиопия Юрга», cold brew, 340₽). Перезагрузите файл в&nbsp;тот&nbsp;же диалог. <em>«Обнови меню по&nbsp;новой версии таблицы»</em>. Заметьте, что Claude добавил позицию в&nbsp;нужную секцию автоматически.</li>
+                <li>Добавьте десятую позицию в&nbsp;.xlsx (например, «Эфиопия Юрга», cold brew, $5.50). Перезагрузите файл в&nbsp;тот&nbsp;же диалог. <em>«Обнови меню по&nbsp;новой версии таблицы»</em>. Заметьте, что Claude добавил позицию в&nbsp;нужную секцию автоматически.</li>
                 <li>Когда нравится&nbsp;&mdash; <em>Export → PDF</em>. Откройте на&nbsp;компьютере, проверьте печать.</li>
             </ol>
             <ol class="steps" lang="en">
@@ -436,7 +436,7 @@
 &gt; top — heading MENU big. bottom — address "12 Marine Street", hours "8:00 — 21:00".</pre>
                 </li>
                 <li>Wait for the first take. If sections are mixed up or prices not right-aligned&nbsp;&mdash; refine via inline comment on the specific section (etape 01).</li>
-                <li>Add a tenth item to .xlsx (e.g., &ldquo;Ethiopia Yirga,&rdquo; cold brew, 340₽). Re-upload to the same dialogue. <em>&ldquo;Update the menu to the new table.&rdquo;</em> Note: Claude adds the item to the right section automatically.</li>
+                <li>Add a tenth item to .xlsx (e.g., &ldquo;Ethiopia Yirga,&rdquo; cold brew, $5.50). Re-upload to the same dialogue. <em>&ldquo;Update the menu to the new table.&rdquo;</em> Note: Claude adds the item to the right section automatically.</li>
                 <li>When happy&nbsp;&mdash; <em>Export → PDF</em>. Open it locally, check the print.</li>
             </ol>
 

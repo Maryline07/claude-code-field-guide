@@ -864,7 +864,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                     Проверка: временно переименуйте <code>ANTHROPIC_API_KEY</code> в&nbsp;<code>.env</code> на&nbsp;<code>ANTHROPIC_API_KEY_BROKEN</code>, перезапустите backend, задайте вопрос&nbsp;&mdash; должно появиться понятное сообщение, а&nbsp;не&nbsp;«Failed to fetch».</li>
                 <li><strong>Вторая модель&nbsp;&mdash; Haiku&nbsp;&mdash; для&nbsp;классификации.</strong> Sonnet хорошо отвечает на&nbsp;развёрнутые вопросы, но&nbsp;для&nbsp;простой задачи «это покупка кофе или транспорт?» он&nbsp;избыточен и&nbsp;дорог. Добавьте параллельный эндпоинт на&nbsp;быстрой и&nbsp;дешёвой Haiku.
                     <pre class="shell">&gt; добавь второй эндпоинт POST /api/advisor/classify:
-&gt; принимает { description: "Starbucks 380₽" } —
+&gt; принимает { description: "Starbucks $4.50" } —
 &gt; возвращает { category: "food", confidence: 0.92 }.
 &gt; использует claude-haiku-4-5 (НЕ sonnet — это важно).
 &gt; prompt caching на системный промпт «классифицируй транзакцию
@@ -951,7 +951,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                     Check: temporarily rename <code>ANTHROPIC_API_KEY</code> in <code>.env</code> to <code>ANTHROPIC_API_KEY_BROKEN</code>, restart the backend, ask a question&nbsp;&mdash; a clear message should appear, not "Failed to fetch".</li>
                 <li><strong>A second model&nbsp;&mdash; Haiku&nbsp;&mdash; for classification.</strong> Sonnet handles open-ended questions well, but for a simple task like "is this a coffee purchase or transport?" it's overkill and expensive. Add a parallel endpoint on the fast, cheap Haiku.
                     <pre class="shell">&gt; add a second endpoint POST /api/advisor/classify:
-&gt; takes { description: "Starbucks 380₽" } —
+&gt; takes { description: "Starbucks $4.50" } —
 &gt; returns { category: "food", confidence: 0.92 }.
 &gt; uses claude-haiku-4-5 (NOT sonnet — this matters).
 &gt; prompt caching on the system prompt "classify a transaction
@@ -1026,8 +1026,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
         <article class="project solo">
             <span class="label"><span lang="ru">Проект C · самостоятельно</span><span lang="en">Project C · solo</span></span>
             <h3><span lang="ru">Поделиться портфелем по&nbsp;ссылке</span><span lang="en">Share your portfolio by link</span></h3>
-            <p class="goal" lang="ru">Цель: добавить в&nbsp;инвест-кабинет (проект&nbsp;A) одну фичу&nbsp;&mdash; кнопку «поделиться». По&nbsp;клику backend генерит подписанную read-only ссылку вида <code>https://my-investing.vercel.app/share/abc123…</code>. Друг открывает её&nbsp;без логина и&nbsp;видит снимок вашего портфеля и&nbsp;график прогноза. Без&nbsp;email, без&nbsp;сумм в&nbsp;рублях, без&nbsp;возможности что-либо изменить. Полдня работы, одна новая идея&nbsp;&mdash; подписанные share-токены.</p>
-            <p class="goal" lang="en">Goal: add one feature to your investment office (project&nbsp;A)&nbsp;— a "share" button. On click the backend generates a signed read-only link like <code>https://my-investing.vercel.app/share/abc123…</code>. A friend opens it without signing in and sees a snapshot of your portfolio and the forecast chart. No email, no rouble amounts, no way to change anything. Half a day of work, one new idea&nbsp;— signed share tokens.</p>
+            <p class="goal" lang="ru">Цель: добавить в&nbsp;инвест-кабинет (проект&nbsp;A) одну фичу&nbsp;&mdash; кнопку «поделиться». По&nbsp;клику backend генерит подписанную read-only ссылку вида <code>https://my-investing.vercel.app/share/abc123…</code>. Друг открывает её&nbsp;без логина и&nbsp;видит снимок вашего портфеля и&nbsp;график прогноза. Без&nbsp;email, без&nbsp;сумм в&nbsp;долларах, без&nbsp;возможности что-либо изменить. Полдня работы, одна новая идея&nbsp;&mdash; подписанные share-токены.</p>
+            <p class="goal" lang="en">Goal: add one feature to your investment office (project&nbsp;A)&nbsp;— a "share" button. On click the backend generates a signed read-only link like <code>https://my-investing.vercel.app/share/abc123…</code>. A friend opens it without signing in and sees a snapshot of your portfolio and the forecast chart. No email, no dollar amounts, no way to change anything. Half a day of work, one new idea&nbsp;— signed share tokens.</p>
 
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
@@ -1048,7 +1048,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   GET  /api/share/&lt;token&gt; (БЕЗ JWT, возвращает только safe-view)
 &gt; safe-view — отдельная Pydantic-модель PortfolioSnapshot:
 &gt;   только тикеры, веса в %, доходность от точки старта в %.
-&gt;   БЕЗ user_id, БЕЗ email, БЕЗ сумм в рублях, БЕЗ списка операций.
+&gt;   БЕЗ user_id, БЕЗ email, БЕЗ сумм в долларах, БЕЗ списка операций.
 &gt; если token истёк или не найден — возвращай 404 (не 403, не «истёк»),
 &gt;   чтобы по сообщению нельзя было угадывать существующие токены.</pre>
                     Проверка: <code>POST /api/share/create</code> с&nbsp;токеном JWT возвращает ссылку. <code>GET</code> по&nbsp;этой ссылке без&nbsp;JWT отдаёт JSON с&nbsp;тикерами, без&nbsp;email и&nbsp;сумм.</li>
@@ -1058,7 +1058,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; верх страницы — обычный лендинг с CTA «заведи свой кабинет → /signup»
 &gt;   (это будущие пользователи, не упускай).
 &gt; ниже — те же графики весов и прогноза, что на /dashboard,
-&gt;   но без таблицы операций и без сумм в рублях.
+&gt;   но без таблицы операций и без сумм в долларах.
 &gt;
 &gt; на /dashboard рядом с заголовком добавь кнопку «поделиться»:
 &gt;   клик → модалка → готовая ссылка, кнопка «копировать»,
@@ -1067,7 +1067,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <li><strong>Аудит&nbsp;&mdash; обязательная фаза, не&nbsp;пропускайте.</strong>
                     <pre class="shell">&gt; через playwright прогон в инкогнито (без JWT) на /share/&lt;token&gt;:
 &gt; 1) проверь, что в DOM нет: моего email, моего user_id, любых
-&gt;    сумм в рублях, списка моих операций;
+&gt;    сумм в долларах, списка моих операций;
 &gt; 2) в network-логе НЕ должно быть вызовов /api/operations,
 &gt;    /api/auth/me, /api/forecast — публичная страница не должна их дёргать;
 &gt; 3) поменяй последний символ токена в URL — должно вернуть 404,
@@ -1097,7 +1097,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   GET  /api/share/&lt;token&gt; (NO JWT, returns only the safe-view)
 &gt; safe-view — a separate Pydantic model PortfolioSnapshot:
 &gt;   tickers, weights in %, return from start date in %.
-&gt;   NO user_id, NO email, NO rouble amounts, NO operations list.
+&gt;   NO user_id, NO email, NO dollar amounts, NO operations list.
 &gt; if the token is expired or not found — return 404 (not 403, not "expired"),
 &gt;   so the response can't be used to guess existing tokens.</pre>
                     Check: <code>POST /api/share/create</code> with a JWT returns a link. <code>GET</code> on that link without JWT returns JSON with tickers, no email, no amounts.</li>
@@ -1107,7 +1107,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt; top of the page — a small landing with CTA "open your office → /signup"
 &gt;   (these are future users, don't waste the moment).
 &gt; below it — the same weight and forecast charts as on /dashboard,
-&gt;   but no operations table and no rouble amounts.
+&gt;   but no operations table and no dollar amounts.
 &gt;
 &gt; on /dashboard, next to the title, add a "share" button:
 &gt;   click → modal → the ready link, a "copy" button,
@@ -1116,7 +1116,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <li><strong>Audit&nbsp;— a required phase, do not skip.</strong>
                     <pre class="shell">&gt; via playwright in incognito (no JWT) on /share/&lt;token&gt;:
 &gt; 1) check the DOM contains NONE of: my email, my user_id, any
-&gt;    rouble amounts, any list of my operations;
+&gt;    dollar amounts, any list of my operations;
 &gt; 2) the network log must NOT contain calls to /api/operations,
 &gt;    /api/auth/me, /api/forecast — the public page must not touch them;
 &gt; 3) change the last character of the token in the URL — must return 404,
@@ -1133,7 +1133,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Подсказки и&nbsp;грабли</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Tips and pitfalls</h4>
             <ul lang="ru">
-                <li><strong>Не&nbsp;показывайте суммы в&nbsp;рублях.</strong> Лучший снимок&nbsp;&mdash; веса в&nbsp;процентах, доходность в&nbsp;процентах, список тикеров. Реальные суммы&nbsp;&mdash; личные данные, их&nbsp;не&nbsp;показывают друзьям и&nbsp;точно не&nbsp;показывают через share-ссылку, у&nbsp;которой нет логина. Если друг попросит сумму&nbsp;&mdash; пришлите скриншот руками.</li>
+                <li><strong>Не&nbsp;показывайте суммы в&nbsp;долларах.</strong> Лучший снимок&nbsp;&mdash; веса в&nbsp;процентах, доходность в&nbsp;процентах, список тикеров. Реальные суммы&nbsp;&mdash; личные данные, их&nbsp;не&nbsp;показывают друзьям и&nbsp;точно не&nbsp;показывают через share-ссылку, у&nbsp;которой нет логина. Если друг попросит сумму&nbsp;&mdash; пришлите скриншот руками.</li>
                 <li><strong>30 дней&nbsp;&mdash; разумный дефолт.</strong> «Навсегда» провоцирует забыть и&nbsp;оставить открытой годами. 7&nbsp;дней&nbsp;&mdash; раздражает («снова делать»). 30&nbsp;&mdash; середина.</li>
                 <li><strong>Логи Render видят URL.</strong> Если эндпоинт <code>/api/share/&lt;token&gt;</code> логируется с&nbsp;полным путём&nbsp;&mdash; токен попадает в&nbsp;логи. Кто читает логи&nbsp;&mdash; читает токены. Спросите Claude: <em>«в&nbsp;backend есть middleware, которое логирует path? если да&nbsp;&mdash; замени токен на&nbsp;*** в&nbsp;логах для&nbsp;маршрутов /api/share/*»</em>. То&nbsp;же про&nbsp;Sentry, Datadog и&nbsp;любую другую аналитику, если подключите.</li>
                 <li><strong>Сначала пользоваться, потом украшать.</strong> Соблазн будет&nbsp;&mdash; нарисовать красивую share-страницу, добавить OG-картинку для&nbsp;превью в&nbsp;Telegram, иконку «поделиться» в&nbsp;шеринге системы. Не&nbsp;сейчас. Сначала: создал&nbsp;&mdash;&nbsp;открыл в&nbsp;инкогнито&nbsp;&mdash;&nbsp;убедился, что не&nbsp;утекает лишнего&nbsp;&mdash;&nbsp;живёт неделю. Красивее&nbsp;&mdash; потом.</li>
@@ -1141,7 +1141,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 <li><strong>Снимки&nbsp;&mdash; это копия данных на&nbsp;момент создания.</strong> Если выбрали режим snapshot&nbsp;&mdash; при&nbsp;создании ссылки backend пишет в&nbsp;<code>ShareToken.payload_json</code> готовый JSON портфеля. Потом <code>GET</code> отдаёт его&nbsp;же, не&nbsp;ходя в&nbsp;таблицу операций. Это надёжнее: даже если завтра вы&nbsp;удалите все операции&nbsp;&mdash;&nbsp;старая ссылка покажет тот&nbsp;же портфель, что вчера.</li>
             </ul>
             <ul lang="en">
-                <li><strong>Don't show rouble amounts.</strong> The best snapshot is weights in %, return in %, and a list of tickers. Real amounts are personal data; you don't show them to friends, and you certainly don't show them through a share link with no sign-in. If a friend asks for the sum — send a screenshot by hand.</li>
+                <li><strong>Don't show dollar amounts.</strong> The best snapshot is weights in %, return in %, and a list of tickers. Real amounts are personal data; you don't show them to friends, and you certainly don't show them through a share link with no sign-in. If a friend asks for the sum — send a screenshot by hand.</li>
                 <li><strong>30 days is a sensible default.</strong> "Forever" tempts you to forget and leave the link open for years. 7 days is annoying ("doing it again"). 30 is the middle.</li>
                 <li><strong>Render logs see the URL.</strong> If the <code>/api/share/&lt;token&gt;</code> endpoint logs the full path, the token lands in the logs. Whoever reads the logs reads the tokens. Ask Claude: <em>"is there middleware that logs path in the backend? if so, replace the token with *** in the log for /api/share/* routes."</em> Same for Sentry, Datadog or any analytics you wire up.</li>
                 <li><strong>Use first, decorate later.</strong> The temptation will be — draw a beautiful share page, add an OG image for Telegram previews, hook in the system "share" icon. Not now. First: created — opened in incognito — confirmed no leaks — survived a week. Pretty comes later.</li>
@@ -1160,7 +1160,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                     <h5><span lang="ru">Готово, если…</span><span lang="en">Done if…</span></h5>
                     <ul lang="ru">
                         <li>на&nbsp;<code>/dashboard</code> есть кнопка «поделиться», по&nbsp;клику получается ссылка вида <code>/share/abc123…</code> (32 символа);</li>
-                        <li>открытие в&nbsp;инкогнито показывает тикеры и&nbsp;веса; <em>не&nbsp;показывает</em> email, user_id, суммы в&nbsp;рублях, список операций;</li>
+                        <li>открытие в&nbsp;инкогнито показывает тикеры и&nbsp;веса; <em>не&nbsp;показывает</em> email, user_id, суммы в&nbsp;долларах, список операций;</li>
                         <li>изменение одного символа в&nbsp;токене&nbsp;&mdash; ответ 404, не&nbsp;500 и&nbsp;не&nbsp;пустая страница;</li>
                         <li>в&nbsp;логах backend (Render → Logs) полный токен не&nbsp;светится&nbsp;&mdash; вместо него видны звёздочки;</li>
                         <li>ссылка отправлена себе в&nbsp;Telegram «сохранёнку», открыта с&nbsp;телефона&nbsp;&mdash; графики видны, лендинг с&nbsp;CTA на&nbsp;<code>/signup</code> читается;</li>
@@ -1168,7 +1168,7 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                     </ul>
                     <ul lang="en">
                         <li>there is a "share" button on <code>/dashboard</code>; one click returns a link like <code>/share/abc123…</code> (32 chars);</li>
-                        <li>opening it in incognito shows tickers and weights; <em>does not</em> show email, user_id, rouble amounts, or operations;</li>
+                        <li>opening it in incognito shows tickers and weights; <em>does not</em> show email, user_id, dollar amounts, or operations;</li>
                         <li>changing one character of the token returns 404, not 500 and not an empty page;</li>
                         <li>backend logs (Render → Logs) do not contain the full token — asterisks instead;</li>
                         <li>the link sent to your own Telegram "Saved Messages" opens on a phone — the charts render and the CTA to <code>/signup</code> reads cleanly;</li>
