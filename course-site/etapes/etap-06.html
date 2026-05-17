@@ -1032,15 +1032,24 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
             <h4 lang="ru" style="margin-top:1.25rem;">Шаги</h4>
             <h4 lang="en" style="margin-top:1.25rem;">Steps</h4>
             <ol class="steps" lang="ru">
-                <li><strong>Три вопроса дизайна до&nbsp;кода.</strong> Прежде чем просить Claude писать что-либо, ответьте себе и&nbsp;запишите в&nbsp;<code>spec_share.md</code>:
-                    <ul style="margin-top:0.5rem;">
+                <li><strong>Три вопроса дизайна до&nbsp;кода.</strong> Это <em>ваши</em> решения, не&nbsp;Claude'а&nbsp;&mdash;&nbsp;поэтому файл вы&nbsp;создаёте руками. В&nbsp;корне проекта (рядом с&nbsp;<code>spec.md</code> от&nbsp;проекта&nbsp;A) сделайте новый файл <code>spec_share.md</code> со&nbsp;следующим содержимым, оставив свои ответы после «=&nbsp;»:
+                    <pre class="shell"><span class="cmt"># spec_share.md — фича «поделиться портфелем»</span>
+
+mode      = snapshot   # snapshot | live
+lifetime  = 30 days    # сколько дней живёт ссылка
+multi     = single     # single (новая отменяет старую) | multi</pre>
+                    <p style="margin:0.5rem 0;">Что означает каждое поле:</p>
+                    <ul>
                         <li><em>Снимок или живой портфель?</em> Если по&nbsp;ссылке видно текущее состояние, друг через месяц увидит совсем другое&nbsp;&mdash; иногда это неудобно. Снимок безопаснее: показываете именно ту&nbsp;картинку, которую хотели показать.</li>
                         <li><em>Срок жизни?</em> 30&nbsp;дней&nbsp;&mdash; разумно по&nbsp;умолчанию. «Навсегда» провоцирует забыть, 7&nbsp;дней раздражает.</li>
                         <li><em>Сколько ссылок одновременно?</em> Одна (новая отменяет старую) или несколько (отдельно для&nbsp;семьи, отдельно для&nbsp;бухгалтера, отдельно с&nbsp;подписью)?</li>
                     </ul>
-                    Без этих трёх решений Claude угадает за&nbsp;вас и&nbsp;угадает не&nbsp;то.</li>
+                    Дальше промпты Claude будут начинаться со&nbsp;слов <em>«прочитай spec_share.md и&nbsp;по&nbsp;моим ответам там реализуй…»</em>&nbsp;&mdash;&nbsp;так Claude увидит ваши решения, а&nbsp;не&nbsp;будет угадывать.</li>
                 <li><strong>Backend: таблица и&nbsp;два эндпоинта.</strong>
-                    <pre class="shell">&gt; в backend/ добавь функцию «поделиться портфелем по ссылке».
+                    <pre class="shell">&gt; прочитай spec_share.md — там мои ответы по mode/lifetime/multi.
+&gt; в backend/ добавь функцию «поделиться портфелем по ссылке»
+&gt; в соответствии с этими ответами.
+&gt;
 &gt; новая таблица ShareToken (id, user_id, token, created_at, expires_at, mode).
 &gt; token — secrets.token_urlsafe(24), это 32 символа случайной строки.
 &gt; два эндпоинта:
@@ -1050,7 +1059,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   только тикеры, веса в %, доходность от точки старта в %.
 &gt;   БЕЗ user_id, БЕЗ email, БЕЗ сумм в долларах, БЕЗ списка операций.
 &gt; если token истёк или не найден — возвращай 404 (не 403, не «истёк»),
-&gt;   чтобы по сообщению нельзя было угадывать существующие токены.</pre>
+&gt;   чтобы по сообщению нельзя было угадывать существующие токены.
+&gt; если multi=single — POST /api/share/create удаляет старые токены этого user_id.</pre>
                     Проверка: <code>POST /api/share/create</code> с&nbsp;токеном JWT возвращает ссылку. <code>GET</code> по&nbsp;этой ссылке без&nbsp;JWT отдаёт JSON с&nbsp;тикерами, без&nbsp;email и&nbsp;сумм.</li>
                 <li><strong>Frontend: публичная страница и&nbsp;кнопка.</strong>
                     <pre class="shell">&gt; frontend: новая страница /share/&lt;token&gt; — публичная, БЕЗ проверки JWT.
@@ -1081,15 +1091,23 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
                 </li>
             </ol>
             <ol class="steps" lang="en">
-                <li><strong>Three design questions before code.</strong> Before asking Claude to write anything, answer for yourself and write down in <code>spec_share.md</code>:
-                    <ul style="margin-top:0.5rem;">
+                <li><strong>Three design questions before code.</strong> These are <em>your</em> calls, not Claude's&nbsp;—&nbsp;so you create the file by hand. In the project root (next to <code>spec.md</code> from project&nbsp;A), make a new file <code>spec_share.md</code> with the contents below and fill in your answers after the "=&nbsp;":
+                    <pre class="shell"><span class="cmt"># spec_share.md — "share portfolio" feature</span>
+
+mode      = snapshot   # snapshot | live
+lifetime  = 30 days    # how many days the link lives
+multi     = single     # single (new cancels old) | multi</pre>
+                    <p style="margin:0.5rem 0;">What each field means:</p>
+                    <ul>
                         <li><em>Snapshot or live?</em> If the link shows the current state, your friend will see something completely different in a month — sometimes awkward. A snapshot is safer: you show exactly the picture you meant to show.</li>
                         <li><em>Lifetime?</em> 30 days is a sensible default. "Forever" tempts you to forget; 7 days is annoying.</li>
                         <li><em>How many links at once?</em> One (a new one cancels the old) or several (one for family, one for an accountant, one with a note)?</li>
                     </ul>
-                    Without these three calls, Claude will guess for you — and guess wrong.</li>
+                    Later prompts to Claude will start with <em>"read spec_share.md and implement per my answers there…"</em>&nbsp;—&nbsp;that way Claude sees your decisions instead of guessing.</li>
                 <li><strong>Backend: a table and two endpoints.</strong>
-                    <pre class="shell">&gt; in backend/ add "share portfolio by link".
+                    <pre class="shell">&gt; read spec_share.md — my answers on mode/lifetime/multi are there.
+&gt; in backend/ add "share portfolio by link" in line with those answers.
+&gt;
 &gt; new table ShareToken (id, user_id, token, created_at, expires_at, mode).
 &gt; token = secrets.token_urlsafe(24), a 32-char random string.
 &gt; two endpoints:
@@ -1099,7 +1117,8 @@ model="claude-haiku-4-5"    <span class="cmt"># for classification</span></pre>
 &gt;   tickers, weights in %, return from start date in %.
 &gt;   NO user_id, NO email, NO dollar amounts, NO operations list.
 &gt; if the token is expired or not found — return 404 (not 403, not "expired"),
-&gt;   so the response can't be used to guess existing tokens.</pre>
+&gt;   so the response can't be used to guess existing tokens.
+&gt; if multi=single — POST /api/share/create deletes older tokens for this user_id.</pre>
                     Check: <code>POST /api/share/create</code> with a JWT returns a link. <code>GET</code> on that link without JWT returns JSON with tickers, no email, no amounts.</li>
                 <li><strong>Frontend: a public page and a button.</strong>
                     <pre class="shell">&gt; frontend: new page /share/&lt;token&gt; — public, NO JWT check.
